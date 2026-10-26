@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#2B1A5E">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>JSlearning Workbook</title>
+<title>Packet to Cloud Workbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Fredoka:wght@500;600;700&display=swap">
@@ -662,6 +662,15 @@ td{min-width:170px}
   function run(now){ if(!M.start){M.start=now; M.last=now;} if(!gate.hidden&&!document.hidden) step(now); else M.last=now; requestAnimationFrame(run);}
   if(!reduce) requestAnimationFrame(run);
   var msg=document.getElementById('gateMsg');
+  var bootErr='';
+  window.addEventListener('error',function(e){ if(!window.__p2cLoaded&&e&&e.message) bootErr=e.message; });
+  function bootProblem(){
+    var hint=/already been declared/i.test(bootErr)?'"const firebaseConfig" appears twice. Keep only the block Firebase gave you.'
+      :/Unexpected|SyntaxError|missing|Invalid or unexpected/i.test(bootErr)?'The Firebase settings were pasted with a typo (a missing quote, comma or bracket).'
+      :'The sign-in code could not load. Check your internet connection, and that the Firebase settings at the top of index.html were pasted correctly.';
+    msg.textContent='Sign-in could not start. '+hint+(bootErr?' ('+bootErr+')':''); msg.className='gate-msg bad';
+  }
+  document.getElementById('loginForm').addEventListener('submit',function(e){ e.preventDefault(); if(!window.__p2cLoaded){ bootProblem(); window.gateFX.shake(); }});
   window.gateFX={
     ready:function(){card.classList.remove('checking');},
     burst:function(el){ if(reduce) return; var r=el.getBoundingClientRect(); burstAt(r.left+r.width/2,r.top+r.height/2,24);},
@@ -669,20 +678,14 @@ td{min-width:170px}
     leave:function(){return new Promise(function(res){ if(reduce){res();return;} gate.classList.add('leaving'); M.leaveRes=res; M.leave=performance.now(); setTimeout(function(){ if(M.leaveRes){M.leaveRes=null; res();}},1800);});},
     reset:function(){gate.classList.remove('leaving'); gate.style.opacity=''; M.leave=0; M.start=performance.now()-ENTER*1000;}
   };
-  setTimeout(function(){ if(card.classList.contains('checking')){ card.classList.remove('checking'); }},10000);
+  setTimeout(function(){ if(card.classList.contains('checking')){ card.classList.remove('checking'); if(!window.__p2cLoaded) bootProblem(); }},6000);
 })();
 </script>
 <script type="module">
 
-/* ================= FIREBASE CONFIG — paste yours here (see SETUP.md, step 5) ================= */
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+/* ================= FIREBASE CONFIG (SETUP.md, step 5) =================
+   Replace the WHOLE block below, from "const firebaseConfig" down to "};",
+   with the block Firebase shows you. There must be only ONE "const firebaseConfig". */
 const firebaseConfig = {
   apiKey: "AIzaSyBKSb32A7ZXTus3-8W2gkGirM2bag5QTZw",
   authDomain: "jslearning-2802b.firebaseapp.com",
@@ -692,14 +695,11 @@ const firebaseConfig = {
   appId: "1:610015243276:web:a5bd85ec319b3703771229",
   measurementId: "G-K0W7TW89N1"
 };
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 /* ============================================================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+window.__p2cLoaded=true;
 
 /* ---------------- content ---------------- */
 const PROV = {aws:{n:'AWS',c:'c-aws',v:'--aws'}, az:{n:'Azure',c:'c-az',v:'--az'}, gcp:{n:'Google Cloud',c:'c-gcp',v:'--gcp'}, oci:{n:'Oracle OCI',c:'c-oci',v:'--oci'}};
@@ -1308,7 +1308,7 @@ window.addEventListener('hashchange',()=>{if(dbRef){route(); afterRoute();}});
 /* ---------------- sign-in ---------------- */
 const gate=document.getElementById('gate'), msg=document.getElementById('gateMsg'), btn=document.getElementById('loginBtn'), FX=window.gateFX||{ready(){},burst(){},shake(){},leave:()=>Promise.resolve(),reset(){}};
 const say=(t,cls)=>{msg.textContent=t; msg.className='gate-msg '+(cls||'');};
-const ERR={'auth/invalid-credential':'That email and password don’t match. Try again.','auth/wrong-password':'That email and password don’t match. Try again.','auth/user-not-found':'That email and password don’t match. Try again.','auth/invalid-email':'Enter a valid email address.','auth/missing-password':'Enter your password.','auth/too-many-requests':'Too many attempts. Wait a few minutes and try again.','auth/network-request-failed':'No connection. Check your internet and try again.','auth/user-disabled':'This account has been turned off.','auth/unauthorized-domain':'This website address isn’t allowed yet. Add it under Firebase → Authentication → Settings → Authorized domains.'};
+const ERR={'auth/invalid-credential':'That email and password don’t match. Try again.','auth/wrong-password':'That email and password don’t match. Try again.','auth/user-not-found':'That email and password don’t match. Try again.','auth/invalid-email':'Enter a valid email address.','auth/missing-password':'Enter your password.','auth/too-many-requests':'Too many attempts. Wait a few minutes and try again.','auth/network-request-failed':'No connection. Check your internet and try again.','auth/user-disabled':'This account has been turned off.','auth/api-key-not-valid.-please-pass-a-valid-api-key.':'The Firebase settings in index.html are not valid. Copy your real config from Firebase → Project settings → Your apps.','auth/invalid-api-key':'The Firebase settings in index.html are not valid. Copy your real config from Firebase → Project settings → Your apps.','auth/configuration-not-found':'Email/Password sign-in is not turned on in Firebase (SETUP.md, step 2).','auth/operation-not-allowed':'Email/Password sign-in is not turned on in Firebase (SETUP.md, step 2).','auth/unauthorized-domain':'This website address isn’t allowed yet. Add it under Firebase → Authentication → Settings → Authorized domains.'};
 let justSubmitted=false;
 function showGate(on){gate.hidden=!on; document.querySelector('.top').hidden=on; app.hidden=on; if(on) FX.reset();}
 showGate(true);
