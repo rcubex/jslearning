@@ -28,7 +28,7 @@
 @media(max-width:760px){body{font-size:15px}.top-row{gap:7px}.brand{font-size:15px}.top-meta{gap:5px}.top-row .acct{max-width:75px}.tabs{scroll-snap-type:x proximity}.tabs .tab{scroll-snap-align:start;min-height:44px}.wrap{padding-inline:12px}main{padding-block:14px 70px}.mhero{padding:20px 16px}.mbody{gap:18px}.lcard{padding:16px 13px}.lcard h4{font-size:20px}.lbody p,.lbody li{line-height:1.75}.read-tools{position:relative}.read-tools button{min-height:44px}.pager .btn{max-width:100%;white-space:normal}.panel{padding:15px}.tscroll{-webkit-overflow-scrolling:touch}.gate-card{padding:21px 16px}.terms span{max-width:100%;overflow-wrap:anywhere}}
 @media(max-width:380px){.mhero h2{font-size:26px}.stat{padding:11px}.mhero .meta{gap:4px}.read-tools button{flex:1 1 auto}}
 </style>
-<title>JS Learning</title>
+<title>Packet to Cloud Workbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Fredoka:wght@500;600;700&display=swap">
@@ -525,76 +525,6 @@ pre,table,.tscroll{max-width:100%}
 @media(prefers-reduced-motion:reduce){.view{animation:none!important}.mcard{transition:none!important}}
 </style>
 
-<style id="horizon-inner-theme">
-/* ================= HORIZON 3.2: INNER APP ONLY =================
-   Presentation-only: no changes to lesson IDs, content or Firebase documents. */
-:root, :root[data-theme="light"], :root[data-theme="dark"] {
-  color-scheme:dark;
-  --bg:#080f1c;--surface:#111c2e;--surface-2:#18263a;--ink:#edf3fc;
-  --muted:#9baec4;--line:#29394e;--accent:#76aaff;--signal:#f7c777;
-  --ok:#56d6a3;--bad:#ff8a83;--rack:#0d1728;--rack-2:#16253a;
-  --rack-ink:#f0f5ff;--rack-muted:#9dafc5;--port:#07101c;--led-off:#2b3a4e;
-}
-body{background:radial-gradient(ellipse 70vw 50vh at 98% -15%,rgba(67,84,169,.14),transparent),var(--bg);}
-.top{background:#0b1424;border-color:#24334a;box-shadow:1px 0 28px rgba(0,0,0,.22)}
-.brand{color:#f4f7ff;letter-spacing:.01em}
-.top-meta{color:#a6bad0}.tab{color:#a3b6cd;transition:background .14s,color .14s}
-.tab:hover{color:#fff;background:rgba(120,169,255,.09)}
-.tab[aria-current="true"]{background:rgba(104,154,249,.16);color:#dceaff;border-color:#79aaff}
-main.wrap{max-width:1420px}
-.view-head h2,.mhero h2{letter-spacing:-.035em}
-.view-head .lede{max-width:72ch}
-.panel,.mcard,.lcard,.q,.badge,.cert,.tscroll,.takeaways{background:#111d2d;border:1px solid #293c53;box-shadow:0 8px 28px rgba(0,0,0,.1)}
-.panel,.lcard{border-radius:16px}
-.mcard{border-radius:16px}.mcard:hover{box-shadow:0 15px 35px rgba(14,48,103,.28);border-color:#568ce1}
-.hero,.mhero{background:linear-gradient(115deg,#17243c,#0d1728 72%);border:1px solid #304361;box-shadow:0 18px 40px rgba(0,0,0,.12)}
-.stats{background:#26394f;border-color:#26394f}.stat{background:#111d2d}
-.btn{background:#19283d;border-color:#354860;color:#e9f0ff}.btn:hover{border-color:#719fee}
-.btn.primary{background:#4a82e5;border-color:#4a82e5;color:white}
-.filters .fbtn{background:#142239;border-color:#324960}.fbtn[aria-pressed="true"]{background:#4778c4;color:white}
-.search,textarea.notes,.field input,.field select,.log-form input,.log-form select{background:#0d1b2e;border-color:#38506d;color:#f2f6ff}
-/* Study Guide Reader D: generous rhythm, scannable callouts, stable typography */
-.mbody{grid-template-columns:minmax(0,1fr) 278px;gap:28px}
-.lbody{max-width:79ch}.lbody p{font-size:16px;line-height:1.86;color:#d9e4f2;margin-bottom:18px}
-.lbody ul.pts,.lbody ol.steps{line-height:1.8;color:#dbe7f4;gap:9px}
-.lcard{padding:26px 30px}.lcard h4{font-size:clamp(21px,2.2vw,27px);line-height:1.25;margin-bottom:20px;color:#f5f8ff}
-.lcard .ln{color:#93b7ee}.lesson.on .lcard{border-color:#407d66}
-.ex{background:#0a1424;border:1px solid #304763;border-radius:12px}.ex figcaption{background:#172842;color:#adc8ec;border-bottom-color:#31455d}
-.ex pre{color:#e0ecff;font-size:13px;line-height:1.75}
-.callout{background:#16273c;border:1px solid #39516b;border-left-width:4px;border-radius:12px;line-height:1.75;padding:17px 18px;gap:10px}
-.callout.tip{border-left-color:#7baaf9}.callout.ana{border-left-color:#f0bd65}.callout.warn{border-left-color:#fa8c83}.callout.cloud{border-left-color:#55d5a5}
-.takeaways{padding:22px 24px 22px 48px;line-height:1.8}
-.mside .panel{background:#101b2c}.mside h5{color:#b9cbe5}.outline button{color:#b9c9dc}.outline button:hover{background:#1b2d44}
-.q{border-radius:14px}.opt{background:#17263a;border-color:#334961;color:#e1eaf6}
-.pager{border-color:#30435a;padding-bottom:12px}
-/* desktop workspace sidebar */
-@media(min-width:1080px){
- .top{position:fixed;inset:0 auto 0 0;width:244px;z-index:9;overflow-y:auto;overflow-x:hidden}
- .top .wrap{padding:22px 13px;display:flex;flex-direction:column;min-height:100%;gap:24px}
- .top-row{display:flex;flex-direction:column;align-items:stretch;gap:20px;padding:4px 9px}
- .brand{font-size:19px;white-space:normal}.brand-mark{width:31px;height:31px}
- .top-meta{margin:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;white-space:normal}
- .acct #who{max-width:170px}.mini-bar{display:block;width:175px}#topPct{display:inline}
- .tabs{display:flex;flex-direction:column;overflow:visible;gap:4px;margin:0;padding:0}
- .tab{width:100%;text-align:left;border:0;border-left:3px solid transparent;border-radius:9px;padding:12px 13px;white-space:normal;font-size:13.5px;min-height:44px}
- .tab[aria-current="true"]{border-left-color:#79aaff}
- main.wrap{margin-left:244px;max-width:none;padding:38px clamp(24px,3.5vw,65px) 90px}
- .mside{top:24px}
-}
-/* tablet/mobile: sticky slim top bar, swipeable nav and wider touch targets */
-@media(max-width:1079px){.top{position:sticky;top:0}.tabs{scroll-snap-type:x mandatory}.tab{scroll-snap-align:start;min-height:45px}.top-row{flex-wrap:wrap}.mhero{border-radius:14px}}
-@media(max-width:650px){
- .top-row{padding-block:10px;gap:6px}.brand{font-size:16px}.top-meta{margin-left:auto;font-size:11px}
- .tabs{margin-inline:-12px;padding-inline:12px}.tab{font-size:12.5px;padding:11px 12px}
- main.wrap{padding:18px 13px 100px}.hero,.mhero{padding:20px 17px}
- .mbody{grid-template-columns:minmax(0,1fr);gap:18px}
- .lcard{padding:19px 17px}.lbody{max-width:100%}.lbody p{font-size:16px;line-height:1.82}
- .lbody ul.pts,.lbody ol.steps{font-size:15px}.callout{padding:15px 14px}
- .cards{grid-template-columns:minmax(0,1fr)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
- .mhero h2{font-size:27px}.mside{position:static}.pager .btn{min-height:46px}
-}
-@media(prefers-reduced-motion:reduce){.tab,.mcard{transition:none!important}}
-</style>
 </head>
 <body>
 <header class="top">
@@ -626,144 +556,215 @@ main.wrap{max-width:1420px}
 </header>
 <main class="wrap" id="app"></main>
 
-<div class="gate ship-gate" id="gate">
-  <canvas id="shipStars" class="ship-stars" aria-hidden="true"></canvas>
-  <div class="ship-nebula" aria-hidden="true"></div>
-  <div class="ship-bridge" aria-hidden="true">
-    <div class="bridge-strut left"></div><div class="bridge-strut right"></div>
-    <div class="bridge-ceiling"><span>PTC // DEEP SPACE EXPLORATION</span><span class="bridge-ceiling-right">BRIDGE 01 · ONLINE</span></div>
-    <div class="bridge-window">
-      <div class="planet"><div class="planet-rim"></div></div>
-      <div class="horizon-line"></div>
-      <div class="reticle reticle-a">+</div><div class="reticle reticle-b">+</div>
-      <div class="window-label">SECTOR 07 / LEARNING SYSTEMS</div>
-      <div class="window-coordinates">RA 02:47:11 &nbsp; DEC +41° 13′</div>
-      <div class="scanner"></div>
+<div class="gate" id="gate">
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="moon" aria-hidden="true"></div>
+  <div class="drift d1" aria-hidden="true"><svg viewBox="0 0 200 70"><g fill="#FFFFFF"><circle cx="50" cy="45" r="25"/><circle cx="90" cy="32" r="32"/><circle cx="135" cy="42" r="26"/><rect x="25" y="45" width="135" height="25" rx="12"/></g></svg></div>
+  <div class="drift d2" aria-hidden="true"><svg viewBox="0 0 200 70"><g fill="#FFFFFF"><circle cx="60" cy="42" r="24"/><circle cx="100" cy="30" r="28"/><circle cx="140" cy="44" r="22"/><rect x="36" y="44" width="124" height="24" rx="12"/></g></svg></div>
+  <div class="drift d3" aria-hidden="true"><svg viewBox="0 0 200 70"><g fill="#FFE3F2"><circle cx="45" cy="45" r="25"/><circle cx="85" cy="30" r="30"/><circle cx="128" cy="38" r="28"/><circle cx="165" cy="48" r="20"/><rect x="20" y="45" width="160" height="25" rx="12"/></g></svg></div>
+  <div class="fx" id="fx" aria-hidden="true"></div>
+  <div class="gate-inner">
+    <div class="scene" aria-hidden="true">
+      <svg viewBox="0 0 520 420">
+        <defs>
+          <linearGradient id="hornG" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFE38A"/><stop offset=".55" stop-color="#FFF6C9"/><stop offset="1" stop-color="#F7B733"/></linearGradient>
+          <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFF6C9" stop-opacity=".55"/><stop offset="1" stop-color="#FFF6C9" stop-opacity="0"/></radialGradient>
+        </defs>
+        <circle cx="300" cy="190" r="170" fill="url(#halo)"/>
+        <g class="rb" transform="translate(0,6)">
+          <path d="M60 330 A200 200 0 0 1 460 330" stroke="#FF9EC7"/>
+          <path d="M76 330 A184 184 0 0 1 444 330" stroke="#FFC48A"/>
+          <path d="M92 330 A168 168 0 0 1 428 330" stroke="#FFE88A"/>
+          <path d="M108 330 A152 152 0 0 1 412 330" stroke="#9EF0C0"/>
+          <path d="M124 330 A136 136 0 0 1 396 330" stroke="#9CCBFF"/>
+          <path d="M140 330 A120 120 0 0 1 380 330" stroke="#C9A8FF"/>
+        </g>
+        <g id="uniMove"><g class="uni">
+          <g transform="translate(124,88) scale(1.16)">
+            <g class="uni-body">
+              <g class="tail">
+                <circle cx="60" cy="98" r="13" fill="#C9A8FF"/>
+                <circle cx="48" cy="106" r="15" fill="#FF9EC7"/>
+                <circle cx="36" cy="120" r="14" fill="#FFC48A"/>
+                <circle cx="30" cy="136" r="13" fill="#FFE88A"/>
+                <circle cx="33" cy="152" r="12" fill="#9EF0C0"/>
+                <circle cx="42" cy="165" r="10" fill="#9CCBFF"/>
+              </g>
+              <g class="leg" data-px="81" data-py="132" data-ph="3.14"><rect x="72" y="126" width="18" height="56" rx="9" fill="#EDE3F9"/><rect x="72" y="171" width="18" height="12" rx="5" fill="#E89BC4"/></g>
+              <g class="leg" data-px="139" data-py="132" data-ph="3.74"><rect x="130" y="126" width="18" height="56" rx="9" fill="#EDE3F9"/><rect x="130" y="171" width="18" height="12" rx="5" fill="#E89BC4"/></g>
+              <ellipse cx="108" cy="118" rx="57" ry="39" fill="#FFFFFF"/>
+              <ellipse cx="112" cy="134" rx="40" ry="17" fill="#F4EDFC"/>
+              <g class="leg" data-px="97" data-py="134" data-ph="0"><rect x="88" y="128" width="18" height="56" rx="9" fill="#FFFFFF"/><rect x="88" y="173" width="18" height="12" rx="5" fill="#F2A7CF"/></g>
+              <g class="leg" data-px="155" data-py="132" data-ph="0.6"><rect x="146" y="126" width="18" height="56" rx="9" fill="#FFFFFF"/><rect x="146" y="171" width="18" height="12" rx="5" fill="#F2A7CF"/></g>
+              <path d="M136 112 C140 86 148 66 160 52 L192 66 C184 84 176 104 170 126 Z" fill="#FFFFFF"/>
+              <circle cx="178" cy="56" r="29" fill="#FFFFFF"/>
+              <ellipse cx="203" cy="73" rx="20" ry="15.5" transform="rotate(22 203 73)" fill="#FFE2F1"/>
+              <path d="M158 38 L162 10 L178 33 Z" fill="#FFFFFF"/>
+              <path d="M163 32 L165 18 L172 31 Z" fill="#F9C6E0"/>
+              <g class="mane">
+                <circle cx="163" cy="30" r="12" fill="#FF9EC7"/>
+                <circle cx="149" cy="44" r="13.5" fill="#FFC48A"/>
+                <circle cx="140" cy="62" r="13.5" fill="#FFE88A"/>
+                <circle cx="134" cy="80" r="13" fill="#9EF0C0"/>
+                <circle cx="130" cy="98" r="12" fill="#9CCBFF"/>
+                <circle cx="128" cy="114" r="10" fill="#C9A8FF"/>
+              </g>
+              <circle cx="176" cy="30" r="10" fill="#C9A8FF"/>
+              <circle cx="185" cy="35" r="7" fill="#FF9EC7"/>
+              <path d="M181 32 L206 -6 L194 38 Z" fill="url(#hornG)"/>
+              <path d="M186 25 L198 21 M190 17 L201 13 M195 9 L203 6" stroke="#E9A21C" stroke-width="2" stroke-linecap="round"/>
+              <path class="shine" d="M188 30 L203 0" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"/>
+              <ellipse cx="187" cy="55" rx="6.4" ry="8" fill="#FFFFFF"/><g id="look"><g class="lid"><ellipse cx="187" cy="55" rx="5.2" ry="7" fill="#3B2A5C"/><circle cx="189" cy="52" r="2.1" fill="#FFFFFF"/></g></g><path class="shut" d="M180.5 55.5 Q187 49.5 193.5 55.5" stroke="#3B2A5C" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+              <path d="M182 47 L179 43 M185.5 46 L184.5 41.5" stroke="#3B2A5C" stroke-width="1.8" stroke-linecap="round"/>
+              <ellipse cx="197" cy="67" rx="6" ry="3.6" fill="#FF9EC7" opacity=".7"/><ellipse class="blush" cx="197" cy="67" rx="7.5" ry="4.4" fill="#FF7FB6" opacity="0"/>
+              <ellipse cx="213" cy="75" rx="2.4" ry="1.8" fill="#E089B8"/>
+              <path d="M199 84 Q205 88 211 83" stroke="#C86A9E" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </g>
+            <path class="twk" d="M206 -26 L209 -15 L220 -12 L209 -9 L206 2 L203 -9 L192 -12 L203 -15 Z" fill="#FFF6C9"/>
+            <path class="twk b" d="M232 6 L234 12 L240 14 L234 16 L232 22 L230 16 L224 14 L230 12 Z" fill="#FFFFFF"/>
+            <path class="twk b" d="M-6 60 L-4 66 L2 68 L-4 70 L-6 76 L-8 70 L-14 68 L-8 66 Z" fill="#FFE88A"/>
+          </g>
+        </g></g>
+        <g class="puff">
+          <ellipse cx="266" cy="398" rx="150" ry="14" fill="#3B1F72" opacity=".25"/>
+          <g fill="#FFFFFF">
+            <circle cx="160" cy="364" r="30"/><circle cx="208" cy="346" r="38"/><circle cx="262" cy="338" r="40"/><circle cx="318" cy="346" r="38"/><circle cx="366" cy="364" r="28"/>
+            <rect x="130" y="362" width="266" height="32" rx="16"/>
+          </g>
+          <g fill="#F4E8FF"><circle cx="196" cy="380" r="15"/><circle cx="290" cy="382" r="17"/></g>
+        </g>
+      </svg>
     </div>
-    <div class="bridge-deck">
-      <div class="deck-lights"><span></span><span></span><span></span><span></span><span></span></div>
-      <div class="deck-screen screen-left"><span>NETWORK LINK</span><i></i><em>ENCRYPTED</em></div>
-      <div class="deck-screen screen-right"><span>MISSION STATUS</span><i></i><em>READY</em></div>
-      <div class="deck-grid"></div>
-    </div>
-  </div>
-  <div class="ship-interface">
-    <header class="ship-topbar"><div class="ship-wordmark"><span class="ship-logo">✦</span><span>PACKET <i>TO</i> CLOUD</span></div><div class="ship-top-status"><span class="ship-pulse"></span> PRIVATE LEARNING STATION <span class="ship-divider">/</span> TWO CREW ACCESS</div></header>
-    <div class="ship-main">
-      <div class="ship-copy"><div class="ship-overline"><span class="ship-number">01 / COMMAND BRIDGE</span><span class="ship-line"></span></div><h1>THE JOURNEY<br>STARTS <span>HERE.</span></h1><p>From packets to the cloud and beyond. Your personal learning mission awaits.</p><div class="ship-readouts"><div><small>MISSION</small><b>KNOWLEDGE</b></div><div><small>TRAJECTORY</small><b>EXPLORE & LEARN</b></div></div></div>
-      <div class="ship-terminal-wrap"><div class="ship-terminal-label"><span class="ship-pulse"></span> SECURE ACCESS CONSOLE <span>AUTH-01</span></div>
-        <section class="gate-card ship-terminal checking" id="gateCard" aria-label="Sign in to Packet to Cloud">
-          <div class="ship-terminal-header"><div><span class="ship-smallcaps">CREW AUTHENTICATION</span><h2>Welcome aboard.</h2><p class="sub">Identify yourself to access your learning command center.</p></div><span class="ship-lock" aria-hidden="true">⌁</span></div>
-          <div class="waking" role="status"><i></i><i></i><i></i> Connecting to navigation systems…</div>
-          <form class="gform" id="loginForm" novalidate>
-            <div class="gfield"><label for="email">CREW EMAIL</label><div class="ginput"><span class="ship-input-mark" aria-hidden="true">@</span><input id="email" type="email" autocomplete="username" placeholder="crew@example.com" required></div></div>
-            <div class="gfield"><label for="password">ACCESS CODE</label><div class="ginput"><span class="ship-input-mark" aria-hidden="true">⌑</span><input id="password" type="password" autocomplete="current-password" placeholder="Enter password" required><button class="peek" id="peek" type="button" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
-            <button class="go" id="loginBtn" type="submit"><span>INITIALIZE SESSION</span><span class="ship-go-arrow" aria-hidden="true">↗</span></button>
-            <p class="gate-msg" id="gateMsg" role="status" aria-live="polite"></p>
-          </form>
-          <div class="gate-foot"><span class="ship-pulse"></span> AUTHORIZED CREW ONLY <span>●</span> END-TO-END SECURE CONNECTION</div>
-        </section>
-        <div class="ship-terminal-bottom">SYSTEM VERSION 3.3 <span>•</span> PACKET TO CLOUD // ACADEMY</div>
-      </div>
-    </div>
-    <footer class="ship-footer"><span>◉ NAVIGATION SYSTEMS NOMINAL</span><span>LEARNING NEVER STOPS <span class="ship-footer-arrow">↗</span></span></footer>
-  </div>
-  <div class="ship-launch-overlay" aria-hidden="true">
-  <div class="warp-tunnel"><div class="warp-core"></div></div>
-  <div class="launch-ship" aria-hidden="true"><svg viewBox="0 0 260 360"><defs><linearGradient id="hull" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eafaff"/><stop offset=".55" stop-color="#619acb"/><stop offset="1" stop-color="#172e58"/></linearGradient><linearGradient id="flame" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".25" stop-color="#8bf3ff"/><stop offset="1" stop-color="#2777ff" stop-opacity="0"/></linearGradient></defs><path d="M130 12 Q72 76 82 196 L22 250 22 283 101 255 159 255 238 283 238 250 178 196 Q188 76 130 12Z" fill="url(#hull)" stroke="#97e5ff" stroke-width="3"/><path d="M130 50 Q112 80 109 129 L151 129 Q148 80 130 50Z" fill="#123961" stroke="#78e8ff" stroke-width="3"/><path d="M107 237 L105 293 130 277 155 293 153 237Z" fill="#8dd9ff"/><path d="M107 283 Q130 352 153 283" fill="url(#flame)"/><path d="M117 279 Q130 340 143 279" fill="url(#flame)"/></svg></div>
-  <div class="launch-message"><span class="launch-check">✓ ACCESS GRANTED</span><strong>HYPERSPACE ENGAGED</strong><small>Entering your learning command center</small></div>
-  <div class="launch-whiteout"></div>
-</div>
-</div>
-<style id="starship-login-style">
-/* Scoped Starship login: no application/dashboard CSS or data handling changes. */
-.ship-gate{background:#020810;color:#e8f5ff;font-family:var(--f-body);isolation:isolate;min-height:100dvh;overflow:auto;--ship-cyan:#57d6ee;--ship-blue:#438bea;--ship-border:rgba(115,189,232,.28)}
-.ship-gate .ship-stars,.ship-gate .ship-nebula,.ship-gate .ship-bridge{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
-.ship-stars{z-index:0;display:block}.ship-nebula{z-index:0;background:radial-gradient(ellipse at 52% 36%,rgba(14,72,118,.25),transparent 43%),radial-gradient(ellipse at 70% 10%,rgba(50,55,134,.23),transparent 37%)}
-.ship-bridge{z-index:1;overflow:hidden}.bridge-window{position:absolute;inset:5% 5% 15%;border-radius:45% 45% 6% 6% / 20% 20% 8% 8%;border:2px solid rgba(69,147,187,.33);box-shadow:inset 0 0 110px rgba(0,120,215,.09),0 0 100px rgba(0,0,0,.5);overflow:hidden;background:linear-gradient(180deg,rgba(4,17,36,.09),rgba(4,17,36,.01) 64%,rgba(7,33,51,.42));}
-.bridge-window:before{content:"";position:absolute;inset:0;border:1px solid rgba(115,195,232,.13);border-radius:inherit;box-shadow:inset 0 0 35px rgba(44,159,231,.15)}
-.bridge-strut{position:absolute;top:-6%;height:125%;width:clamp(45px,10vw,160px);background:linear-gradient(90deg,#02070e 0%,#101b27 50%,#03080e 90%);z-index:2;transform:skewX(10deg);border-right:2px solid rgba(104,184,232,.13);box-shadow:0 0 55px #01060e}
-.bridge-strut.left{left:-6%;transform:skewX(10deg)}.bridge-strut.right{right:-6%;transform:skewX(-10deg);border-right:0;border-left:2px solid rgba(104,184,232,.13)}
-.bridge-ceiling{position:absolute;z-index:3;inset:0 0 auto;height:clamp(45px,9vh,95px);background:linear-gradient(#01050c,#091728 78%,rgba(7,23,40,.65));border-bottom:2px solid rgba(91,161,211,.18);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,8vw,140px);font:10px var(--f-mono);letter-spacing:.2em;color:#77a7c0}
-.bridge-ceiling-right{color:#75dcc9}
-.planet{position:absolute;right:8%;top:12%;width:min(35vw,370px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 24% 27%,#9fe4fc 0%,#3a8ebd 24%,#0d416e 43%,#07192d 70%,#030911 86%);box-shadow:-13px -9px 45px rgba(101,193,255,.32),0 0 110px 15px rgba(54,137,201,.14);opacity:.63;animation:planet-float 16s ease-in-out infinite;filter:saturate(.83)}
-.planet:before{content:"";position:absolute;inset:13%;border-radius:50%;background:repeating-linear-gradient(160deg,transparent 0 13px,rgba(184,230,244,.06) 14px 22px,transparent 25px 52px);transform:rotate(-17deg)}
-.planet-rim{position:absolute;inset:-4%;border-radius:50%;border:1px solid rgba(122,220,255,.1)}
-.horizon-line{position:absolute;inset:61% -10% auto;height:1px;background:linear-gradient(90deg,transparent,rgba(45,195,241,.25),transparent)}
-.window-label,.window-coordinates{position:absolute;font:10px var(--f-mono);letter-spacing:.15em;color:rgba(106,203,228,.65)}.window-label{left:4%;top:17%}.window-coordinates{right:5%;bottom:20%}
-.reticle{position:absolute;color:rgba(68,190,220,.42);font:30px var(--f-mono)}.reticle-a{left:14%;top:29%}.reticle-b{right:29%;bottom:29%}
-.scanner{position:absolute;width:45%;height:1px;background:linear-gradient(90deg,transparent,rgba(115,221,246,.6),transparent);top:35%;left:-50%;box-shadow:0 0 13px rgba(97,202,240,.9);animation:scanner 12s linear infinite}
-.bridge-deck{position:absolute;bottom:-2%;left:-3%;width:106%;height:23%;z-index:4;background:linear-gradient(180deg,#122838 0%,#07121f 37%,#030811 95%);border-top:4px solid #2b4b61;box-shadow:0 -18px 60px #030915}
-.bridge-deck:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 10%,rgba(50,140,178,.08) 10.1% 10.3%,transparent 10.5% 20%)}
-.deck-lights{position:absolute;left:39%;right:39%;top:20px;display:flex;justify-content:space-between}.deck-lights span{width:8px;height:3px;background:#76dfe4;box-shadow:0 0 12px #5dd9e9;animation:deck-blink 2s ease-in-out infinite}.deck-lights span:nth-child(2){animation-delay:.4s}.deck-lights span:nth-child(3){animation-delay:.9s}.deck-lights span:nth-child(4){animation-delay:1.3s}
-.deck-screen{position:absolute;top:20%;width:19%;height:60%;border:1px solid rgba(91,211,235,.25);background:rgba(16,54,71,.45);border-radius:4px;transform:perspective(400px) rotateY(12deg);padding:12px;color:#68cbe0;font:10px var(--f-mono);letter-spacing:.09em}.deck-screen.screen-left{left:9%}.deck-screen.screen-right{right:9%;transform:perspective(400px) rotateY(-12deg)}.deck-screen i{display:block;margin:12px 0;height:5px;width:80%;background:repeating-linear-gradient(90deg,#35b8d0 0 14px,transparent 14px 20px);opacity:.7}.deck-screen em{font-style:normal;color:#97e7b6}
-.deck-grid{position:absolute;left:35%;right:35%;bottom:0;height:60%;transform:perspective(160px) rotateX(60deg);background-image:linear-gradient(rgba(38,128,158,.21) 1px,transparent 1px),linear-gradient(90deg,rgba(38,128,158,.21) 1px,transparent 1px);background-size:22px 22px}
-.ship-interface{position:relative;z-index:5;min-height:100dvh;display:flex;flex-direction:column;max-width:1600px;margin:auto;padding:clamp(18px,3vw,35px) clamp(22px,6vw,95px) 26px}
-.ship-topbar,.ship-footer{display:flex;align-items:center;justify-content:space-between;gap:15px}.ship-topbar{min-height:48px}.ship-wordmark{display:flex;align-items:center;gap:14px;font-family:var(--f-display);font-weight:700;letter-spacing:.12em;font-size:17px}.ship-wordmark i{font-size:.8em;color:#6ebad1;font-style:normal}.ship-logo{display:grid;place-items:center;width:35px;height:35px;border:1px solid rgba(107,218,239,.55);border-radius:9px;color:#69ddf5;box-shadow:inset 0 0 20px rgba(76,197,238,.12),0 0 24px rgba(64,175,220,.1);font-size:24px}.ship-top-status{font:10px var(--f-mono);letter-spacing:.12em;color:#9bb2c1}.ship-pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:#5ddbb3;box-shadow:0 0 12px #5ddbb3;margin-right:8px;animation:deck-blink 2.5s infinite}.ship-divider{padding:0 9px;color:#557188}
-.ship-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,440px);align-items:center;gap:clamp(24px,7vw,110px);flex:1;padding:clamp(38px,8vh,90px) 0 clamp(50px,10vh,100px)}
-.ship-copy{max-width:625px;text-shadow:0 3px 28px #020810}.ship-overline{display:flex;align-items:center;gap:20px;color:#80cfe3;font:11px var(--f-mono);letter-spacing:.23em}.ship-line{display:block;height:1px;width:70px;background:#58bdd8}.ship-copy h1{font-family:var(--f-display);font-weight:700;letter-spacing:-.04em;line-height:1.08;font-size:clamp(44px,5.4vw,88px);margin:22px 0 22px;text-wrap:balance}.ship-copy h1 span{background:linear-gradient(105deg,#93f0f2,#56a8f8);background-clip:text;-webkit-background-clip:text;color:transparent}.ship-copy p{color:#a9c1d5;font-size:clamp(15px,1.5vw,19px);line-height:1.75;max-width:44ch}.ship-readouts{display:flex;flex-wrap:wrap;gap:32px;margin-top:46px}.ship-readouts div{border-left:2px solid #3c97b6;padding-left:13px}.ship-readouts small,.ship-readouts b{display:block;font-family:var(--f-mono);font-size:11px}.ship-readouts small{color:#718fa5;letter-spacing:.2em;margin-bottom:7px}.ship-readouts b{color:#d1f5ff;letter-spacing:.08em}
-.ship-terminal-wrap{width:100%;max-width:440px;justify-self:end}.ship-terminal-label{display:flex;align-items:center;color:#9bddf0;font:10px var(--f-mono);letter-spacing:.15em;margin-bottom:12px}.ship-terminal-label>span:last-child{margin-left:auto;color:#68869d}
-.ship-gate .card-float{animation:none}.ship-gate .gate-card.ship-terminal{max-width:none;width:100%;padding:clamp(22px,3vw,34px);background:linear-gradient(135deg,rgba(15,37,58,.95),rgba(4,15,29,.95));border:1px solid rgba(91,183,218,.45);border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.7),inset 0 1px 0 rgba(130,224,255,.12),0 0 60px rgba(30,119,173,.12);animation:terminal-arrive .8s ease both;backdrop-filter:blur(20px)}
-.ship-gate .gate-card.ship-terminal:before{display:none}.ship-terminal:after{content:"";position:absolute;pointer-events:none;inset:9px;border:1px solid rgba(74,165,196,.13);border-radius:7px}
-.ship-terminal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}.ship-smallcaps{font:10px var(--f-mono);letter-spacing:.18em;color:#67cada}.ship-terminal-header h2{font:700 clamp(24px,3vw,33px) var(--f-display);color:#f0f8ff;margin:12px 0 9px}.ship-gate .ship-terminal .sub{font-size:14px;color:#90abc1;line-height:1.6;margin:0}.ship-lock{font-size:26px;border:1px solid #2b5c70;width:40px;height:40px;display:grid;place-items:center;border-radius:8px;color:#72c3db}
-.ship-gate .gfield label{font-family:var(--f-mono);font-size:10px;letter-spacing:.15em;color:#a1bcca}.ship-gate .gform{gap:19px;margin-top:10px}.ship-gate .ginput input{border:1px solid #315568;border-radius:8px;background:#071826;color:#edfaff;padding:14px 45px;font-family:var(--f-body);font-size:15px}.ship-gate .ginput input:focus{border-color:#62cbeb;background:#0b2235;box-shadow:0 0 0 3px rgba(73,174,224,.16)}.ship-gate .ginput input::placeholder{color:#6c8ba1}.ship-input-mark{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#6cbad4;font:18px var(--f-mono)}.ship-gate .peek{color:#8eabbc}
-.ship-gate .go{background:linear-gradient(100deg,#51c9e3,#4285df);border:1px solid #7cddfb;color:#031826;border-radius:8px;box-shadow:0 7px 24px rgba(38,146,227,.24);font:700 13px var(--f-mono);letter-spacing:.12em;padding:16px;justify-content:space-between;animation:none}.ship-gate .go:after{display:none}.ship-gate .go:hover{box-shadow:0 10px 30px rgba(38,146,227,.48);transform:translateY(-1px)}.ship-go-arrow{font-size:21px}.ship-gate .gate-foot{display:flex;justify-content:space-between;gap:6px;align-items:center;color:#789bae;font:9px var(--f-mono);letter-spacing:.04em;text-align:left;border-top:1px solid #26445a;padding-top:15px}.ship-gate .gate-foot .ship-pulse{width:5px;height:5px;margin:0 4px 0 0}.ship-gate .gate-foot>span:nth-child(2){color:#426d7d}.ship-terminal-bottom{display:flex;justify-content:space-between;color:#6d93a6;font:10px var(--f-mono);letter-spacing:.07em;margin-top:13px}
-.ship-footer{font:10px var(--f-mono);color:#86a7b9;letter-spacing:.14em;padding-bottom:3px}.ship-footer-arrow{color:#6ad8eb;font-size:15px}.ship-gate .gate-card.shake{animation:ship-shake .4s ease}.ship-gate.leaving .ship-launch-overlay{opacity:1;transform:scale(1)}.ship-launch-overlay{pointer-events:none;position:fixed;z-index:10;inset:0;background:radial-gradient(circle,#1270a0 0%,#051b37 40%,#01050b 100%);display:grid;place-items:center;opacity:0;transform:scale(1.15);transition:opacity .65s ease,transform .7s ease}.ship-launch-overlay div{font:700 clamp(13px,2vw,21px) var(--f-mono);letter-spacing:.16em;color:#a2edff;text-align:center;padding:20px}.ship-launch-overlay span{color:#70dfff;margin:0 12px}
-.ship-gate .waking{font-family:var(--f-mono);font-size:12px;color:#a1e6f5}.ship-gate .waking i{background:#4bbddf}
-@keyframes scanner{to{left:110%}}@keyframes planet-float{50%{transform:translateY(13px)}}@keyframes deck-blink{50%{opacity:.4}}@keyframes terminal-arrive{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}@keyframes ship-shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
-@media(max-width:900px){.ship-main{grid-template-columns:1fr;gap:28px;padding:52px 0 60px}.ship-copy{max-width:100%}.ship-copy h1{font-size:clamp(38px,8vw,68px)}.ship-copy p{font-size:15px}.ship-readouts{margin-top:20px}.ship-terminal-wrap{justify-self:center}.bridge-window{inset:5% 0 14%;border-radius:30% 30% 0 0}.planet{width:260px;top:18%}.ship-top-status{font-size:9px}}
-@media(max-width:600px){.ship-interface{padding:15px 15px 24px}.ship-topbar{min-height:40px}.ship-wordmark{font-size:13px}.ship-logo{width:30px;height:30px;font-size:18px}.ship-top-status{display:none}.ship-main{padding:42px 0 48px;gap:23px}.ship-copy h1{margin:13px 0;font-size:clamp(34px,11vw,50px)}.ship-copy p{font-size:13px;line-height:1.6}.ship-overline{font-size:9px}.ship-readouts{gap:16px}.ship-readouts b,.ship-readouts small{font-size:9px}.ship-gate .gate-card.ship-terminal{padding:22px 18px}.ship-terminal-header h2{font-size:25px}.ship-terminal-header .sub{font-size:13px}.ship-gate .gate-foot{font-size:8px}.ship-footer{font-size:8px}.ship-footer span:last-child{display:none}.bridge-ceiling{height:35px;font-size:8px;padding:0 25px}.bridge-ceiling-right{display:none}.bridge-deck{height:12%}.deck-screen{display:none}.planet{width:210px;right:-12%;top:15%;opacity:.3}.ship-terminal-bottom{font-size:8px}}
-@media(prefers-reduced-motion:reduce){.ship-gate .planet,.ship-gate .scanner,.ship-gate .ship-pulse,.ship-gate .deck-lights span,.ship-gate .gate-card.ship-terminal{animation:none!important}.ship-launch-overlay{transition:none}}
 
-/* Galaxy holographic portal: visual-only enhancement; authentication code and Firestore are unchanged. */
-.ship-gate{background:#02040f url('./galaxy-cockpit.png') center 43% / cover no-repeat!important;}
-.ship-gate:before{content:"";position:fixed;inset:0;background:linear-gradient(90deg,rgba(2,6,17,.6),rgba(2,5,16,.16) 40%,rgba(1,4,15,.38)),linear-gradient(0deg,rgba(2,5,14,.55),transparent 35%);z-index:0;pointer-events:none}
-.ship-gate .ship-nebula{background:radial-gradient(ellipse at 68% 20%,rgba(152,66,229,.22),transparent 43%),radial-gradient(ellipse at 25% 58%,rgba(21,116,209,.2),transparent 54%);animation:nebula-breathe 11s ease-in-out infinite alternate}
-.ship-gate .bridge-window{background:transparent;border-color:rgba(101,198,255,.14);box-shadow:inset 0 0 30px rgba(31,84,153,.09)}
-.ship-gate .bridge-ceiling,.ship-gate .bridge-deck{opacity:.55}
-.ship-gate .planet{opacity:0}
-.ship-gate .ship-main{grid-template-columns:minmax(0,1fr) minmax(345px,470px)}
-.ship-gate .gate-card.ship-terminal{position:relative;border:0;border-radius:44% 44% 17% 17% / 13% 13% 9% 9%;background:radial-gradient(ellipse at 50% 8%,rgba(16,73,120,.74),rgba(3,13,32,.76) 67%,rgba(4,18,43,.86));box-shadow:0 0 0 2px rgba(51,193,255,.48),0 0 0 9px rgba(18,103,182,.09),0 0 85px rgba(27,129,247,.5),inset 0 0 50px rgba(17,101,173,.24);padding:clamp(30px,4vw,48px) clamp(25px,3vw,39px);backdrop-filter:blur(19px) saturate(160%);-webkit-backdrop-filter:blur(19px) saturate(160%);animation:terminal-arrive 1s ease both,holo-breathe 5s ease-in-out infinite alternate}
-.ship-gate .gate-card.ship-terminal:before{display:block;position:absolute;content:"";inset:-24px;border-radius:50%;background:conic-gradient(from 15deg,transparent 0deg,#40bffd 25deg,transparent 42deg,transparent 90deg,#8570ff 114deg,transparent 132deg,transparent 200deg,#39e1fc 225deg,transparent 242deg);mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));animation:orbit-ring 23s linear infinite;pointer-events:none;opacity:.82}
-.ship-gate .gate-card.ship-terminal:after{inset:9px;border:1px solid rgba(86,211,255,.17);border-radius:44% 44% 17% 17% / 13% 13% 9% 9%}
-.ship-terminal-header{position:relative;z-index:1}.ship-gate .ship-terminal-header h2{color:#e4faff;text-shadow:0 0 14px rgba(36,170,255,.6)}
-.ship-gate .ginput input{border-radius:18px;clip-path:polygon(4% 0,96% 0,100% 50%,96% 100%,4% 100%,0 50%);border:1px solid #3a9bd1;background:rgba(2,18,41,.76)}
-.ship-gate .go{border-radius:999px;min-height:57px;background:linear-gradient(115deg,#7cecff,#4383fb,#9277fc);box-shadow:0 0 32px rgba(57,146,245,.54);justify-content:center;gap:18px}
-.ship-gate .ship-copy h1{color:#f3faff;text-shadow:0 0 25px #285db8,0 2px 20px #080c20}.ship-gate .ship-copy p{color:#c9e7ff}
-.ship-gate .ship-terminal-wrap{max-width:470px}.ship-gate .ship-terminal-label{justify-content:center}
-.ship-gate .ship-launch-overlay{position:fixed;inset:0;z-index:40;display:block;overflow:hidden;transform:none;opacity:0;background:radial-gradient(ellipse at center,#091b43,#010510 77%);visibility:hidden;transition:opacity .25s ease,visibility 0s linear .25s}
-.ship-gate.leaving .ship-launch-overlay{visibility:visible;opacity:1;transform:none;transition:opacity .23s ease}
-.warp-tunnel{position:absolute;inset:-45%;background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0deg 7deg,rgba(86,173,255,.1) 7.2deg 7.55deg,transparent 8deg 16deg);transform:scale(.4);opacity:.2;filter:blur(1px)}
-.ship-gate.leaving .warp-tunnel{animation:warp-zoom 2.35s cubic-bezier(.18,.6,.15,1) forwards}
-.warp-core{position:absolute;inset:36%;border-radius:50%;background:radial-gradient(circle,#dffaff,#2778dc 25%,transparent 70%);filter:blur(26px)}
-.launch-ship{position:absolute;width:clamp(95px,15vw,190px);top:55%;left:50%;transform:translate(-50%,-50%) scale(.55);filter:drop-shadow(0 0 24px #6ecfff);opacity:0}
-.launch-ship svg{width:100%;display:block;transform:rotate(0deg)}
-.ship-gate.leaving .launch-ship{animation:ship-jump 2.5s cubic-bezier(.24,.02,.18,1) forwards}
-.launch-message{position:absolute;top:13%;width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:0 20px;font-family:var(--f-mono);color:#c7efff;letter-spacing:.16em;z-index:2;text-shadow:0 0 15px #2389ea;opacity:0}
-.launch-message strong{font-size:clamp(17px,3.5vw,33px)}.launch-message small{font-size:clamp(10px,1.3vw,14px);color:#8ec7e5}.launch-check{color:#7dfad7;font-size:12px}
-.ship-gate.leaving .launch-message{animation:launch-text 2.45s ease forwards}
-.launch-whiteout{position:absolute;inset:0;background:#e6faff;opacity:0;pointer-events:none}
-.ship-gate.leaving .launch-whiteout{animation:jump-flash 2.55s ease-in forwards}
-@keyframes nebula-breathe{to{opacity:.65;transform:scale(1.12)}}@keyframes orbit-ring{to{transform:rotate(360deg)}}@keyframes holo-breathe{to{box-shadow:0 0 0 2px rgba(68,213,255,.7),0 0 0 12px rgba(18,103,182,.13),0 0 115px rgba(48,152,255,.65),inset 0 0 65px rgba(17,101,173,.3)}}
-@keyframes warp-zoom{0%{transform:scale(.35) rotate(0);opacity:.08}35%{opacity:.6}100%{transform:scale(2.2) rotate(25deg);opacity:1}}@keyframes ship-jump{0%{opacity:0;transform:translate(-50%,-22%) scale(.5)}15%{opacity:1;transform:translate(-50%,-50%) scale(.8)}45%{transform:translate(-50%,-50%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-190%) scale(.025)}}@keyframes launch-text{0%{opacity:0}15%,75%{opacity:1}100%{opacity:0}}@keyframes jump-flash{0%,79%{opacity:0}96%,100%{opacity:.95}}
-@media(max-width:900px){.ship-gate .ship-main{grid-template-columns:1fr}.ship-gate .ship-copy{text-align:center}.ship-gate .ship-terminal-wrap{justify-self:center}.ship-gate .ship-copy h1{font-size:clamp(31px,8vw,61px)}}
-@media(max-width:600px){.ship-gate{background-position:55% center!important}.ship-gate .ship-copy h1{font-size:35px}.ship-gate .gate-card.ship-terminal{padding:32px 25px;border-radius:28% 28% 15% 15% / 10% 10% 8% 8%}.ship-gate .gate-card.ship-terminal:before{inset:-10px}.ship-gate .ship-main{gap:27px}.ship-gate .ship-copy p{font-size:13px}.ship-gate .ship-readouts{display:none}}
-@media(prefers-reduced-motion:reduce){.ship-gate .ship-nebula,.ship-gate .gate-card.ship-terminal,.ship-gate .gate-card.ship-terminal:before{animation:none!important}.ship-gate.leaving .warp-tunnel,.ship-gate.leaving .launch-ship,.ship-gate.leaving .launch-message,.ship-gate.leaving .launch-whiteout{animation:none!important}.ship-gate.leaving .launch-message{opacity:1}.ship-gate.leaving .launch-ship{opacity:1;transform:translate(-50%,-50%) scale(.8)}}
-</style>
+    <div class="card-float"><div class="gate-card checking" id="gateCard">
+      <svg class="tsp" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z" fill="#FFF2A1"/></svg>
+      <svg class="tsp b" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z" fill="#FFB3D9"/></svg>
+      <div class="gate-brand"><svg class="brand-mark" viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="5" y="9" width="5" height="6" rx="1" fill="currentColor"/><rect x="16" y="9" width="5" height="6" rx="1" fill="currentColor"/><path d="M10 12h6" stroke="currentColor" stroke-width="1.6"/><circle cx="20" cy="5.5" r="1.6" fill="#9EF0C0"/></svg>Packet to Cloud</div>
+      <h1>Welcome back</h1>
+      <p class="sub">Sign in to continue your ride from packets to the clouds.</p>
+      <div class="waking" role="status"><i></i><i></i><i></i>Waking the unicorn…</div>
+      <form class="gform" id="loginForm" novalidate>
+        <div class="gfield"><label for="email">Email</label>
+          <div class="ginput"><svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></svg><input id="email" type="email" autocomplete="username" placeholder="you@example.com" required></div></div>
+        <div class="gfield"><label for="password">Password</label>
+          <div class="ginput"><svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><input id="password" type="password" autocomplete="current-password" placeholder="Your password" required>
+            <button class="peek" id="peek" type="button" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+        <button class="go" id="loginBtn" type="submit"><svg viewBox="0 0 24 24" fill="#2A1650" aria-hidden="true"><path d="M12 2l2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2z"/></svg><span>Sign in</span></button>
+        <p class="gate-msg" id="gateMsg" role="status"></p>
+      </form>
+      <div class="gate-foot">Private workbook · invited accounts only</div>
+    </div></div>
+  </div>
+</div>
 <script>
 (function(){
-  const gate=document.getElementById('gate'),card=document.getElementById('gateCard'),canvas=document.getElementById('shipStars');
-  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const ctx=canvas.getContext('2d');let W=0,H=0,stars=[],last=0;
-  function resize(){const d=Math.min(window.devicePixelRatio||1,2);W=canvas.clientWidth;H=canvas.clientHeight;canvas.width=Math.max(1,W*d);canvas.height=Math.max(1,H*d);ctx.setTransform(d,0,0,d,0,0);stars=Array.from({length:Math.min(400,Math.max(90,Math.floor(W*H/3600)))},()=>({x:Math.random()*W,y:Math.random()*H,z:.2+Math.random()*.8,r:.3+Math.random()*1.5}));}
-  function draw(t){if(!gate.hidden&&!document.hidden){ctx.clearRect(0,0,W,H);for(const s of stars){if(!reduce){s.y+=.14+s.z*.6;if(s.y>H){s.y=0;s.x=Math.random()*W;}}ctx.fillStyle='rgba(179,225,255,'+(.18+s.z*.7)+')';ctx.beginPath();ctx.arc(s.x,s.y,s.r*s.z,0,Math.PI*2);ctx.fill();}if(!reduce){ctx.strokeStyle='rgba(101,195,245,.2)';const yy=(t*.03)%H;ctx.beginPath();ctx.moveTo(0,yy);ctx.lineTo(W,yy);ctx.stroke();}}requestAnimationFrame(draw);}
-  resize();window.addEventListener('resize',resize);requestAnimationFrame(draw);
-  const pw=document.getElementById('password'),peek=document.getElementById('peek'),msg=document.getElementById('gateMsg');
-  peek.addEventListener('click',()=>{const show=pw.type==='password';pw.type=show?'text':'password';peek.setAttribute('aria-pressed',String(show));peek.setAttribute('aria-label',show?'Hide password':'Show password');});
-  let bootErr='';window.addEventListener('error',e=>{if(!window.__p2cLoaded&&e&&e.message)bootErr=e.message;});
-  document.getElementById('loginForm').addEventListener('submit',function(e){if(!window.__p2cLoaded){e.preventDefault();msg.textContent='Sign-in is unavailable. Check Firebase configuration and network connection.'+(bootErr?' ('+bootErr+')':'');msg.className='gate-msg bad';window.gateFX.shake();}});
-  window.gateFX={ready(){card.classList.remove('checking');},burst(){},shake(){card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');},leave(){gate.classList.add('leaving');return new Promise(resolve=>setTimeout(resolve,reduce?250:2600));},reset(){gate.classList.remove('leaving');}};
-  setTimeout(()=>{if(card.classList.contains('checking')){card.classList.remove('checking');if(!window.__p2cLoaded){msg.textContent='Unable to connect to sign-in. Check Firebase configuration and network access.';msg.className='gate-msg bad';}}},6000);
+  var gate=document.getElementById('gate'); if(!gate) return;
+  var card=document.getElementById('gateCard'), scene=gate.querySelector('.scene');
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var COLORS=['#FF9EC7','#FFC48A','#FFE88A','#9EF0C0','#9CCBFF','#C9A8FF','#FFFFFF'];
+  /* starfield + shooting stars */
+  var cv=document.getElementById('sky'), cx=cv.getContext('2d'), W=0,H=0, stars=[], shoot=null;
+  function size(){var d=Math.min(window.devicePixelRatio||1,2); W=cv.clientWidth; H=cv.clientHeight; cv.width=W*d; cv.height=H*d; cx.setTransform(d,0,0,d,0,0);
+    stars=[]; var n=Math.round(W*H/5200); for(var i=0;i<n;i++) stars.push({x:Math.random()*W,y:Math.random()*H*.78,r:Math.random()*1.3+.3,p:Math.random()*6.28,s:.4+Math.random()*1.6}); draw(0);}
+  function draw(t){cx.clearRect(0,0,W,H);
+    for(var i=0;i<stars.length;i++){var s=stars[i]; cx.globalAlpha=reduce?.7:.3+.7*Math.abs(Math.sin(s.p+t/1000*s.s)); cx.fillStyle='#FFFFFF'; cx.beginPath(); cx.arc(s.x,s.y,s.r,0,6.283); cx.fill();}
+    if(!reduce){ if(!shoot&&Math.random()<.005) shoot={x:Math.random()*W*.6+W*.1,y:Math.random()*H*.3,k:0};
+      if(shoot){shoot.k++; var k=shoot.k, x=shoot.x+k*8, y=shoot.y+k*3.2, g=cx.createLinearGradient(x,y,x-110,y-44); g.addColorStop(0,'rgba(255,255,255,.95)'); g.addColorStop(1,'rgba(255,255,255,0)');
+        cx.globalAlpha=Math.max(0,1-k/50); cx.strokeStyle=g; cx.lineWidth=2; cx.beginPath(); cx.moveTo(x,y); cx.lineTo(x-110,y-44); cx.stroke(); if(k>50) shoot=null;}}
+    cx.globalAlpha=1;}
+  function loop(t){ if(!gate.hidden) draw(t); requestAnimationFrame(loop);}
+  size(); window.addEventListener('resize',size); if(!reduce) requestAnimationFrame(loop);
+  /* sparkles */
+  function sparkle(host,x,y,dx,dy,dur,sc){var e=document.createElement('i'); e.className='spk';
+    e.style.cssText='left:'+x+'px;top:'+y+'px;--c:'+COLORS[Math.floor(Math.random()*COLORS.length)]+';--dx:'+dx+'px;--dy:'+dy+'px;--s:'+sc+';animation-duration:'+dur+'ms';
+    host.appendChild(e); setTimeout(function(){e.remove();},dur+60);}
+  if(!reduce) setInterval(function(){ if(gate.hidden||document.hidden) return; var r=scene.getBoundingClientRect(); if(!r.width) return;
+    sparkle(scene, r.width*(.15+Math.random()*.7), r.height*(.25+Math.random()*.55), (Math.random()-.5)*50, -(50+Math.random()*90), 1800+Math.random()*1400, .5+Math.random()*.8);},240);
+  /* parallax */
+  /* show/hide password */
+  var peek=document.getElementById('peek'), pw=document.getElementById('password');
+  peek.addEventListener('click',function(){var on=pw.type==='password'; pw.type=on?'text':'password'; peek.setAttribute('aria-pressed',on); peek.setAttribute('aria-label',on?'Hide password':'Show password');});
+  var fx=document.getElementById('fx');
+  function fxSpark(x,y,dx,dy,dur,sc){var e=document.createElement('i'); e.className='spk'; e.style.cssText='left:'+x+'px;top:'+y+'px;--c:'+COLORS[Math.floor(Math.random()*COLORS.length)]+';--dx:'+dx+'px;--dy:'+dy+'px;--s:'+sc+';animation-duration:'+dur+'ms'; fx.appendChild(e); setTimeout(function(){e.remove();},dur+60);}
+  function burstAt(x,y,n){for(var i=0;i<n;i++){var a=Math.random()*6.283, d=40+Math.random()*90; fxSpark(x,y,Math.cos(a)*d,Math.sin(a)*d-20,800+Math.random()*700,.5+Math.random()*.9);}}
+  if(!reduce){
+    /* rising glow bubbles */
+    setInterval(function(){ if(gate.hidden||document.hidden) return; var e=document.createElement('i'), sz=5+Math.random()*12, d=9000+Math.random()*7000; e.className='bub';
+      e.style.cssText='left:'+(Math.random()*100)+'vw;width:'+sz+'px;height:'+sz+'px;--c:'+COLORS[Math.floor(Math.random()*6)]+';--sw:'+((Math.random()-.5)*120)+'px;animation-duration:'+d+'ms';
+      fx.appendChild(e); setTimeout(function(){e.remove();},d+100);},650);
+    /* rainbow trail from the tail */
+    var tail=gate.querySelector('.tail'), ti=0;
+    setInterval(function(){ if(gate.hidden||document.hidden) return; var r=tail.getBoundingClientRect(); if(!r.width) return; var e=document.createElement('i'), sz=6+Math.random()*7;
+      e.className='trl'; e.style.cssText='left:'+(r.left+r.width*.2)+'px;top:'+(r.top+r.height*(.25+Math.random()*.6))+'px;width:'+sz+'px;height:'+sz+'px;--c:'+COLORS[ti++%6]+';--dy:'+((Math.random()-.5)*30);
+      fx.appendChild(e); setTimeout(function(){e.remove();},1150);},90);
+    /* tap anywhere for sparkles */
+    gate.addEventListener('pointerdown',function(e){ if(e.target.closest('input,button')) return; burstAt(e.clientX,e.clientY,12);});
+    /* sparkles while typing */
+    ['email','password'].forEach(function(id){var el=document.getElementById(id); el.addEventListener('input',function(){var r=el.getBoundingClientRect(); for(var i=0;i<3;i++) fxSpark(r.left+Math.min(r.width-50,40+el.value.length*9),r.top+r.height/2,(Math.random()-.5)*40,-(20+Math.random()*40),700+Math.random()*400,.5+Math.random()*.4);});});
+  }
+  /* the unicorn politely looks away while you type your password */
+  pw.addEventListener('focus',function(){ if(pw.type==='password') gate.classList.add('shy');});
+  pw.addEventListener('blur',function(){gate.classList.remove('shy');});
+  peek.addEventListener('click',function(){gate.classList.toggle('shy',pw.type==='password'&&document.activeElement===pw);});
+  /* ---- smooth motion engine: one rAF loop drives the unicorn ---- */
+  var mover=document.getElementById('uniMove'), tailG=gate.querySelector('.tail'), maneG=gate.querySelector('.mane'), look=document.getElementById('look'), eyeEl=gate.querySelector('.lid');
+  var legs=[].slice.call(gate.querySelectorAll('.leg')).map(function(g){return {g:g,px:+g.dataset.px,py:+g.dataset.py,ph:+g.dataset.ph};});
+  var M={start:0,last:performance.now(),phase:0,leave:0,leaveRes:null,ptx:0,pty:0,px:0,py:0,etx:0,ety:0,ex:0,ey:0};
+  var ENTER=2.6;
+  function ease(p){return p<0?0:p>1?1:1-Math.pow(1-p,4);}
+  function smooth(p){p=p<0?0:p>1?1:p; return p*p*(3-2*p);}
+  gate.addEventListener('pointermove',function(e){
+    M.ptx=(e.clientX/window.innerWidth-.5)*16; M.pty=(e.clientY/window.innerHeight-.5)*10;
+    var r=eyeEl.getBoundingClientRect(); if(!r.width) return; var vx=e.clientX-(r.left+r.width/2), vy=e.clientY-(r.top+r.height/2), L=Math.hypot(vx,vy)||1, k=Math.min(1.8,L/80);
+    M.etx=vx/L*k; M.ety=vy/L*k*1.2;});
+  function step(now){
+    var dt=Math.min(.05,(now-M.last)/1000); M.last=now;
+    var t=(now-M.start)/1000, x=0,y=0,rot=0,gait=0,speed=7;
+    if(M.leave){
+      var lt=(now-M.leave)/1000, a=smooth(lt/1.1);
+      gait=1; speed=11;
+      x=lt*lt*520; y=-a*150+Math.sin(t*1.3)*9; rot=-9*a;
+      if(lt>1.15&&M.leaveRes){var r=M.leaveRes; M.leaveRes=null; r();}
+    }else{
+      var p=t/ENTER, e=ease(p);
+      x=-430*(1-e);
+      gait=1-smooth((p-.35)/.65);
+      var floatIn=smooth((t-ENTER*.55)/1.2);
+      y=Math.sin(t*1.35)*10*floatIn - gait*7*(.5-.5*Math.cos(2*M.phase));
+      rot=Math.sin(t*.7)*1.6*floatIn + gait*Math.sin(M.phase*2)*1.2;
+    }
+    M.phase+=dt*speed*(0.25+gait);
+    var idle=1-gait;
+    mover.setAttribute('transform','translate('+x.toFixed(2)+' '+y.toFixed(2)+') rotate('+rot.toFixed(2)+' 280 240)');
+    for(var i=0;i<legs.length;i++){var L=legs[i], ang=Math.sin(M.phase+L.ph)*26*gait + Math.sin(t*1.6+L.ph)*3*idle; L.g.setAttribute('transform','rotate('+ang.toFixed(2)+' '+L.px+' '+L.py+')');}
+    tailG.setAttribute('transform','rotate('+(Math.sin(t*2-0.6)*7+Math.sin(M.phase-0.9)*12*gait).toFixed(2)+' 62 98)');
+    maneG.setAttribute('transform','rotate('+(Math.sin(t*1.7-0.3)*2.4+Math.sin(M.phase-0.5)*3*gait).toFixed(2)+' 160 34)');
+    M.px+=(M.ptx-M.px)*Math.min(1,dt*3); M.py+=(M.pty-M.py)*Math.min(1,dt*3);
+    scene.style.transform='translate3d('+M.px.toFixed(2)+'px,'+M.py.toFixed(2)+'px,0)';
+    M.ex+=(M.etx-M.ex)*Math.min(1,dt*8); M.ey+=(M.ety-M.ey)*Math.min(1,dt*8);
+    look.setAttribute('transform','translate('+M.ex.toFixed(2)+' '+M.ey.toFixed(2)+')');
+  }
+  function run(now){ if(!M.start){M.start=now; M.last=now;} if(!gate.hidden&&!document.hidden) step(now); else M.last=now; requestAnimationFrame(run);}
+  if(!reduce) requestAnimationFrame(run);
+  var msg=document.getElementById('gateMsg');
+  var bootErr='';
+  window.addEventListener('error',function(e){ if(!window.__p2cLoaded&&e&&e.message) bootErr=e.message; });
+  function bootProblem(){
+    var hint=/already been declared/i.test(bootErr)?'"const firebaseConfig" appears twice. Keep only the block Firebase gave you.'
+      :/Unexpected|SyntaxError|missing|Invalid or unexpected/i.test(bootErr)?'The Firebase settings were pasted with a typo (a missing quote, comma or bracket).'
+      :'The sign-in code could not load. Check your internet connection, and that the Firebase settings at the top of index.html were pasted correctly.';
+    msg.textContent='Sign-in could not start. '+hint+(bootErr?' ('+bootErr+')':''); msg.className='gate-msg bad';
+  }
+  document.getElementById('loginForm').addEventListener('submit',function(e){ e.preventDefault(); if(!window.__p2cLoaded){ bootProblem(); window.gateFX.shake(); }});
+  window.gateFX={
+    ready:function(){card.classList.remove('checking');},
+    burst:function(el){ if(reduce) return; var r=el.getBoundingClientRect(); burstAt(r.left+r.width/2,r.top+r.height/2,24);},
+    shake:function(){card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');},
+    leave:function(){return new Promise(function(res){ if(reduce){res();return;} gate.classList.add('leaving'); M.leaveRes=res; M.leave=performance.now(); setTimeout(function(){ if(M.leaveRes){M.leaveRes=null; res();}},1800);});},
+    reset:function(){gate.classList.remove('leaving'); gate.style.opacity=''; M.leave=0; M.start=performance.now()-ENTER*1000;}
+  };
+  setTimeout(function(){ if(card.classList.contains('checking')){ card.classList.remove('checking'); if(!window.__p2cLoaded) bootProblem(); }},6000);
 })();
 </script>
 <script type="module">
@@ -1319,11 +1320,11 @@ document.getElementById('loginForm').addEventListener('submit',async e=>{
   e.preventDefault(); if(!auth){FX.shake(); say('Sign-in isn’t available right now.','bad'); return;}
   const em=document.getElementById('email').value.trim(), pw=document.getElementById('password').value;
   if(!em||!pw){say('Enter your email and password.','bad'); FX.shake(); return;}
-  btn.disabled=true; btn.querySelector('span').textContent='CONNECTING…'; say(''); FX.burst(btn);
+  btn.disabled=true; btn.querySelector('span').textContent='Summoning…'; say(''); FX.burst(btn);
   justSubmitted=true;
   try{await signInWithEmailAndPassword(auth,em,pw);}
   catch(err){justSubmitted=false; FX.shake(); say(ERR[err.code]||'Sign-in failed ('+(err.code||'unknown error')+').','bad');}
-  finally{btn.disabled=false; btn.querySelector('span').textContent='INITIALIZE SESSION';}
+  finally{btn.disabled=false; btn.querySelector('span').textContent='Sign in';}
 });
 document.getElementById('signout').onclick=async()=>{await flush(); await signOut(auth); go('dashboard');};
 </script>
