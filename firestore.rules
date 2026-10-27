@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // REPLACE both example UIDs with the actual administrator and learner Firebase Auth UIDs.
+    function approved() {
+      return request.auth != null && request.auth.uid in [
+        'REPLACE_WITH_ADMIN_UID', 'REPLACE_WITH_LEARNER_UID'
+      ];
+    }
+    match /progress/{uid} {
+      allow read, write: if approved() && request.auth.uid == uid;
+    }
+    match /users/{uid}/{area}/{entryId} {
+      allow read, write: if approved() && request.auth.uid == uid
+        && area in ['grcProgress', 'studyEntries'];
+    }
+  }
+}
