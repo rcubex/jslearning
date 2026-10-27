@@ -1,6 +1,6 @@
 # Packet to Cloud · theory reader (enhanced edition)
 
-Static-hostable and responsive edition based on the uploaded workbook. Includes all original 22 modules, 134 lessons, Firebase web authentication and progress structure, supplemental theory notes, conceptual step diagrams, revealable recall questions, bookmark controls, knowledge explorer, reader font-size/width preferences, chapter Markdown companions and same-origin offline caching. No hands-on labs were added.
+Static-hostable and responsive edition based on the uploaded workbook. Includes all original 22 modules, 134 lessons, Firebase web authentication and progress structure, supplemental theory notes, conceptual step diagrams, revealable recall questions, bookmark controls, knowledge explorer, reader font-size/width preferences, chapter Markdown companions and same-origin offline caching. No hands-on labs were added. 
 
 ## Deployment
 
