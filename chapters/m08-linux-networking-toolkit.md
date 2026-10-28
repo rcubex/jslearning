@@ -1,8 +1,12 @@
-# Module 09: Linux Networking Toolkit
+# Module 08: Linux Networking Toolkit
 
-**Level:** 2 · **Lessons:** 7 · **Questions:** 6
+**Level:** 2 · **Lessons:** 6
 
-_Troubleshoot any cloud VM from its own shell._
+## A real-world thread: API is intermittently unreachable
+
+An internal API sometimes times out. Name resolution, socket state, routes, MTU, host firewall and packet timing provide different clues; no single command proves the root cause.
+
+This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
 
 ## Lesson 1: Interfaces and routes
 
@@ -12,9 +16,7 @@ On any Linux VM, start with two commands.
 
 `ip route` (short: `ip r`) shows the routing table. Check that there is a `default via ...` line and that it points to the subnet's gateway (in most clouds the first usable address, such as 10.0.1.1).
 
-**First look at a VM**
-
-```
+```text
 $ ip -br a
 lo      UNKNOWN 127.0.0.1/8
 eth0    UP      10.0.1.25/24
@@ -28,13 +30,19 @@ $ cat /etc/resolv.conf      # which DNS server is configured?
 
 > **In the cloud:** Don't change IP settings by hand on cloud VMs. Addresses come from the provider's DHCP; a manually set wrong address can cut you off completely. Change them in the console or with IaC instead.
 
+**Build the mental model:** On any Linux VM, start with two commands. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — API is intermittently unreachable:** Consider how “interfaces and routes” affects the situation: An internal API sometimes times out. Name resolution, socket state, routes, MTU, host firewall and packet timing provide different clues; no single command proves the root cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For interfaces and routes, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain interfaces and routes to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 2: Sockets and ports
 
 `ss` (socket statistics) shows connections and listening ports. The most useful form is `ss -tulpn`: **t**cp, **u**dp, **l**istening, **p**rocess, **n**umeric.
 
-**Is my service actually listening?**
-
-```
+```text
 $ sudo ss -tulpn
 Netid State  Local Address:Port  Process
 tcp   LISTEN 127.0.0.1:5432      users:(("postgres",pid=812))
@@ -48,13 +56,19 @@ Pay attention to the local address. `127.0.0.1:5432` means PostgreSQL only accep
 
 > **Tip:** The order that saves hours: is the process running (`systemctl status`), is it listening on the right address (`ss`), is the host firewall open (`iptables`/`nft`/`ufw`), and only then the cloud security rules.
 
+**Build the mental model:** `ss` (socket statistics) shows connections and listening ports. The most useful form is `ss -tulpn`: **t**cp, **u**dp, **l**istening, **p**rocess, **n**umeric. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — API is intermittently unreachable:** Consider how “sockets and ports” affects the situation: An internal API sometimes times out. Name resolution, socket state, routes, MTU, host firewall and packet timing provide different clues; no single command proves the root cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For sockets and ports, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain sockets and ports to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 3: HTTP and DNS testing
 
 `curl` is the Swiss army knife for testing web services.
 
-**Useful curl patterns**
-
-```
+```text
 curl -I https://app.example.com                 # headers only
 curl -v https://app.example.com                 # full detail: DNS, TLS, headers
 curl -s -o /dev/null -w '%{http_code} %{time_total}s\n' https://app.example.com
@@ -69,13 +83,19 @@ curl -k https://10.0.1.50                       # ignore certificate errors (tes
 
 > **Watch out:** Many clouds and firewalls block or deprioritise ICMP and traceroute probes. Missing hops are normal; consistent loss that continues all the way to the destination is what matters.
 
+**Build the mental model:** `curl` is the Swiss army knife for testing web services. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — API is intermittently unreachable:** Consider how “http and dns testing” affects the situation: An internal API sometimes times out. Name resolution, socket state, routes, MTU, host firewall and packet timing provide different clues; no single command proves the root cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For http and dns testing, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain http and dns testing to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 4: Packet capture
 
 When logs and tests disagree, look at the packets. `tcpdump` captures traffic on an interface.
 
-**tcpdump patterns**
-
-```
+```text
 sudo tcpdump -i eth0 -nn port 443                 # all HTTPS traffic
 sudo tcpdump -i eth0 -nn host 10.0.2.30           # traffic to/from one host
 sudo tcpdump -i eth0 -nn 'tcp[tcpflags] & tcp-syn != 0'   # only SYNs
@@ -90,15 +110,21 @@ How to read the result:
 
 > **Tip:** Capture on both ends at the same time. If the packet leaves A but never reaches B, the problem is in between, which narrows it down to routes and cloud firewalls.
 
+**Build the mental model:** You see SYN going out and nothing coming back → something on the path is dropping it (security rule, NACL, route, or the far host is down). This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — API is intermittently unreachable:** Consider how “packet capture” affects the situation: An internal API sometimes times out. Name resolution, socket state, routes, MTU, host firewall and packet timing provide different clues; no single command proves the root cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For packet capture, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain packet capture to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 5: MTU and fragmentation
 
 The **MTU** (maximum transmission unit) is the largest packet a link can carry. Standard Ethernet is 1,500 bytes. Some cloud networks support **jumbo frames**: AWS allows 9,001 bytes inside a VPC, a Google Cloud VPC's MTU can be set up to 8,896, and OCI supports 9,000 within a VCN. Azure VMs default to 1,500; check the current Azure documentation before raising it.
 
 Tunnels add headers: IPsec, GRE, VXLAN and VPN connections all reduce the space left for data, so the effective MTU across a VPN might be around 1,400 bytes or less. If a packet is too big and has the "don't fragment" bit set, the router drops it and should send back an ICMP "fragmentation needed" message. If ICMP is blocked, the sender never learns, and you get a **PMTU black hole**: small requests work, large transfers hang.
 
-**Find the working MTU**
-
-```
+```text
 ping -M do -s 1472 10.20.0.5    # 1472 + 28 bytes of headers = 1500
 ping -M do -s 1372 10.20.0.5    # try smaller until it works
 ip link show eth0 | grep mtu
@@ -108,13 +134,19 @@ The usual fix is **MSS clamping** on the VPN or firewall, which tells TCP to use
 
 > **Watch out:** Traffic leaving a VPC through an Internet gateway, VPN or peering connection to another region is usually limited to 1,500 bytes or less, even if instances use jumbo frames internally.
 
+**Build the mental model:** The **MTU** (maximum transmission unit) is the largest packet a link can carry. Standard Ethernet is 1,500 bytes. Some cloud networks support **jumbo frames**: AWS allows 9,001 bytes inside a VPC, a Google Cloud VPC's MT. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — API is intermittently unreachable:** Consider how “mtu and fragmentation” affects the situation: An internal API sometimes times out. Name resolution, socket state, routes, MTU, host firewall and packet timing provide different clues; no single command proves the root cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For mtu and fragmentation, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain mtu and fragmentation to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 6: Host firewalls
 
 Linux has its own firewall in the kernel, managed with **iptables** or its successor **nftables**, or more simply with **ufw** (Ubuntu) and **firewalld** (RHEL family). A host firewall applies in addition to cloud security groups: traffic must pass both.
 
-**Check and manage host firewall rules**
-
-```
+```text
 sudo ufw status verbose
 sudo ufw allow from 10.0.0.0/16 to any port 5432 proto tcp
 sudo firewall-cmd --list-all              # firewalld
@@ -126,86 +158,10 @@ Linux is also the basis of many network functions you will meet: routing (`sysct
 
 > **Tip:** When a port is open in the cloud security group but still unreachable, check the host firewall next. Both must allow the traffic.
 
-## Lesson 7: Real-world scenario: works with curl, fails in the app
+**Build the mental model:** Linux has its own firewall in the kernel, managed with **iptables** or its successor **nftables**, or more simply with **ufw** (Ubuntu) and **firewalld** (RHEL family). A host firewall applies in addition to cloud securi. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
 
-**Situation.** A Java application on a cloud VM can't connect to a partner's HTTPS API: "connection timed out". The engineer runs `curl https://api.partner.example` from the same VM and it works instantly.
+**Scenario connection — API is intermittently unreachable:** Consider how “host firewalls” affects the situation: An internal API sometimes times out. Name resolution, socket state, routes, MTU, host firewall and packet timing provide different clues; no single command proves the root cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
 
-**Investigation.**
+**Reasoning in a real design:** For host firewalls, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
 
-1. `dig api.partner.example` returns two addresses: an IPv6 AAAA and an IPv4 A record.
-2. `curl -v` shows curl tried IPv6 first, failed quickly, and fell back to IPv4 (the "happy eyeballs" behaviour).
-3. The Java runtime was configured to prefer IPv6 and waited the full timeout on the IPv6 address before giving up. The VM had an IPv6 address but the subnet's route table had no IPv6 default route.
-4. `tcpdump -i eth0 -nn ip6` confirmed SYN packets to the IPv6 address with no replies.
-
-**Fix.** Either add the IPv6 route (via the Internet gateway or egress-only gateway) and security rules, or remove IPv6 from the VM's interface until IPv6 is properly supported. The team added the egress-only gateway route; both curl and Java worked.
-
-**Lessons learned.** Tools behave differently: curl's fallback hid a broken path. tcpdump shows what really happens on the wire. Half-configured IPv6 is a common cause of mysterious timeouts.
-
-## Key takeaways
-
-- ip addr and ip route are the first two commands on any broken VM.
-- ss -tulpn proves a service is listening before you blame the network.
-- curl, dig and nc test the application, DNS and raw ports separately.
-- tcpdump shows the truth; MTU problems make large transfers hang.
-
-## Checkpoint
-
-**Q1. Which command shows which process listens on a port?**
-
-A. ip route
-B. ss -tulpn  ✓
-C. dig
-D. traceroute
-
-_ss lists sockets; -p shows the owning process._
-
-**Q2. Large transfers hang over a VPN but small requests work. First suspect?**
-
-A. DNS
-B. MTU  ✓
-C. ARP
-D. TTL
-
-_Tunnel overhead shrinks the usable packet size; oversized packets get dropped._
-
-**Q3. ss shows PostgreSQL listening on 127.0.0.1:5432. Other VMs can't connect. Why?**
-
-A. The security group is wrong
-B. PostgreSQL only accepts local connections on the loopback address  ✓
-C. DNS is broken
-D. The VM has no route
-
-_A service bound to 127.0.0.1 can't be reached from outside the VM, whatever the firewall says._
-
-**Q4. tcpdump on the client shows SYN sent and no reply ever arrives. What is most likely?**
-
-A. Nothing is listening on the port
-B. The certificate expired
-C. A firewall, security rule or route on the path is dropping the traffic  ✓
-D. The application crashed after connecting
-
-_No reply at all means the packet is being dropped. "Nothing listening" would produce an RST._
-
-**Q5. Which curl option lets you test a specific server for a host name without changing DNS?**
-
-A. -I
-B. -k
-C. --resolve  ✓
-D. -o
-
-_--resolve host:port:ip forces curl to use that IP for the name._
-
-**Q6. curl works but the application times out to the same host. What does tcpdump reveal in the scenario?**
-
-A. DNS failures
-B. SYNs sent over IPv6 with no replies, because IPv6 routing was missing  ✓
-C. Certificate errors
-D. MTU problems
-
-_The application preferred IPv6, which had no working route._
-
-## Official reading
-
-- [tcpdump manual](https://www.tcpdump.org/manpages/tcpdump.1.html)
-- [iproute2 ip(8) manual](https://man7.org/linux/man-pages/man8/ip.8.html)
-- [curl documentation](https://curl.se/docs/)
+> **Tip:** **Check your understanding:** Explain host firewalls to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.

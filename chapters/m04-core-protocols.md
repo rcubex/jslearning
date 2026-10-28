@@ -1,8 +1,12 @@
 # Module 04: Core Protocols
 
-**Level:** 1 · **Lessons:** 7 · **Questions:** 7
+**Level:** 1 · **Lessons:** 5
 
-_Know the protocols every cloud firewall rule and DNS record depends on._
+## A real-world thread: Banking app connection
+
+A customer opens a banking application. DNS locates the endpoint, TLS protects the session, TCP or QUIC transports messages and application requests access account information.
+
+This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
 
 ## Lesson 1: TCP vs UDP
 
@@ -12,9 +16,7 @@ Both TCP and UDP deliver data to the right application on a host, identified by 
 
 **UDP** (User Datagram Protocol) just sends datagrams with no setup, no acknowledgements and no ordering. It is lighter and faster, and suits traffic where a late packet is useless anyway: DNS lookups, voice and video, online games, and **QUIC**, the transport under HTTP/3, which builds its own reliability on top of UDP.
 
-**See the handshake**
-
-```
+```text
 sudo tcpdump -i any -nn 'tcp port 443 and tcp[tcpflags] & (tcp-syn) != 0'
 # then open any https site; you'll see [S] and [S.] (SYN, SYN-ACK)
 ```
@@ -24,6 +26,14 @@ sudo tcpdump -i any -nn 'tcp port 443 and tcp[tcpflags] & (tcp-syn) != 0'
 - A connection timeout usually means the SYN got no answer (blocked or nothing listening)
 
 > **Tip:** "Connection refused" means the host answered with RST, so the network path is fine but nothing listens on that port. "Connection timed out" means no answer at all, which usually points to a firewall or routing problem.
+
+**Build the mental model:** TCP: handshake, reliable, ordered, congestion control. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Banking app connection:** Consider how “tcp vs udp” affects the situation: A customer opens a banking application. DNS locates the endpoint, TLS protects the session, TCP or QUIC transports messages and application requests access account information. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For tcp vs udp, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain tcp vs udp to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 2: Ports
 
@@ -41,6 +51,14 @@ A connection is identified by its **5-tuple**: protocol, source IP, source port,
 
 > **In the cloud:** Every security group, NSG and firewall rule is a 5-tuple filter: "allow TCP 443 from 0.0.0.0/0" or "allow TCP 5432 from the app subnet". Opening 22 or 3389 to 0.0.0.0/0 is one of the most common causes of cloud breaches.
 
+**Build the mental model:** 20/21 FTP, 22 SSH, 23 Telnet, 25 SMTP, 53 DNS, 67/68 DHCP. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Banking app connection:** Consider how “ports” affects the situation: A customer opens a banking application. DNS locates the endpoint, TLS protects the session, TCP or QUIC transports messages and application requests access account information. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For ports, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain ports to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 3: DNS
 
 The **Domain Name System** turns names like `www.example.com` into IP addresses. It is a distributed, hierarchical database.
@@ -55,9 +73,7 @@ Record types you will use constantly:
 - **NS**: which servers are authoritative for a zone. **SOA**: zone administration data
 - **Alias records** (AWS Route 53 alias, Azure alias records): cloud-specific records that point the apex to a load balancer or CDN
 
-**Explore DNS**
-
-```
+```text
 dig example.com A +short
 dig example.com MX
 dig +trace example.com        # follow root → TLD → authoritative
@@ -65,6 +81,14 @@ nslookup example.com 1.1.1.1  # Windows-friendly
 ```
 
 > **Tip:** Before changing a DNS record (for a migration, for example), lower its TTL to 60–300 seconds a day in advance. Then the change takes effect quickly and can be rolled back quickly.
+
+**Build the mental model:** A: name → IPv4 address. AAAA: name → IPv6 address. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Banking app connection:** Consider how “dns” affects the situation: A customer opens a banking application. DNS locates the endpoint, TLS protects the session, TCP or QUIC transports messages and application requests access account information. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For dns, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain dns to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 4: DHCP and ARP
 
@@ -74,9 +98,7 @@ nslookup example.com 1.1.1.1  # Windows-friendly
 
 In the cloud, both are handled for you. Every VM gets its address from the provider's DHCP service, and the virtual network answers ARP requests itself. That is why many classic Layer 2 tricks (such as gratuitous ARP for failover, or broadcast and multicast) do not work in the cloud.
 
-**Look at your own settings**
-
-```
+```text
 ip addr && ip route        # Linux
 ip neigh                   # Linux ARP table
 ipconfig /all              # Windows
@@ -84,6 +106,14 @@ arp -a                     # Windows / macOS
 ```
 
 > **Watch out:** A device showing a 169.254.x.x address failed to get a DHCP lease. Check the DHCP server, the cable or Wi-Fi, and the VLAN.
+
+**Build the mental model:** **DHCP** (Dynamic Host Configuration Protocol) gives a device its network settings automatically: IP address, subnet mask, default gateway, DNS servers and lease time. It works in four steps, remembered as **DORA**: the. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Banking app connection:** Consider how “dhcp and arp” affects the situation: A customer opens a banking application. DNS locates the endpoint, TLS protects the session, TCP or QUIC transports messages and application requests access account information. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For dhcp and arp, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain dhcp and arp to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 5: ICMP, HTTP and TLS
 
@@ -93,9 +123,7 @@ arp -a                     # Windows / macOS
 
 **TLS** (Transport Layer Security) encrypts traffic and proves the server's identity using a **certificate** signed by a trusted certificate authority. HTTPS is HTTP inside TLS, on port 443. TLS 1.2 and 1.3 are current; older versions should be disabled.
 
-**Inspect a real HTTPS conversation**
-
-```
+```text
 curl -v https://example.com 2>&1 | head -40
 # Look for: TLS version, certificate subject and issuer, "HTTP/2 200"
 openssl s_client -connect example.com:443 -servername example.com </dev/null | head -20
@@ -103,121 +131,10 @@ openssl s_client -connect example.com:443 -servername example.com </dev/null | h
 
 > **In the cloud:** A 502 or 504 from a cloud load balancer almost always means the load balancer could not reach a healthy backend: check the health check, the backend's security group and whether the app is listening.
 
-## Lesson 6: Deep dive: HTTP/2, HTTP/3 and QUIC
+**Build the mental model:** **ICMP** (Internet Control Message Protocol) carries network control messages. `ping` uses ICMP Echo Request and Echo Reply. `traceroute` relies on ICMP "Time Exceeded" messages. ICMP also carries "Destination Unreachabl. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
 
-HTTP has evolved to cut latency, and cloud load balancers and CDNs support all current versions.
+**Scenario connection — Banking app connection:** Consider how “icmp, http and tls” affects the situation: A customer opens a banking application. DNS locates the endpoint, TLS protects the session, TCP or QUIC transports messages and application requests access account information. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
 
-**HTTP/1.1** sends one request at a time per connection. Browsers open about six connections per site to work around this, and a slow response blocks those behind it (**head-of-line blocking**).
+**Reasoning in a real design:** For icmp, http and tls, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
 
-**HTTP/2** (over TLS, negotiated via ALPN `h2`) **multiplexes** many requests as independent streams over one TCP connection, with header compression (HPACK). Far fewer connections and handshakes. But it still runs over TCP: one lost packet stalls *all* streams until it's retransmitted, which hurts on lossy mobile networks.
-
-**HTTP/3** runs over **QUIC**, a transport built on UDP (port 443):
-
-- Streams are independent at the transport level, so a lost packet only stalls its own stream.
-- The transport and TLS 1.3 handshakes are combined: a new connection takes 1 RTT, and resumed connections can send data immediately (0-RTT).
-- **Connection migration**: a phone moving from Wi-Fi to mobile data keeps its connection, because QUIC identifies connections by ID, not by IP and port.
-
-**gRPC** uses HTTP/2 for fast service-to-service APIs with streaming; L7 load balancers that understand HTTP/2 can balance individual gRPC calls rather than whole connections.
-
-**See which protocol a site uses**
-
-```
-curl -sI --http2 https://example.com | head -1
-curl -sI --http3 https://example.com | head -1    # needs a curl build with HTTP/3 support
-```
-
-> **In the cloud:** CloudFront, Azure Front Door, Google Cloud's external Application Load Balancer and others can serve HTTP/3 to clients while talking HTTP/1.1 or HTTP/2 to your backends. Make sure firewalls allow UDP 443 outbound from clients, or browsers silently fall back to HTTP/2.
-
-## Lesson 7: Real-world scenario: the DNS change that took a day
-
-**Situation.** A company moves its website to a new load balancer. At 09:00 they update the A record for `www.example.com`. By 17:00, about a third of customers still reach the old server, which is now switched off.
-
-**Investigation.** `dig www.example.com` against the authoritative servers shows the new address. Asking several public resolvers shows some still return the old one. The old record had a **TTL of 86,400 seconds (24 hours)**, so resolvers that cached it just before the change keep serving the old address until the next morning. Some corporate networks and devices also cache longer.
-
-**Fix.** They turn the old server back on, behind the new load balancer's target group, until the TTL fully expires. For the next migration they follow a runbook:
-
-1. Two days before: lower the TTL to 300 seconds.
-2. Wait at least the old TTL (24 hours) so all caches pick up the short TTL.
-3. Change the record; traffic moves within minutes.
-4. Keep the old endpoint running for a while anyway.
-5. Raise the TTL again after the migration is stable.
-
-**Lessons learned.** DNS changes are only as fast as the TTL that was cached *before* the change. Plan TTLs ahead of migrations.
-
-## Key takeaways
-
-- TCP is reliable and ordered; UDP is fast and connectionless.
-- Firewall rules are written as protocol + port + source; know the common ports.
-- DNS turns names into addresses; TTL decides how long answers are cached.
-- HTTPS = HTTP over TLS; certificates prove the server's identity.
-
-## Checkpoint
-
-**Q1. Which protocol and port does DNS mainly use?**
-
-A. TCP 80
-B. UDP 53  ✓
-C. UDP 123
-D. TCP 22
-
-_DNS queries use UDP 53, falling back to TCP 53 for large responses._
-
-**Q2. A laptop joins Wi-Fi and needs an IP address. Which protocol provides it?**
-
-A. ARP
-B. DNS
-C. DHCP  ✓
-D. ICMP
-
-_DHCP assigns the address, mask, gateway and DNS servers._
-
-**Q3. You get "connection refused" when connecting to a server on port 8080. What does that tell you?**
-
-A. A firewall silently dropped the packet
-B. The host is reachable but nothing is listening on 8080  ✓
-C. DNS failed
-D. The route is missing
-
-_A refusal is an active RST from the host. A silent drop would show as a timeout._
-
-**Q4. Which DNS record type cannot be used at the zone apex (example.com itself)?**
-
-A. A
-B. MX
-C. CNAME  ✓
-D. TXT
-
-_CNAMEs cannot coexist with the SOA and NS records at the apex; use A/AAAA or a cloud alias record._
-
-**Q5. A cloud load balancer returns HTTP 502. What is the most likely cause?**
-
-A. The user's browser is out of date
-B. DNS points to the wrong IP
-C. The load balancer could not get a valid response from a backend  ✓
-D. The TLS certificate expired
-
-_502 Bad Gateway means the proxy reached out to a backend and failed: check health checks, ports and security rules._
-
-**Q6. Why can HTTP/3 perform better than HTTP/2 on a lossy mobile network?**
-
-A. It uses bigger packets
-B. QUIC streams are independent, so one lost packet doesn't stall all requests  ✓
-C. It disables encryption
-D. It uses TCP port 80
-
-_HTTP/2 over TCP suffers head-of-line blocking; QUIC avoids it per stream._
-
-**Q7. You must move a website whose DNS record has a 24-hour TTL. What should you do first?**
-
-A. Change the record immediately
-B. Lower the TTL and wait at least 24 hours before changing the record  ✓
-C. Delete the record, then recreate it
-D. Switch DNS providers
-
-_Caches hold the old TTL; lowering it in advance makes the cut-over fast._
-
-## Official reading
-
-- [Cloudflare Learning: what is DNS](https://www.cloudflare.com/learning/dns/what-is-dns/)
-- [Cloudflare Learning: what is TLS](https://www.cloudflare.com/learning/ssl/transport-layer-security-tls/)
-- [MDN: an overview of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
+> **Tip:** **Check your understanding:** Explain icmp, http and tls to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.

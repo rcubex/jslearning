@@ -1,8 +1,12 @@
-# Module 26: Multi-Cloud Architecture
+# Module 18: Multi-Cloud Architecture
 
-**Level:** 5 · **Lessons:** 7 · **Questions:** 6
+**Level:** 5 · **Lessons:** 6
 
-_Plan addresses, topology and DNS across four clouds and on-premises._
+## A real-world thread: Company operating on two clouds
+
+A business chooses different clouds for applications and analytics. Nonoverlapping addressing, identity boundaries, private connectivity, DNS and operational ownership become important.
+
+This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
 
 ## Lesson 1: IP address management (IPAM)
 
@@ -10,9 +14,7 @@ In a multi-cloud estate, address overlaps are the most expensive mistake. Two ne
 
 Build one hierarchical plan and allocate from it:
 
-**A multi-cloud address plan inside 10.0.0.0/8**
-
-```
+```text
 10.0.0.0/12     on-premises data centres and offices
 10.16.0.0/12    reserved for growth
 10.32.0.0/12    AWS     (10.32/14 me-central-1, 10.36/14 eu-west-1, ...)
@@ -25,6 +27,14 @@ Build one hierarchical plan and allocate from it:
 Tools help enforce it: **Amazon VPC IPAM** can allocate VPC CIDRs automatically from pools and monitor usage; **Azure Virtual Network Manager IPAM** manages address pools across subscriptions; Google Cloud and OCI rely on careful planning plus third-party IPAM (Infoblox, NetBox).
 
 > **Tip:** Each cloud gets one large, summarisable block per region. Then on-premises routers need only one route per cloud region, and routing stays simple.
+
+**Build the mental model:** In a multi-cloud estate, address overlaps are the most expensive mistake. Two networks with the same range cannot be routed to each other without NAT, which complicates everything that follows. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Company operating on two clouds:** Consider how “ip address management (ipam)” affects the situation: A business chooses different clouds for applications and analytics. Nonoverlapping addressing, identity boundaries, private connectivity, DNS and operational ownership become important. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For ip address management (ipam), consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain ip address management (ipam) to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 2: Topologies
 
@@ -41,6 +51,14 @@ Between clouds and on-premises, common shapes are:
 
 > **Tip:** Segment consistently everywhere. If "prod" and "dev" are separate route domains in AWS Transit Gateway, keep them separate in Azure, Google Cloud and OCI too, and across the interconnects.
 
+**Build the mental model:** On-premises as the hub: every cloud connects back to the data centre. Simple, but cloud-to-cloud traffic hairpins through the data centre. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Company operating on two clouds:** Consider how “topologies” affects the situation: A business chooses different clouds for applications and analytics. Nonoverlapping addressing, identity boundaries, private connectivity, DNS and operational ownership become important. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For topologies, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain topologies to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 3: Connecting the clouds
 
 For each pair of clouds that must talk, weigh bandwidth, latency, cost and effort:
@@ -51,6 +69,14 @@ For each pair of clouds that must talk, weigh bandwidth, latency, cost and effor
 - **Partner network-as-a-service**: Equinix Fabric, Megaport and similar let you create virtual circuits between clouds in minutes from a portal.
 
 > **In the cloud:** A typical example is an application on Azure using Oracle Database on OCI over the Oracle–Azure interconnect, or Oracle Database@Azure, which runs Oracle's database service inside Azure data centres.
+
+**Build the mental model:** VPN between cloud gateways (for example, AWS Site-to-Site VPN to Azure VPN Gateway, or Google HA VPN to AWS). Set up in an hour, encrypted, but limited per tunnel and crosses the Internet. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Company operating on two clouds:** Consider how “connecting the clouds” affects the situation: A business chooses different clouds for applications and analytics. Nonoverlapping addressing, identity boundaries, private connectivity, DNS and operational ownership become important. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For connecting the clouds, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain connecting the clouds to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 4: DNS across clouds
 
@@ -67,6 +93,14 @@ A clean design gives each environment its own zone, such as `aws.corp.example`, 
 
 > **Watch out:** Private endpoint zones (`privatelink.*` on Azure, PSC and interface endpoint names elsewhere) must also be forwarded, or clients in other environments will resolve the public addresses.
 
+**Build the mental model:** AWS: Route 53 Resolver inbound and outbound endpoints with forwarding rules. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Company operating on two clouds:** Consider how “dns across clouds” affects the situation: A business chooses different clouds for applications and analytics. Nonoverlapping addressing, identity boundaries, private connectivity, DNS and operational ownership become important. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For dns across clouds, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain dns across clouds to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 5: Choosing where workloads live
 
 Multi-cloud adds complexity: more skills to maintain, more tools, more connections and more places for mistakes. Adopt it for a clear reason:
@@ -80,6 +114,14 @@ Then place each workload by **data gravity** (keep compute close to its largest 
 
 > **Tip:** Make chatty systems live in the same cloud and region. Send only summarised, infrequent traffic across clouds.
 
+**Build the mental model:** Best-of-breed services: Oracle Database on OCI, analytics on Google Cloud, Microsoft workloads on Azure. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Company operating on two clouds:** Consider how “choosing where workloads live” affects the situation: A business chooses different clouds for applications and analytics. Nonoverlapping addressing, identity boundaries, private connectivity, DNS and operational ownership become important. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For choosing where workloads live, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain choosing where workloads live to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 6: Running multi-cloud as code
 
 At this scale, networks must be managed as code and observed in one place.
@@ -91,91 +133,10 @@ At this scale, networks must be managed as code and observed in one place.
 
 > **Tip:** Write an "allowed flows" matrix (which environment may talk to which, on which ports) and implement it identically in each cloud's firewall layer. It becomes the single source of truth for audits.
 
-## Lesson 7: Real-world scenario: "Let's be multi-cloud for resilience"
+**Build the mental model:** Infrastructure as code: Terraform with all four providers (covered in Module 20), one repository per layer (foundation, hubs, spokes), reviewed changes, and automated policy checks. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
 
-**Situation.** After a widely reported cloud outage, a company's board asks the IT team to make the main customer application "multi-cloud active-active" across two providers within six months.
+**Scenario connection — Company operating on two clouds:** Consider how “running multi-cloud as code” affects the situation: A business chooses different clouds for applications and analytics. Nonoverlapping addressing, identity boundaries, private connectivity, DNS and operational ownership become important. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
 
-**Analysis the network architect presents.**
+**Reasoning in a real design:** For running multi-cloud as code, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
 
-1. **Data**: the application uses a relational database with strong consistency. Active-active writes across two clouds would need either a distributed database that supports both clouds, or a single writer with cross-cloud replication (which is active-passive for writes).
-2. **Network**: cross-cloud links (interconnects or VPN) add latency (5–30 ms or more) and cost per GB; every cross-cloud call slows user requests.
-3. **Operations**: two sets of IAM, networking, security tooling and on-call skills.
-4. **Actual risk**: most outages the company experienced were caused by its own deployments and configuration, not provider outages. Multi-region within one provider already covers regional failures.
-
-**Recommendation adopted.**
-
-1. Phase 1: **multi-region active-passive** on the current provider (secondary region, data replication, tested failover); fix deployment practices (progressive rollouts, automated rollback).
-2. Phase 2: **multi-cloud for specific risks**: DNS hosted on two providers, backups replicated to a second cloud, and a documented "cold" recovery plan in the second cloud.
-3. Revisit full multi-cloud active-active only if regulation or customer contracts require it.
-
-**Lessons learned.** Multi-cloud is a means, not a goal. Match the architecture to the real risks, and remember that data and operations, not networking alone, decide what's feasible.
-
-## Key takeaways
-
-- One address plan for everything; no overlaps, room to grow.
-- Use each cloud's native transit hub, then connect hubs to each other and to on-premises.
-- DNS must be designed across clouds as carefully as routing.
-- Only go multi-cloud for a clear reason, and design for egress costs.
-
-## Checkpoint
-
-**Q1. What breaks peering and hybrid routing most often in multi-cloud?**
-
-A. Too many subnets
-B. Overlapping CIDR ranges  ✓
-C. Using IPv6
-D. Using BGP
-
-_Overlapping ranges cannot be routed between._
-
-**Q2. What lets each cloud resolve private names hosted in another cloud?**
-
-A. A NAT gateway
-B. Conditional DNS forwarding  ✓
-C. VPC peering
-D. A CDN
-
-_Resolver endpoints forward specific zones to the cloud that hosts them._
-
-**Q3. Which is a direct private interconnect between two different cloud providers?**
-
-A. AWS Transit Gateway
-B. Oracle Interconnect for Microsoft Azure  ✓
-C. Azure Virtual WAN
-D. Google Shared VPC
-
-_Oracle and Microsoft link paired OCI and Azure regions directly._
-
-**Q4. Why give each cloud region one large, summarisable address block?**
-
-A. It is required by all providers
-B. Other networks then need only one route per region, keeping routing simple  ✓
-C. It makes IPv6 unnecessary
-D. It reduces egress cost
-
-_Summarisable blocks keep route tables small and stay under BGP prefix limits._
-
-**Q5. Which factor is "data gravity" about?**
-
-A. The weight of servers
-B. Keeping compute close to where its largest datasets live  ✓
-C. The number of regions
-D. DNS TTLs
-
-_Moving large data is slow and costly, so applications are best placed next to it._
-
-**Q6. What usually makes cross-cloud active-active hardest?**
-
-A. Lack of BGP support
-B. Keeping strongly consistent data writable in both clouds  ✓
-C. DNS limits
-D. IPv6 support
-
-_Networking can be solved; consistent multi-writer data across clouds is the hard part._
-
-## Official reading
-
-- [Google Cloud: hybrid and multi-cloud patterns](https://cloud.google.com/architecture/hybrid-multicloud-patterns-and-practices)
-- [AWS: building a scalable multi-VPC network](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/welcome.html)
-- [Azure landing zone network topology](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/define-an-azure-network-topology)
-- [OCI and Azure interconnect](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/azure.htm)
+> **Tip:** **Check your understanding:** Explain running multi-cloud as code to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.

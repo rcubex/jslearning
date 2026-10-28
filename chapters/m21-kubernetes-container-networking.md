@@ -1,8 +1,12 @@
-# Module 29: Kubernetes & Container Networking
+# Module 21: Kubernetes & Container Networking
 
-**Level:** 5 · **Lessons:** 7 · **Questions:** 6
+**Level:** 5 · **Lessons:** 6
 
-_Plan and secure pod networking on EKS, AKS, GKE and OKE._
+## A real-world thread: Containers talking to databases
+
+An application runs in pods across nodes and calls a private database. Pod networking, Services, ingress, DNS and network policy each solve a different part of reachability and access.
+
+This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
 
 ## Lesson 1: The Kubernetes network model
 
@@ -21,6 +25,14 @@ Modern CNIs such as **Cilium** use **eBPF** in the Linux kernel for fast routing
 
 > **Tip:** The CNI choice is hard to change after the cluster is built. Decide it together with your IP plan.
 
+**Build the mental model:** Every pod gets its own IP address. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Containers talking to databases:** Consider how “the kubernetes network model” affects the situation: An application runs in pods across nodes and calls a private database. Pod networking, Services, ingress, DNS and network policy each solve a different part of reachability and access. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For the kubernetes network model, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain the kubernetes network model to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 2: Services, Ingress and Gateway API
 
 Pods come and go, so their IPs change. A **Service** gives a set of pods a stable name and virtual IP:
@@ -34,9 +46,7 @@ Pods come and go, so their IPs change. A **Service** gives a set of pods a stabl
 
 For HTTP, an **Ingress** or the newer **Gateway API** describes host and path routing, TLS and more, implemented by a controller: AWS Load Balancer Controller (creates ALBs), Application Gateway for Containers on Azure, GKE Gateway controller (Google Cloud load balancers), OCI native ingress controller, or in-cluster controllers like NGINX and Envoy-based gateways.
 
-**A Gateway API route**
-
-```
+```text
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata: { name: shop, namespace: prod }
@@ -51,6 +61,14 @@ spec:
 
 > **Tip:** Gateway API is the successor to Ingress, with clearer roles (platform team owns the Gateway, app teams own their routes). Prefer it for new clusters.
 
+**Build the mental model:** ClusterIP (default): reachable only inside the cluster, for example orders.prod.svc.cluster.local. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Containers talking to databases:** Consider how “services, ingress and gateway api” affects the situation: An application runs in pods across nodes and calls a private database. Pod networking, Services, ingress, DNS and network policy each solve a different part of reachability and access. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For services, ingress and gateway api, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain services, ingress and gateway api to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 3: Managed clusters in each cloud
 
 Each managed Kubernetes service has its own networking defaults:
@@ -62,13 +80,19 @@ Each managed Kubernetes service has its own networking defaults:
 
 > **In the cloud:** Private clusters (API server reachable only from your network) are the secure default in all four. Reach them via a bastion, VPN or a CI runner inside the network.
 
+**Build the mental model:** Amazon EKS: the Amazon VPC CNI gives each pod a real VPC IP from the node's subnet (secondary IPs or prefix delegation). Options: custom networking to place pods in separate subnets, and security groups for pods. Cluster. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Containers talking to databases:** Consider how “managed clusters in each cloud” affects the situation: An application runs in pods across nodes and calls a private database. Pod networking, Services, ingress, DNS and network policy each solve a different part of reachability and access. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For managed clusters in each cloud, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain managed clusters in each cloud to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 4: IP planning for pods
 
 VPC-native pod networking is powerful but hungry for addresses. A rough sizing formula:
 
-**Estimate addresses for VPC-native pods**
-
-```
+```text
 nodes × max pods per node = pod IPs needed
 50 nodes × 30 pods = 1,500 pod IPs  → at least a /21 (2,048), more for upgrades and scaling
 Add surge capacity: rolling node upgrades temporarily add extra nodes.
@@ -83,15 +107,21 @@ Guidelines per provider:
 
 > **Watch out:** Running out of pod IPs makes new pods stay "Pending" with network errors and blocks node scaling and upgrades. Monitor subnet utilisation.
 
+**Build the mental model:** EKS: use prefix delegation to fit more pods per node; give pods their own large subnets (custom networking) or a secondary CIDR such as 100.64.0.0/16 if the primary range is short. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Containers talking to databases:** Consider how “ip planning for pods” affects the situation: An application runs in pods across nodes and calls a private database. Pod networking, Services, ingress, DNS and network policy each solve a different part of reachability and access. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For ip planning for pods, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain ip planning for pods to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 5: Network policies
 
 By default, every pod can talk to every other pod in the cluster, across namespaces. A **NetworkPolicy** restricts that, selecting pods by label and allowing specific ingress and egress.
 
 Start with **default deny** in each namespace, then allow only the required flows:
 
-**Default deny, then allow frontend → backend on 8080**
-
-```
+```text
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata: { name: default-deny, namespace: prod }
@@ -115,6 +145,14 @@ NetworkPolicies only work if the CNI enforces them: Calico, Cilium, GKE Dataplan
 
 > **Tip:** Cilium and Calico also offer richer policies (DNS/FQDN-based egress rules, cluster-wide policies, L7 rules) beyond the standard NetworkPolicy API.
 
+**Build the mental model:** By default, every pod can talk to every other pod in the cluster, across namespaces. A **NetworkPolicy** restricts that, selecting pods by label and allowing specific ingress and egress. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Containers talking to databases:** Consider how “network policies” affects the situation: An application runs in pods across nodes and calls a private database. Pod networking, Services, ingress, DNS and network policy each solve a different part of reachability and access. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For network policies, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain network policies to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 6: Service mesh
 
 A **service mesh** adds a layer for service-to-service traffic without changing application code:
@@ -128,92 +166,10 @@ Popular meshes are **Istio** (including its sidecar-less **ambient mode**), **Li
 
 > **Tip:** A mesh adds real operational complexity. Adopt one when you need mTLS everywhere or advanced traffic control across many services, not by default.
 
-## Lesson 7: Real-world scenario: a NetworkPolicy that broke everything
+**Build the mental model:** mTLS: every connection between services is encrypted and both sides authenticated with certificates issued by the mesh. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
 
-**Situation.** To improve security, a platform team applies a default-deny NetworkPolicy to the `prod` namespace, followed by allow rules for frontend → backend and backend → database. Within minutes, every service in `prod` fails health checks and stops resolving names.
+**Scenario connection — Containers talking to databases:** Consider how “service mesh” affects the situation: An application runs in pods across nodes and calls a private database. Pod networking, Services, ingress, DNS and network policy each solve a different part of reachability and access. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
 
-**Investigation.**
+**Reasoning in a real design:** For service mesh, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
 
-1. Pods can't resolve any names: the default-deny **egress** policy blocked DNS traffic to CoreDNS in `kube-system`.
-2. Readiness probes are failing on some nodes: the CNI in use evaluates probe traffic from the node against policies, and no rule allowed it.
-3. The ingress controller in another namespace can't reach frontend pods: no rule allowed traffic from the `ingress` namespace.
-
-**Fix.**
-
-1. Add an egress rule allowing UDP and TCP 53 to CoreDNS pods (selected by namespace and label).
-2. Allow ingress from the ingress controller's namespace to the frontend pods.
-3. Allow health-check traffic where the CNI requires it (check your CNI's documentation).
-4. Next time: apply policies first in a staging cluster, use the CNI's policy audit or visibility tools (Cilium Hubble, Calico flow logs) to see what would be blocked, then roll out.
-
-**Lessons learned.** Default-deny is right, but it denies *everything*, including DNS, probes and ingress controllers. Map real flows before enforcing.
-
-## Key takeaways
-
-- Every pod gets an IP and can reach every other pod; a CNI plugin makes it happen.
-- Services give pods stable addresses; Ingress or Gateway API handles HTTP routing.
-- VPC-native pod networking consumes many cloud IPs; plan ranges early.
-- Default-deny NetworkPolicies are essential, and only work with a policy-capable CNI.
-
-## Checkpoint
-
-**Q1. What enforces Kubernetes NetworkPolicy?**
-
-A. kube-proxy
-B. The CNI plugin  ✓
-C. CoreDNS
-D. etcd
-
-_Without a policy-capable CNI, NetworkPolicies have no effect._
-
-**Q2. Which GKE feature gives pods IPs from VPC secondary ranges?**
-
-A. VPC-native (alias IPs)  ✓
-B. Cloud NAT
-C. Shared VPC
-D. Autopilot
-
-_VPC-native clusters allocate pod IPs from alias ranges._
-
-**Q3. Which Service type is reachable only from inside the cluster?**
-
-A. ClusterIP  ✓
-B. NodePort
-C. LoadBalancer
-D. ExternalName
-
-_ClusterIP is the default internal virtual IP._
-
-**Q4. After applying a default-deny egress policy, pods can't resolve any names. Why?**
-
-A. CoreDNS crashed
-B. The policy also blocks DNS traffic to CoreDNS on port 53  ✓
-C. The CNI doesn't support DNS
-D. Services were deleted
-
-_Default-deny egress blocks everything, including DNS; add an allow rule for port 53._
-
-**Q5. Which AKS networking option avoids consuming VNet addresses for every pod?**
-
-A. Azure CNI with pod subnets
-B. Azure CNI Overlay  ✓
-C. Host networking
-D. Service endpoints
-
-_In overlay mode, pods use a private range separate from the VNet._
-
-**Q6. After a default-deny egress policy, pods can't resolve names. What must you allow?**
-
-A. TCP 443 to the Internet
-B. UDP and TCP 53 to the cluster DNS (CoreDNS)  ✓
-C. ICMP
-D. All traffic in kube-system
-
-_Default-deny egress blocks DNS unless explicitly allowed._
-
-## Official reading
-
-- [Kubernetes: services and networking](https://kubernetes.io/docs/concepts/services-networking/)
-- [Amazon EKS networking](https://docs.aws.amazon.com/eks/latest/best-practices/networking.html)
-- [AKS networking concepts](https://learn.microsoft.com/en-us/azure/aks/concepts-network)
-- [GKE networking overview](https://cloud.google.com/kubernetes-engine/docs/concepts/network-overview)
-- [OKE pod networking](https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengpodnetworking.htm)
+> **Tip:** **Check your understanding:** Explain service mesh to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.

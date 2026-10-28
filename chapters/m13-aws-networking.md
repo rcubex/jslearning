@@ -1,8 +1,12 @@
-# Module 20: AWS Networking
+# Module 13: AWS Networking
 
-**Level:** 4 · **Lessons:** 10 · **Questions:** 7
+**Level:** 4 · **Lessons:** 8
 
-_Design and build production VPC networks on AWS._
+## A real-world thread: AWS private application
+
+A workload has an internet-facing load balancer but private compute instances. Security groups, subnet routes, NAT, endpoints, DNS and VPC connectivity work together to implement this boundary.
+
+This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
 
 ## Lesson 1: VPC and subnets
 
@@ -10,9 +14,7 @@ A **VPC** is a regional, isolated network. You give it a primary IPv4 CIDR (betw
 
 A standard production layout uses three AZs and three tiers, so nine subnets:
 
-**Production VPC 10.10.0.0/16 across three AZs**
-
-```
+```text
 public-a   10.10.0.0/24    public-b   10.10.1.0/24    public-c   10.10.2.0/24
 app-a      10.10.16.0/20   app-b      10.10.32.0/20   app-c      10.10.48.0/20
 data-a     10.10.64.0/24   data-b     10.10.65.0/24   data-c     10.10.66.0/24
@@ -28,15 +30,21 @@ Every VPC also has a built-in DNS resolver at the VPC base address plus two (for
 
 > **Tip:** Make app subnets large (/20 or bigger). Containers on EKS with the VPC CNI and Lambda functions in a VPC consume IP addresses quickly.
 
+**Build the mental model:** Internet gateway (IGW): one per VPC, horizontally scaled, free. Public subnets route 0.0.0.0/0 → igw-…. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — AWS private application:** Consider how “vpc and subnets” affects the situation: A workload has an internet-facing load balancer but private compute instances. Security groups, subnet routes, NAT, endpoints, DNS and VPC connectivity work together to implement this boundary. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For vpc and subnets, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain vpc and subnets to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 2: Security groups vs network ACLs
 
 **Security groups (SGs)** attach to network interfaces (ENIs). They are **stateful** and contain only **allow** rules; anything not allowed is denied. Their superpower is that a rule's source can be **another security group**: "allow 5432 from sg-app" keeps working however many app instances exist and whatever their IPs.
 
 **Network ACLs (NACLs)** attach to subnets. They are **stateless**, have numbered **allow and deny** rules evaluated lowest number first, and end with an implicit deny. Because they are stateless, you need rules for return traffic on ephemeral ports.
 
-**A three-tier security group design**
-
-```
+```text
 sg-alb   inbound: TCP 443 from 0.0.0.0/0 (and ::/0)
 sg-app   inbound: TCP 8080 from sg-alb
 sg-db    inbound: TCP 5432 from sg-app
@@ -47,6 +55,14 @@ Use security groups as your main control. Use NACLs sparingly, for coarse subnet
 
 > **Watch out:** The default NACL allows everything. A custom NACL starts by denying everything, including return traffic. If you add one, test both directions.
 
+**Build the mental model:** **Security groups (SGs)** attach to network interfaces (ENIs). They are **stateful** and contain only **allow** rules; anything not allowed is denied. Their superpower is that a rule's source can be **another security gr. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — AWS private application:** Consider how “security groups vs network acls” affects the situation: A workload has an internet-facing load balancer but private compute instances. Security groups, subnet routes, NAT, endpoints, DNS and VPC connectivity work together to implement this boundary. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For security groups vs network acls, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain security groups vs network acls to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 3: Connecting VPCs: peering, Transit Gateway and Cloud WAN
 
 **VPC peering** connects two VPCs (same or different account, same or different region) privately. It is simple and has no hourly charge, but it is **non-transitive**: if A peers with B and B with C, A cannot reach C through B. CIDRs must not overlap. Full mesh peering of 10 VPCs needs 45 connections, each with route table entries.
@@ -55,9 +71,7 @@ Use security groups as your main control. Use NACLs sparingly, for coarse subnet
 
 **AWS Cloud WAN** builds a global network from a central **policy**: you define segments (prod, dev, shared) and which attachments join which segment, and AWS builds the TGW-like core across regions for you.
 
-**Transit Gateway segmentation example**
-
-```
+```text
 TGW route table "prod":    routes to prod VPCs + shared-services + on-prem
 TGW route table "dev":     routes to dev VPCs + shared-services
 TGW route table "shared":  routes to everything
@@ -65,6 +79,14 @@ Attach each VPC to the table matching its environment.
 ```
 
 > **Tip:** Rough guide: peering for 2–5 VPCs, Transit Gateway for more or for hybrid hubs, Cloud WAN for multi-region networks managed as policy.
+
+**Build the mental model:** **VPC peering** connects two VPCs (same or different account, same or different region) privately. It is simple and has no hourly charge, but it is **non-transitive**: if A peers with B and B with C, A cannot reach C thr. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — AWS private application:** Consider how “connecting vpcs: peering, transit gateway and cloud wan” affects the situation: A workload has an internet-facing load balancer but private compute instances. Security groups, subnet routes, NAT, endpoints, DNS and VPC connectivity work together to implement this boundary. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For connecting vpcs: peering, transit gateway and cloud wan, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain connecting vpcs: peering, transit gateway and cloud wan to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 4: Private access to services
 
@@ -81,6 +103,14 @@ PrivateLink also lets you publish **your own** service: put it behind an NLB, cr
 
 > **Tip:** Always add the S3 gateway endpoint to every VPC. It costs nothing and removes S3 traffic from the NAT gateway bill.
 
+**Build the mental model:** Gateway endpoints (S3 and DynamoDB only) add a route to the subnet route tables using a managed prefix list. They are free. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — AWS private application:** Consider how “private access to services” affects the situation: A workload has an internet-facing load balancer but private compute instances. Security groups, subnet routes, NAT, endpoints, DNS and VPC connectivity work together to implement this boundary. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For private access to services, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain private access to services to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 5: DNS with Route 53
 
 **Amazon Route 53** provides DNS in several roles:
@@ -96,6 +126,14 @@ Routing policies decide which answer each user gets: **simple**, **weighted** (c
 
 > **In the cloud:** Resolver endpoints are the standard way to make DNS work across hybrid and multi-account networks; share forwarding rules to other accounts with AWS RAM.
 
+**Build the mental model:** Public hosted zones for your Internet domains. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — AWS private application:** Consider how “dns with route 53” affects the situation: A workload has an internet-facing load balancer but private compute instances. Security groups, subnet routes, NAT, endpoints, DNS and VPC connectivity work together to implement this boundary. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For dns with route 53, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain dns with route 53 to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 6: Load balancing and edge services
 
 **Elastic Load Balancing** offers three types:
@@ -107,6 +145,14 @@ Routing policies decide which answer each user gets: **simple**, **weighted** (c
 At the edge: **Amazon CloudFront** (CDN with edge TLS, caching and WAF), **AWS Global Accelerator** (two static anycast IPs routing users over the AWS backbone to the closest healthy regional endpoint), **AWS Shield** (DDoS protection; Advanced adds response team support and cost protection).
 
 > **Tip:** Put internet-facing ALBs in public subnets and their targets in private subnets. Targets need no public IPs; the ALB reaches them over private addresses.
+
+**Build the mental model:** Application Load Balancer (ALB): L7 HTTP/HTTPS/gRPC. Host, path, header and query routing; redirects; authentication with OIDC or Amazon Cognito; integrates with AWS WAF. Targets can be instances, IPs or Lambda functions. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — AWS private application:** Consider how “load balancing and edge services” affects the situation: A workload has an internet-facing load balancer but private compute instances. Security groups, subnet routes, NAT, endpoints, DNS and VPC connectivity work together to implement this boundary. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For load balancing and edge services, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain load balancing and edge services to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 7: Hybrid connectivity on AWS
 
@@ -123,6 +169,14 @@ For production, AWS recommends **maximum resiliency**: connections at two DX loc
 
 > **Watch out:** A private VIF accepts a limited number of prefixes from you (100 by default). Advertising more drops the BGP session; summarise your on-premises routes.
 
+**Build the mental model:** Dedicated connections of 1, 10, 100 or 400 Gbps, or hosted connections from a partner (from 50 Mbps upwards). This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — AWS private application:** Consider how “hybrid connectivity on aws” affects the situation: A workload has an internet-facing load balancer but private compute instances. Security groups, subnet routes, NAT, endpoints, DNS and VPC connectivity work together to implement this boundary. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For hybrid connectivity on aws, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain hybrid connectivity on aws to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 8: Operating and troubleshooting AWS networks
 
 AWS gives you several tools that save hours:
@@ -133,9 +187,7 @@ AWS gives you several tools that save hours:
 - **Traffic Mirroring**: copies packets from an ENI to a monitoring appliance for deep inspection.
 - **AWS Network Firewall**: managed stateful firewall with Suricata-compatible rules and domain filtering, deployed into dedicated subnets.
 
-**A flow log record, decoded**
-
-```
+```text
 2 123456789012 eni-0a1b2c 10.10.16.25 10.10.64.10 49152 5432 6 10 840 1700000000 1700000060 REJECT OK
           (version account interface src dst srcport dstport proto packets bytes start end action status)
 → App server 10.10.16.25 tried PostgreSQL on 10.10.64.10 and was REJECTED: check sg-db and the data subnet NACL.
@@ -143,122 +195,10 @@ AWS gives you several tools that save hours:
 
 > **Tip:** Run Reachability Analyzer before opening a support case. It names the exact security group, NACL or route that blocks traffic.
 
-## Lesson 9: Deep dive: centralised egress and inspection on AWS
+**Build the mental model:** VPC Flow Logs: metadata for every accepted and rejected flow at VPC, subnet or ENI level, sent to CloudWatch Logs, S3 or Firehose. A REJECT tells you a security group or NACL dropped the traffic. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
 
-As AWS estates grow to dozens of VPCs, giving each VPC its own NAT gateways and firewalls becomes expensive and inconsistent. The standard alternative routes traffic through shared **egress** and **inspection** VPCs attached to **Transit Gateway**.
+**Scenario connection — AWS private application:** Consider how “operating and troubleshooting aws networks” affects the situation: A workload has an internet-facing load balancer but private compute instances. Security groups, subnet routes, NAT, endpoints, DNS and VPC connectivity work together to implement this boundary. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
 
-**Centralised egress.** Spoke VPCs have no Internet gateway or NAT gateway. Their route tables send `0.0.0.0/0` to the Transit Gateway. The TGW sends it to an **egress VPC** with NAT gateways in each AZ, which then route to an Internet gateway. Return traffic follows the same path back. This saves NAT costs, gives one set of egress IPs to allow-list, and one place to filter.
+**Reasoning in a real design:** For operating and troubleshooting aws networks, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
 
-**Centralised inspection.** An **inspection VPC** holds **AWS Network Firewall** endpoints (or third-party appliances behind a **Gateway Load Balancer**). TGW route tables send spoke-to-spoke, spoke-to-on-premises and spoke-to-Internet traffic through it.
-
-**Traffic path: spoke VPC → Internet with inspection**
-
-```
-spoke subnet RT:        0.0.0.0/0 → TGW
-TGW "spokes" RT:        0.0.0.0/0 → inspection VPC attachment
-inspection VPC (TGW subnet RT): 0.0.0.0/0 → Network Firewall endpoint (same AZ)
-firewall subnet RT:     0.0.0.0/0 → NAT gateway (or → TGW → egress VPC)
-return traffic:         symmetric path back through the same firewall endpoint
-```
-
-Two settings make or break this design:
-
-- **Appliance mode** on the inspection VPC's TGW attachment keeps both directions of each flow in the same AZ, so stateful firewalls see the whole connection.
-- **Per-AZ routing**: each AZ's subnets route to the firewall endpoint in the same AZ, avoiding cross-AZ charges and AZ-failure coupling.
-
-> **Tip:** AWS also supports a **distributed** model (a firewall endpoint inside each VPC) and a **combined** model. Centralised suits shared policy and many small VPCs; distributed suits very high-throughput VPCs that shouldn't hairpin through a hub.
-
-## Lesson 10: Real-world scenario: the AZ outage that took everything offline
-
-**Situation.** During a partial outage of one availability zone in its primary region, a company's entire application lost Internet access, even though two of three zones were healthy and the load balancer kept serving users.
-
-**Investigation.** The application's private subnets in all three AZs routed `0.0.0.0/0` to a single NAT gateway, created in AZ-a when the VPC was built "temporarily". When AZ-a degraded, every instance lost outbound access: payment calls, package downloads and calls to third-party APIs all failed. The app's inbound path was fine, so the failure looked like an application bug at first.
-
-**Fix.**
-
-1. Create a NAT gateway in each AZ's public subnet.
-2. Give each AZ's private subnets their own route table pointing to the NAT gateway **in the same AZ**.
-3. Review every other zonal dependency: interface endpoints enabled in all AZs, Network Firewall endpoints per AZ, databases with Multi-AZ, instances spread across AZs.
-4. Add a game-day exercise: simulate an AZ failure (for example with AWS Fault Injection Service) twice a year.
-
-**Lessons learned.** Multi-AZ isn't just about where instances run. Every component in the path, including NAT, endpoints and firewalls, must be zonal and independent, or one zone can take down all three.
-
-## Key takeaways
-
-- Build one subnet per tier per AZ; route public subnets to an IGW and private ones to a NAT gateway per AZ.
-- Security groups (stateful, reference each other) are the main control; NACLs are a coarse backstop.
-- Use Transit Gateway or Cloud WAN once you have more than a handful of VPCs.
-- Keep AWS service traffic private with gateway and interface endpoints.
-
-## Checkpoint
-
-**Q1. Which AWS control is stateless?**
-
-A. Security group
-B. Network ACL  ✓
-C. PrivateLink
-D. Route 53 Resolver
-
-_NACLs need explicit rules for return traffic._
-
-**Q2. VPC A peers with B and B peers with C. Can A reach C through B?**
-
-A. Yes
-B. No  ✓
-C. Only with NAT
-D. Only over IPv6
-
-_Peering is non-transitive. Use Transit Gateway or a direct peering._
-
-**Q3. Why should production VPCs have one NAT gateway per availability zone?**
-
-A. NAT gateways are free
-B. A NAT gateway is zonal; if its AZ fails, private subnets in other AZs lose Internet access  ✓
-C. AWS requires it
-D. It doubles bandwidth for each instance
-
-_Keep each AZ's egress independent so one AZ failure doesn't spread._
-
-**Q4. Which endpoint type is free and supports only S3 and DynamoDB?**
-
-A. Interface endpoint
-B. Gateway endpoint  ✓
-C. Gateway Load Balancer endpoint
-D. Resolver endpoint
-
-_Gateway endpoints add routes for S3 and DynamoDB at no charge._
-
-**Q5. Which tool tells you which security group or route blocks traffic between two resources, without sending packets?**
-
-A. VPC Flow Logs
-B. Traffic Mirroring
-C. Reachability Analyzer  ✓
-D. CloudTrail
-
-_Reachability Analyzer analyses configuration and names the blocking component._
-
-**Q6. Why is appliance mode enabled on the inspection VPC's Transit Gateway attachment?**
-
-A. To encrypt traffic
-B. To keep both directions of each flow on the same AZ and firewall endpoint  ✓
-C. To enable IPv6
-D. To reduce costs
-
-_Stateful inspection needs symmetric paths; appliance mode provides them._
-
-**Q7. All private subnets in three AZs used one NAT gateway in AZ-a. What happens if AZ-a fails?**
-
-A. Only AZ-a loses Internet access
-B. All three AZs lose outbound Internet access  ✓
-C. Traffic automatically fails over to a NAT gateway in AZ-b
-D. Nothing; NAT gateways are regional
-
-_The single zonal NAT gateway becomes a shared point of failure._
-
-## Official reading
-
-- [Amazon VPC User Guide](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html)
-- [AWS Transit Gateway](https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html)
-- [AWS PrivateLink](https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html)
-- [Elastic Load Balancing](https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html)
-- [AWS Direct Connect](https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html)
+> **Tip:** **Check your understanding:** Explain operating and troubleshooting aws networks to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.

@@ -1,8 +1,12 @@
-# Module 27: Cloud Network Security
+# Module 19: Cloud Network Security
 
-**Level:** 5 · **Lessons:** 7 · **Questions:** 6
+**Level:** 5 · **Lessons:** 6
 
-_Build defense in depth with each provider’s native controls._
+## A real-world thread: Public API with private data
+
+A public API requires exposure at its front door but should not expose internal databases or administrative ports. WAF, layered firewall policies, segmentation, logging and private endpoints control risk.
+
+This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
 
 ## Lesson 1: Defense in depth
 
@@ -18,6 +22,14 @@ No single control stops every attack. Cloud network security layers independent 
 
 > **Tip:** For each layer, write down which service you use in each cloud. Gaps in the table are your next priorities.
 
+**Build the mental model:** Edge: DDoS protection, CDN and WAF in front of public endpoints. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Public API with private data:** Consider how “defense in depth” affects the situation: A public API requires exposure at its front door but should not expose internal databases or administrative ports. WAF, layered firewall policies, segmentation, logging and private endpoints control risk. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For defense in depth, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain defense in depth to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 2: Edge protection
 
 Every public endpoint should sit behind DDoS protection and a web application firewall.
@@ -30,6 +42,14 @@ Every public endpoint should sit behind DDoS protection and a web application fi
 A good WAF policy starts with the provider's managed rule sets (OWASP Top 10 protections such as SQL injection and cross-site scripting), adds rate limits per client IP, and blocks countries or IP lists you never expect traffic from. Run new rules in **count / detection mode** first to avoid blocking real users.
 
 > **Watch out:** A WAF in front of a load balancer does nothing if the backend also has a public IP that attackers can hit directly. Lock backends so they only accept traffic from the load balancer.
+
+**Build the mental model:** AWS: AWS Shield Standard (automatic, free) and Advanced (paid, with the Shield Response Team and cost protection); AWS WAF on CloudFront, ALB, API Gateway and others. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Public API with private data:** Consider how “edge protection” affects the situation: A public API requires exposure at its front door but should not expose internal databases or administrative ports. WAF, layered firewall policies, segmentation, logging and private endpoints control risk. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For edge protection, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain edge protection to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 3: Central inspection with managed firewalls
 
@@ -48,6 +68,14 @@ Inspect three directions:
 
 > **Tip:** Egress filtering is one of the highest-value controls. Most servers only need to reach a handful of domains (OS updates, a payment API). Allow those, deny the rest, and log the denials.
 
+**Build the mental model:** AWS Network Firewall: stateful rules, Suricata-compatible IPS signatures, domain allow and deny lists, TLS inspection. Deployed in dedicated subnets, often in an inspection VPC behind Transit Gateway. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Public API with private data:** Consider how “central inspection with managed firewalls” affects the situation: A public API requires exposure at its front door but should not expose internal databases or administrative ports. WAF, layered firewall policies, segmentation, logging and private endpoints control risk. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For central inspection with managed firewalls, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain central inspection with managed firewalls to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 4: Private by default
 
 Reduce what is reachable at all.
@@ -60,14 +88,20 @@ Reduce what is reachable at all.
 - Google Cloud **IAP TCP forwarding** (`gcloud compute ssh --tunnel-through-iap`)
 - **OCI Bastion** (time-limited sessions)
 
-**SSH to a private Google Cloud VM through IAP**
-
-```
+```text
 # Firewall: allow tcp:22 only from IAP's range 35.235.240.0/20
 gcloud compute ssh app-1 --zone=me-central1-a --tunnel-through-iap
 ```
 
 > **Tip:** Every one of these logs who connected and when, which an open SSH port never does well.
+
+**Build the mental model:** No public IPs on VMs, databases or containers. Enforce it with policy (AWS SCPs, Azure Policy, Google organization policy, OCI security zones). This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Public API with private data:** Consider how “private by default” affects the situation: A public API requires exposure at its front door but should not expose internal databases or administrative ports. WAF, layered firewall policies, segmentation, logging and private endpoints control risk. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For private by default, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain private by default to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 5: Flow logs and detection
 
@@ -82,6 +116,14 @@ You cannot defend what you cannot see. Turn on logging everywhere and send it to
 Send everything to a **SIEM** (Microsoft Sentinel, Google Security Operations, Splunk and others) and write alerts for what matters: rejected traffic to databases, outbound traffic to new countries, changes to security groups or route tables.
 
 > **Watch out:** Logs cost money to store. Keep high-volume flow logs for a shorter period or sample them, and keep security-relevant logs longer.
+
+**Build the mental model:** Flow logs: AWS VPC Flow Logs, Azure VNet flow logs, Google Cloud VPC Flow Logs, OCI VCN flow logs. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Public API with private data:** Consider how “flow logs and detection” affects the situation: A public API requires exposure at its front door but should not expose internal databases or administrative ports. WAF, layered firewall policies, segmentation, logging and private endpoints control risk. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For flow logs and detection, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain flow logs and detection to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 6: Security checklist for a cloud network
 
@@ -100,93 +142,10 @@ Use this checklist for any new environment, in any cloud:
 
 > **Tip:** Benchmarks such as the CIS Foundations Benchmarks for AWS, Azure, Google Cloud and OCI turn these principles into hundreds of checkable rules; posture management tools can scan for them automatically.
 
-## Lesson 7: Real-world scenario: data exfiltration through DNS
+**Build the mental model:** No resource except load balancers, NAT and VPN gateways has a public IP. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
 
-**Situation.** A threat detection service raises an alert: a server in a private subnet is making thousands of DNS queries per hour for random-looking subdomains of an unknown domain, like `a9f3k2.d8x.exfil-example.net`. The server has no Internet access except DNS.
+**Scenario connection — Public API with private data:** Consider how “security checklist for a cloud network” affects the situation: A public API requires exposure at its front door but should not expose internal databases or administrative ports. WAF, layered firewall policies, segmentation, logging and private endpoints control risk. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
 
-**Analysis.** This is **DNS tunnelling**: malware encodes stolen data in DNS query names, which travel through the cloud's resolver to the attacker's authoritative server. Because "DNS is always allowed", it bypassed egress firewall rules.
+**Reasoning in a real design:** For security checklist for a cloud network, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
 
-**Response.**
-
-1. Isolate the server (move it to a quarantine security group with no outbound access) and capture its disk for forensics.
-2. Block the domain with **DNS firewall** rules (Route 53 Resolver DNS Firewall, Azure Firewall DNS proxy with FQDN filtering or DNS security policies, Cloud DNS response policies, OCI DNS policies or a security appliance).
-3. Hunt for the same pattern on other hosts using **DNS query logs**.
-
-**Prevention.**
-
-- Allow-list domains that servers may resolve where practical; block newly registered and known-malicious domains.
-- Alert on high query volumes, long random subdomains and unusual TXT queries.
-- Treat DNS as an egress channel in your security design.
-
-**Lessons learned.** Egress filtering must include DNS. Query logs are one of the best early warning signals in the cloud.
-
-## Key takeaways
-
-- Stack controls: edge (DDoS, WAF), network (segmentation, firewalls), identity, host, data, monitoring.
-- Inspect egress and east-west traffic, not only inbound.
-- Nothing internal should have a public IP; admin access goes through identity-aware services.
-- Log every flow and decision, and alert on what matters.
-
-## Checkpoint
-
-**Q1. What is the managed way to SSH into a private Google Cloud VM with no public IP?**
-
-A. Cloud NAT
-B. IAP TCP forwarding  ✓
-C. Cloud Armor
-D. Private Service Connect
-
-_Identity-Aware Proxy tunnels SSH after checking identity._
-
-**Q2. Where should a WAF sit?**
-
-A. Behind the database
-B. In front of public web endpoints  ✓
-C. Inside each VM
-D. On the DNS server
-
-_A WAF inspects HTTP requests before they reach your app._
-
-**Q3. Why is egress filtering valuable?**
-
-A. It speeds up downloads
-B. It blocks malware call-backs and data exfiltration to unapproved destinations  ✓
-C. It removes the need for a WAF
-D. It is required for NAT to work
-
-_Most servers need only a few destinations; denying the rest limits damage after a compromise._
-
-**Q4. Which AWS service lets you reach an instance's shell with no inbound ports open?**
-
-A. Elastic IP
-B. Systems Manager Session Manager  ✓
-C. Network ACL
-D. Route 53
-
-_Session Manager connects through the SSM agent's outbound connection, with IAM authentication and logging._
-
-**Q5. New WAF rules should first be deployed in which mode?**
-
-A. Block mode
-B. Count or detection mode  ✓
-C. Disabled
-D. Bypass mode
-
-_Observe what the rule would block before enforcing, to avoid blocking real users._
-
-**Q6. Why did DNS tunnelling bypass the egress firewall in the scenario?**
-
-A. The firewall was off
-B. DNS was allowed for all servers and passed through the cloud resolver to the attacker's server  ✓
-C. The server had a public IP
-D. TLS hid the traffic
-
-_Data hidden in DNS queries reaches the attacker's authoritative server via normal resolution._
-
-## Official reading
-
-- [AWS Network Firewall](https://docs.aws.amazon.com/network-firewall/latest/developerguide/what-is-aws-network-firewall.html)
-- [Azure Firewall features](https://learn.microsoft.com/en-us/azure/firewall/features-by-sku)
-- [Google Cloud Armor](https://cloud.google.com/armor/docs/cloud-armor-overview)
-- [OCI Network Firewall](https://docs.oracle.com/en-us/iaas/Content/network-firewall/overview.htm)
-- [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks)
+> **Tip:** **Check your understanding:** Explain security checklist for a cloud network to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.

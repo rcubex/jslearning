@@ -1,8 +1,12 @@
 # Module 02: OSI & TCP/IP Models
 
-**Level:** 1 · **Lessons:** 6 · **Questions:** 6
+**Level:** 1 · **Lessons:** 5
 
-_Use the layer models to describe where any network problem lives._
+## A real-world thread: Website appears down
+
+A user can reach an IP address but cannot open its domain name. DNS, transport, TLS and application layers should be distinguished before anyone blames the web server.
+
+This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
 
 ## Lesson 1: The seven OSI layers
 
@@ -22,6 +26,14 @@ Layers 5 and 6 are rarely discussed separately in practice; most real problems a
 
 > **Tip:** A classic memory aid, bottom to top: "Please Do Not Throw Sausage Pizza Away".
 
+**Build the mental model:** 1 Physical: bits as electrical signals, light or radio. Cables, fibre, Wi-Fi radio. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Website appears down:** Consider how “the seven osi layers” affects the situation: A user can reach an IP address but cannot open its domain name. DNS, transport, TLS and application layers should be distinguished before anyone blames the web server. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For the seven osi layers, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain the seven osi layers to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 2: The TCP/IP model
 
 The Internet actually runs on the **TCP/IP model**, which has four layers: **Link** (OSI 1–2), **Internet** (OSI 3, the IP protocol), **Transport** (OSI 4, TCP and UDP) and **Application** (OSI 5–7).
@@ -32,6 +44,14 @@ Cloud documentation freely mixes the two vocabularies. You will see "Layer 4 loa
 - AWS Application Load Balancer, Azure Application Gateway, Google Cloud Application Load Balancer, OCI Load Balancer: Layer 7
 
 > **In the cloud:** Firewall rules in every cloud are written at Layers 3 and 4 (IP address, protocol, port). A web application firewall (WAF) works at Layer 7 and can inspect URLs and request bodies.
+
+**Build the mental model:** AWS Network Load Balancer, Azure Load Balancer, Google Cloud passthrough Network Load Balancer, OCI Network Load Balancer: Layer 4. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Website appears down:** Consider how “the tcp/ip model” affects the situation: A user can reach an IP address but cannot open its domain name. DNS, transport, TLS and application layers should be distinguished before anyone blames the web server. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For the tcp/ip model, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain the tcp/ip model to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 3: Encapsulation
 
@@ -45,9 +65,7 @@ As data goes down the stack on the sender, each layer wraps it with its own head
 
 The receiver unwraps in reverse order. A key detail: as a packet crosses routers, the IP addresses stay the same end to end, but the MAC addresses change at every hop, because each hop is a separate local delivery.
 
-**What one web request looks like, layer by layer**
-
-```
+```text
 Ethernet: src MAC a4:83:e7:..  dst MAC 00:1a:2b:..   (changes every hop)
 IP:       src 192.168.1.20     dst 93.184.215.14    (end to end)
 TCP:      src port 53122       dst port 443
@@ -55,6 +73,14 @@ TLS/HTTP: GET / HTTP/1.1  Host: example.com
 ```
 
 > **Watch out:** Each header costs bytes. Tunnels and VPNs add even more headers, which is why they reduce the space left for data (the MTU problem you will meet in Module 08).
+
+**Build the mental model:** The application produces data, such as an HTTP request. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Website appears down:** Consider how “encapsulation” affects the situation: A user can reach an IP address but cannot open its domain name. DNS, transport, TLS and application layers should be distinguished before anyone blames the web server. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For encapsulation, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain encapsulation to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 4: Devices by layer
 
@@ -70,6 +96,14 @@ The higher the layer, the more a device can understand, and the more processing 
 
 > **Analogy:** An L3 device reads the address on the envelope. An L7 device opens the envelope and reads the letter.
 
+**Build the mental model:** Hub / repeater (L1): copies bits to every port. Obsolete. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Website appears down:** Consider how “devices by layer” affects the situation: A user can reach an IP address but cannot open its domain name. DNS, transport, TLS and application layers should be distinguished before anyone blames the web server. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For devices by layer, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain devices by layer to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 5: Troubleshooting with the layers
 
 The layers give you a method. Start at the bottom and work up, or start at the top and work down, but test one layer at a time.
@@ -80,9 +114,7 @@ The layers give you a method. Start at the bottom and work up, or start at the t
 - **L4**: Is the port open? Is a firewall or security group blocking it?
 - **L7**: Does DNS resolve? Does the application return an error (HTTP 500, certificate error)?
 
-**A quick bottom-up check**
-
-```
+```text
 ip addr                  # L3: do I have an address? (Windows: ipconfig)
 ping 192.168.1.1         # L3: can I reach my gateway?
 ping 1.1.1.1             # L3: can I reach the Internet?
@@ -92,85 +124,10 @@ curl -I https://example.com   # L4/L7: does the service answer?
 
 > **Tip:** If `ping 1.1.1.1` works but `ping example.com` fails, the network is fine and DNS is broken. That one test saves a lot of time.
 
-## Lesson 6: Real-world scenario: using the layers to fix a broken branch
+**Build the mental model:** L1: Is the link up? Is the cable plugged in? Is Wi-Fi connected?. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
 
-**Situation.** A new branch office opens. Staff can print to the local printer but can't open any website or the company's cloud apps. IT support is 800 km away and talks a local employee through troubleshooting by phone.
+**Scenario connection — Website appears down:** Consider how “troubleshooting with the layers” affects the situation: A user can reach an IP address but cannot open its domain name. DNS, transport, TLS and application layers should be distinguished before anyone blames the web server. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
 
-**Walking up the layers.**
+**Reasoning in a real design:** For troubleshooting with the layers, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
 
-1. **Layer 1**: the laptop's Ethernet light is on and Wi-Fi shows "connected". Physical layer fine.
-2. **Layer 2**: printing to the local printer works, so frames are moving on the local network.
-3. **Layer 3**: `ipconfig` shows IP 192.168.10.45/24 and a default gateway of 192.168.1.1. That gateway is **not in the laptop's subnet** (192.168.10.0/24), so the laptop can't reach it to send traffic off the local network. `ping 192.168.10.1` (the router's real address) works.
-4. Root cause: the DHCP scope on the new router was copied from another branch and hands out the wrong gateway.
-
-**Fix.** Correct the DHCP option for the default gateway to 192.168.10.1, renew leases (`ipconfig /renew`), and test: `ping 1.1.1.1` works, `nslookup` works, websites open.
-
-**Lessons learned.** The layered method avoided guessing. Because Layer 2 worked (printing) and Layer 3 failed beyond the subnet, attention went straight to IP settings. Saying "it's Layer 3, the default gateway" turned a vague complaint into a five-minute fix.
-
-## Key takeaways
-
-- The OSI model has 7 layers; the TCP/IP model has 4 and is what the Internet runs.
-- Each layer adds its own header: data → segment → packet → frame → bits.
-- "Layer 4" means ports and TCP/UDP; "Layer 7" means the application, such as HTTP.
-- Naming the layer of a fault is the fastest way to narrow down its cause.
-
-## Checkpoint
-
-**Q1. A load balancer routes /api and /images to different servers. Which layer is it working at?**
-
-A. Layer 3
-B. Layer 4
-C. Layer 7  ✓
-D. Layer 2
-
-_Reading the URL path requires understanding HTTP, which is Layer 7._
-
-**Q2. Which unit belongs to the transport layer?**
-
-A. Frame
-B. Packet
-C. Segment  ✓
-D. Bit
-
-_TCP data units are segments; IP carries packets; Ethernet carries frames._
-
-**Q3. As a packet crosses three routers, what stays the same from start to finish?**
-
-A. The source and destination MAC addresses
-B. The source and destination IP addresses  ✓
-C. The Ethernet header
-D. Nothing
-
-_IP addresses are end to end; MAC addresses are rewritten at every hop._
-
-**Q4. You can ping 1.1.1.1 but not google.com. Where is the problem most likely?**
-
-A. Physical layer
-B. Data link layer
-C. DNS at the application layer  ✓
-D. The network card
-
-_IP connectivity works, so name resolution (DNS) is failing._
-
-**Q5. Which TCP/IP layer corresponds to OSI Layer 3?**
-
-A. Link
-B. Internet  ✓
-C. Transport
-D. Application
-
-_The TCP/IP Internet layer is where IP lives, matching OSI Layer 3 (Network)._
-
-**Q6. In the branch scenario, local printing worked but websites didn't. What did that prove?**
-
-A. The cable was broken
-B. Local Layer 2 delivery worked, so the problem was at Layer 3 or above  ✓
-C. DNS was the only problem
-D. The printer was misconfigured
-
-_Local communication working narrows the fault to routing or higher layers._
-
-## Official reading
-
-- [Cloudflare Learning: the OSI model](https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/)
-- [Wireshark documentation](https://www.wireshark.org/docs/)
+> **Tip:** **Check your understanding:** Explain troubleshooting with the layers to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.

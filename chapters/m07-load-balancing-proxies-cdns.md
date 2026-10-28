@@ -1,8 +1,12 @@
-# Module 08: Load Balancing, Proxies & CDNs
+# Module 07: Load Balancing, Proxies & CDNs
 
-**Level:** 2 · **Lessons:** 6 · **Questions:** 6
+**Level:** 2 · **Lessons:** 5
 
-_Choose the right traffic distribution layer for an application._
+## A real-world thread: Traffic spike after product launch
+
+A product announcement causes a sudden increase in visits. Health-aware load balancing distributes requests, a CDN serves cacheable objects and reverse proxies enforce application-facing controls.
+
+This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
 
 ## Lesson 1: L4 vs L7 load balancing
 
@@ -19,6 +23,14 @@ Common distribution algorithms: **round robin** (each server in turn), **least c
 
 > **In the cloud:** AWS Network Load Balancer vs Application Load Balancer, Azure Load Balancer vs Application Gateway, Google Cloud passthrough Network Load Balancer vs Application Load Balancer, OCI Network Load Balancer vs Load Balancer.
 
+**Build the mental model:** Choose L4 for non-HTTP protocols, extreme performance or static IPs. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Traffic spike after product launch:** Consider how “l4 vs l7 load balancing” affects the situation: A product announcement causes a sudden increase in visits. Health-aware load balancing distributes requests, a CDN serves cacheable objects and reverse proxies enforce application-facing controls. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For l4 vs l7 load balancing, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain l4 vs l7 load balancing to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 2: Health checks
 
 A load balancer regularly sends **health checks** to each backend: a TCP connection attempt, or an HTTP request to a path such as `/healthz`. A backend that fails a set number of checks in a row (the **unhealthy threshold**) stops receiving traffic; after enough successful checks (the **healthy threshold**) it is added back.
@@ -29,15 +41,21 @@ Health checks are simple but cause many outages:
 - A check that is too deep (also tests the database) can mark *every* server unhealthy at once when the database blips, taking the whole site down
 - A check blocked by a firewall makes all backends look dead, so the load balancer returns 502/503
 
-**A good health endpoint**
-
-```
+```text
 GET /healthz  →  200 OK in under 100 ms
 - Confirms the process is running and can serve requests
 - Does NOT fail just because an optional dependency is slow
 ```
 
 > **Watch out:** In every cloud, the backend's security rules must allow traffic from the load balancer's health-check source (for example, Google Cloud's health checks come from 35.191.0.0/16 and 130.211.0.0/22).
+
+**Build the mental model:** A check that is too shallow (just "is the port open") keeps sending traffic to an app that is running but broken. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Traffic spike after product launch:** Consider how “health checks” affects the situation: A product announcement causes a sudden increase in visits. Health-aware load balancing distributes requests, a CDN serves cacheable objects and reverse proxies enforce application-facing controls. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For health checks, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain health checks to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 3: Sessions, TLS termination and reverse proxies
 
@@ -47,9 +65,7 @@ Some applications store user state on one server. **Sticky sessions** (session a
 
 A **reverse proxy** sits in front of servers and handles TLS, compression, caching, rate limiting and request routing, while hiding the internal layout. Nginx, HAProxy and Envoy are the common open-source choices; cloud L7 load balancers are managed reverse proxies.
 
-**Nginx: a minimal reverse proxy with two backends**
-
-```
+```text
 upstream app {
     least_conn;
     server 10.0.10.11:8080;
@@ -66,6 +82,14 @@ server {
 
 > **Tip:** Behind an L7 proxy, the app sees the proxy's IP. The real client IP is in the `X-Forwarded-For` header.
 
+**Build the mental model:** Some applications store user state on one server. **Sticky sessions** (session affinity) send a user's requests to the same backend, usually with a cookie. They help legacy apps but spread load unevenly; storing sessions. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Traffic spike after product launch:** Consider how “sessions, tls termination and reverse proxies” affects the situation: A product announcement causes a sudden increase in visits. Health-aware load balancing distributes requests, a CDN serves cacheable objects and reverse proxies enforce application-facing controls. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For sessions, tls termination and reverse proxies, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain sessions, tls termination and reverse proxies to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 4: CDNs and anycast
 
 A **CDN** (content delivery network) caches content in hundreds of **edge locations** close to users. A user in Dubai downloading an image from a server in Ireland gets it from a nearby edge instead, cutting latency and taking load off the origin. Modern CDNs also accelerate dynamic content, terminate TLS near the user, and provide DDoS protection and WAF at the edge.
@@ -75,6 +99,14 @@ How long content is cached is controlled by HTTP headers such as `Cache-Control:
 **Anycast** announces the same IP address from many locations. BGP routes each user to the nearest one. DNS resolvers like 1.1.1.1 and 8.8.8.8, CDNs and global cloud load balancers all use anycast. If one site fails, its route is withdrawn and users flow to the next nearest.
 
 > **In the cloud:** Amazon CloudFront, Azure Front Door, Google Cloud CDN with the global Application Load Balancer, and OCI's CDN partners. Google's global load balancer gives you one anycast IP for the whole world.
+
+**Build the mental model:** A **CDN** (content delivery network) caches content in hundreds of **edge locations** close to users. A user in Dubai downloading an image from a server in Ireland gets it from a nearby edge instead, cutting latency and. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Traffic spike after product launch:** Consider how “cdns and anycast” affects the situation: A product announcement causes a sudden increase in visits. Health-aware load balancing distributes requests, a CDN serves cacheable objects and reverse proxies enforce application-facing controls. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For cdns and anycast, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain cdns and anycast to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 5: Choosing the right front door
 
@@ -88,85 +120,10 @@ Decision guide for a new application:
 
 > **Tip:** Start simple. One regional L7 load balancer with a WAF covers most applications; add a CDN when users are far away or traffic is heavy.
 
-## Lesson 6: Real-world scenario: the health check that took down the site
+**Build the mental model:** Static website or global audience → CDN in front, origin in object storage or behind a load balancer. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
 
-**Situation.** An e-commerce site with 12 web servers behind an L7 load balancer goes completely down for 4 minutes every time the database team performs a routine failover. The servers themselves never crash.
+**Scenario connection — Traffic spike after product launch:** Consider how “choosing the right front door” affects the situation: A product announcement causes a sudden increase in visits. Health-aware load balancing distributes requests, a CDN serves cacheable objects and reverse proxies enforce application-facing controls. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
 
-**Investigation.** The load balancer's health check calls `/health`, which the developers implemented to run a database query. During a 30-second database failover, every server's health check fails at the same time. After 3 failures, the load balancer marks all 12 servers unhealthy and returns 503 to every user. When the database returns, health checks need several successful checks before servers are marked healthy again.
+**Reasoning in a real design:** For choosing the right front door, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
 
-**Fix.**
-
-1. Split health endpoints: `/livez` (is the process up and able to serve?) for the load balancer, and `/readyz` with dependency checks for monitoring dashboards.
-2. Make the application handle a brief database outage gracefully (retry with backoff, serve cached data where possible).
-3. Tune thresholds so a short blip doesn't remove servers.
-
-**Lessons learned.** Health checks decide where traffic goes; a check that depends on a shared component can remove every server at once. Keep load-balancer health checks focused on the instance itself.
-
-## Key takeaways
-
-- L4 balances connections by IP and port; L7 understands HTTP and routes by content.
-- Health checks decide where traffic goes; tune them carefully.
-- Reverse proxies terminate TLS, cache and hide backends.
-- CDNs and anycast bring content and entry points close to users.
-
-## Checkpoint
-
-**Q1. You need /api to go to one service and /static to another. Which balancer type?**
-
-A. L4
-B. L7  ✓
-C. DNS round-robin
-D. Anycast
-
-_Path-based routing needs HTTP awareness, which is L7._
-
-**Q2. What makes one IP address reachable at the nearest of many locations?**
-
-A. NAT
-B. Anycast  ✓
-C. Multicast
-D. VLAN
-
-_Anycast announces the same prefix from many sites; BGP delivers users to the closest._
-
-**Q3. Your health check queries the database. The database restarts for 30 seconds. What can happen?**
-
-A. Nothing
-B. Every backend is marked unhealthy and the whole site goes down  ✓
-C. Only one server is affected
-D. The CDN takes over automatically
-
-_Deep health checks can fail on all servers at once. Keep health checks focused on the app itself._
-
-**Q4. Behind an L7 load balancer, where does the app find the real client IP?**
-
-A. In the TCP source address
-B. In the X-Forwarded-For header  ✓
-C. In the TLS certificate
-D. In the DNS record
-
-_The proxy opens a new connection, so the original client IP is passed in X-Forwarded-For._
-
-**Q5. Which header controls how long a CDN caches a file?**
-
-A. Content-Type
-B. Host
-C. Cache-Control  ✓
-D. Authorization
-
-_Cache-Control (for example max-age) tells caches how long the content stays fresh._
-
-**Q6. Why did every web server fail its health check at once during a database failover?**
-
-A. The servers crashed
-B. The health endpoint depended on the shared database  ✓
-C. The load balancer was overloaded
-D. DNS changed
-
-_Shared dependencies in health checks cause correlated failures._
-
-## Official reading
-
-- [Cloudflare Learning: what is a CDN](https://www.cloudflare.com/learning/cdn/what-is-a-cdn/)
-- [Nginx load balancing guide](https://nginx.org/en/docs/http/load_balancing.html)
-- [Cloudflare Learning: what is load balancing](https://www.cloudflare.com/learning/performance/what-is-load-balancing/)
+> **Tip:** **Check your understanding:** Explain choosing the right front door to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.

@@ -1,8 +1,12 @@
-# Module 30: Troubleshooting & Capstone
+# Module 22: Troubleshooting & Capstone
 
-**Level:** 5 · **Lessons:** 7 · **Questions:** 6
+**Level:** 5 · **Lessons:** 6
 
-_Diagnose any cloud network fault and prove your skills end to end._
+## A real-world thread: Intermittent failure during a migration
+
+A service fails only for some clients following a network change. Comparing source, destination, routes, filters, DNS, logs and captured packets can distinguish symptoms from the actual cause.
+
+This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
 
 ## Lesson 1: A method for every outage
 
@@ -14,9 +18,7 @@ Good troubleshooting is a method, not luck. Use the same steps every time:
 4. **Form one hypothesis, test it, change one thing.**
 5. **Fix, verify, and write down what happened.**
 
-**The questions, in order**
-
-```
+```text
 Is the destination up and listening?        ss -tulpn / service status
 Does the name resolve to the right IP?       dig / nslookup
 Is there a route there AND back?             cloud route tables, effective routes
@@ -25,6 +27,14 @@ Is anything in between unhealthy?            NAT, LB health checks, VPN/BGP stat
 ```
 
 > **Tip:** Most outages are caused by recent changes. Always ask "what changed?" before diving deep.
+
+**Build the mental model:** Define the problem precisely: what source, what destination, what port, since when, for whom? "The app is down" is not a problem statement; "VMs in app-subnet can't reach the database on 5432 since 14:10" is. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Intermittent failure during a migration:** Consider how “a method for every outage” affects the situation: A service fails only for some clients following a network change. Comparing source, destination, routes, filters, DNS, logs and captured packets can distinguish symptoms from the actual cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For a method for every outage, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain a method for every outage to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 2: Built-in path analyzers
 
@@ -39,6 +49,14 @@ These tools are the fastest way to rule configuration in or out. If the analyzer
 
 > **Tip:** Run the analyzer in both directions. Many problems are on the return path.
 
+**Build the mental model:** AWS Reachability Analyzer: source and destination (instances, ENIs, gateways, endpoints); checks routes, SGs, NACLs, gateways and peering, and names the blocking component. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Intermittent failure during a migration:** Consider how “built-in path analyzers” affects the situation: A service fails only for some clients following a network change. Comparing source, destination, routes, filters, DNS, logs and captured packets can distinguish symptoms from the actual cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For built-in path analyzers, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain built-in path analyzers to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 3: Packet-level visibility
 
 When configuration looks right but traffic still fails, capture the packets:
@@ -51,6 +69,14 @@ When configuration looks right but traffic still fails, capture the packets:
 Or simply run `tcpdump` on both ends (Module 08). Combine with **flow logs**, which show accepted and rejected flows at scale, to find which direction and which hop is failing.
 
 > **Tip:** Capture on the sender and the receiver at the same time. If packets leave A but never reach B, the problem is in the network between; if they reach B and B replies, but A never gets the reply, look at the return path.
+
+**Build the mental model:** AWS Traffic Mirroring: copies traffic from an ENI to a monitoring target. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Intermittent failure during a migration:** Consider how “packet-level visibility” affects the situation: A service fails only for some clients following a network change. Comparing source, destination, routes, filters, DNS, logs and captured packets can distinguish symptoms from the actual cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For packet-level visibility, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain packet-level visibility to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 4: Common failure patterns
 
@@ -68,6 +94,14 @@ Most cloud network problems fall into a handful of patterns. Learn to recognise 
 
 > **Tip:** Keep a personal runbook. Each time you solve a problem, add the symptom, the cause and the fix.
 
+**Build the mental model:** Connection timeout to a new VM: security group/NSG/firewall rule missing, or wrong route. Check the analyzer. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Intermittent failure during a migration:** Consider how “common failure patterns” affects the situation: A service fails only for some clients following a network change. Comparing source, destination, routes, filters, DNS, logs and captured packets can distinguish symptoms from the actual cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For common failure patterns, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain common failure patterns to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+
 ## Lesson 5: Cost and performance review
 
 A network can work and still be expensive or slow. Review it regularly:
@@ -79,6 +113,14 @@ A network can work and still be expensive or slow. Review it regularly:
 - **Right-sizing**: VPN/ExpressRoute gateway SKUs, interconnect bandwidth and firewall capacity sized for real usage.
 
 > **Tip:** Tag every network resource with an owner and environment. Unowned resources are usually the ones nobody remembered to delete.
+
+**Build the mental model:** Egress: which flows leave the cloud, cross regions or cross zones? Can a CDN, caching or co-locating services reduce them?. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+
+**Scenario connection — Intermittent failure during a migration:** Consider how “cost and performance review” affects the situation: A service fails only for some clients following a network change. Comparing source, destination, routes, filters, DNS, logs and captured packets can distinguish symptoms from the actual cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+
+**Reasoning in a real design:** For cost and performance review, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+
+> **Tip:** **Check your understanding:** Explain cost and performance review to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 6: Capstone brief
 
@@ -100,93 +142,10 @@ Prove your skills end to end. Build a small but real system across two clouds of
 
 > **Tip:** Keep costs low by using the smallest sizes, running the lab for a few hours at a time, and destroying it with `terraform destroy` when you stop. Set a budget alert before you start.
 
-## Lesson 7: Real-world scenario: an end-to-end investigation
+**Build the mental model:** An address plan for both clouds and an imaginary data centre, with no overlaps. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
 
-**Situation.** Users report that an internal reporting web app on Google Cloud, accessed from offices over HA VPN, shows "502 Bad Gateway" since this morning. Nothing in the app changed.
+**Scenario connection — Intermittent failure during a migration:** Consider how “capstone brief” affects the situation: A service fails only for some clients following a network change. Comparing source, destination, routes, filters, DNS, logs and captured packets can distinguish symptoms from the actual cause. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
 
-**Walking the method.**
+**Reasoning in a real design:** For capstone brief, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
 
-1. **Define**: users in all offices get 502 from the internal Application Load Balancer for `reports.corp.example`, since 07:30.
-2. **What changed?** Cloud Audit Logs show a firewall policy update at 07:25 by the security team: a new rule "deny all ingress from 35.191.0.0/16 and 130.211.0.0/22" was added at high priority, intended to block a scan from an external range they thought these were.
-3. **Confirm**: the load balancer shows all backends **unhealthy**. Those two ranges are Google's **health-check source ranges**; and for internal Application Load Balancers, traffic also comes from the **proxy-only subnet**, which the same change had been grouped with.
-4. **Connectivity Tests** from the proxy-only subnet to a backend on port 8080 report "dropped by firewall policy rule 'deny-scan'".
-
-**Fix.** Roll back the rule (service restored in 3 minutes after health checks pass), then re-implement the security team's intent correctly: block the actual scanning range, and add a hierarchical policy rule explicitly allowing health-check ranges and proxy-only subnets, with a comment explaining why.
-
-**Postmortem actions.**
-
-- Firewall policy changes go through the same IaC pipeline with Connectivity Tests as a pre-merge check.
-- Add a "load balancer healthy backends = 0" alert that pages.
-- Document Google's health-check ranges in the firewall policy itself.
-
-**Lessons learned.** Ask "what changed?" first, confirm with the path analyzer, mitigate quickly, then fix the process so the same mistake can't recur.
-
-## Key takeaways
-
-- Work methodically up the layers and change one thing at a time.
-- Use each cloud's path analyzer before guessing.
-- Flow logs and packet captures show what really happened.
-- Design, build, break and fix a real two-cloud system to prove your skills.
-
-## Checkpoint
-
-**Q1. A private AWS instance cannot reach the Internet. A route to the NAT exists and the security group allows egress. What next?**
-
-A. The CPU
-B. The subnet NACL, including the return path  ✓
-C. The DNS TTL
-D. The instance size
-
-_Stateless NACLs often block the return traffic on ephemeral ports._
-
-**Q2. Which path-analysis tool belongs to OCI?**
-
-A. Reachability Analyzer
-B. Connectivity Tests
-C. Network Path Analyzer  ✓
-D. Network Watcher
-
-_AWS, Google Cloud and Azure use the other three names._
-
-**Q3. Everything worked yesterday and fails today for all users. What should you check first?**
-
-A. Replace the load balancer
-B. What changed: recent deployments, rule changes and certificate expiry  ✓
-C. Reboot every server
-D. Increase the instance sizes
-
-_Most outages follow a change; audit logs show what changed and when._
-
-**Q4. Requests work by IP address but fail by host name. Where is the fault?**
-
-A. Routing
-B. MTU
-C. DNS  ✓
-D. Security groups
-
-_If the IP works, the network path is fine; name resolution is the problem._
-
-**Q5. NAT gateway data-processing charges are very high. What is a likely improvement?**
-
-A. Add a second NAT gateway
-B. Route traffic to cloud services through private or gateway endpoints instead of NAT  ✓
-C. Use bigger instances
-D. Disable flow logs
-
-_Traffic to storage and other cloud APIs often goes through NAT unnecessarily; endpoints avoid it._
-
-**Q6. In the scenario, why did all backends become unhealthy?**
-
-A. The app crashed
-B. DNS failed
-C. A new firewall rule blocked Google's health-check and proxy source ranges  ✓
-D. The VPN went down
-
-_Health checks and proxy traffic must be allowed, or load balancers mark every backend unhealthy._
-
-## Official reading
-
-- [AWS Reachability Analyzer](https://docs.aws.amazon.com/vpc/latest/reachability/what-is-reachability-analyzer.html)
-- [Azure Network Watcher](https://learn.microsoft.com/en-us/azure/network-watcher/network-watcher-overview)
-- [Google Cloud Connectivity Tests](https://cloud.google.com/network-intelligence-center/docs/connectivity-tests/concepts/overview)
-- [OCI Network Path Analyzer](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/path_analyzer.htm)
+> **Tip:** **Check your understanding:** Explain capstone brief to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
