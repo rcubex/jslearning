@@ -1,12 +1,8 @@
-# Module 09: BGP & Internet Routing
+# Module 10: BGP & Internet Routing
 
-**Level:** 2 · **Lessons:** 5
+**Level:** 2 · **Lessons:** 7 · **Questions:** 7
 
-## A real-world thread: Two ISPs for a critical office
-
-An organisation connects to two providers. BGP exchanges reachable prefixes, but route attributes, filtering and asymmetric paths determine whether resilience works as intended.
-
-This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
+_Read and reason about BGP, the protocol behind every hybrid cloud link._
 
 ## Lesson 1: Autonomous systems
 
@@ -18,21 +14,15 @@ BGP is a **path-vector** protocol. Routers announce which IP **prefixes** they c
 
 > **In the cloud:** When you set up a cloud VPN or private link with BGP, you choose an ASN for your side (for example 65010) and the provider uses its own (AWS defaults to 64512 for a virtual private gateway, Azure VPN gateways use 65515, Google Cloud Router lets you pick, OCI uses 31898).
 
-**Build the mental model:** An **autonomous system (AS)** is a network, or group of networks, run by one organisation with one routing policy. Each has an **ASN** (autonomous system number). Examples: Amazon is AS16509, Microsoft AS8075, Google AS1. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Two ISPs for a critical office:** Consider how “autonomous systems” affects the situation: An organisation connects to two providers. BGP exchanges reachable prefixes, but route attributes, filtering and asymmetric paths determine whether resilience works as intended. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For autonomous systems, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain autonomous systems to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
-
 ## Lesson 2: eBGP and iBGP
 
 **eBGP** (external BGP) runs between routers in *different* autonomous systems, usually directly connected. **iBGP** (internal BGP) runs between routers in the *same* AS to spread externally learned routes across the organisation.
 
 A BGP session runs over **TCP port 179**. The two routers (**peers** or **neighbours**) exchange their routes, then send updates only when something changes, plus small keepalive messages. If keepalives stop for the **hold time** (often 90 seconds; cloud services commonly use shorter timers or BFD for faster detection), the session drops and its routes are withdrawn.
 
-```text
+**Typical BGP neighbour setup on your router (Cisco-style)**
+
+```
 router bgp 65010
  neighbor 169.254.10.1 remote-as 64512        ! the cloud side
  neighbor 169.254.10.1 password <md5-key>
@@ -44,14 +34,6 @@ router bgp 65010
 ```
 
 > **Tip:** The 169.254.x.x addresses on cloud VPN and private-link interfaces are link-local "inside tunnel" addresses used only for the BGP session.
-
-**Build the mental model:** **eBGP** (external BGP) runs between routers in *different* autonomous systems, usually directly connected. **iBGP** (internal BGP) runs between routers in the *same* AS to spread externally learned routes across the org. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Two ISPs for a critical office:** Consider how “ebgp and ibgp” affects the situation: An organisation connects to two providers. BGP exchanges reachable prefixes, but route attributes, filtering and asymmetric paths determine whether resilience works as intended. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For ebgp and ibgp, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain ebgp and ibgp to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 3: Path selection
 
@@ -68,7 +50,9 @@ Remember the direction:
 - You control **outbound** traffic with **local preference** (and weight on Cisco).
 - You influence **inbound** traffic with **AS-path prepending** (repeating your own ASN to make a path look longer) and **MED**.
 
-```text
+**Make link B the backup for inbound traffic**
+
+```
 route-map PREPEND-BACKUP permit 10
  set as-path prepend 65010 65010 65010
 router bgp 65010
@@ -76,14 +60,6 @@ router bgp 65010
 ```
 
 > **In the cloud:** Providers document how they pick between your links. For example, AWS prefers Direct Connect over VPN for the same prefix and honours prepending and longest prefix; Azure ExpressRoute uses AS path and weight; always read the provider's routing-preference page before designing primary/backup.
-
-**Build the mental model:** Highest local preference: set inside your AS to choose the *outbound* exit (prefer link A over link B for traffic you send). This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Two ISPs for a critical office:** Consider how “path selection” affects the situation: An organisation connects to two providers. BGP exchanges reachable prefixes, but route attributes, filtering and asymmetric paths determine whether resilience works as intended. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For path selection, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain path selection to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 4: Peering and transit
 
@@ -96,14 +72,6 @@ Networks connect to each other in two commercial ways.
 Cloud providers peer with thousands of ISPs worldwide, which is why traffic to them often enters their private backbone very close to the user.
 
 > **Tip:** Look up your ISP and the big clouds on bgp.he.net to see their prefixes, peers and the IXPs they connect at.
-
-**Build the mental model:** Networks connect to each other in two commercial ways. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Two ISPs for a critical office:** Consider how “peering and transit” affects the situation: An organisation connects to two providers. BGP exchanges reachable prefixes, but route attributes, filtering and asymmetric paths determine whether resilience works as intended. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For peering and transit, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain peering and transit to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 5: Route security and best practice
 
@@ -119,10 +87,120 @@ Defences:
 
 > **In the cloud:** Clouds limit how many routes you can advertise to them (for example, AWS Direct Connect private virtual interfaces accept up to 100 prefixes by default, and Azure ExpressRoute private peering allows up to 4,000 with Standard). Exceed the limit and the session goes down. Summarise.
 
-**Build the mental model:** Prefix filters: only advertise your own prefixes, and only accept what you expect from each peer. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+## Lesson 6: Deep dive: BGP communities and route reflectors
 
-**Scenario connection — Two ISPs for a critical office:** Consider how “route security and best practice” affects the situation: An organisation connects to two providers. BGP exchanges reachable prefixes, but route attributes, filtering and asymmetric paths determine whether resilience works as intended. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+**BGP communities** are tags attached to routes. They let networks signal intentions to each other: "don't advertise this route further", "prefer this path", "this is a customer route". Standard communities look like `ASN:value` (for example `65010:100`); well-known ones include **NO_EXPORT** (don't send outside this AS).
 
-**Reasoning in a real design:** For route security and best practice, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+Cloud providers use communities so you can influence routing on private links:
 
-> **Tip:** **Check your understanding:** Explain route security and best practice to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+- **AWS Direct Connect**: local preference communities (`7224:7100` low, `7224:7200` medium, `7224:7300` high) that you attach to routes you advertise, to choose which Direct Connect connection AWS uses to send traffic to you; and scope communities on public VIFs that control how far your prefixes propagate.
+- **Azure ExpressRoute**: Microsoft tags routes learned over Microsoft peering with regional communities, so you can filter which regions' prefixes you accept.
+- Other providers document their own community schemes; check before designing.
+
+**Route reflectors** solve an iBGP scaling problem. iBGP requires every router to peer with every other router (a full mesh). With 50 routers that's 1,225 sessions. A **route reflector** lets routers peer only with one or two reflectors, which reflect routes to everyone. Large enterprises and all service providers use them; cloud hub routers (Transit Gateway, Cloud Router, DRG) act in a similar central role.
+
+**Tag routes to make AWS prefer this Direct Connect for return traffic**
+
+```
+ip prefix-list ONPREM seq 10 permit 10.100.0.0/14
+route-map TO-AWS-PRIMARY permit 10
+ match ip address prefix-list ONPREM
+ set community 7224:7300
+router bgp 65010
+ neighbor 169.254.30.1 send-community
+ neighbor 169.254.30.1 route-map TO-AWS-PRIMARY out
+```
+
+> **Tip:** Communities only work if you remember `send-community` (or the equivalent) on the BGP session. Without it, tags are stripped silently.
+
+## Lesson 7: Real-world scenario: the route leak that blackholed the cloud
+
+**Situation.** A company connects its data centre to AWS via Direct Connect (primary) and Site-to-Site VPN (backup). One evening, users suddenly can't reach any cloud application, although both connections show "up".
+
+**Investigation.**
+
+1. On the on-premises edge router, `show ip bgp` shows the cloud prefixes still learned over Direct Connect, but a new, more specific route `10.32.0.0/16` points to a lab firewall.
+2. A network engineer, testing in the lab, had advertised `10.32.0.0/16` into the company's OSPF from a lab firewall by mistake. It was redistributed into BGP and to the data centre core.
+3. Longest-prefix match beat the cloud's `10.32.0.0/14` route, so traffic for the main production VPC went to the lab and died there.
+
+**Fix.** Remove the lab route, then prevent recurrence: prefix lists on OSPF-to-BGP redistribution accepting only approved on-premises ranges, filters on the core refusing cloud ranges from internal sources, and an alert when routes for cloud ranges appear from unexpected neighbours.
+
+**Lessons learned.** A single wrong advertisement can override correct routes because more specific prefixes always win. Filter what you accept and redistribute, not just what you send.
+
+## Key takeaways
+
+- The Internet is ~75,000+ autonomous systems connected by BGP.
+- Every cloud private link and dynamic VPN uses eBGP between your router and the provider.
+- Steer outbound traffic with local preference; steer inbound traffic with prepending and MED.
+- Always filter what you advertise and accept; route leaks cause real outages.
+
+## Checkpoint
+
+**Q1. Which BGP technique makes a path look longer so peers prefer another link?**
+
+A. MED
+B. AS-path prepending  ✓
+C. Local preference
+D. Route reflection
+
+_Prepending repeats your ASN in the path, making it less attractive._
+
+**Q2. Which range is reserved for private 2-byte ASNs?**
+
+A. 1–1023
+B. 64512–65534  ✓
+C. 65535 only
+D. 100–200
+
+_64512–65534 is the private 16-bit ASN range._
+
+**Q3. Which TCP port does a BGP session use?**
+
+A. 22
+B. 443
+C. 179  ✓
+D. 500
+
+_BGP peers connect over TCP 179._
+
+**Q4. You have two links to the cloud and want your outbound traffic to prefer link A. Which attribute do you set?**
+
+A. MED
+B. AS-path prepending
+C. Local preference  ✓
+D. Origin
+
+_Local preference is set inside your AS and controls which exit you use for outbound traffic._
+
+**Q5. What does RPKI help prevent?**
+
+A. Packet loss
+B. Unauthorised networks announcing your prefixes  ✓
+C. DNS spoofing
+D. MTU problems
+
+_RPKI lets routers check that an ASN is authorised to originate a prefix._
+
+**Q6. Which AWS Direct Connect community gives the highest local preference for traffic AWS sends to you?**
+
+A. 7224:7100
+B. 7224:7200
+C. 7224:7300  ✓
+D. 7224:9999
+
+_7224:7300 is high preference; 7100 low, 7200 medium._
+
+**Q7. Why do large networks use BGP route reflectors?**
+
+A. To encrypt BGP
+B. To avoid needing a full mesh of iBGP sessions between all routers  ✓
+C. To replace OSPF
+D. To filter prefixes
+
+_Reflectors relay routes so routers don't all have to peer with each other._
+
+## Official reading
+
+- [Cloudflare Learning: what is BGP](https://www.cloudflare.com/learning/security/glossary/what-is-bgp/)
+- [Hurricane Electric BGP Toolkit](https://bgp.he.net/)
+- [Cloudflare: is BGP safe yet (RPKI)](https://isbgpsafeyet.com/)

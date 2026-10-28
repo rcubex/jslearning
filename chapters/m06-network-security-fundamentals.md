@@ -1,12 +1,8 @@
-# Module 06: Network Security Fundamentals
+# Module 07: Network Security Fundamentals
 
-**Level:** 2 · **Lessons:** 6
+**Level:** 2 · **Lessons:** 7 · **Questions:** 6
 
-## A real-world thread: Partner network integration
-
-A company integrates an external payment partner. Separate network zones, least-privilege access, encryption and controlled egress prevent one compromised system from reaching everything.
-
-This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
+_Apply filtering, segmentation and encryption the way cloud controls expect._
 
 ## Lesson 1: Stateful vs stateless filtering
 
@@ -22,14 +18,6 @@ A **stateless** filter judges every packet on its own, with no memory. If you al
 
 > **Watch out:** The most common NACL mistake on AWS: allowing inbound 443 but forgetting outbound 1024–65535, so requests arrive and the replies are silently dropped.
 
-**Build the mental model:** AWS security groups, Azure NSGs, Google Cloud firewall rules and OCI NSGs are stateful. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Partner network integration:** Consider how “stateful vs stateless filtering” affects the situation: A company integrates an external payment partner. Separate network zones, least-privilege access, encryption and controlled egress prevent one compromised system from reaching everything. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For stateful vs stateless filtering, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain stateful vs stateless filtering to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
-
 ## Lesson 2: Rule order and default deny
 
 Firewall rules are evaluated in order. In most systems (AWS NACLs, Azure NSGs, OCI, Google Cloud firewall priorities) the rules are checked by number or priority and the **first match wins**. AWS security groups are different: they only contain allow rules, and if any rule matches, traffic is allowed.
@@ -40,7 +28,9 @@ The golden rule is **default deny**: block everything, then add narrow allow rul
 - **Port**: 443, not "all"
 - **Protocol**: TCP, not "any"
 
-```text
+**A sensible three-tier rule set (conceptually)**
+
+```
 web tier:  allow TCP 443 from 0.0.0.0/0
 app tier:  allow TCP 8080 from web-tier security group only
 db tier:   allow TCP 5432 from app-tier security group only
@@ -49,14 +39,6 @@ everything else: denied
 ```
 
 > **Tip:** Reference security groups (AWS), application security groups (Azure), service accounts or tags (Google Cloud) or NSGs (OCI) as rule sources instead of IP addresses. Rules then keep working as servers scale up and down.
-
-**Build the mental model:** Source: a specific subnet or security group, not 0.0.0.0/0. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Partner network integration:** Consider how “rule order and default deny” affects the situation: A company integrates an external payment partner. Separate network zones, least-privilege access, encryption and controlled egress prevent one compromised system from reaching everything. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For rule order and default deny, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain rule order and default deny to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 3: Segmentation and the DMZ
 
@@ -72,14 +54,6 @@ In the cloud you segment with separate subnets, separate VPCs/VNets, and per-wor
 
 > **In the cloud:** A database should never have a public IP address. Put it in a private subnet with a rule that only the application tier can reach its port.
 
-**Build the mental model:** A DMZ or public zone for things the Internet must reach: load balancers, reverse proxies, VPN endpoints. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Partner network integration:** Consider how “segmentation and the dmz” affects the situation: A company integrates an external payment partner. Separate network zones, least-privilege access, encryption and controlled egress prevent one compromised system from reaching everything. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For segmentation and the dmz, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain segmentation and the dmz to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
-
 ## Lesson 4: VPNs, IPsec and IKE
 
 A **VPN** (virtual private network) builds an encrypted tunnel across an untrusted network such as the Internet.
@@ -90,7 +64,9 @@ A **VPN** (virtual private network) builds an encrypted tunnel across an untrust
 
 Every cloud offers a managed VPN gateway (AWS Site-to-Site VPN, Azure VPN Gateway, Google Cloud HA VPN, OCI Site-to-Site VPN), each providing two tunnels for redundancy. Use both.
 
-```text
+**What you agree with the other side (example)**
+
+```
 IKE version:      IKEv2
 Encryption:       AES-256-GCM
 Integrity / PRF:  SHA-256
@@ -100,14 +76,6 @@ Routing:          BGP (preferred) or static
 ```
 
 > **Tip:** If a tunnel shows "IKE up, IPsec down" or no traffic flows, compare phase 2 (IPsec) parameters and the traffic selectors / routes on both ends first.
-
-**Build the mental model:** A **VPN** (virtual private network) builds an encrypted tunnel across an untrusted network such as the Internet. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Partner network integration:** Consider how “vpns, ipsec and ike” affects the situation: A company integrates an external payment partner. Separate network zones, least-privilege access, encryption and controlled egress prevent one compromised system from reaching everything. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For vpns, ipsec and ike, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain vpns, ipsec and ike to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 5: Zero trust
 
@@ -123,14 +91,6 @@ Traditional security assumed that anything inside the network perimeter could be
 Practical zero-trust building blocks in the cloud: identity-aware proxies (Google IAP, Microsoft Entra application proxy), managed admin access without open ports (AWS Systems Manager Session Manager, Azure Bastion, OCI Bastion), service-to-service mTLS in a service mesh, and private endpoints for managed services.
 
 > **Analogy:** The old model is a castle with a moat: once inside, you can go anywhere. Zero trust is a modern office where your badge is checked at every door.
-
-**Build the mental model:** Identity: who is the user or workload, proven with strong authentication (MFA, certificates, workload identity). This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Partner network integration:** Consider how “zero trust” affects the situation: A company integrates an external payment partner. Separate network zones, least-privilege access, encryption and controlled egress prevent one compromised system from reaching everything. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For zero trust, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain zero trust to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 6: Encryption in transit and defense in depth
 
@@ -148,10 +108,84 @@ Encrypt data in transit everywhere, including inside your own network. Use TLS 1
 
 > **Watch out:** A firewall rule is not a substitute for patching. Assume any single control can fail, and ask what stops an attacker at the next layer.
 
-**Build the mental model:** Edge: DDoS protection and a web application firewall. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+## Lesson 7: Real-world scenario: the exposed database
 
-**Scenario connection — Partner network integration:** Consider how “encryption in transit and defense in depth” affects the situation: A company integrates an external payment partner. Separate network zones, least-privilege access, encryption and controlled egress prevent one compromised system from reaching everything. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+**Situation.** A start-up's security scan finds its PostgreSQL database reachable from the Internet on port 5432. It was made public "temporarily" during a migration a year ago. Logs show thousands of failed login attempts per day from around the world.
 
-**Reasoning in a real design:** For encryption in transit and defense in depth, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+**Response.**
 
-> **Tip:** **Check your understanding:** Explain encryption in transit and defense in depth to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+1. **Contain**: remove the public IP and the security rule allowing 5432 from 0.0.0.0/0. Confirm with an external port scan that it's no longer reachable.
+2. **Investigate**: check database logs for any **successful** logins from unknown IPs, review accounts, and rotate all database passwords and application credentials.
+3. **Re-architect**: place the database in a private subnet; allow 5432 only from the application tier's security group; give developers access through a managed bastion or session service with MFA instead of direct connections.
+4. **Prevent**: add a guardrail policy denying public IPs on databases and security rules opening database ports to the Internet; add an automated check that alerts on any new exposure.
+
+**Lessons learned.** "Temporary" exposures become permanent. Default deny, segmentation and guardrail policies stop one person's shortcut becoming a breach.
+
+## Key takeaways
+
+- Stateful filters remember connections; stateless filters need rules for both directions.
+- Deny by default, allow only what is needed, from the narrowest source possible.
+- Segment networks by tier and sensitivity so one compromise does not reach everything.
+- Zero trust verifies every request by identity, never by network location alone.
+
+## Checkpoint
+
+**Q1. With a stateless filter, what must you add so a web server on 443 can reply?**
+
+A. Nothing
+B. An outbound rule for ephemeral ports  ✓
+C. A DNS rule
+D. A NAT rule
+
+_Stateless filters do not track connections, so return traffic to client ports (1024–65535) needs its own rule._
+
+**Q2. Zero trust removes trust based on what?**
+
+A. Passwords
+B. Network location  ✓
+C. Encryption
+D. Certificates
+
+_Being "inside the network" grants nothing; every request is verified._
+
+**Q3. Which source is best for a database rule that should only accept the app tier?**
+
+A. 0.0.0.0/0
+B. The whole VPC range
+C. The app tier's security group or tag  ✓
+D. The Internet gateway
+
+_Referencing the app tier's group follows instances as they change and is as narrow as possible._
+
+**Q4. Which ports must be open for an IPsec VPN that crosses a NAT device?**
+
+A. TCP 22 and 443
+B. UDP 500 and UDP 4500  ✓
+C. TCP 179
+D. UDP 53
+
+_IKE uses UDP 500; NAT traversal moves IKE and ESP to UDP 4500._
+
+**Q5. What is the main purpose of network segmentation?**
+
+A. Faster Internet access
+B. Fewer IP addresses
+C. Limiting how far an attacker can move after one compromise  ✓
+D. Removing the need for passwords
+
+_Segments contain breaches and let you apply tighter rules to sensitive systems._
+
+**Q6. What is the first action when you discover a database exposed to the Internet?**
+
+A. Write a postmortem
+B. Upgrade the database version
+C. Remove the exposure (public IP or open rule) to contain it  ✓
+D. Change the DNS name
+
+_Contain first, then investigate and prevent recurrence._
+
+## Official reading
+
+- [NIST SP 800-207: Zero Trust Architecture](https://csrc.nist.gov/pubs/sp/800/207/final)
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [Cloudflare Learning: what is IPsec](https://www.cloudflare.com/learning/network-layer/what-is-ipsec/)

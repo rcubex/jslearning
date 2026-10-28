@@ -1,12 +1,8 @@
-# Module 17: Hybrid Connectivity
+# Module 25: Hybrid Connectivity
 
-**Level:** 5 · **Lessons:** 6
+**Level:** 5 · **Lessons:** 7 · **Questions:** 6
 
-## A real-world thread: Bank connecting a data centre to cloud
-
-A banking service must access on-premises systems from the cloud. The design combines private circuits or VPN, encrypted traffic, BGP routing and failover assumptions.
-
-This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
+_Connect data centres to cloud with resilient, BGP-steered links._
 
 ## Lesson 1: Private links in all four clouds
 
@@ -23,14 +19,6 @@ Why use them instead of VPN over the Internet? Predictable latency and throughpu
 
 > **Tip:** Many enterprises meet all their clouds in one or two carrier-neutral colocation facilities (Equinix, Digital Realty and similar), with short cross-connects to each provider. That colocation becomes the network's centre.
 
-**Build the mental model:** AWS Direct Connect: dedicated 1/10/100/400 Gbps ports or hosted connections via partners; virtual interfaces (private, transit, public); Direct Connect gateway for multi-region reach. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Bank connecting a data centre to cloud:** Consider how “private links in all four clouds” affects the situation: A banking service must access on-premises systems from the cloud. The design combines private circuits or VPN, encrypted traffic, BGP routing and failover assumptions. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For private links in all four clouds, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain private links in all four clouds to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
-
 ## Lesson 2: VPN as primary or backup
 
 **Site-to-site IPsec VPN** over the Internet is quick to set up (minutes, not weeks), cheap, and available everywhere. Its limits are variable latency, lower throughput per tunnel (for example, about 1.25 Gbps per AWS tunnel), and dependence on Internet quality.
@@ -43,14 +31,6 @@ Common patterns:
 - **SD-WAN**: branch routers build overlay tunnels to cloud hubs (AWS Cloud WAN, Azure Virtual WAN, Google NCC router appliances and OCI all integrate with SD-WAN vendors).
 
 > **Watch out:** When VPN backs up a private link, make sure the VPN can actually carry the load. A 10 Gbps link failing over to a 1 Gbps VPN still causes an outage for heavy workloads.
-
-**Build the mental model:** VPN only: small sites, labs, or while waiting for a private link. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Bank connecting a data centre to cloud:** Consider how “vpn as primary or backup” affects the situation: A banking service must access on-premises systems from the cloud. The design combines private circuits or VPN, encrypted traffic, BGP routing and failover assumptions. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For vpn as primary or backup, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain vpn as primary or backup to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 3: Designing for resilience
 
@@ -65,7 +45,9 @@ The resilience ladder, from weakest to strongest:
 
 Also remove shared dependencies: different carriers, different building entrances, separate power. And make failover fast: use **BFD** (Bidirectional Forwarding Detection) where supported so BGP notices a dead link in about a second instead of 90 seconds.
 
-```text
+**Checklist for a production hybrid design**
+
+```
 [ ] At least two physical connections, at two locations
 [ ] Separate customer routers for each connection
 [ ] BGP on every link; BFD enabled where supported
@@ -74,14 +56,6 @@ Also remove shared dependencies: different carriers, different building entrance
 ```
 
 > **Tip:** Test failover regularly. An untested backup link is often a broken backup link.
-
-**Build the mental model:** One connection, one device, one location: no redundancy. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Bank connecting a data centre to cloud:** Consider how “designing for resilience” affects the situation: A banking service must access on-premises systems from the cloud. The design combines private circuits or VPN, encrypted traffic, BGP routing and failover assumptions. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For designing for resilience, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain designing for resilience to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 4: Steering traffic with BGP
 
@@ -98,7 +72,9 @@ With two or more links you decide which one carries traffic in each direction.
 
 **Equal-cost multipath (ECMP)** lets you use several links at once for more bandwidth when paths look identical.
 
-```text
+**Primary/backup with prepending and local preference (Cisco-style)**
+
+```
 ! Prefer link A for outbound
 route-map FROM-CLOUD-A permit 10
  set local-preference 200
@@ -108,14 +84,6 @@ route-map TO-CLOUD-B permit 10
 ```
 
 > **Watch out:** Asymmetric routing (out via link A, back via link B) breaks stateful firewalls in the path. Steer both directions consistently.
-
-**Build the mental model:** AWS prefers the longest prefix, then Direct Connect over VPN, then honours AS-path length and local preference communities on Direct Connect. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Bank connecting a data centre to cloud:** Consider how “steering traffic with bgp” affects the situation: A banking service must access on-premises systems from the cloud. The design combines private circuits or VPN, encrypted traffic, BGP routing and failover assumptions. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For steering traffic with bgp, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain steering traffic with bgp to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 5: Encryption, MTU and route limits
 
@@ -128,14 +96,6 @@ Three details cause many hybrid problems.
 **Route limits.** Every provider limits the number of prefixes you can advertise per session (for example, 100 on an AWS private VIF; 4,000 on ExpressRoute private peering with Standard, 10,000 with Premium). Exceeding the limit drops the BGP session. Advertise **summaries** such as `10.100.0.0/14` rather than every subnet.
 
 > **Tip:** Before go-live, agree in writing on the prefixes each side advertises and the filters each side applies. Most hybrid incidents come from unexpected route advertisements.
-
-**Build the mental model:** Three details cause many hybrid problems. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Bank connecting a data centre to cloud:** Consider how “encryption, mtu and route limits” affects the situation: A banking service must access on-premises systems from the cloud. The design combines private circuits or VPN, encrypted traffic, BGP routing and failover assumptions. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For encryption, mtu and route limits, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain encryption, mtu and route limits to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 6: A complete hybrid design
 
@@ -152,10 +112,91 @@ Putting the pieces together for an organisation with a Dubai data centre and wor
 
 > **In the cloud:** The colocation routers can also route between the two clouds, so AWS and Azure traffic stays on private links instead of crossing the Internet.
 
-**Build the mental model:** Colocation: rent space in a carrier-neutral facility near the cloud regions. Place two routers there. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+## Lesson 7: Real-world scenario: failover that didn't fail over
 
-**Scenario connection — Bank connecting a data centre to cloud:** Consider how “a complete hybrid design” affects the situation: A banking service must access on-premises systems from the cloud. The design combines private circuits or VPN, encrypted traffic, BGP routing and failover assumptions. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+**Situation.** A company has ExpressRoute as its primary connection to Azure and a Site-to-Site VPN as backup, both with BGP. During a carrier outage, ExpressRoute goes down. Users lose access to Azure for 45 minutes, although the VPN tunnels are up.
 
-**Reasoning in a real design:** For a complete hybrid design, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+**Investigation.**
 
-> **Tip:** **Check your understanding:** Explain a complete hybrid design to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+1. The VPN gateway's BGP status shows routes learned from on-premises, but the on-premises routers show **no Azure routes** learned over the VPN.
+2. The on-premises VPN firewall had an outbound route filter, configured during setup, that only accepted Azure routes when "a test tag" was present. The test had ended, but the filter remained.
+3. The backup path had never been tested end to end since installation.
+
+**Fix.**
+
+1. Correct the route filters so Azure prefixes are accepted over the VPN with a lower local preference than ExpressRoute.
+2. Verify that ExpressRoute stays preferred when both are up, and VPN takes over when ExpressRoute withdraws.
+3. Schedule quarterly failover tests: shut the ExpressRoute BGP sessions in a maintenance window and confirm traffic moves, then restore.
+4. Alert when the backup path's learned-route count drops to zero.
+
+**Lessons learned.** A backup path that hasn't been tested is an assumption, not a backup. Monitor the backup's routes continuously and test failover on a schedule.
+
+## Key takeaways
+
+- Every cloud's private link uses eBGP; your router design is the same everywhere.
+- Resilience needs two links, two locations, two devices and tested failover.
+- Steer primary and backup paths deliberately with BGP attributes, and summarise routes.
+- Private links are not encrypted by default; add MACsec or IPsec when required.
+
+## Checkpoint
+
+**Q1. Which protocol do all four providers use to exchange routes over private links?**
+
+A. OSPF
+B. BGP  ✓
+C. RIP
+D. EIGRP
+
+_eBGP is universal for cloud hybrid connectivity._
+
+**Q2. Is traffic on a dedicated private link encrypted by default?**
+
+A. Yes, always
+B. No  ✓
+C. Only for IPv6
+D. Only on Azure
+
+_Private does not mean encrypted; add MACsec or IPsec._
+
+**Q3. Which design survives the loss of an entire colocation facility?**
+
+A. Two connections at one location on one device
+B. Two connections at one location on two devices
+C. Connections at two different locations  ✓
+D. One connection with a bigger port
+
+_Only diversity across locations protects against a site-level failure._
+
+**Q4. Which feature helps BGP detect a failed link in about a second?**
+
+A. Prepending
+B. MED
+C. BFD  ✓
+D. Route summarisation
+
+_Bidirectional Forwarding Detection detects path failure much faster than BGP hold timers._
+
+**Q5. You advertise 300 individual /24 routes over an AWS private VIF and the session keeps dropping. Best fix?**
+
+A. Use a bigger port
+B. Add a VPN
+C. Advertise summary routes to stay under the prefix limit  ✓
+D. Change the ASN
+
+_Private VIFs accept a limited number of prefixes; summarise._
+
+**Q6. How do you know a backup hybrid path will work when the primary fails?**
+
+A. Its tunnels show "up"
+B. Test failover regularly and monitor the routes learned over the backup path  ✓
+C. Buy a bigger primary link
+D. Use static routes
+
+_Tunnels can be up while routing is broken; only testing and route monitoring prove it._
+
+## Official reading
+
+- [AWS Direct Connect resiliency recommendations](https://docs.aws.amazon.com/directconnect/latest/UserGuide/resiliency_toolkit.html)
+- [Azure ExpressRoute high availability](https://learn.microsoft.com/en-us/azure/expressroute/designing-for-high-availability-with-expressroute)
+- [Google Cloud Interconnect topologies](https://cloud.google.com/network-connectivity/docs/interconnect/concepts/overview)
+- [OCI FastConnect redundancy best practices](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/fastconnectresiliency.htm)
