@@ -1,12 +1,8 @@
 # Module 01: How Networks Work
 
-**Level:** 1 · **Lessons:** 5
+**Level:** 1 · **Lessons:** 6 · **Questions:** 6
 
-## A real-world thread: Video call across countries
-
-An employee in Dubai joins a video call hosted in Europe. Voice packets cross home Wi-Fi, ISP networks, international transit and a cloud region. Different paths and temporary congestion may introduce jitter despite high advertised bandwidth.
-
-This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
+_Understand what happens when data crosses a network, and measure it yourself._
 
 ## Lesson 1: What a network is
 
@@ -22,14 +18,6 @@ A cloud provider is, from a network point of view, a huge private WAN with data 
 
 > **Analogy:** Think of the road system. Houses are devices, roads are links, and the highway code is the protocol. Your street is a LAN; motorways between cities are a WAN.
 
-**Build the mental model:** Devices + links + protocols = a network. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Video call across countries:** Consider how “what a network is” affects the situation: An employee in Dubai joins a video call hosted in Europe. Voice packets cross home Wi-Fi, ISP networks, international transit and a cloud region. Different paths and temporary congestion may introduce jitter despite high advertised bandwidth. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For what a network is, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain what a network is to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
-
 ## Lesson 2: Packets and packet switching
 
 Data is not sent as one long stream. It is cut into small pieces called **packets**, typically up to about 1,500 bytes each on Ethernet. A 5 MB photo becomes roughly 3,500 packets. Each packet carries a **header** with the source address, the destination address and other control information, followed by a slice of the actual data, called the **payload**.
@@ -42,20 +30,14 @@ This design is called **packet switching**. It lets millions of conversations sh
 - Routers make a fresh forwarding decision for every packet
 - Lost packets can be re-sent; the receiver reassembles them in order
 
-```text
+**Watch the hops between you and a server**
+
+```
 traceroute 8.8.8.8        # macOS / Linux
 tracert 8.8.8.8           # Windows
 ```
 
 > **Tip:** Each line of a traceroute is one router (hop). Asterisks (* * *) usually mean that router chose not to reply to the probe, not that the path is broken.
-
-**Build the mental model:** Packet = header (addresses and control info) + payload (your data). This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Video call across countries:** Consider how “packets and packet switching” affects the situation: An employee in Dubai joins a video call hosted in Europe. Voice packets cross home Wi-Fi, ISP networks, international transit and a cloud region. Different paths and temporary congestion may introduce jitter despite high advertised bandwidth. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For packets and packet switching, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain packets and packet switching to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 3: Bandwidth, latency, jitter, loss
 
@@ -70,21 +52,15 @@ Four numbers describe how a network path behaves, and each one affects applicati
 - Voice and video calls care most about jitter and loss
 - Cloud region choice is often a latency decision: put servers near users
 
-```text
+**Measure latency and loss**
+
+```
 ping -c 20 1.1.1.1        # macOS / Linux: 20 probes
 ping -n 20 1.1.1.1        # Windows
 # Read: min/avg/max RTT and the "% packet loss" line
 ```
 
 > **Watch out:** "Our Internet is fast" usually refers to bandwidth. A 1 Gbps link with 300 ms latency still makes a chatty application feel slow.
-
-**Build the mental model:** Large file transfers care most about bandwidth and loss. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Video call across countries:** Consider how “bandwidth, latency, jitter, loss” affects the situation: An employee in Dubai joins a video call hosted in Europe. Voice packets cross home Wi-Fi, ISP networks, international transit and a cloud region. Different paths and temporary congestion may introduce jitter despite high advertised bandwidth. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For bandwidth, latency, jitter, loss, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain bandwidth, latency, jitter, loss to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 4: Topologies and the edge
 
@@ -99,14 +75,6 @@ These shapes come back again and again in the cloud. Hub-and-spoke is the standa
 - Hub-and-spoke: the most common cloud design
 
 > **In the cloud:** When you hear "transit hub" or "hub VNet", picture the hub-and-spoke diagram. Learn it once and it applies to all four providers.
-
-**Build the mental model:** Star: simple, one central point. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Video call across countries:** Consider how “topologies and the edge” affects the situation: An employee in Dubai joins a video call hosted in Europe. Voice packets cross home Wi-Fi, ISP networks, international transit and a cloud region. Different paths and temporary congestion may introduce jitter despite high advertised bandwidth. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For topologies and the edge, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain topologies and the edge to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 5: How a web request travels end to end
 
@@ -127,10 +95,93 @@ This takes roughly 50–300 ms and involves a dozen protocols. Networking skill 
 
 > **Tip:** Keep this list. When something "doesn't connect", ask which step failed: no IP address, no DNS answer, no route, blocked port, or a TLS error. Each has a different fix.
 
-**Build the mental model:** Your laptop already has an IP address, subnet mask, default gateway and DNS server, which it got from DHCP when it joined the network. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+## Lesson 6: Real-world scenario: "The Internet is slow" in the Dubai office
 
-**Scenario connection — Video call across countries:** Consider how “how a web request travels end to end” affects the situation: An employee in Dubai joins a video call hosted in Europe. Voice packets cross home Wi-Fi, ISP networks, international transit and a cloud region. Different paths and temporary congestion may introduce jitter despite high advertised bandwidth. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+**Situation.** Staff in a 60-person Dubai office complain that "the Internet is slow" every afternoon. The office has a 500 Mbps fibre line. Speed tests in the morning show 480 Mbps; in the afternoon, web pages take seconds to start loading and video calls freeze.
 
-**Reasoning in a real design:** For how a web request travels end to end, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+**Investigation.**
 
-> **Tip:** **Check your understanding:** Explain how a web request travels end to end to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+1. An afternoon speed test still shows about 300 Mbps, so raw bandwidth isn't the main problem.
+2. `ping -c 100 1.1.1.1` shows average latency rising from 4 ms (morning) to 180 ms (afternoon), with jitter of ±90 ms and 1.5% packet loss.
+3. The router's interface graph shows upload bandwidth pinned at 100% (the line is 500 Mbps down but only 100 Mbps up).
+4. The router's traffic report shows one PC uploading continuously: a design team's cloud folder syncing large video files every afternoon.
+
+**Why it hurts.** When the upload direction is full, packets queue in the router's buffer. Every packet, including the tiny acknowledgements that downloads depend on and the voice packets of calls, waits in that queue. Latency and jitter explode even though download bandwidth is free. This queueing problem is called **bufferbloat**.
+
+**Fix.**
+
+1. Limit the sync client's upload rate to 40 Mbps during working hours.
+2. Enable smart queue management (such as fq_codel or CAKE) on the router so small, interactive packets aren't stuck behind bulk uploads.
+3. Add QoS that prioritises voice and video traffic.
+
+Afternoon latency stayed under 15 ms.
+
+**Lessons learned.** "Slow" can mean low bandwidth, high latency, jitter or loss, and each has a different cause. Measure all four, in both directions, at the time the problem happens.
+
+## Key takeaways
+
+- A network is devices plus links plus agreed rules (protocols).
+- Data travels as small packets that routers forward one hop at a time.
+- Bandwidth, latency, jitter and loss together decide how an application feels.
+- The Internet is thousands of independent networks that agree to exchange traffic.
+
+## Checkpoint
+
+**Q1. A video call stutters even though a speed test shows 500 Mbps. Which metric is the likely cause?**
+
+A. Bandwidth
+B. Jitter  ✓
+C. Throughput
+D. MTU
+
+_Speed tests measure bandwidth. Real-time audio and video suffer when delay varies, which is jitter._
+
+**Q2. What is the Internet?**
+
+A. One network owned by ISPs
+B. A network of independently run networks  ✓
+C. A single protocol
+D. The global DNS system
+
+_The Internet is thousands of autonomous networks that exchange traffic with each other._
+
+**Q3. Roughly what is the best possible round-trip time between two cities 5,000 km apart over fibre?**
+
+A. 5 ms
+B. 25 ms
+C. 50 ms  ✓
+D. 500 ms
+
+_Light in fibre covers about 200 km per ms: 10,000 km round trip ÷ 200 = 50 ms, before any equipment delay._
+
+**Q4. How many links does a full mesh of 6 sites need?**
+
+A. 6
+B. 12
+C. 15  ✓
+D. 36
+
+_n × (n − 1) / 2 = 6 × 5 / 2 = 15._
+
+**Q5. What does a router use to decide where to send a packet?**
+
+A. The packet's payload
+B. The destination address in the header  ✓
+C. The size of the packet
+D. The source port
+
+_Routers look up the destination address in their routing table and forward one hop closer._
+
+**Q6. In the Dubai office scenario, why did calls freeze when the upload was saturated even though download bandwidth was free?**
+
+A. The ISP blocked video
+B. DNS stopped working
+C. Packets queued behind bulk uploads, causing high latency and jitter (bufferbloat)  ✓
+D. The Wi-Fi channel changed
+
+_A full upload queue delays every packet, including acknowledgements and voice._
+
+## Official reading
+
+- [Cloudflare Learning: what is the network layer](https://www.cloudflare.com/learning/network-layer/what-is-the-network-layer/)
+- [Cloudflare Learning: what is latency](https://www.cloudflare.com/learning/performance/glossary/what-is-latency/)

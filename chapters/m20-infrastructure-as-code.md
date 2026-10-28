@@ -1,12 +1,8 @@
-# Module 20: Infrastructure as Code
+# Module 28: Infrastructure as Code
 
-**Level:** 5 · **Lessons:** 6
+**Level:** 5 · **Lessons:** 7 · **Questions:** 6
 
-## A real-world thread: Production changes across regions
-
-A network team must reproduce secure configurations consistently. Versioned infrastructure definitions, code reviews, state management, drift detection and policy checks affect reliability.
-
-This scenario is a running conceptual example. The lessons below explain the relevant technology and how to reason about its behavior; no practical labs are required.
+_Define every network in reviewable, repeatable code._
 
 ## Lesson 1: Why infrastructure as code
 
@@ -22,21 +18,15 @@ Clicking through a console is fine for learning, but it fails for real networks:
 
 > **Tip:** Treat the console as read-only for production networks. If a change isn't in code, it shouldn't exist.
 
-**Build the mental model:** Review: every change is a pull request someone checks before it is applied. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Production changes across regions:** Consider how “why infrastructure as code” affects the situation: A network team must reproduce secure configurations consistently. Versioned infrastructure definitions, code reviews, state management, drift detection and policy checks affect reliability. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For why infrastructure as code, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain why infrastructure as code to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
-
 ## Lesson 2: Terraform across clouds
 
 **Terraform** (and its open-source fork **OpenTofu**) uses one language, **HCL**, for all four clouds through **providers**: `hashicorp/aws`, `hashicorp/azurerm`, `hashicorp/google` and `oracle/oci`.
 
 The workflow is always the same: `terraform init` (download providers), `terraform plan` (show the changes), `terraform apply` (make them), and `terraform destroy` (remove everything).
 
-```text
+**A minimal AWS VPC with Terraform**
+
+```
 terraform {
   required_providers { aws = { source = "hashicorp/aws", version = "~> 5.0" } }
 }
@@ -60,14 +50,6 @@ Key concepts: **resources** (things to create), **data sources** (read existing 
 
 > **Tip:** Build one module per cloud with the same inputs (name, CIDR, zones, tiers). Teams then request a network the same way regardless of provider.
 
-**Build the mental model:** **Terraform** (and its open-source fork **OpenTofu**) uses one language, **HCL**, for all four clouds through **providers**: `hashicorp/aws`, `hashicorp/azurerm`, `hashicorp/google` and `oracle/oci`. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Production changes across regions:** Consider how “terraform across clouds” affects the situation: A network team must reproduce secure configurations consistently. Versioned infrastructure definitions, code reviews, state management, drift detection and policy checks affect reliability. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For terraform across clouds, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain terraform across clouds to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
-
 ## Lesson 3: Native tools
 
 Each provider also has its own IaC option:
@@ -77,7 +59,9 @@ Each provider also has its own IaC option:
 - **Google Cloud Infrastructure Manager**: runs Terraform as a managed service; Google also publishes Terraform blueprints (Cloud Foundation Fabric).
 - **OCI Resource Manager**: runs Terraform as a managed service with stored state, drift detection and ready-made stacks.
 
-```text
+**The same VNet in Bicep**
+
+```
 resource vnet 'Microsoft.Network/virtualNetworks@2023-09-01' = {
   name: 'vnet-prod-uaen'
   location: 'uaenorth'
@@ -89,14 +73,6 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-09-01' = {
 ```
 
 > **Tip:** Use Terraform when you span several clouds; native tools are a good choice if you are committed to one provider and want the newest features immediately.
-
-**Build the mental model:** AWS CloudFormation (YAML/JSON templates) and the AWS CDK (write infrastructure in TypeScript, Python, Java and others, compiled to CloudFormation). This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Production changes across regions:** Consider how “native tools” affects the situation: A network team must reproduce secure configurations consistently. Versioned infrastructure definitions, code reviews, state management, drift detection and policy checks affect reliability. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For native tools, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain native tools to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
 
 ## Lesson 4: State and safety
 
@@ -110,7 +86,9 @@ Rules:
 - **Read every plan**. Watch especially for `destroy` and `forces replacement` on networks, gateways and subnets.
 - Protect critical resources with `lifecycle { prevent_destroy = true }`.
 
-```text
+**Remote state in Azure Storage**
+
+```
 terraform {
   backend "azurerm" {
     resource_group_name  = "rg-tfstate"
@@ -123,14 +101,6 @@ terraform {
 
 > **Watch out:** Changing a subnet's CIDR or an immutable property usually *replaces* the subnet, deleting everything in it. The plan says "must be replaced"; stop and rethink when you see it on a network.
 
-**Build the mental model:** Store state remotely with locking: an S3 bucket (with native S3 locking or DynamoDB), Azure Storage with blob leases, a Google Cloud Storage bucket, OCI Object Storage, HCP Terraform, or OCI Resource Manager. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Production changes across regions:** Consider how “state and safety” affects the situation: A network team must reproduce secure configurations consistently. Versioned infrastructure definitions, code reviews, state management, drift detection and policy checks affect reliability. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For state and safety, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain state and safety to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
-
 ## Lesson 5: Policy as code and CI/CD
 
 Automate checks so that mistakes are caught before they reach the cloud.
@@ -139,7 +109,9 @@ Automate checks so that mistakes are caught before they reach the cloud.
 - **Custom policies**: **Open Policy Agent** with **Conftest**, or HashiCorp **Sentinel**, enforce your own rules on the plan output, such as "only approved CIDRs" or "no public IPs".
 - **Pipeline**: on every pull request, run `terraform fmt -check`, `terraform validate`, `terraform plan` and the policy checks, and post the plan to the pull request. After approval, apply from the pipeline, never from a laptop.
 
-```text
+**A small Conftest (Rego) policy: no SSH from the Internet**
+
+```
 package main
 deny[msg] {
   r := input.resource_changes[_]
@@ -153,14 +125,6 @@ deny[msg] {
 
 > **Tip:** Use the cloud's workload identity (OIDC federation from GitHub Actions or GitLab to AWS roles, Azure managed identities, Google Workload Identity Federation, OCI) so pipelines need no stored keys.
 
-**Build the mental model:** Static analysis: Checkov, tfsec/Trivy or KICS scan Terraform for risky patterns (security group open to the world, missing flow logs, public storage). This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
-
-**Scenario connection — Production changes across regions:** Consider how “policy as code and ci/cd” affects the situation: A network team must reproduce secure configurations consistently. Versioned infrastructure definitions, code reviews, state management, drift detection and policy checks affect reliability. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
-
-**Reasoning in a real design:** For policy as code and ci/cd, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
-
-> **Tip:** **Check your understanding:** Explain policy as code and ci/cd to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
-
 ## Lesson 6: Drift, imports and day-two operations
 
 Real environments change. Handle it deliberately:
@@ -170,7 +134,9 @@ Real environments change. Handle it deliberately:
 - **Refactoring**: `moved` blocks rename resources or move them into modules without destroying them.
 - **Upgrades**: pin provider versions, upgrade them deliberately, and read the changelogs.
 
-```text
+**Bring an existing VPC under Terraform**
+
+```
 import {
   to = aws_vpc.legacy
   id = "vpc-0abc123def4567890"
@@ -183,10 +149,89 @@ resource "aws_vpc" "legacy" {
 
 > **Tip:** Start small: put one non-critical network under Terraform, practise plan/apply/import, then expand.
 
-**Build the mental model:** Drift: someone changes a rule by hand. terraform plan shows the difference; either revert it by applying, or update the code to match. Scheduled plans can alert on drift. This is one part of a larger system, not a standalone feature. Separate the observable outcome (what a user or service sees) from the mechanism that produces it (rules, messages, state, routes or decisions). Ask where this function operates, which input it receives, and how its output influences the next component. This helps distinguish two technologies that sound similar but solve different problems.
+## Lesson 7: Real-world scenario: the plan nobody read
 
-**Scenario connection — Production changes across regions:** Consider how “drift, imports and day-two operations” affects the situation: A network team must reproduce secure configurations consistently. Versioned infrastructure definitions, code reviews, state management, drift detection and policy checks affect reliability. The key is to identify what this concept controls, what it depends on, and which other component would need to cooperate for the whole request to succeed.
+**Situation.** An engineer changes a variable in a Terraform module to add a new subnet. The pipeline shows the plan, a reviewer approves after glancing at "Plan: 2 to add, 1 to change, 3 to destroy", and it's applied. Production loses its NAT gateway and route tables; outbound traffic fails for 25 minutes.
 
-**Reasoning in a real design:** For drift, imports and day-two operations, consider a normal case, an incorrect configuration and a component failure. In the normal case, the relevant components agree about addressing, trust and expected traffic. With an incorrect configuration, one component can reject or misdirect a request even when all others work. During a failure, observability and redundant paths matter, but redundancy does not automatically correct a bad policy or a missing return route. The exact behavior depends on the platform and architecture.
+**Investigation.** The variable change altered the **index** of subnets in a `count`-based list. Terraform therefore planned to destroy and recreate the subnets after the new one in the list, together with their route table associations and the NAT gateway inside one of them. The plan said so, but nobody read the destroy lines.
 
-> **Tip:** **Check your understanding:** Explain drift, imports and day-two operations to a colleague without using vendor product names. Identify one benefit, one limitation, one common misunderstanding and how this topic connects to the preceding lesson. If you can explain those relationships, you understand more than a definition.
+**Fix and prevention.**
+
+1. Restore from the previous state by reverting the change and applying (resources recreated with new IDs).
+2. Refactor the module to use `for_each` with stable keys (subnet names) instead of `count` indexes, using `moved` blocks to migrate state without recreation.
+3. Add `prevent_destroy` to critical network resources.
+4. Add a policy check that **fails the pipeline** if a plan destroys or replaces network resources in production without an explicit override label.
+5. Post a summary of destroyed resources prominently in the pull request.
+
+**Lessons learned.** Terraform tells you exactly what it will do; the risk is people not reading it. Use stable keys, protect critical resources, and let automation block destructive changes.
+
+## Key takeaways
+
+- Networks built in code are reviewable, repeatable and recoverable.
+- Terraform's plan shows exactly what will change; always read it.
+- Keep state remote, locked and separated per environment.
+- Check every change automatically with policy as code before it reaches production.
+
+## Checkpoint
+
+**Q1. Which command shows changes without applying them?**
+
+A. terraform init
+B. terraform plan  ✓
+C. terraform apply
+D. terraform fmt
+
+_plan previews; apply executes._
+
+**Q2. Which OCI service runs Terraform for you?**
+
+A. Resource Manager  ✓
+B. Cloud Shell
+C. DevOps
+D. Bastion
+
+_OCI Resource Manager is managed Terraform._
+
+**Q3. Why must Terraform state be stored remotely with locking?**
+
+A. To make plans faster
+B. So team members share one source of truth and two runs can't corrupt it at once  ✓
+C. Because providers require it
+D. To encrypt the code
+
+_Locking prevents concurrent applies; remote storage gives everyone the same state._
+
+**Q4. A plan shows a production subnet "must be replaced". What should you do?**
+
+A. Apply quickly before anyone notices
+B. Stop and review: replacement deletes the subnet and everything in it  ✓
+C. Ignore it; subnets are recreated without impact
+D. Run terraform fmt
+
+_Replacing network resources is destructive; change the approach or plan a migration._
+
+**Q5. Which Terraform feature brings an existing, hand-made resource under management?**
+
+A. moved block
+B. import block  ✓
+C. output block
+D. backend block
+
+_import blocks attach existing resources to Terraform state without recreating them._
+
+**Q6. Why did adding a subnet to a count-based list destroy existing subnets?**
+
+A. Terraform has a bug
+B. Resources are identified by list index, so inserting an item shifts indexes and forces replacement  ✓
+C. The provider version changed
+D. State was stored locally
+
+_for_each with stable keys avoids index-based replacement._
+
+## Official reading
+
+- [Terraform documentation](https://developer.hashicorp.com/terraform/docs)
+- [Terraform AWS provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [Azure Bicep documentation](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview)
+- [OCI Resource Manager](https://docs.oracle.com/en-us/iaas/Content/ResourceManager/Concepts/resourcemanager.htm)
+- [Checkov](https://www.checkov.io/)

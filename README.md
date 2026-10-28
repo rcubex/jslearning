@@ -1,23 +1,32 @@
-# Packet to Cloud · theory reader (enhanced edition)
+# Packet to Cloud
 
-Static-hostable and responsive edition based on the uploaded workbook. Includes all original 22 modules, 134 lessons, Firebase web authentication and progress structure, supplemental theory notes, conceptual step diagrams, revealable recall questions, bookmark controls, knowledge explorer, reader font-size/width preferences, chapter Markdown companions and same-origin offline caching. No hands-on labs were added.
+A private learning website: a Technical Academy (networking to multi-cloud architecture), a GRC Academy, a personal study workbook and study tools. It's hosted as a static site (GitHub Pages or Firebase Hosting), with Firebase sign-in and saved progress.
 
-## Deployment
+## What's inside
 
-**Important:** Replace the `PASTE_*` Firebase config placeholders in `index.html` with the configuration from your existing working deployment. Firebase web configuration is not an admin key. Do not publish service-account credentials. Keep existing Firestore user-specific authorization rules.
+| | |
+|---|---|
+| Technical Academy | 34 modules, 243 lessons, 201 checkpoint questions, a "big picture" diagram per module, a real-world scenario in every module, 6 architecture case studies |
+| GRC Academy | 10 modules, 40 lessons (including 10 scenarios), 50 checkpoint questions, key takeaways and official reading |
+| Glossary | 407 terms with plain-English definitions, A–Z, each linked to the module that teaches it |
+| Tracking | Dashboard, My Workbook (table), Study Log, Study Insights, achievements |
+| Tools | Cloud Rosetta, Subnet Calculator, Cert Paths |
 
-- GitHub Pages: upload the root files and `chapters/` into your published repository directory. Use Pages HTTPS. Add the Pages domain in Firebase Auth authorized domains.
-- Firebase Hosting: `firebase init hosting` to connect the correct project if required; put these files in the configured public directory, and `firebase deploy --only hosting`. If using the provided `firebase.json`, run from this folder.
-- The app uses Firebase CDN imports and ES modules, so serve over HTTP(S), not `file://`.
+## Files
 
-## Content editing
+- `index.html`: the whole app, including all course content, styles and Firebase logic.
+- `grc-v31.js`: GRC modules g07–g10 (base lessons).
+- `service-worker.js`: caches the site files for faster loads.
+- `firestore.rules`: database security rules (only your approved accounts, each reading and writing its own data).
+- `chapters/*.md`: a readable Markdown copy of every Technical Academy module, for printing or offline reading. The website doesn't use these files.
 
-- `index.html`: original module metadata, lesson bodies, quizzes and Firebase logic. Lesson IDs remain unchanged.
-- `theory-content.js`: supplemental paragraphs for the 134 original lessons.
-- `expert-notes.js`: concept, scenario, design-reasoning, recall and concept-map structures.
-- `chapters/*.md`: separate editable reference chapters. These Markdown files are **not automatically used by the site**; changes to them must be mirrored to the JS content before deployment.
-- `service-worker.js`: first-party static cache for previously accessed pages/assets. It **does not** ensure first-load offline access to Firebase CDN modules, and Firebase sign-in/sync needs connectivity.
+`theory-content.js` and `expert-notes.js` are no longer used. Their generic text has been replaced by real content. You can delete them from your repository.
 
-## Scope and limitations
+## Deploy
 
-This upgrade adds working learning and responsive UI features. The supplemental concept maps are general three-stage mental models rather than accurate per-technology architecture drawings. The existing and supplemental chapter content is not a fully peer-reviewed expert textbook; further topic-specific editorial work and vendor version checks are needed. Bookmarks and reading preferences use browser localStorage and are not synced to Firebase. Glossary entries currently link to modules rather than providing a verified definition for every term. Check console and Firebase configuration on your deployment.
+1. Copy your real `firebaseConfig` and `ALLOWED_USER_UIDS` from your live `index.html` into this `index.html`. This file contains placeholders.
+2. Upload `index.html`, `service-worker.js` and `grc-v31.js` (and `chapters/` if you want it) to your GitHub Pages repository.
+3. Wait for the Pages build to finish, then hard refresh once (Ctrl+Shift+R).
+4. Sign in and check that your progress, GRC answers and workbook entries appear.
+
+Saved progress is safe: lesson and question IDs from earlier versions are unchanged, and new lessons and questions were added after the existing ones.
