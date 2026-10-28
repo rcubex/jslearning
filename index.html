@@ -1283,20 +1283,19 @@ thead th{font-family:var(--f-body);letter-spacing:.02em;text-transform:none;font
 </script>
 <script type="module">
 
-/* ================= FIREBASE CONFIG (SETUP.md, step 5) =================
-   Replace the WHOLE block below, from "const firebaseConfig" down to "};",
-   with the block Firebase shows you. There must be only ONE "const firebaseConfig". */
+/* Firebase web configuration for the existing jslearning-2802b project. */
 const firebaseConfig = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE_PROJECT_ID.firebasestorage.app",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyBKSb32A7ZXTus3-8W2gkGirM2bag5QTZw",
+  authDomain: "jslearning-2802b.firebaseapp.com",
+  projectId: "jslearning-2802b",
+  storageBucket: "jslearning-2802b.firebasestorage.app",
+  messagingSenderId: "610015243276",
+  appId: "1:610015243276:web:a5bd85ec319b3703771229",
+  measurementId: "G-K0W7TW89N1"
 };
-/* Only these two Firebase Authentication UIDs may enter the website.
-   Replace these placeholders before launch. Access is also enforced in firestore.rules. */
-const ALLOWED_USER_UIDS=['REPLACE_WITH_ADMIN_UID','REPLACE_WITH_LEARNER_UID'];
+/* Only these approved Firebase Authentication UIDs may sign in.
+   Access to saved data is also enforced by deployed Firestore rules. */
+const ALLOWED_USER_UIDS=['Yk0WCbGfCOfiy7fnXqMgcfxjvze2','m6ybLppag7e9ky7UMVqnc80gwxA3'];
 /* ============================================================================================ */
 import { GRC_V31 } from "./grc-v31.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
