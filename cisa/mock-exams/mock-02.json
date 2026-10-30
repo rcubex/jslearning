@@ -3,6 +3,46 @@
   "title": "Applied Audit Scenarios",
   "durationMinutes": 240,
   "kind": "Original practice exam. Not an official ISACA exam or score predictor.",
+  "version": 2,
+  "rewrittenInV2": [
+    "M2-001",
+    "M2-005",
+    "M2-006",
+    "M2-009",
+    "M2-010",
+    "M2-013",
+    "M2-017",
+    "M2-020",
+    "M2-026",
+    "M2-027",
+    "M2-038",
+    "M2-043",
+    "M2-046",
+    "M2-058",
+    "M2-065",
+    "M2-070",
+    "M2-071",
+    "M2-076",
+    "M2-078",
+    "M2-079",
+    "M2-080",
+    "M2-085",
+    "M2-090",
+    "M2-094",
+    "M2-101",
+    "M2-102",
+    "M2-106",
+    "M2-113",
+    "M2-118",
+    "M2-120",
+    "M2-121",
+    "M2-128",
+    "M2-130",
+    "M2-131",
+    "M2-132",
+    "M2-134",
+    "M2-139"
+  ],
   "questions": [
     {
       "id": "M2-001",
@@ -10,18 +50,18 @@
       "topicId": "5B6",
       "question": "A retail group is preparing for a review of evidence collection and forensics. Audit interviews and preliminary workpapers show that investigators copied disk images without recording custody or verifying hashes. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception."
+        "Calculate hashes of the copies now and record them as the originals and note the action in the audit report.",
+        "Discard all the evidence and close the investigation.",
+        "Determine whether the evidence can still be validated and is admissible.",
+        "Accept the images because the investigators are trusted senior staff and document it in the working papers."
       ],
-      "answer": 1,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that digital evidence integrity and admissibility may be challenged. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 2,
+      "explanation": "Without custody records and hashes, evidence integrity is in doubt. The auditor assesses whether it can still support legal action. The potential consequence is that digital evidence integrity and admissibility may be challenged.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that digital evidence integrity and admissibility may be challenged. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Best answer. Without custody records and hashes, evidence integrity is in doubt. The auditor assesses whether it can still support legal action. The potential consequence is that digital evidence integrity and admissibility may be challenged.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -50,7 +90,7 @@
       "id": "M2-003",
       "domain": 2,
       "topicId": "2B2",
-      "question": "An online retailer is preparing for a review of it vendor management. Audit interviews and preliminary workpapers show that a cloud supplier operated a critical service without measurable security or service obligations. Which recommendation would BEST reduce the identified exposure?",
+      "question": "An online retailer is preparing for a review of IT vendor management. Audit interviews and preliminary workpapers show that a cloud supplier operated a critical service without measurable security or service obligations. Which recommendation would BEST reduce the identified exposure?",
       "choices": [
         "Assign accountable data owners and enforce classification-based handling rules.",
         "Establish risk-based vendor due diligence, contractual controls and monitoring.",
@@ -71,7 +111,7 @@
       "id": "M2-004",
       "domain": 2,
       "topicId": "2A2",
-      "question": "A healthcare network is preparing for a review of organizational structure, it governance, and it strategy. Audit interviews and preliminary workpapers show that technology investment decisions bypassed the steering committee's approved governance process. Management requests a quick decision before the next governance meeting. Which risk should the auditor prioritize in the report?",
+      "question": "A healthcare network is preparing for a review of organizational structure, IT governance, and IT strategy. Audit interviews and preliminary workpapers show that technology investment decisions bypassed the steering committee's approved governance process. Management requests a quick decision before the next governance meeting. Which risk should the auditor prioritize in the report?",
       "choices": [
         "Leaders may make decisions without visibility into material performance or control issues.",
         "Third-party failures may go undetected or leave accountability unclear.",
@@ -94,18 +134,18 @@
       "topicId": "1B3",
       "question": "An energy utility is preparing for a review of audit evidence collection techniques. Audit interviews and preliminary workpapers show that control effectiveness was concluded solely from a manager's verbal assurance. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
       "choices": [
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Independently corroborate the condition and quantify exposure against approved criteria."
+        "Accept the assurance because the manager is senior and accountable to avoid disrupting operations during fieldwork.",
+        "Rate the control ineffective because only verbal assurance was given and inform senior management the same day.",
+        "Ask the manager to repeat the same assurance in a signed email.",
+        "Corroborate the assurance by inspection or reperformance before concluding."
       ],
       "answer": 3,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that the audit conclusion may be unsupported because evidence lacks reliability. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "explanation": "Inquiry alone never provides sufficient evidence. It must be corroborated by inspection, observation or reperformance. The potential consequence is that the audit conclusion may be unsupported because evidence lacks reliability.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that the audit conclusion may be unsupported because evidence lacks reliability. Premature conclusions or unquestioned reliance on management undermine assurance."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Best answer. Inquiry alone never provides sufficient evidence. It must be corroborated by inspection, observation or reperformance. The potential consequence is that the audit conclusion may be unsupported because evidence lacks reliability."
       ],
       "level": "application"
     },
@@ -115,18 +155,18 @@
       "topicId": "3B1",
       "question": "A retail group is preparing for a review of system readiness and implementation testing. Audit interviews and preliminary workpapers show that user acceptance testing covered standard transactions but excluded failure recovery. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Omit the matter from scope because it is only a process exception."
+        "Trace requirements to test cases to find untested recovery scenarios to establish the full extent.",
+        "Recommend delaying go-live indefinitely until every scenario is tested.",
+        "Run the failure recovery tests personally before the system goes live.",
+        "Accept the testing because all standard transactions passed successfully to avoid disrupting operations during fieldwork."
       ],
-      "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that production failures may occur without a proven recovery path. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 0,
+      "explanation": "Tracing requirements to test cases shows which failure scenarios were never tested and need assessment before go-live. The potential consequence is that production failures may occur without a proven recovery path.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that production failures may occur without a proven recovery path. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Best answer. Tracing requirements to test cases shows which failure scenarios were never tested and need assessment before go-live. The potential consequence is that production failures may occur without a proven recovery path.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -134,7 +174,7 @@
       "id": "M2-007",
       "domain": 5,
       "topicId": "5A7",
-      "question": "A payment processor is preparing for a review of public key infrastructure (pki). Audit interviews and preliminary workpapers show that internal certificates were issued without independently validating requester identity. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
+      "question": "A payment processor is preparing for a review of public key infrastructure (PKI). Audit interviews and preliminary workpapers show that internal certificates were issued without independently validating requester identity. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
       "choices": [
         "Select risk-aligned standards, document ownership and test operating effectiveness.",
         "Define actionable detection use cases, ownership and response thresholds.",
@@ -178,18 +218,18 @@
       "topicId": "4A6",
       "question": "An energy utility is preparing for a review of systems availability and capacity management. Audit interviews and preliminary workpapers show that a customer-facing system repeatedly saturated its storage without a capacity forecast. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
       "choices": [
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Report the system as unavailable for the whole audit period to protect the organisation in the meantime.",
+        "Accept the situation because storage can be expanded whenever it fills.",
+        "Review capacity monitoring and incident data for frequency and impact.",
+        "Purchase additional storage to prevent the next saturation event and note the action in the audit report."
       ],
-      "answer": 0,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that service disruption may breach approved availability requirements. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 2,
+      "explanation": "Capacity management is judged by how often saturation occurs and what it costs the business, which monitoring and incident data reveal. The potential consequence is that service disruption may breach approved availability requirements.",
       "choiceExplanations": [
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that service disruption may breach approved availability requirements. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Best answer. Capacity management is judged by how often saturation occurs and what it costs the business, which monitoring and incident data reveal. The potential consequence is that service disruption may breach approved availability requirements.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends."
       ],
       "level": "application"
     },
@@ -199,18 +239,18 @@
       "topicId": "4A4",
       "question": "An energy utility is preparing for a review of system interfaces. Audit interviews and preliminary workpapers show that a treasury interface silently dropped messages when upstream feeds were delayed. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
       "choices": [
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Accept the interface because delays in the upstream feeds are rare and move on to the next audit area.",
+        "Reconcile messages sent with messages received to quantify the losses.",
+        "Ask the developers to add retry logic before the audit is completed so the risk is closed during fieldwork.",
+        "Report the treasury figures as unreliable before determining any losses."
       ],
-      "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that financial records can become incomplete without exception visibility. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 1,
+      "explanation": "Reconciling interface traffic establishes how many messages were lost and which treasury transactions were affected. The potential consequence is that financial records can become incomplete without exception visibility.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that financial records can become incomplete without exception visibility. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Best answer. Reconciling interface traffic establishes how many messages were lost and which treasury transactions were affected. The potential consequence is that financial records can become incomplete without exception visibility.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established."
       ],
       "level": "application"
     },
@@ -218,7 +258,7 @@
       "id": "M2-011",
       "domain": 5,
       "topicId": "5A7",
-      "question": "A digital insurer is preparing for a review of public key infrastructure (pki). Audit interviews and preliminary workpapers show that internal certificates were issued without independently validating requester identity. The control owner argues that no incidents have been reported. Which set of records offers the STRONGEST corroboration?",
+      "question": "A digital insurer is preparing for a review of public key infrastructure (PKI). Audit interviews and preliminary workpapers show that internal certificates were issued without independently validating requester identity. The control owner argues that no incidents have been reported. Which set of records offers the STRONGEST corroboration?",
       "choices": [
         "Alert-to-incident records, triage times and escalation evidence.",
         "Threat mapping, authentication design and control validation records.",
@@ -262,18 +302,18 @@
       "topicId": "2A1",
       "question": "A public agency is preparing for a review of laws, regulations, and industry standards. Audit interviews and preliminary workpapers show that a cross-border data processing service had no documented mapping of applicable obligations. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Rely on the supplier's ISO 27001 certificate as proof of legal compliance.",
+        "Draft the obligations mapping for management as part of the audit.",
+        "Report a regulatory breach to the authorities before assessing obligations and escalate it as a high-risk finding.",
+        "Obtain compliance's obligations mapping and test it against actual data flows."
       ],
-      "answer": 1,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that the enterprise may violate binding legal or regulatory requirements. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 3,
+      "explanation": "Management owns the obligations register. The auditor obtains it and tests whether it reflects how data actually moves across borders. The potential consequence is that the enterprise may violate binding legal or regulatory requirements.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that the enterprise may violate binding legal or regulatory requirements. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Best answer. Management owns the obligations register. The auditor obtains it and tests whether it reflects how data actually moves across borders. The potential consequence is that the enterprise may violate binding legal or regulatory requirements."
       ],
       "level": "application"
     },
@@ -281,7 +321,7 @@
       "id": "M2-014",
       "domain": 4,
       "topicId": "4A1",
-      "question": "An university is preparing for a review of it components. Audit interviews and preliminary workpapers show that the operations inventory did not include a critical network gateway. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of IT components. Audit interviews and preliminary workpapers show that the operations inventory did not include a critical network gateway. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Enforce asset disposal, sanitization and chain-of-custody controls.",
         "Maintain accurate component discovery and lifecycle accountability.",
@@ -302,7 +342,7 @@
       "id": "M2-015",
       "domain": 5,
       "topicId": "5B1",
-      "question": "An university is preparing for a review of security awareness training and programs. Audit interviews and preliminary workpapers show that staff completed annual awareness training but did not recognize current fraud scenarios. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of security awareness training and programs. Audit interviews and preliminary workpapers show that staff completed annual awareness training but did not recognize current fraud scenarios. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Define incident roles, containment authority and exercise decision paths.",
         "Preserve chain of custody, use validated forensic acquisition and hash verification.",
@@ -323,7 +363,7 @@
       "id": "M2-016",
       "domain": 4,
       "topicId": "4A7",
-      "question": "An university is preparing for a review of problem and incident management. Audit interviews and preliminary workpapers show that recurring incidents were closed as isolated tickets without problem analysis. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of problem and incident management. Audit interviews and preliminary workpapers show that recurring incidents were closed as isolated tickets without problem analysis. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Connect incidents to root-cause analysis and controlled permanent fixes.",
         "Centralize protected logs with retention, synchronized time and access restrictions.",
@@ -344,20 +384,20 @@
       "id": "M2-017",
       "domain": 5,
       "topicId": "5A5",
-      "question": "A public agency is preparing for a review of data loss prevention (dlp). Audit interviews and preliminary workpapers show that confidential customer exports were permitted to unmanaged personal storage. Which action is MOST appropriate before finalizing the audit conclusion?",
+      "question": "A public agency is preparing for a review of data loss prevention (DLP). Audit interviews and preliminary workpapers show that confidential customer exports were permitted to unmanaged personal storage. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Rely on staff confirming they deleted any copies from personal storage.",
+        "Recommend banning data exports for all business users.",
+        "Ask the DLP vendor to confirm that its product is configured correctly.",
+        "Compare the DLP rules with the classification policy for customer exports."
       ],
-      "answer": 0,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that sensitive information could leave approved environments without detection. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 3,
+      "explanation": "Testing DLP rules against the classification policy shows whether the control was misconfigured or never designed to block these exports. The potential consequence is that sensitive information could leave approved environments without detection.",
       "choiceExplanations": [
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that sensitive information could leave approved environments without detection. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Best answer. Testing DLP rules against the classification policy shows whether the control was misconfigured or never designed to block these exports. The potential consequence is that sensitive information could leave approved environments without detection."
       ],
       "level": "application"
     },
@@ -409,18 +449,18 @@
       "topicId": "3B4",
       "question": "An energy utility is preparing for a review of post-implementation review. Audit interviews and preliminary workpapers show that the new customer portal was declared successful without checking operational outcomes. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
       "choices": [
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Compare actual results with the success criteria in the business case.",
+        "Survey a few users and treat their satisfaction as proof of success.",
+        "Accept the success claim because the project finished on time and budget.",
+        "Recommend decommissioning the portal until its outcomes are measured."
       ],
-      "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that benefits and unresolved control defects may remain unidentified. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 0,
+      "explanation": "A post-implementation review measures whether intended outcomes were achieved, not just whether the project was delivered. The potential consequence is that benefits and unresolved control defects may remain unidentified.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that benefits and unresolved control defects may remain unidentified. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Best answer. A post-implementation review measures whether intended outcomes were achieved, not just whether the project was delivered. The potential consequence is that benefits and unresolved control defects may remain unidentified.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established."
       ],
       "level": "application"
     },
@@ -449,7 +489,7 @@
       "id": "M2-022",
       "domain": 5,
       "topicId": "5A5",
-      "question": "A logistics company is preparing for a review of data loss prevention (dlp). Audit interviews and preliminary workpapers show that confidential customer exports were permitted to unmanaged personal storage. No compensating control has yet been demonstrated. Which evidence would BEST support a reliable audit conclusion?",
+      "question": "A logistics company is preparing for a review of data loss prevention (DLP). Audit interviews and preliminary workpapers show that confidential customer exports were permitted to unmanaged personal storage. No compensating control has yet been demonstrated. Which evidence would BEST support a reliable audit conclusion?",
       "choices": [
         "Retest evidence, system configuration and verified findings records.",
         "DLP policies, event logs and sample blocked/allowed transfers.",
@@ -470,7 +510,7 @@
       "id": "M2-023",
       "domain": 4,
       "topicId": "4A8",
-      "question": "A digital insurer is preparing for a review of it change, configuration, and patch management. Audit interviews and preliminary workpapers show that critical security patches were deployed without testing compatibility with core systems. The control owner argues that no incidents have been reported. Which set of records offers the STRONGEST corroboration?",
+      "question": "A digital insurer is preparing for a review of IT change, configuration, and patch management. Audit interviews and preliminary workpapers show that critical security patches were deployed without testing compatibility with core systems. The control owner argues that no incidents have been reported. Which set of records offers the STRONGEST corroboration?",
       "choices": [
         "Spreadsheet change history, ownership and independent formula checks.",
         "Capacity trend charts, alert history and capacity planning approvals.",
@@ -491,7 +531,7 @@
       "id": "M2-024",
       "domain": 5,
       "topicId": "5A8",
-      "question": "An university is preparing for a review of cloud and virtualized environments. Audit interviews and preliminary workpapers show that a storage bucket used inherited public access that was not in the design. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of cloud and virtualized environments. Audit interviews and preliminary workpapers show that a storage bucket used inherited public access that was not in the design. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Classify data and enforce monitored, risk-based exfiltration controls.",
         "Apply cloud configuration baselines, least privilege and continuous monitoring.",
@@ -512,7 +552,7 @@
       "id": "M2-025",
       "domain": 4,
       "topicId": "4A5",
-      "question": "A regional bank is preparing for a review of shadow it and end-user computing (euc). Audit interviews and preliminary workpapers show that finance analysts relied on an unregistered spreadsheet for key month-end adjustments. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
+      "question": "A regional bank is preparing for a review of shadow IT and end-user computing (EUC). Audit interviews and preliminary workpapers show that finance analysts relied on an unregistered spreadsheet for key month-end adjustments. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
       "choices": [
         "Uncontrolled formulas or access can distort financial reporting.",
         "The organization cannot demonstrate recovery within business tolerance.",
@@ -535,18 +575,18 @@
       "topicId": "4A9",
       "question": "During sampling of 50 additional records, the auditor confirms the condition. A retail group is preparing for a review of operational log management. Audit interviews and preliminary workpapers show that privileged activities were logged locally but erased during server rebuilds. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria."
+        "Rely on administrators' own accounts of what they did on the servers.",
+        "Recommend stopping server rebuilds until a logging tool is purchased.",
+        "Compare required log retention with actual retention on rebuilt servers.",
+        "Ask IT to recreate the deleted logs from memory of recent changes."
       ],
-      "answer": 3,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that investigations may lack complete, reliable evidence of administrative actions. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 2,
+      "explanation": "Testing rebuilt servers against the retention requirement establishes how far practice falls short of policy. The potential consequence is that investigations may lack complete, reliable evidence of administrative actions.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that investigations may lack complete, reliable evidence of administrative actions. Premature conclusions or unquestioned reliance on management undermine assurance."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Best answer. Testing rebuilt servers against the retention requirement establishes how far practice falls short of policy. The potential consequence is that investigations may lack complete, reliable evidence of administrative actions.",
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding."
       ],
       "level": "application"
     },
@@ -556,18 +596,18 @@
       "topicId": "4B2",
       "question": "A retail group is preparing for a review of system and operational resilience. Audit interviews and preliminary workpapers show that a supposedly redundant application shared a single power source. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated."
+        "Ask facilities to confirm the power source is highly reliable.",
+        "Recommend moving the application to a different cloud provider.",
+        "Compare the as-built design with requirements and review failover tests.",
+        "Rely on the architecture diagram that labels the application redundant."
       ],
       "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that one common failure could disable both primary and secondary components. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "explanation": "Testing actual design and failover results against requirements shows whether redundancy works in practice. The potential consequence is that one common failure could disable both primary and secondary components.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that one common failure could disable both primary and secondary components. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Best answer. Testing actual design and failover results against requirements shows whether redundancy works in practice. The potential consequence is that one common failure could disable both primary and secondary components.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -617,7 +657,7 @@
       "id": "M2-030",
       "domain": 4,
       "topicId": "4B5",
-      "question": "A payment processor is preparing for a review of disaster recovery plans (drp). Audit interviews and preliminary workpapers show that the last disaster recovery test exceeded a critical service's approved RTO. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
+      "question": "A payment processor is preparing for a review of disaster recovery plans (DRP). Audit interviews and preliminary workpapers show that the last disaster recovery test exceeded a critical service's approved RTO. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
       "choices": [
         "Trend demand, set capacity thresholds and test scaling or failover.",
         "Define process-level alternatives, roles, communication and exercise plans.",
@@ -701,7 +741,7 @@
       "id": "M2-034",
       "domain": 3,
       "topicId": "3A3",
-      "question": "An university is preparing for a review of system development methodologies. Audit interviews and preliminary workpapers show that an agile delivery team removed independent acceptance criteria to meet a sprint deadline. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of system development methodologies. Audit interviews and preliminary workpapers show that an agile delivery team removed independent acceptance criteria to meet a sprint deadline. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Reconcile critical fields and business totals and preserve rollback capability.",
         "Use controlled baselines, documented approvals and post-deployment verification.",
@@ -787,18 +827,18 @@
       "topicId": "1B6",
       "question": "A retail group is preparing for a review of quality assurance and improvement of audit process. Audit interviews and preliminary workpapers show that audit files were closed without independent supervisory review. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Omit the matter from scope because it is only a process exception."
+        "Add review sign-offs now, dated as of the original file closure.",
+        "Identify reports that relied on the unreviewed files and assess their support.",
+        "Recall every report the audit function issued during the year.",
+        "Note the matter only for the next external quality assessment."
       ],
-      "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that material errors and inconsistent audit conclusions may go undetected. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 1,
+      "explanation": "The impact of the quality failure depends on whether issued conclusions were unsupported, which determines whether reports must be revisited. The potential consequence is that material errors and inconsistent audit conclusions may go undetected.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that material errors and inconsistent audit conclusions may go undetected. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Best answer. The impact of the quality failure depends on whether issued conclusions were unsupported, which determines whether reports must be revisited. The potential consequence is that material errors and inconsistent audit conclusions may go undetected.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding."
       ],
       "level": "application"
     },
@@ -827,7 +867,7 @@
       "id": "M2-040",
       "domain": 2,
       "topicId": "2A5",
-      "question": "A payment processor is preparing for a review of enterprise risk management (erm). Audit interviews and preliminary workpapers show that IT risks were accepted by project leads beyond their delegated authority. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
+      "question": "A payment processor is preparing for a review of enterprise risk management (ERM). Audit interviews and preliminary workpapers show that IT risks were accepted by project leads beyond their delegated authority. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
       "choices": [
         "Subject significant designs to enterprise architecture review and exception governance.",
         "Restore decision rights, governance reporting and business-aligned prioritization.",
@@ -869,7 +909,7 @@
       "id": "M2-042",
       "domain": 2,
       "topicId": "2A5",
-      "question": "A logistics company is preparing for a review of enterprise risk management (erm). Audit interviews and preliminary workpapers show that IT risks were accepted by project leads beyond their delegated authority. No compensating control has yet been demonstrated. Which evidence would BEST support a reliable audit conclusion?",
+      "question": "A logistics company is preparing for a review of enterprise risk management (ERM). Audit interviews and preliminary workpapers show that IT risks were accepted by project leads beyond their delegated authority. No compensating control has yet been demonstrated. Which evidence would BEST support a reliable audit conclusion?",
       "choices": [
         "Contractual terms, regulatory mapping and control compliance evidence.",
         "Risk appetite statements, acceptance decisions and risk committee minutes.",
@@ -892,18 +932,18 @@
       "topicId": "4A3",
       "question": "A retail group is preparing for a review of job scheduling and production process automation. Audit interviews and preliminary workpapers show that overnight batch jobs failed without notifying process owners. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated."
+        "Check whether failed jobs affected downstream data that was never corrected.",
+        "Ask operations to confirm that failures have never affected the business to avoid disrupting operations during fieldwork.",
+        "Rely on the scheduler dashboard showing that most jobs completed normally and move on to the next audit area.",
+        "Recommend replacing the job scheduling tool with a new product."
       ],
-      "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that business transactions may be delayed or omitted without timely intervention. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 0,
+      "explanation": "The business impact of a failed batch depends on whether incomplete outputs were consumed downstream without correction. The potential consequence is that business transactions may be delayed or omitted without timely intervention.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that business transactions may be delayed or omitted without timely intervention. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Best answer. The business impact of a failed batch depends on whether incomplete outputs were consumed downstream without correction. The potential consequence is that business transactions may be delayed or omitted without timely intervention.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established."
       ],
       "level": "application"
     },
@@ -953,20 +993,20 @@
       "id": "M2-046",
       "domain": 1,
       "topicId": "1A1",
-      "question": "A public agency is preparing for a review of is audit standards, guidelines, functions, and codes of ethics. Audit interviews and preliminary workpapers show that the audit team accepted scope changes requested by the process owner without documenting independence safeguards. Which action is MOST appropriate before finalizing the audit conclusion?",
+      "question": "A public agency is preparing for a review of IS audit standards, guidelines, functions, and codes of ethics. Audit interviews and preliminary workpapers show that the audit team accepted scope changes requested by the process owner without documenting independence safeguards. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Independently corroborate the condition and quantify exposure against approved criteria."
+        "Withdraw from the engagement and notify external regulators of the impairment.",
+        "Ask the process owner to sign a statement that the scope remains appropriate.",
+        "Assess whether the change impairs independence and tell the audit committee.",
+        "Accept the narrower scope because the process owner knows the operational risks best."
       ],
-      "answer": 3,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that the assurance conclusion may be biased and fail to meet professional audit requirements. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 2,
+      "explanation": "Auditees cannot set or narrow audit scope. The auditor evaluates whether the change is an independence impairment or scope limitation and communicates it to those charged with governance. The potential consequence is that the assurance conclusion may be biased and fail to meet professional audit requirements.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that the assurance conclusion may be biased and fail to meet professional audit requirements. Premature conclusions or unquestioned reliance on management undermine assurance."
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Best answer. Auditees cannot set or narrow audit scope. The auditor evaluates whether the change is an independence impairment or scope limitation and communicates it to those charged with governance. The potential consequence is that the assurance conclusion may be biased and fail to meet professional audit requirements.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -974,7 +1014,7 @@
       "id": "M2-047",
       "domain": 2,
       "topicId": "2B2",
-      "question": "A telecommunications provider is preparing for a review of it vendor management. Audit interviews and preliminary workpapers show that a cloud supplier operated a critical service without measurable security or service obligations. Management requests a quick decision before the next governance meeting. What evidence should the auditor prioritize?",
+      "question": "A telecommunications provider is preparing for a review of IT vendor management. Audit interviews and preliminary workpapers show that a cloud supplier operated a critical service without measurable security or service obligations. Management requests a quick decision before the next governance meeting. What evidence should the auditor prioritize?",
       "choices": [
         "Defect history, quality metrics and verified corrective action records.",
         "Risk appetite statements, acceptance decisions and risk committee minutes.",
@@ -995,7 +1035,7 @@
       "id": "M2-048",
       "domain": 5,
       "topicId": "5A9",
-      "question": "A telecommunications provider is preparing for a review of mobile, wireless, and internet-of-things (iot) devices. Audit interviews and preliminary workpapers show that unmanaged tablets used the same wireless segment as privileged administration devices. Management requests a quick decision before the next governance meeting. What evidence should the auditor prioritize?",
+      "question": "A telecommunications provider is preparing for a review of mobile, wireless, and internet-of-things (IOT) devices. Audit interviews and preliminary workpapers show that unmanaged tablets used the same wireless segment as privileged administration devices. Management requests a quick decision before the next governance meeting. What evidence should the auditor prioritize?",
       "choices": [
         "Approved control framework, risk mapping and control test results.",
         "Wireless policy, device inventory and segmentation enforcement tests.",
@@ -1016,7 +1056,7 @@
       "id": "M2-049",
       "domain": 2,
       "topicId": "2B3",
-      "question": "A regional bank is preparing for a review of it performance monitoring and reporting. Audit interviews and preliminary workpapers show that IT scorecards tracked uptime but not service outcomes or risk indicators. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
+      "question": "A regional bank is preparing for a review of IT performance monitoring and reporting. Audit interviews and preliminary workpapers show that IT scorecards tracked uptime but not service outcomes or risk indicators. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
       "choices": [
         "Controls may not reflect confidentiality, integrity and retention requirements.",
         "Inconsistent control execution can create security and compliance gaps.",
@@ -1142,7 +1182,7 @@
       "id": "M2-055",
       "domain": 1,
       "topicId": "1B5",
-      "question": "An university is preparing for a review of reporting and communication techniques. Audit interviews and preliminary workpapers show that a significant finding was reported without describing cause, effect or accountable remediation. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of reporting and communication techniques. Audit interviews and preliminary workpapers show that a significant finding was reported without describing cause, effect or accountable remediation. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Set accountable owners, realistic milestones and escalation criteria in the audit plan.",
         "Refresh the audit universe and prioritize engagements using documented likelihood and impact.",
@@ -1184,7 +1224,7 @@
       "id": "M2-057",
       "domain": 2,
       "topicId": "2B4",
-      "question": "A regional bank is preparing for a review of quality assurance and quality management of it. Audit interviews and preliminary workpapers show that repeated release defects were accepted without root-cause analysis. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
+      "question": "A regional bank is preparing for a review of quality assurance and quality management of IT. Audit interviews and preliminary workpapers show that repeated release defects were accepted without root-cause analysis. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
       "choices": [
         "Inconsistent control execution can create security and compliance gaps.",
         "IT initiatives may diverge from business strategy and risk appetite.",
@@ -1207,18 +1247,18 @@
       "topicId": "2A7",
       "question": "An energy utility is preparing for a review of data governance and classification. Audit interviews and preliminary workpapers show that sensitive reports had inconsistent classification and unclear data owners. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
       "choices": [
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception."
+        "Ask IT to set every report label to the highest classification level.",
+        "Report a data breach because the classification labels are inconsistent.",
+        "Sample reports and compare their labels with the classification policy to establish the full extent.",
+        "Rely on the policy document as proof that reports are correctly labelled."
       ],
-      "answer": 0,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that controls may not reflect confidentiality, integrity and retention requirements. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 2,
+      "explanation": "Testing a sample against the policy establishes how widespread the inconsistency is and what exposure it creates. The potential consequence is that controls may not reflect confidentiality, integrity and retention requirements.",
       "choiceExplanations": [
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that controls may not reflect confidentiality, integrity and retention requirements. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Best answer. Testing a sample against the policy establishes how widespread the inconsistency is and what exposure it creates. The potential consequence is that controls may not reflect confidentiality, integrity and retention requirements.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -1289,7 +1329,7 @@
       "id": "M2-062",
       "domain": 2,
       "topicId": "2A4",
-      "question": "An university is preparing for a review of enterprise architecture (ea) and considerations. Audit interviews and preliminary workpapers show that several departments adopted incompatible identity platforms without architecture review. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of enterprise architecture (EA) and considerations. Audit interviews and preliminary workpapers show that several departments adopted incompatible identity platforms without architecture review. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Assign accountable data owners and enforce classification-based handling rules.",
         "Approve consistent standards and procedures, communicate changes and monitor adherence.",
@@ -1310,7 +1350,7 @@
       "id": "M2-063",
       "domain": 5,
       "topicId": "5A9",
-      "question": "An investment firm is preparing for a review of mobile, wireless, and internet-of-things (iot) devices. Audit interviews and preliminary workpapers show that unmanaged tablets used the same wireless segment as privileged administration devices. What is the MOST significant risk implication?",
+      "question": "An investment firm is preparing for a review of mobile, wireless, and internet-of-things (IOT) devices. Audit interviews and preliminary workpapers show that unmanaged tablets used the same wireless segment as privileged administration devices. What is the MOST significant risk implication?",
       "choices": [
         "Loss of storage media may expose confidential information despite encryption.",
         "An untrusted endpoint could reach systems beyond its authorized role.",
@@ -1352,20 +1392,20 @@
       "id": "M2-065",
       "domain": 2,
       "topicId": "2A3",
-      "question": "A retail group is preparing for a review of it policies, standards, procedures and practices. Audit interviews and preliminary workpapers show that critical administrators followed informal procedures that contradicted published policy. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
+      "question": "A retail group is preparing for a review of IT policies, standards, procedures and practices. Audit interviews and preliminary workpapers show that critical administrators followed informal procedures that contradicted published policy. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Omit the matter from scope because it is only a process exception.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated."
+        "Accept the informal procedures because administrators are the experts.",
+        "Update the published policy so it matches the administrators' practice.",
+        "Compare actual practice with policy and find out why the two diverge.",
+        "Recommend disciplinary action against the administrators involved."
       ],
       "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that inconsistent control execution can create security and compliance gaps. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "explanation": "Understanding the gap between practice and policy, and its cause, shows whether the policy is unworkable or simply not enforced. The potential consequence is that inconsistent control execution can create security and compliance gaps.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that inconsistent control execution can create security and compliance gaps. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Best answer. Understanding the gap between practice and policy, and its cause, shows whether the policy is unworkable or simply not enforced. The potential consequence is that inconsistent control execution can create security and compliance gaps.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established."
       ],
       "level": "application"
     },
@@ -1373,7 +1413,7 @@
       "id": "M2-066",
       "domain": 5,
       "topicId": "5B5",
-      "question": "An university is preparing for a review of security incident response management. Audit interviews and preliminary workpapers show that incident response procedures lacked clear authority to isolate compromised hosts. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of security incident response management. Audit interviews and preliminary workpapers show that incident response procedures lacked clear authority to isolate compromised hosts. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Enforce controlled physical access, visitor management and environmental monitoring.",
         "Update threat models and evaluate preventive and detective controls by scenario.",
@@ -1436,7 +1476,7 @@
       "id": "M2-069",
       "domain": 2,
       "topicId": "2B4",
-      "question": "An online retailer is preparing for a review of quality assurance and quality management of it. Audit interviews and preliminary workpapers show that repeated release defects were accepted without root-cause analysis. Which recommendation would BEST reduce the identified exposure?",
+      "question": "An online retailer is preparing for a review of quality assurance and quality management of IT. Audit interviews and preliminary workpapers show that repeated release defects were accepted without root-cause analysis. Which recommendation would BEST reduce the identified exposure?",
       "choices": [
         "Implement measurable quality assurance, defect trends and corrective action follow-up.",
         "Define risk ownership, approval authority, escalation thresholds and regular review.",
@@ -1459,18 +1499,18 @@
       "topicId": "1B1",
       "question": "An energy utility is preparing for a review of audit project management. Audit interviews and preliminary workpapers show that audit milestones slipped because evidence owners were not assigned. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
       "choices": [
-        "Omit the matter from scope because it is only a process exception.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated."
+        "Agree named evidence owners and dates with management, and record any delay.",
+        "Pull the evidence straight from production systems without telling the auditee.",
+        "Issue the report with the affected areas quietly removed from scope.",
+        "Extend the deadline indefinitely until management supplies the evidence."
       ],
-      "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that important audit coverage or report timelines may be compromised. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 0,
+      "explanation": "Engagement management means resolving obstacles promptly with the auditee and documenting any impact on scope or timing. The potential consequence is that important audit coverage or report timelines may be compromised.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that important audit coverage or report timelines may be compromised. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Best answer. Engagement management means resolving obstacles promptly with the auditee and documenting any impact on scope or timing. The potential consequence is that important audit coverage or report timelines may be compromised.",
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding."
       ],
       "level": "application"
     },
@@ -1480,18 +1520,18 @@
       "topicId": "5B1",
       "question": "A public agency is preparing for a review of security awareness training and programs. Audit interviews and preliminary workpapers show that staff completed annual awareness training but did not recognize current fraud scenarios. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria."
+        "Write new fraud awareness content for the training team.",
+        "Compare training content with current threats and phishing test results.",
+        "Accept the programme because training completion rates are high to avoid disrupting operations during fieldwork.",
+        "Report staff as negligent for failing to recognise fraud scenarios and escalate it as a high-risk finding."
       ],
-      "answer": 3,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that human error may bypass otherwise effective preventive controls. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 1,
+      "explanation": "Awareness effectiveness is measured by behaviour, not completion. Content relevance and simulation results show the real gap. The potential consequence is that human error may bypass otherwise effective preventive controls.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that human error may bypass otherwise effective preventive controls. Premature conclusions or unquestioned reliance on management undermine assurance."
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Best answer. Awareness effectiveness is measured by behaviour, not completion. Content relevance and simulation results show the real gap. The potential consequence is that human error may bypass otherwise effective preventive controls.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established."
       ],
       "level": "application"
     },
@@ -1585,18 +1625,18 @@
       "topicId": "5A4",
       "question": "An energy utility is preparing for a review of network and end-point security. Audit interviews and preliminary workpapers show that user endpoints could communicate directly with sensitive server administration ports. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
       "choices": [
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Recommend removing all administrative access to the servers.",
+        "Test connectivity from sample endpoints against the approved design.",
+        "Rely on the network team's statement that segmentation is in place and document it in the working papers.",
+        "Ask users whether they have ever connected to server admin ports."
       ],
-      "answer": 0,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that compromised workstations could reach management services and amplify impact. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 1,
+      "explanation": "Connectivity testing gives direct evidence of whether segmentation works as designed. The potential consequence is that compromised workstations could reach management services and amplify impact.",
       "choiceExplanations": [
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that compromised workstations could reach management services and amplify impact. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Best answer. Connectivity testing gives direct evidence of whether segmentation works as designed. The potential consequence is that compromised workstations could reach management services and amplify impact.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -1627,18 +1667,18 @@
       "topicId": "3B3",
       "question": "A public agency is preparing for a review of system migration, infrastructure deployment, and data conversion. Audit interviews and preliminary workpapers show that migration validation compared row counts but not monetary balances. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception."
+        "Rely on users not reporting balance errors since the system went live and move on to the next audit area.",
+        "Compare source and target balances and test a sample of high-value accounts.",
+        "Perform the full balance reconciliation for management as audit work.",
+        "Report the migrated balances as materially misstated before any testing and inform senior management the same day."
       ],
-      "answer": 0,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that material data corruption could go undetected despite matching record totals. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 1,
+      "explanation": "Comparing balances and testing high-value accounts gives direct evidence of whether monetary data was corrupted in migration. The potential consequence is that material data corruption could go undetected despite matching record totals.",
       "choiceExplanations": [
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that material data corruption could go undetected despite matching record totals. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Best answer. Comparing balances and testing high-value accounts gives direct evidence of whether monetary data was corrupted in migration. The potential consequence is that material data corruption could go undetected despite matching record totals.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established."
       ],
       "level": "application"
     },
@@ -1648,18 +1688,18 @@
       "topicId": "3A3",
       "question": "A retail group is preparing for a review of system development methodologies. Audit interviews and preliminary workpapers show that an agile delivery team removed independent acceptance criteria to meet a sprint deadline. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria."
+        "Accept the change because agile teams may adapt their own processes and document it in the working papers.",
+        "Write acceptance criteria for the affected stories on the team's behalf so the issue is fixed before reporting.",
+        "Determine which stories shipped without acceptance criteria and the risk.",
+        "Recommend that the project switch back to a waterfall methodology and escalate it as a high-risk finding."
       ],
-      "answer": 3,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that software may enter production without demonstrating required business controls. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 2,
+      "explanation": "Agile delivery still requires independent acceptance. The auditor establishes what went live untested and the resulting exposure. The potential consequence is that software may enter production without demonstrating required business controls.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that software may enter production without demonstrating required business controls. Premature conclusions or unquestioned reliance on management undermine assurance."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Best answer. Agile delivery still requires independent acceptance. The auditor establishes what went live untested and the resulting exposure. The potential consequence is that software may enter production without demonstrating required business controls.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established."
       ],
       "level": "application"
     },
@@ -1667,20 +1707,20 @@
       "id": "M2-080",
       "domain": 2,
       "topicId": "2B4",
-      "question": "An energy utility is preparing for a review of quality assurance and quality management of it. Audit interviews and preliminary workpapers show that repeated release defects were accepted without root-cause analysis. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
+      "question": "An energy utility is preparing for a review of quality assurance and quality management of IT. Audit interviews and preliminary workpapers show that repeated release defects were accepted without root-cause analysis. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
       "choices": [
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Omit the matter from scope because it is only a process exception."
+        "Perform the root-cause analysis for the development team as audit work so the risk is closed during fieldwork.",
+        "Analyse defect trends across releases for a systemic cause before concluding on severity.",
+        "Recommend stopping all releases until the defect rate reaches zero.",
+        "Accept the defects because each one was fixed before the next release to avoid disrupting operations during fieldwork."
       ],
-      "answer": 0,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that recurring failures may undermine service quality and customer outcomes. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 1,
+      "explanation": "Repeated defects suggest a process weakness. Trend analysis shows whether the issue is systemic before its severity is rated. The potential consequence is that recurring failures may undermine service quality and customer outcomes.",
       "choiceExplanations": [
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that recurring failures may undermine service quality and customer outcomes. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Best answer. Repeated defects suggest a process weakness. Trend analysis shows whether the issue is systemic before its severity is rated. The potential consequence is that recurring failures may undermine service quality and customer outcomes.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -1709,7 +1749,7 @@
       "id": "M2-082",
       "domain": 2,
       "topicId": "2A3",
-      "question": "A payment processor is preparing for a review of it policies, standards, procedures and practices. Audit interviews and preliminary workpapers show that critical administrators followed informal procedures that contradicted published policy. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
+      "question": "A payment processor is preparing for a review of IT policies, standards, procedures and practices. Audit interviews and preliminary workpapers show that critical administrators followed informal procedures that contradicted published policy. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
       "choices": [
         "Assess critical skill dependencies and implement succession and capacity planning.",
         "Define risk ownership, approval authority, escalation thresholds and regular review.",
@@ -1730,7 +1770,7 @@
       "id": "M2-083",
       "domain": 4,
       "topicId": "4A10",
-      "question": "A regional bank is preparing for a review of it service level management. Audit interviews and preliminary workpapers show that an outsourced service met response time targets but repeatedly breached recovery commitments. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
+      "question": "A regional bank is preparing for a review of IT service level management. Audit interviews and preliminary workpapers show that an outsourced service met response time targets but repeatedly breached recovery commitments. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
       "choices": [
         "Service disruption may breach approved availability requirements.",
         "Financial records can become incomplete without exception visibility.",
@@ -1751,7 +1791,7 @@
       "id": "M2-084",
       "domain": 4,
       "topicId": "4B4",
-      "question": "A logistics company is preparing for a review of business continuity plan (bcp). Audit interviews and preliminary workpapers show that continuity procedures listed IT contacts but no alternate business processing steps. No compensating control has yet been demonstrated. Which evidence would BEST support a reliable audit conclusion?",
+      "question": "A logistics company is preparing for a review of business continuity plan (BCP). Audit interviews and preliminary workpapers show that continuity procedures listed IT contacts but no alternate business processing steps. No compensating control has yet been demonstrated. Which evidence would BEST support a reliable audit conclusion?",
       "choices": [
         "Schema change logs, approvals and restore-test records.",
         "Linked incident/problem records, root-cause analysis and validation results.",
@@ -1774,18 +1814,18 @@
       "topicId": "1A3",
       "question": "A public agency is preparing for a review of risk-based audit planning. Audit interviews and preliminary workpapers show that the annual audit plan omitted a newly launched high-volume payment service. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Wait for next year's planning cycle before considering the payment service so the audit file remains complete.",
+        "Ask the payment service manager to self-assess and report any issues.",
+        "Assess the service's risk and propose an approved amendment to the audit plan.",
+        "Add the service and drop the cheapest planned audit to keep the budget fixed so the audit file remains complete."
       ],
       "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that material business risks could remain unaudited despite changes in the enterprise risk profile. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "explanation": "Audit plans are risk-based and must be revisited when significant new risks emerge. A high-volume payment service warrants assessment and, if justified, an approved plan change. The potential consequence is that material business risks could remain unaudited despite changes in the enterprise risk profile.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that material business risks could remain unaudited despite changes in the enterprise risk profile. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Best answer. Audit plans are risk-based and must be revisited when significant new risks emerge. A high-volume payment service warrants assessment and, if justified, an approved plan change. The potential consequence is that material business risks could remain unaudited despite changes in the enterprise risk profile.",
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding."
       ],
       "level": "application"
     },
@@ -1793,7 +1833,7 @@
       "id": "M2-086",
       "domain": 4,
       "topicId": "4A8",
-      "question": "A telecommunications provider is preparing for a review of it change, configuration, and patch management. Audit interviews and preliminary workpapers show that critical security patches were deployed without testing compatibility with core systems. Management requests a quick decision before the next governance meeting. What evidence should the auditor prioritize?",
+      "question": "A telecommunications provider is preparing for a review of IT change, configuration, and patch management. Audit interviews and preliminary workpapers show that critical security patches were deployed without testing compatibility with core systems. Management requests a quick decision before the next governance meeting. What evidence should the auditor prioritize?",
       "choices": [
         "Asset register updates, sanitization records and disposal certificates.",
         "Patch inventory, test evidence and approved implementation records.",
@@ -1856,7 +1896,7 @@
       "id": "M2-089",
       "domain": 2,
       "topicId": "2B1",
-      "question": "A digital insurer is preparing for a review of it resource management. Audit interviews and preliminary workpapers show that a key banking application depended on a single unsupported specialist. The control owner argues that no incidents have been reported. Which set of records offers the STRONGEST corroboration?",
+      "question": "A digital insurer is preparing for a review of IT resource management. Audit interviews and preliminary workpapers show that a key banking application depended on a single unsupported specialist. The control owner argues that no incidents have been reported. Which set of records offers the STRONGEST corroboration?",
       "choices": [
         "Skills matrix, cross-training records and staffing plans.",
         "Current policy versions, approvals, training records and sampled execution evidence.",
@@ -1879,18 +1919,18 @@
       "topicId": "5B4",
       "question": "A public agency is preparing for a review of security monitoring logs, tools, and techniques. Audit interviews and preliminary workpapers show that security alerts were generated but never assigned to accountable responders. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Omit the matter from scope because it is only a process exception.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Ask the tool vendor to confirm that the alerts were false positives and move on to the next audit area.",
+        "Recommend disabling noisy detection rules to reduce alert volume.",
+        "Rely on the SOC manager's view that the alerts were all low priority and document it in the working papers.",
+        "Confirm who owns alert triage and compare practice with the procedure."
       ],
-      "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that threat activity may persist without timely investigation or containment. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 3,
+      "explanation": "Accountability for triage is the missing control. Comparing practice with procedure shows whether it is a design or an operating failure. The potential consequence is that threat activity may persist without timely investigation or containment.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that threat activity may persist without timely investigation or containment. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Best answer. Accountability for triage is the missing control. Comparing practice with procedure shows whether it is a design or an operating failure. The potential consequence is that threat activity may persist without timely investigation or containment."
       ],
       "level": "application"
     },
@@ -1898,7 +1938,7 @@
       "id": "M2-091",
       "domain": 4,
       "topicId": "4A2",
-      "question": "An university is preparing for a review of it asset management. Audit interviews and preliminary workpapers show that decommissioned storage assets remained assigned to active users. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of IT asset management. Audit interviews and preliminary workpapers show that decommissioned storage assets remained assigned to active users. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Enforce asset disposal, sanitization and chain-of-custody controls.",
         "Connect incidents to root-cause analysis and controlled permanent fixes.",
@@ -1940,7 +1980,7 @@
       "id": "M2-093",
       "domain": 1,
       "topicId": "1A1",
-      "question": "An university is preparing for a review of is audit standards, guidelines, functions, and codes of ethics. Audit interviews and preliminary workpapers show that the audit team accepted scope changes requested by the process owner without documenting independence safeguards. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of IS audit standards, guidelines, functions, and codes of ethics. Audit interviews and preliminary workpapers show that the audit team accepted scope changes requested by the process owner without documenting independence safeguards. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Define the population, sampling objective and defensible selection approach before testing.",
         "Reconcile source populations, validate logic and independently check exceptional records.",
@@ -1963,18 +2003,18 @@
       "topicId": "5A3",
       "question": "A retail group is preparing for a review of identity and access management. Audit interviews and preliminary workpapers show that departed staff retained privileged accounts in a finance system. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Recommend replacing the finance system's access control module.",
+        "Count leavers with access and check for logins after departure dates.",
+        "Ask the finance system owner to confirm the accounts are unused and move on to the next audit area.",
+        "Rely on the access review that managers signed off last quarter and move on to the next audit area."
       ],
       "answer": 1,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that unauthorized access or transactions may continue after employment ends. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "explanation": "The number of orphaned privileged accounts and any post-departure activity determine the severity of the finding. The potential consequence is that unauthorized access or transactions may continue after employment ends.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that unauthorized access or transactions may continue after employment ends. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Best answer. The number of orphaned privileged accounts and any post-departure activity determine the severity of the finding. The potential consequence is that unauthorized access or transactions may continue after employment ends.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -1982,7 +2022,7 @@
       "id": "M2-095",
       "domain": 4,
       "topicId": "4A2",
-      "question": "A healthcare network is preparing for a review of it asset management. Audit interviews and preliminary workpapers show that decommissioned storage assets remained assigned to active users. Management requests a quick decision before the next governance meeting. Which risk should the auditor prioritize in the report?",
+      "question": "A healthcare network is preparing for a review of IT asset management. Audit interviews and preliminary workpapers show that decommissioned storage assets remained assigned to active users. Management requests a quick decision before the next governance meeting. Which risk should the auditor prioritize in the report?",
       "choices": [
         "Emergency fixes can introduce outages or unsupported configurations.",
         "The same underlying defect may continue disrupting critical services.",
@@ -2024,7 +2064,7 @@
       "id": "M2-097",
       "domain": 5,
       "topicId": "5A9",
-      "question": "A payment processor is preparing for a review of mobile, wireless, and internet-of-things (iot) devices. Audit interviews and preliminary workpapers show that unmanaged tablets used the same wireless segment as privileged administration devices. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
+      "question": "A payment processor is preparing for a review of mobile, wireless, and internet-of-things (IOT) devices. Audit interviews and preliminary workpapers show that unmanaged tablets used the same wireless segment as privileged administration devices. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
       "choices": [
         "Update threat models and evaluate preventive and detective controls by scenario.",
         "Separate device trust zones and enforce enrollment, authentication and patching.",
@@ -2066,7 +2106,7 @@
       "id": "M2-099",
       "domain": 2,
       "topicId": "2A3",
-      "question": "An investment firm is preparing for a review of it policies, standards, procedures and practices. Audit interviews and preliminary workpapers show that critical administrators followed informal procedures that contradicted published policy. What is the MOST significant risk implication?",
+      "question": "An investment firm is preparing for a review of IT policies, standards, procedures and practices. Audit interviews and preliminary workpapers show that critical administrators followed informal procedures that contradicted published policy. What is the MOST significant risk implication?",
       "choices": [
         "Controls may not reflect confidentiality, integrity and retention requirements.",
         "Leaders may make decisions without visibility into material performance or control issues.",
@@ -2110,18 +2150,18 @@
       "topicId": "5B4",
       "question": "An energy utility is preparing for a review of security monitoring logs, tools, and techniques. Audit interviews and preliminary workpapers show that security alerts were generated but never assigned to accountable responders. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
       "choices": [
-        "Omit the matter from scope because it is only a process exception.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated."
+        "Report that the organisation has suffered an undetected breach.",
+        "Triage the outstanding alerts personally during the audit.",
+        "Sample the alerts to see whether any real incidents went uninvestigated.",
+        "Accept the process because the monitoring tool generated the alerts and move on to the next audit area."
       ],
       "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that threat activity may persist without timely investigation or containment. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "explanation": "Unassigned alerts matter most if they hid real incidents. Sampling them establishes the actual impact of the gap. The potential consequence is that threat activity may persist without timely investigation or containment.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that threat activity may persist without timely investigation or containment. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Best answer. Unassigned alerts matter most if they hid real incidents. Sampling them establishes the actual impact of the gap. The potential consequence is that threat activity may persist without timely investigation or containment.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -2131,18 +2171,18 @@
       "topicId": "1B5",
       "question": "A public agency is preparing for a review of reporting and communication techniques. Audit interviews and preliminary workpapers show that a significant finding was reported without describing cause, effect or accountable remediation. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Omit the matter from scope because it is only a process exception."
+        "Remove the finding because management has not yet agreed to remediate before the closing meeting.",
+        "Issue the report as written because the condition itself is accurate before the closing meeting.",
+        "Revise the finding to state criteria, cause, effect and an accountable owner.",
+        "Assign the remediation to the IT team without consulting management."
       ],
       "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that management may misunderstand the exposure and fail to address its root cause. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "explanation": "A useful finding sets out condition, criteria, cause and effect, with an agreed action and owner, so management can remediate the root cause. The potential consequence is that management may misunderstand the exposure and fail to address its root cause.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that management may misunderstand the exposure and fail to address its root cause. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding.",
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding.",
+        "Best answer. A useful finding sets out condition, criteria, cause and effect, with an agreed action and owner, so management can remediate the root cause. The potential consequence is that management may misunderstand the exposure and fail to address its root cause.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends."
       ],
       "level": "application"
     },
@@ -2150,7 +2190,7 @@
       "id": "M2-103",
       "domain": 4,
       "topicId": "4A1",
-      "question": "An investment firm is preparing for a review of it components. Audit interviews and preliminary workpapers show that the operations inventory did not include a critical network gateway. What is the MOST significant risk implication?",
+      "question": "An investment firm is preparing for a review of IT components. Audit interviews and preliminary workpapers show that the operations inventory did not include a critical network gateway. What is the MOST significant risk implication?",
       "choices": [
         "Service obligations may not reflect critical business resilience needs.",
         "Recovery plans may protect low-value systems before essential business processes.",
@@ -2171,7 +2211,7 @@
       "id": "M2-104",
       "domain": 4,
       "topicId": "4A2",
-      "question": "A logistics company is preparing for a review of it asset management. Audit interviews and preliminary workpapers show that decommissioned storage assets remained assigned to active users. No compensating control has yet been demonstrated. Which evidence would BEST support a reliable audit conclusion?",
+      "question": "A logistics company is preparing for a review of IT asset management. Audit interviews and preliminary workpapers show that decommissioned storage assets remained assigned to active users. No compensating control has yet been demonstrated. Which evidence would BEST support a reliable audit conclusion?",
       "choices": [
         "Patch inventory, test evidence and approved implementation records.",
         "Asset register updates, sanitization records and disposal certificates.",
@@ -2215,18 +2255,18 @@
       "topicId": "4A9",
       "question": "A retail group is preparing for a review of operational log management. Audit interviews and preliminary workpapers show that privileged activities were logged locally but erased during server rebuilds. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception."
+        "Determine which systems lost logs and whether activity is recorded elsewhere.",
+        "Configure central log forwarding for the servers during fieldwork so the issue is fixed before reporting.",
+        "Conclude that privileged users acted improperly because logs were erased and inform senior management the same day.",
+        "Accept local logging because server rebuilds are infrequent and planned to avoid disrupting operations during fieldwork."
       ],
-      "answer": 1,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that investigations may lack complete, reliable evidence of administrative actions. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 0,
+      "explanation": "The exposure depends on how much privileged activity is now unreviewable and whether another source, such as a PAM tool, still holds it. The potential consequence is that investigations may lack complete, reliable evidence of administrative actions.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that investigations may lack complete, reliable evidence of administrative actions. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Best answer. The exposure depends on how much privileged activity is now unreviewable and whether another source, such as a PAM tool, still holds it. The potential consequence is that investigations may lack complete, reliable evidence of administrative actions.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -2297,7 +2337,7 @@
       "id": "M2-110",
       "domain": 2,
       "topicId": "2A4",
-      "question": "A digital insurer is preparing for a review of enterprise architecture (ea) and considerations. Audit interviews and preliminary workpapers show that several departments adopted incompatible identity platforms without architecture review. The control owner argues that no incidents have been reported. Which set of records offers the STRONGEST corroboration?",
+      "question": "A digital insurer is preparing for a review of enterprise architecture (EA) and considerations. Audit interviews and preliminary workpapers show that several departments adopted incompatible identity platforms without architecture review. The control owner argues that no incidents have been reported. Which set of records offers the STRONGEST corroboration?",
       "choices": [
         "Skills matrix, cross-training records and staffing plans.",
         "Architecture standards, design decisions and approved exception records.",
@@ -2318,7 +2358,7 @@
       "id": "M2-111",
       "domain": 3,
       "topicId": "3B1",
-      "question": "An university is preparing for a review of system readiness and implementation testing. Audit interviews and preliminary workpapers show that user acceptance testing covered standard transactions but excluded failure recovery. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of system readiness and implementation testing. Audit interviews and preliminary workpapers show that user acceptance testing covered standard transactions but excluded failure recovery. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Perform an independent post-implementation review against original objectives.",
         "Embed control and acceptance criteria into the development lifecycle.",
@@ -2339,7 +2379,7 @@
       "id": "M2-112",
       "domain": 2,
       "topicId": "2A2",
-      "question": "A telecommunications provider is preparing for a review of organizational structure, it governance, and it strategy. Audit interviews and preliminary workpapers show that technology investment decisions bypassed the steering committee's approved governance process. Management requests a quick decision before the next governance meeting. What evidence should the auditor prioritize?",
+      "question": "A telecommunications provider is preparing for a review of organizational structure, IT governance, and IT strategy. Audit interviews and preliminary workpapers show that technology investment decisions bypassed the steering committee's approved governance process. Management requests a quick decision before the next governance meeting. What evidence should the auditor prioritize?",
       "choices": [
         "Approved committee minutes, investment decisions and strategic objectives.",
         "Defect history, quality metrics and verified corrective action records.",
@@ -2362,18 +2402,18 @@
       "topicId": "5A4",
       "question": "A retail group is preparing for a review of network and end-point security. Audit interviews and preliminary workpapers show that user endpoints could communicate directly with sensitive server administration ports. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria."
+        "Change the firewall rules to block the ports during fieldwork.",
+        "Report that every server has been compromised through the endpoints.",
+        "Review firewall rules to see which endpoints can reach admin ports.",
+        "Accept the design because the administration ports require passwords."
       ],
-      "answer": 3,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that compromised workstations could reach management services and amplify impact. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 2,
+      "explanation": "Rule and design review shows the extent of the exposure: which endpoints can reach which administration services. The potential consequence is that compromised workstations could reach management services and amplify impact.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that compromised workstations could reach management services and amplify impact. Premature conclusions or unquestioned reliance on management undermine assurance."
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Best answer. Rule and design review shows the extent of the exposure: which endpoints can reach which administration services. The potential consequence is that compromised workstations could reach management services and amplify impact.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -2381,7 +2421,7 @@
       "id": "M2-114",
       "domain": 4,
       "topicId": "4B4",
-      "question": "A regional bank is preparing for a review of business continuity plan (bcp). Audit interviews and preliminary workpapers show that continuity procedures listed IT contacts but no alternate business processing steps. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
+      "question": "A regional bank is preparing for a review of business continuity plan (BCP). Audit interviews and preliminary workpapers show that continuity procedures listed IT contacts but no alternate business processing steps. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
       "choices": [
         "Investigations may lack complete, reliable evidence of administrative actions.",
         "Essential services may stop even if systems are recoverable.",
@@ -2402,7 +2442,7 @@
       "id": "M2-115",
       "domain": 4,
       "topicId": "4A10",
-      "question": "An online retailer is preparing for a review of it service level management. Audit interviews and preliminary workpapers show that an outsourced service met response time targets but repeatedly breached recovery commitments. Which recommendation would BEST reduce the identified exposure?",
+      "question": "An online retailer is preparing for a review of IT service level management. Audit interviews and preliminary workpapers show that an outsourced service met response time targets but repeatedly breached recovery commitments. Which recommendation would BEST reduce the identified exposure?",
       "choices": [
         "Inventory critical EUC tools and apply change, access and calculation controls.",
         "Require controlled schema changes, privileged oversight and recoverable backups.",
@@ -2423,7 +2463,7 @@
       "id": "M2-116",
       "domain": 2,
       "topicId": "2B2",
-      "question": "An investment firm is preparing for a review of it vendor management. Audit interviews and preliminary workpapers show that a cloud supplier operated a critical service without measurable security or service obligations. What is the MOST significant risk implication?",
+      "question": "An investment firm is preparing for a review of IT vendor management. Audit interviews and preliminary workpapers show that a cloud supplier operated a critical service without measurable security or service obligations. What is the MOST significant risk implication?",
       "choices": [
         "IT initiatives may diverge from business strategy and risk appetite.",
         "Recurring failures may undermine service quality and customer outcomes.",
@@ -2467,18 +2507,18 @@
       "topicId": "4A7",
       "question": "A public agency is preparing for a review of problem and incident management. Audit interviews and preliminary workpapers show that recurring incidents were closed as isolated tickets without problem analysis. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Test a sample of repeated incidents against the problem management procedure.",
+        "Recommend outsourcing the service desk to a managed service provider and escalate it as a high-risk finding.",
+        "Rely on the service desk manager's view that the incidents are unrelated and document it in the working papers.",
+        "Close the audit area because incidents are being resolved quickly and move on to the next audit area."
       ],
-      "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that the same underlying defect may continue disrupting critical services. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 0,
+      "explanation": "Testing a sample of repeat incidents against the procedure shows whether the process is designed but not followed, or missing altogether. The potential consequence is that the same underlying defect may continue disrupting critical services.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that the same underlying defect may continue disrupting critical services. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Best answer. Testing a sample of repeat incidents against the procedure shows whether the process is designed but not followed, or missing altogether. The potential consequence is that the same underlying defect may continue disrupting critical services.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -2507,20 +2547,20 @@
       "id": "M2-120",
       "domain": 2,
       "topicId": "2B3",
-      "question": "A public agency is preparing for a review of it performance monitoring and reporting. Audit interviews and preliminary workpapers show that IT scorecards tracked uptime but not service outcomes or risk indicators. Which action is MOST appropriate before finalizing the audit conclusion?",
+      "question": "A public agency is preparing for a review of IT performance monitoring and reporting. Audit interviews and preliminary workpapers show that IT scorecards tracked uptime but not service outcomes or risk indicators. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Omit the matter from scope because it is only a process exception.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Independently corroborate the condition and quantify exposure against approved criteria."
+        "Accept the scorecards because uptime has consistently exceeded target and document it in the working papers.",
+        "Compare the scorecard measures with business objectives and risk indicators.",
+        "Design a new set of IT performance metrics for management to adopt.",
+        "Rate IT performance unsatisfactory because outcome measures are missing and escalate it as a high-risk finding."
       ],
-      "answer": 3,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that leaders may make decisions without visibility into material performance or control issues. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 1,
+      "explanation": "Performance measurement should show value delivery and risk, not only technical availability. The auditor tests alignment with objectives. The potential consequence is that leaders may make decisions without visibility into material performance or control issues.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that leaders may make decisions without visibility into material performance or control issues. Premature conclusions or unquestioned reliance on management undermine assurance."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Best answer. Performance measurement should show value delivery and risk, not only technical availability. The auditor tests alignment with objectives. The potential consequence is that leaders may make decisions without visibility into material performance or control issues.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established."
       ],
       "level": "application"
     },
@@ -2528,20 +2568,20 @@
       "id": "M2-121",
       "domain": 1,
       "topicId": "1A1",
-      "question": "A retail group is preparing for a review of is audit standards, guidelines, functions, and codes of ethics. Audit interviews and preliminary workpapers show that the audit team accepted scope changes requested by the process owner without documenting independence safeguards. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
+      "question": "A retail group is preparing for a review of IS audit standards, guidelines, functions, and codes of ethics. Audit interviews and preliminary workpapers show that the audit team accepted scope changes requested by the process owner without documenting independence safeguards. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Omit the matter from scope because it is only a process exception.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Independently corroborate the condition and quantify exposure against approved criteria."
+        "Let the process owner approve the final report wording to keep goodwill.",
+        "Compare the revised scope with the approved plan to find untested key risks.",
+        "Record the change in the working papers and carry on with the revised scope.",
+        "Expand the audit to every process the owner manages to offset the change."
       ],
-      "answer": 3,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that the assurance conclusion may be biased and fail to meet professional audit requirements. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 1,
+      "explanation": "Before deciding how serious the change is, the auditor must know what the original, approved scope covered and which significant risks the change leaves unaddressed. The potential consequence is that the assurance conclusion may be biased and fail to meet professional audit requirements.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that the assurance conclusion may be biased and fail to meet professional audit requirements. Premature conclusions or unquestioned reliance on management undermine assurance."
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Best answer. Before deciding how serious the change is, the auditor must know what the original, approved scope covered and which significant risks the change leaves unaddressed. The potential consequence is that the assurance conclusion may be biased and fail to meet professional audit requirements.",
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding.",
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding."
       ],
       "level": "application"
     },
@@ -2549,7 +2589,7 @@
       "id": "M2-122",
       "domain": 4,
       "topicId": "4B1",
-      "question": "A payment processor is preparing for a review of business impact analysis (bia). Audit interviews and preliminary workpapers show that recovery priorities were set only by IT without consulting critical business owners. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
+      "question": "A payment processor is preparing for a review of business impact analysis (BIA). Audit interviews and preliminary workpapers show that recovery priorities were set only by IT without consulting critical business owners. The control owner argues that no incidents have been reported. What action would BEST address the underlying issue?",
       "choices": [
         "Test restoration of representative critical data against recovery objectives.",
         "Perform business-led impact analysis and approve recovery objectives.",
@@ -2570,7 +2610,7 @@
       "id": "M2-123",
       "domain": 4,
       "topicId": "4B1",
-      "question": "A healthcare network is preparing for a review of business impact analysis (bia). Audit interviews and preliminary workpapers show that recovery priorities were set only by IT without consulting critical business owners. Management requests a quick decision before the next governance meeting. Which risk should the auditor prioritize in the report?",
+      "question": "A healthcare network is preparing for a review of business impact analysis (BIA). Audit interviews and preliminary workpapers show that recovery priorities were set only by IT without consulting critical business owners. Management requests a quick decision before the next governance meeting. Which risk should the auditor prioritize in the report?",
       "choices": [
         "Emergency fixes can introduce outages or unsupported configurations.",
         "Recovery plans may protect low-value systems before essential business processes.",
@@ -2675,20 +2715,20 @@
       "id": "M2-128",
       "domain": 4,
       "topicId": "4A1",
-      "question": "A public agency is preparing for a review of it components. Audit interviews and preliminary workpapers show that the operations inventory did not include a critical network gateway. Which action is MOST appropriate before finalizing the audit conclusion?",
+      "question": "A public agency is preparing for a review of IT components. Audit interviews and preliminary workpapers show that the operations inventory did not include a critical network gateway. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Add the gateway to the inventory and close the issue.",
+        "Disconnect the gateway until it has been formally inventoried and inform senior management the same day.",
+        "Reconcile the inventory with network discovery data to find other gaps.",
+        "Accept the inventory because the network team already knows the gateway."
       ],
-      "answer": 0,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that unsupported or unmanaged infrastructure may escape required controls. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 2,
+      "explanation": "One missing critical asset suggests the inventory process is incomplete. Reconciliation shows the full extent before rating severity. The potential consequence is that unsupported or unmanaged infrastructure may escape required controls.",
       "choiceExplanations": [
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that unsupported or unmanaged infrastructure may escape required controls. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Best answer. One missing critical asset suggests the inventory process is incomplete. Reconciliation shows the full extent before rating severity. The potential consequence is that unsupported or unmanaged infrastructure may escape required controls.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion."
       ],
       "level": "application"
     },
@@ -2719,18 +2759,18 @@
       "topicId": "4A11",
       "question": "An energy utility is preparing for a review of database management. Audit interviews and preliminary workpapers show that database administrators made schema changes directly without reviewing dependencies. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
       "choices": [
-        "Omit the matter from scope because it is only a process exception.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Replace existing governance approvals with informal management sign-offs."
+        "Rely on the DBA team lead's assurance that every change was safe.",
+        "Recommend freezing all database changes until a new tool is in place.",
+        "Ask application owners whether they have noticed any problems lately.",
+        "Review database logs for all changes made outside change management to establish the full extent."
       ],
-      "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that data integrity and application stability may be compromised. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 3,
+      "explanation": "Logs show how often direct changes occur and whether any were unauthorised, which determines the significance of the bypass. The potential consequence is that data integrity and application stability may be compromised.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that data integrity and application stability may be compromised. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Best answer. Logs show how often direct changes occur and whether any were unauthorised, which determines the significance of the bypass. The potential consequence is that data integrity and application stability may be compromised."
       ],
       "level": "application"
     },
@@ -2738,20 +2778,20 @@
       "id": "M2-131",
       "domain": 4,
       "topicId": "4B4",
-      "question": "A public agency is preparing for a review of business continuity plan (bcp). Audit interviews and preliminary workpapers show that continuity procedures listed IT contacts but no alternate business processing steps. Which action is MOST appropriate before finalizing the audit conclusion?",
+      "question": "A public agency is preparing for a review of business continuity plan (BCP). Audit interviews and preliminary workpapers show that continuity procedures listed IT contacts but no alternate business processing steps. Which action is MOST appropriate before finalizing the audit conclusion?",
       "choices": [
-        "Omit the matter from scope because it is only a process exception.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Require a complete system shutdown until every issue has been remediated."
+        "Report the organisation as unable to survive any outage and inform senior management the same day.",
+        "Accept the plan because the IT contacts can coordinate the business response.",
+        "Write alternate processing procedures for each business unit so the risk is closed during fieldwork.",
+        "Assess whether critical processes could continue during an outage."
       ],
-      "answer": 1,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that essential services may stop even if systems are recoverable. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 3,
+      "explanation": "Continuity plans must cover how the business keeps operating, not just who to call. The auditor tests whether critical processes are covered. The potential consequence is that essential services may stop even if systems are recoverable.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that essential services may stop even if systems are recoverable. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Best answer. Continuity plans must cover how the business keeps operating, not just who to call. The auditor tests whether critical processes are covered. The potential consequence is that essential services may stop even if systems are recoverable."
       ],
       "level": "application"
     },
@@ -2759,20 +2799,20 @@
       "id": "M2-132",
       "domain": 2,
       "topicId": "2B3",
-      "question": "A retail group is preparing for a review of it performance monitoring and reporting. Audit interviews and preliminary workpapers show that IT scorecards tracked uptime but not service outcomes or risk indicators. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
+      "question": "A retail group is preparing for a review of IT performance monitoring and reporting. Audit interviews and preliminary workpapers show that IT scorecards tracked uptime but not service outcomes or risk indicators. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Omit the matter from scope because it is only a process exception.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Independently corroborate the condition and quantify exposure against approved criteria."
+        "Ask IT to certify each month that service outcomes are satisfactory and document it in the working papers.",
+        "Remove the uptime metrics from the scorecard because they are misleading so the issue is fixed before reporting.",
+        "Recommend adding more uptime metrics to make the scorecard more detailed so the audit file remains complete.",
+        "Ask business owners which outcomes they rely on and test scorecard coverage."
       ],
       "answer": 3,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that leaders may make decisions without visibility into material performance or control issues. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "explanation": "Business owners define which service outcomes matter. Their input shows what the scorecard fails to measure. The potential consequence is that leaders may make decisions without visibility into material performance or control issues.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that leaders may make decisions without visibility into material performance or control issues. Premature conclusions or unquestioned reliance on management undermine assurance."
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Not the best answer. It does not address the underlying risk or produce the evidence needed to judge the finding.",
+        "Best answer. Business owners define which service outcomes matter. Their input shows what the scorecard fails to measure. The potential consequence is that leaders may make decisions without visibility into material performance or control issues."
       ],
       "level": "application"
     },
@@ -2803,18 +2843,18 @@
       "topicId": "5B2",
       "question": "A retail group is preparing for a review of information system attack methods and techniques. Audit interviews and preliminary workpapers show that the threat model excluded credential replay against external access systems. Management requests a quick decision before the next governance meeting. What should the IS auditor do FIRST before determining the finding severity?",
       "choices": [
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Omit the matter from scope because it is only a process exception."
+        "Assess how exposed external access is to the omitted replay threat.",
+        "Update the threat model for the security team during the audit.",
+        "Accept the model because credential replay attacks are uncommon.",
+        "Report that external access systems were breached through replay and inform senior management the same day."
       ],
       "answer": 0,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that relevant attack paths may be missed in control design and assurance. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "explanation": "An omitted threat may leave controls such as MFA or token binding unassessed. The auditor evaluates the exposure the gap creates. The potential consequence is that relevant attack paths may be missed in control design and assurance.",
       "choiceExplanations": [
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that relevant attack paths may be missed in control design and assurance. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Best answer. An omitted threat may leave controls such as MFA or token binding unassessed. The auditor evaluates the exposure the gap creates. The potential consequence is that relevant attack paths may be missed in control design and assurance.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established."
       ],
       "level": "application"
     },
@@ -2843,7 +2883,7 @@
       "id": "M2-136",
       "domain": 2,
       "topicId": "2A5",
-      "question": "An university is preparing for a review of enterprise risk management (erm). Audit interviews and preliminary workpapers show that IT risks were accepted by project leads beyond their delegated authority. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of enterprise risk management (ERM). Audit interviews and preliminary workpapers show that IT risks were accepted by project leads beyond their delegated authority. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Approve consistent standards and procedures, communicate changes and monitor adherence.",
         "Define risk ownership, approval authority, escalation thresholds and regular review.",
@@ -2906,20 +2946,20 @@
       "id": "M2-139",
       "domain": 5,
       "topicId": "5A5",
-      "question": "An energy utility is preparing for a review of data loss prevention (dlp). Audit interviews and preliminary workpapers show that confidential customer exports were permitted to unmanaged personal storage. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
+      "question": "An energy utility is preparing for a review of data loss prevention (DLP). Audit interviews and preliminary workpapers show that confidential customer exports were permitted to unmanaged personal storage. No compensating control has yet been demonstrated. What is the BEST immediate audit response?",
       "choices": [
-        "Require a complete system shutdown until every issue has been remediated.",
-        "Replace existing governance approvals with informal management sign-offs.",
-        "Independently corroborate the condition and quantify exposure against approved criteria.",
-        "Omit the matter from scope because it is only a process exception."
+        "Review DLP logs to determine what data was exported and by whom before rating the finding.",
+        "Accept the practice because staff signed the acceptable use policy.",
+        "Declare a reportable privacy breach before determining what was exported and escalate it as a high-risk finding.",
+        "Block all personal storage sites on the network immediately."
       ],
-      "answer": 2,
-      "explanation": "Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that sensitive information could leave approved environments without detection. Premature conclusions or unquestioned reliance on management undermine assurance.",
+      "answer": 0,
+      "explanation": "DLP logs establish what confidential data actually left the organisation, which drives severity and any breach obligations. The potential consequence is that sensitive information could leave approved environments without detection.",
       "choiceExplanations": [
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response.",
-        "Best answer. Professional audit judgement requires validating the condition, understanding scope and impact, and comparing findings with criteria. The potential consequence is that sensitive information could leave approved environments without detection. Premature conclusions or unquestioned reliance on management undermine assurance.",
-        "Not the best answer. This does not provide sufficient, reliable, relevant evidence or a defensible risk-based audit response."
+        "Best answer. DLP logs establish what confidential data actually left the organisation, which drives severity and any breach obligations. The potential consequence is that sensitive information could leave approved environments without detection.",
+        "Not the best answer. It relies on unverified, self-reported or insufficient evidence, which cannot support an audit conclusion.",
+        "Not the best answer. It jumps to a conclusion or drastic action before the condition, its extent and its impact are established.",
+        "Not the best answer. It has the auditor perform or decide management's work, which impairs independence; the auditor evaluates and recommends."
       ],
       "level": "application"
     },
@@ -2948,7 +2988,7 @@
       "id": "M2-141",
       "domain": 4,
       "topicId": "4B5",
-      "question": "An online retailer is preparing for a review of disaster recovery plans (drp). Audit interviews and preliminary workpapers show that the last disaster recovery test exceeded a critical service's approved RTO. Which recommendation would BEST reduce the identified exposure?",
+      "question": "An online retailer is preparing for a review of disaster recovery plans (DRP). Audit interviews and preliminary workpapers show that the last disaster recovery test exceeded a critical service's approved RTO. Which recommendation would BEST reduce the identified exposure?",
       "choices": [
         "Monitor automated jobs with retries, alerts, ownership and reconciliations.",
         "Require controlled schema changes, privileged oversight and recoverable backups.",
@@ -2969,7 +3009,7 @@
       "id": "M2-142",
       "domain": 4,
       "topicId": "4A5",
-      "question": "A digital insurer is preparing for a review of shadow it and end-user computing (euc). Audit interviews and preliminary workpapers show that finance analysts relied on an unregistered spreadsheet for key month-end adjustments. The control owner argues that no incidents have been reported. Which set of records offers the STRONGEST corroboration?",
+      "question": "A digital insurer is preparing for a review of shadow IT and end-user computing (EUC). Audit interviews and preliminary workpapers show that finance analysts relied on an unregistered spreadsheet for key month-end adjustments. The control owner argues that no incidents have been reported. Which set of records offers the STRONGEST corroboration?",
       "choices": [
         "Observed recovery timing, recovered data age and signed test outcomes.",
         "Approved business continuity plans, exercise results and follow-up actions.",
@@ -2990,7 +3030,7 @@
       "id": "M2-143",
       "domain": 2,
       "topicId": "2B1",
-      "question": "A regional bank is preparing for a review of it resource management. Audit interviews and preliminary workpapers show that a key banking application depended on a single unsupported specialist. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
+      "question": "A regional bank is preparing for a review of IT resource management. Audit interviews and preliminary workpapers show that a key banking application depended on a single unsupported specialist. The control owner argues that no incidents have been reported. What is the GREATEST business concern?",
       "choices": [
         "Third-party failures may go undetected or leave accountability unclear.",
         "Controls may not reflect confidentiality, integrity and retention requirements.",
@@ -3074,7 +3114,7 @@
       "id": "M2-147",
       "domain": 4,
       "topicId": "4B1",
-      "question": "An university is preparing for a review of business impact analysis (bia). Audit interviews and preliminary workpapers show that recovery priorities were set only by IT without consulting critical business owners. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of business impact analysis (BIA). Audit interviews and preliminary workpapers show that recovery priorities were set only by IT without consulting critical business owners. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Define process-level alternatives, roles, communication and exercise plans.",
         "Identify single points of failure and validate resilience through testing.",
@@ -3116,7 +3156,7 @@
       "id": "M2-149",
       "domain": 2,
       "topicId": "2A6",
-      "question": "An university is preparing for a review of privacy program and principles. Audit interviews and preliminary workpapers show that customer data collection expanded without a documented purpose or retention basis. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
+      "question": "A university is preparing for a review of privacy program and principles. Audit interviews and preliminary workpapers show that customer data collection expanded without a documented purpose or retention basis. No compensating control has yet been demonstrated. What is the MOST appropriate control improvement?",
       "choices": [
         "Apply data minimization, lawful purpose, retention controls and privacy impact assessment.",
         "Implement measurable quality assurance, defect trends and corrective action follow-up.",
