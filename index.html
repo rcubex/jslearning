@@ -2829,12 +2829,14 @@ a.ed-card:hover{background:rgba(255,255,255,.62);color:#0A2540}
   function tick(){var d=new Date();document.getElementById('lkTime').textContent=d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',hour12:false});document.getElementById('lkDate').textContent=d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'});}
   tick(); setInterval(tick,15000);
 
-  /* wallpaper rotates every 30 minutes */
-  var wallsEl=document.getElementById('lkWalls'), wallIdx=-1;
+  /* wallpaper: a new scene on every refresh, logout or timeout, and every 30 minutes while the login page is open */
+  var wallsEl=document.getElementById('lkWalls'), wallIdx=-1, wallAt=0;
+  function pickWall(n){ var last=-1; try{ last=parseInt(localStorage.getItem('p2c-wall-last'),10); }catch(e){} if(isNaN(last)) last=wallIdx;
+    if(n<2) return 0; var i; do{ i=Math.floor(Math.random()*n); }while(i===last||i===wallIdx); return i; }
   function applyWall(){
     var W=window.LK_WALLS; if(!W||!W.length||!wallsEl) return;
-    var i=Math.floor(Date.now()/18e5)%W.length; if(i===wallIdx) return;
-    var first=wallIdx===-1; wallIdx=i; var w=W[i];
+    var i=pickWall(W.length), first=wallIdx===-1; wallIdx=i; wallAt=Date.now(); var w=W[i];
+    try{ localStorage.setItem('p2c-wall-last',String(i)); }catch(e){}
     gate.style.setProperty('--lk-ink',w.i); gate.style.setProperty('--lk-sub',w.u); gate.style.setProperty('--lk-card',w.c);
     gate.setAttribute('data-wall',w.n);
     var layer=document.createElement('div'); layer.className='lk-layer';
@@ -2842,9 +2844,9 @@ a.ed-card:hover{background:rgba(255,255,255,.62);color:#0A2540}
     wallsEl.appendChild(layer);
     var old=[].slice.call(wallsEl.children,0,-1);
     if(first||reduce){ old.forEach(function(o){o.remove();}); layer.classList.add('on'); return; }
-    requestAnimationFrame(function(){ layer.classList.add('on'); setTimeout(function(){ old.forEach(function(o){o.remove();}); },1400); });
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ layer.classList.add('on'); }); setTimeout(function(){ old.forEach(function(o){o.remove();}); },1500); });
   }
-  applyWall(); setInterval(function(){ if(!gate.hidden) applyWall(); },60000);
+  applyWall(); setInterval(function(){ if(!gate.hidden && Date.now()-wallAt>=18e5) applyWall(); },30000);
   /* show / hide password */
   var peek=document.getElementById('peek'), pw=document.getElementById('password');
   peek.addEventListener('click',function(){var on=pw.type==='password'; pw.type=on?'text':'password'; peek.textContent=on?'Hide':'Show'; peek.setAttribute('aria-pressed',on); peek.setAttribute('aria-label',on?'Hide password':'Show password');});
@@ -2872,7 +2874,7 @@ a.ed-card:hover{background:rgba(255,255,255,.62);color:#0A2540}
     burst:function(){},
     shake:function(){card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');},
     leave:function(){return new Promise(function(res){ hideNote(); if(reduce){res();return;} gate.classList.add('leaving'); setTimeout(res,450);});},
-    reset:function(){gate.classList.remove('leaving'); tick(); applyWall(); setTimeout(showNote,reduce?0:700);}
+    reset:function(){gate.classList.remove('leaving'); tick(); if(Date.now()-wallAt>3000) applyWall(); setTimeout(showNote,reduce?0:700);}
   };
   setTimeout(function(){ if(!window.__p2cLoaded) bootProblem(); },6000);
 })();

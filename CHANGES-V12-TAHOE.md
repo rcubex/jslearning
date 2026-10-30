@@ -80,3 +80,8 @@ The Dashboard and the CISA Overview were rebuilt with large type, few boxes and 
 - The wallpapers live in the new file `login-walls.js`, which is cached offline by the service worker.
 - Sign-in card proportions adjusted to 344 × 308 px (about 1.1:1), with more even padding.
 - Service worker cache: `p2c-theory-cisa-v25-walls`.
+
+## Update — Wallpaper changes on every visit
+- The login page shows a different scene, picked at random, every time it appears: on refresh, after you sign out, and after the 10-minute timeout. It never repeats the previous scene.
+- While the login page stays open, it also changes every 30 minutes.
+- Service worker cache: `p2c-theory-cisa-v26-walls`.
