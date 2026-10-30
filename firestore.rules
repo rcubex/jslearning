@@ -7,8 +7,30 @@ service cloud.firestore {
         'Yk0WCbGfCOfiy7fnXqMgcfxjvze2', 'm6ybLppag7e9ky7UMVqnc80gwxA3'
       ];
     }
+    // The admin can read every learner's progress and unlock a locked CISA study plan.
+    function isAdmin() {
+      return request.auth != null && request.auth.uid == 'Yk0WCbGfCOfiy7fnXqMgcfxjvze2';
+    }
+    // Once a learner locks their CISA study plan, the plan fields cannot change
+    // (topic completion, notes, logs, mock exams etc. can). Only the admin can unlock.
+    function planIntact() {
+      let before = resource.data.get('cisa', {});
+      let after = request.resource.data.get('cisa', {});
+      return before.get('planLock', {}).get('locked', false) != true || (
+        after.get('planLock', null) == before.get('planLock', null) &&
+        after.get('plans', null) == before.get('plans', null) &&
+        after.get('planMode', null) == before.get('planMode', null) &&
+        after.get('topicEdits', null) == before.get('topicEdits', null) &&
+        after.get('customTasks', null) == before.get('customTasks', null) &&
+        after.get('order', null) == before.get('order', null) &&
+        after.get('hidden', null) == before.get('hidden', null)
+      );
+    }
     match /progress/{uid} {
-      allow read, write: if approved() && request.auth.uid == uid;
+      allow read: if approved() && (request.auth.uid == uid || isAdmin());
+      allow create: if approved() && request.auth.uid == uid;
+      allow update: if approved() && (isAdmin() || (request.auth.uid == uid && planIntact()));
+      allow delete: if approved() && request.auth.uid == uid;
     }
     match /users/{uid}/{area}/{entryId} {
       allow read, write: if approved() && request.auth.uid == uid
