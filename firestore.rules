@@ -1,10 +1,10 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Approved Firebase Authentication UIDs for access to private user data.
+    // REPLACE both example UIDs with the actual administrator and learner Firebase Auth UIDs.
     function approved() {
       return request.auth != null && request.auth.uid in [
-        'Yk0WCbGfCOfiy7fnXqMgcfxjvze2', 'm6ybLppag7e9ky7UMVqnc80gwxA3'
+        'REPLACE_WITH_ADMIN_UID', 'REPLACE_WITH_LEARNER_UID'
       ];
     }
     match /progress/{uid} {
