@@ -1,0 +1,18 @@
+{
+  "id": "normal",
+  "title": "Normal \u00b7 Target 15 January",
+  "start": "2026-11-01",
+  "examDate": "2027-01-13",
+  "deadline": "2027-01-15",
+  "weeklyMinutes": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    180,
+    120
+  ],
+  "reviewDays": 10,
+  "description": "Accelerated route with structured weekday study and a final mock/revision period."
+}
