@@ -27,3 +27,63 @@
 .cisa-mx-table td .cisa-actions{flex-wrap:nowrap;justify-content:flex-end}
 .cisa-mx-table td:last-child{white-space:nowrap}
 .cisa-hub label.cisa-inline select{font-size:13.5px;padding:7px 10px}
+
+/* ===== V12 · Planner minimal view + Apple-style sheets ===== */
+.pl-hero .pl-time{margin:14px 0 4px;max-width:520px}
+.pl-hero .pl-time .d3-bar{display:block}
+.pl-time-l{display:flex;justify-content:space-between;font-size:11.5px;color:#6B7A90;margin-top:6px;font-weight:500}
+.pl-time-l span:nth-child(2){color:#0A6CFF;font-weight:600}
+.pl-warn{margin:14px 0 0;padding:12px 16px;border-radius:14px;background:rgba(255,159,10,.10);border:1px solid rgba(255,159,10,.28);color:#7A4A00;font-size:13px;line-height:1.5}
+.pl-warn strong{display:block;margin-bottom:2px}
+html.ap-lock,html.ap-lock body{overflow:hidden!important}
+.ap-modal{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;padding:24px}
+.ap-backdrop{position:absolute;inset:0;background:rgba(28,34,48,.28);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2)}
+.ap-modal.is-under .ap-backdrop{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.ap-modal.is-under .ap-sheet{transform:scale(.955) translateY(-8px);filter:brightness(.97);transition:transform .35s cubic-bezier(.2,.9,.3,1.1)}
+.ap-modal+.ap-modal .ap-backdrop{background:rgba(28,34,48,.18)}
+.ap-sheet{position:relative;display:flex;flex-direction:column;width:min(760px,100%);max-height:min(86vh,860px);border-radius:24px;background:rgba(250,251,253,.88);-webkit-backdrop-filter:blur(40px) saturate(1.8);backdrop-filter:blur(40px) saturate(1.8);border:1px solid rgba(255,255,255,.75);box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 30px 80px -10px rgba(20,30,60,.35),0 10px 24px -8px rgba(20,30,60,.18),inset 0 1px 0 rgba(255,255,255,.9);overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif}
+.ap-sheet.ap-config{width:min(680px,100%)}
+.ap-modal.anim .ap-backdrop{animation:apFade .28s ease both}
+.ap-modal.anim .ap-sheet{animation:apSpring .52s cubic-bezier(.18,1.25,.4,1) both}
+.ap-modal.closing .ap-backdrop{animation:apFade .2s ease reverse both}
+.ap-modal.closing .ap-sheet{animation:apOut .2s ease-in both}
+@keyframes apFade{from{opacity:0}to{opacity:1}}
+@keyframes apSpring{from{opacity:0;transform:scale(.9) translateY(14px)}60%{opacity:1}to{opacity:1;transform:none}}
+@keyframes apOut{to{opacity:0;transform:scale(.95)}}
+@media (prefers-reduced-motion:reduce){.ap-modal.anim .ap-sheet,.ap-modal.anim .ap-backdrop{animation:none}}
+.ap-head{position:relative;padding:18px 56px 14px;text-align:center;border-bottom:1px solid rgba(60,60,67,.12)}
+.ap-head h3{margin:0;font-size:16px;font-weight:650;letter-spacing:-.01em;color:#1D1D1F}
+.ap-head p{margin:3px 0 0;font-size:12px;color:#6E6E73}
+.ap-x{position:absolute;left:16px;top:17px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(120,120,128,.14);color:#3C3C43;font-size:19px;line-height:28px;padding:0;cursor:pointer;transition:background .15s}
+.ap-x:hover{background:rgba(120,120,128,.24)}
+.ap-body{overflow:auto;padding:16px 22px 20px;overscroll-behavior:contain;flex:1}
+.ap-foot{display:flex;justify-content:flex-end;gap:10px;padding:12px 18px;border-top:1px solid rgba(60,60,67,.12);background:rgba(255,255,255,.55)}
+.ap-foot .cisa-btn,.ap-sheet .cisa-btn{border-radius:10px}
+.ap-foot .cisa-btn{min-width:96px;justify-content:center}
+.pl-week{margin:0 0 16px}
+.pl-week-h{position:sticky;top:-16px;z-index:2;display:flex;align-items:baseline;justify-content:space-between;padding:10px 4px 8px;margin:0 -4px;background:linear-gradient(rgba(250,251,253,.97) 70%,rgba(250,251,253,0))}
+.pl-week-h b{font-size:13px;color:#1D1D1F}
+.pl-week-h span{font-size:11.5px;color:#6E6E73}
+.ap-sheet .cisa-day{background:#fff;border:1px solid rgba(60,60,67,.10);border-radius:14px;padding:10px 14px;margin:0 0 8px;box-shadow:none}
+.ap-sheet .cisa-day.today{border-color:rgba(10,108,255,.45);box-shadow:0 0 0 3px rgba(10,108,255,.10)}
+.ap-sheet .cisa-day h3{font-size:12.5px;margin:0 0 4px;color:#6E6E73;font-weight:600}
+.ap-sheet .cisa-task{padding:7px 0;border-top:1px solid rgba(60,60,67,.07)}
+.ap-sheet .cisa-task:first-of-type{border-top:0}
+.ap-sheet .cisa-task.done strong{text-decoration:line-through;color:#8E8E93}
+.pl-sec{background:#fff;border:1px solid rgba(60,60,67,.10);border-radius:16px;padding:14px 16px;margin:0 0 14px}
+.pl-sec h4{margin:0 0 10px;font-size:11.5px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:#6E6E73}
+.pl-sec .cisa-table-wrap{max-height:none}
+@media (max-width:640px){.ap-modal{padding:0;align-items:end}.ap-sheet{width:100%;max-height:92vh;border-radius:22px 22px 0 0}@keyframes apSpring{from{transform:translateY(40%)}to{transform:none}}}
+.ap-sheet input:not([type=checkbox]):not([type=radio]),.ap-sheet select,.ap-sheet textarea{background:rgba(118,118,128,.10)!important;border:1px solid transparent!important;border-radius:10px!important;padding:8px 11px!important;font-size:13.5px!important;min-height:36px;box-shadow:none!important;transition:background .15s,box-shadow .15s}
+.ap-sheet input:not([type=checkbox]):focus,.ap-sheet select:focus,.ap-sheet textarea:focus{background:#fff!important;box-shadow:0 0 0 3.5px rgba(10,108,255,.35)!important;outline:0}
+.ap-sheet label{font-size:12.5px;color:#3C3C43;font-weight:550}
+.ap-sheet .cisa-fields{gap:12px 14px}
+.ap-sheet .cisa-table{table-layout:fixed;width:100%;font-size:12.5px}
+.ap-sheet .cisa-table th{font-size:10.5px;padding:8px 6px}
+.ap-sheet .cisa-table td{padding:9px 6px;vertical-align:middle}
+.ap-sheet .cisa-table th:nth-child(1){width:44%}.ap-sheet .cisa-table th:nth-child(2){width:9%}.ap-sheet .cisa-table th:nth-child(3){width:9%}.ap-sheet .cisa-table th:nth-child(4){width:13%}
+.ap-sheet .cisa-table td strong{font-weight:600;font-size:12.5px;line-height:1.35}
+.ap-sheet .cisa-table .cisa-actions{gap:4px;flex-wrap:nowrap}
+.ap-sheet .cisa-table .cisa-btn.sm{padding:4px 8px;font-size:11.5px;min-height:0}
+.ap-sheet .cisa-table-wrap{overflow-x:visible;border:0}
+.ap-sheet form[data-form="topic"]{background:rgba(10,108,255,.04);border:1px solid rgba(10,108,255,.15);border-radius:14px;padding:14px;margin:12px 0}

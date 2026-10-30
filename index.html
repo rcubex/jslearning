@@ -2651,6 +2651,89 @@ a.ed-card:hover{background:rgba(255,255,255,.62);color:#0A2540}
 :root[data-variant="tahoe"] #app .cisa-hub>.cisa-tabs button{padding:6px 11px!important;font-size:12.5px!important}
 #app .cisa-hub .ed-hero+.ed-sect{margin-top:26px!important}
 :root[data-variant="tahoe"] #app .view>.view-head.ed-head.ed-head:first-child h2,:root[data-variant="tahoe"] #app .cisa-hub>.view-head.cisa-head.ed-titlebar h2{font-size:25px!important;margin-top:2px!important}
+
+/* ===================== Lock-screen login (Tahoe glass) ===================== */
+.gate.lockgate{position:fixed;inset:0;z-index:50;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding:6vh 20px 40px;color:#0A2540;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,system-ui,sans-serif;
+ background:radial-gradient(55% 55% at 15% 10%,#8FE3FF 0%,transparent 60%),radial-gradient(55% 60% at 90% 15%,#B3B8FF 0%,transparent 60%),radial-gradient(70% 70% at 70% 100%,#4F8CFF 0%,transparent 62%),radial-gradient(60% 60% at 5% 95%,#7FF5D9 0%,transparent 60%),#E3EEFB}
+.gate.lockgate[hidden]{display:none}
+.lk-clock{text-align:center;margin-bottom:4vh}
+.lk-date{font-size:16px;font-weight:500;color:#33415C}
+.lk-time{font-size:clamp(64px,9vw,96px);font-weight:700;letter-spacing:-.05em;line-height:1;color:#0A2540;font-variant-numeric:tabular-nums}
+.lk-card{width:min(400px,100%);padding:30px 32px 24px;border-radius:30px;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 0 #fff,0 30px 70px -34px rgba(20,60,140,.55);-webkit-backdrop-filter:blur(40px) saturate(200%);backdrop-filter:blur(40px) saturate(200%)}
+.lk-head{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:20px}
+.lk-avatar{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;font-size:26px;font-weight:700;color:#fff;background:linear-gradient(180deg,#5AC8FA,#0A84FF);box-shadow:0 0 0 5px rgba(255,255,255,.7),0 14px 30px -12px rgba(10,132,255,.7)}
+.lk-head h1{margin:14px 0 2px;font-size:20px;font-weight:700;letter-spacing:-.02em;color:#0A2540}
+.lk-head p{margin:0;font-size:13.5px;color:#6B7A90}
+.lk-field{display:block;margin-bottom:14px}
+.lk-field>span:first-child{display:block;margin:0 0 6px 4px;font-size:12.5px;font-weight:600;color:#33415C}
+.lk-input{display:flex;align-items:center;gap:10px;height:46px;padding:0 8px 0 16px;border-radius:14px;background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 2px rgba(20,60,140,.08);transition:box-shadow .15s}
+.lk-input:focus-within{box-shadow:0 0 0 3px rgba(10,132,255,.25)}
+.lk-input svg{width:17px;height:17px;flex:none;fill:none;stroke:#6B7A90;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lk-input input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-family:inherit;font-size:15px;font-weight:400;color:#0A2540}
+.lk-input input::placeholder{color:#8A97AA}
+.lk-peek{appearance:none;border:0;background:transparent;color:#0A84FF;font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 10px;border-radius:10px;cursor:pointer}
+.lk-peek:hover{background:rgba(10,132,255,.08)}
+.lk-go{appearance:none;border:0;width:100%;height:48px;margin-top:6px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;color:#fff;background:linear-gradient(180deg,#3B9BFF,#0A7AFF);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 12px 26px -10px rgba(10,122,255,.7)}
+.lk-go:hover{filter:brightness(1.05)}.lk-go:disabled{opacity:.7;cursor:progress}
+.lk-go svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round}
+.lk-go:focus-visible,.lk-peek:focus-visible,.lk-note-x:focus-visible{outline:2px solid #0A84FF;outline-offset:3px}
+.lk-msg{min-height:0;margin:12px 0 0;font-size:13px;line-height:1.45;color:#33415C;text-align:center}
+.lk-msg:empty{display:none}.lk-msg.bad{color:#D70015}
+.lk-foot{margin-top:16px;text-align:center;font-size:12.5px;color:#6B7A90}
+.lk-card.shake{animation:lkshake .4s}
+@keyframes lkshake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.gate.lockgate.leaving{animation:lkleave .45s ease forwards}
+@keyframes lkleave{to{opacity:0;transform:scale(1.03)}}
+/* Apple-style notification */
+.lk-note{position:fixed;top:16px;right:16px;width:min(360px,calc(100% - 32px));display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:20px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.95);box-shadow:0 18px 40px -16px rgba(20,40,90,.45);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);z-index:60;transform:translateY(-130%);opacity:0}
+.lk-note.in{animation:lknotein .55s cubic-bezier(.2,.9,.25,1.15) forwards}
+.lk-note.out{animation:lknoteout .35s ease forwards}
+@keyframes lknotein{from{transform:translateY(-130%);opacity:0}to{transform:none;opacity:1}}
+@keyframes lknoteout{from{transform:none;opacity:1}to{transform:translateY(-130%);opacity:0}}
+.lk-note-ic{width:38px;height:38px;border-radius:10px;flex:none;display:grid;place-items:center;background:linear-gradient(180deg,#FFD60A,#FF9F0A)}
+.lk-note-ic svg{width:20px;height:20px;fill:#fff}
+.lk-note-body{flex:1;min-width:0}
+.lk-note-top{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:#0A2540}
+.lk-note-top span{font-size:12px;color:#6B7A90}
+.lk-note-body p{margin:3px 0 2px;font-size:14px;line-height:1.4;color:#1C2A3D}
+.lk-note-body small{font-size:12.5px;color:#6B7A90}
+.lk-note-x{appearance:none;border:0;background:rgba(10,37,64,.06);width:22px;height:22px;border-radius:50%;font-size:15px;line-height:1;color:#6B7A90;cursor:pointer;flex:none}
+@media (prefers-reduced-motion:reduce){.lk-note.in{animation:none;transform:none;opacity:1}.lk-note.out{animation:none;opacity:0}}
+@media (max-width:560px){.lk-card{padding:24px 20px 20px}.lk-note{top:10px;right:10px}}
+
+/* ===== Login · Misty Forest (matches option 14 mockup) ===== */
+.gate.lockgate{justify-content:space-between!important;padding:66px 20px 56px!important;background:#E6F0EB!important;isolation:isolate}
+.gate.lockgate>.lk-wall{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.gate.lockgate .lk-clock{margin:0 0 24px}
+.gate.lockgate .lk-date{font-size:17px;font-weight:500;color:#2C3E55}
+.gate.lockgate .lk-time{font-size:96px;font-weight:700;letter-spacing:-.05em;line-height:1;color:#14253F}
+.gate.lockgate .lk-card{width:min(420px,100%);padding:22px 26px;border-radius:28px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);box-shadow:0 30px 60px -30px rgba(20,30,50,.55);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%)}
+.gate.lockgate .lk-head-row{flex-direction:row;align-items:center;text-align:left;gap:12px;margin-bottom:16px}
+.lk-logo{width:40px;height:40px;border-radius:12px;flex:none;background:linear-gradient(180deg,#5AC8FA,#0A84FF);display:grid;place-items:center;box-shadow:0 8px 18px -8px rgba(10,132,255,.7)}
+.lk-logo svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round}
+.gate.lockgate .lk-head-row h1{margin:0;font-size:17px;font-weight:700;color:#0A2540;letter-spacing:-.01em;line-height:1.3}
+.gate.lockgate .lk-head-row p{margin:0;font-size:12.5px;color:#6B7A90}
+.gate.lockgate .lk-foot{display:none}
+.gate.lockgate .lk-input{background:rgba(255,255,255,.72)}
+@media (max-height:720px){.gate.lockgate{padding:36px 20px 32px!important}.gate.lockgate .lk-time{font-size:72px}}
+@media (max-width:560px){.gate.lockgate{justify-content:center!important;padding:80px 16px 32px!important}.gate.lockgate .lk-time{font-size:72px}}
+/* notification (mockup style, slides in from the right like macOS) */
+.lk-note{top:18px!important;right:18px!important;left:auto!important;width:min(360px,calc(100% - 36px))!important;display:flex!important;gap:12px!important;align-items:center!important;padding:13px 15px!important;border-radius:20px!important;background:rgba(255,255,255,.75)!important;border:1px solid #fff!important;box-shadow:0 18px 40px -16px rgba(20,40,90,.45)!important;-webkit-backdrop-filter:blur(30px) saturate(200%)!important;backdrop-filter:blur(30px) saturate(200%)!important;cursor:default}
+.lk-note[hidden]{display:none!important}
+.gate.lockgate .lk-note:not(.in):not(.out){transform:translateX(calc(100% + 40px))}
+.gate.lockgate .lk-note.in{opacity:1}
+.lk-note.in{animation:lkmacin .7s cubic-bezier(.16,1.24,.42,1) forwards!important}
+.lk-note.out{animation:lkmacout .32s cubic-bezier(.5,0,.75,0) forwards!important}
+@keyframes lkmacin{from{transform:translateX(calc(100% + 40px))}to{transform:translateX(0)}}
+@keyframes lkmacout{from{transform:translateX(0);opacity:1}to{transform:translateX(calc(100% + 40px));opacity:.6}}
+.lk-note .lk-note-ic{width:36px!important;height:36px!important;border-radius:10px!important;background:linear-gradient(180deg,#FFD60A,#FF9F0A)!important;color:#fff;font-size:20px;font-weight:800;line-height:1;display:grid;place-items:center;padding-top:6px;box-sizing:border-box}
+.lk-note .lk-note-body b{display:block;font-size:13px;font-weight:700;color:#0A2540}
+.lk-note .lk-note-body p{margin:2px 0 0!important;font-size:13.5px!important;line-height:1.35!important;color:#33415C!important}
+.lk-note .lk-note-body small{font-size:13.5px!important;color:#33415C!important}
+.lk-note .lk-note-x{position:absolute;top:-7px;left:-7px;width:20px!important;height:20px!important;border-radius:50%;background:rgba(246,246,248,.95)!important;border:.5px solid rgba(0,0,0,.14)!important;box-shadow:0 1px 3px rgba(0,0,0,.15);font-size:13px!important;color:#6E6E73!important;opacity:0;transition:opacity .15s;display:grid;place-items:center;padding:0}
+.lk-note:hover .lk-note-x,.lk-note:focus-within .lk-note-x{opacity:1}
+@media (hover:none){.lk-note .lk-note-x{opacity:1}}
+@media (prefers-reduced-motion:reduce){.lk-note.in{animation:none!important;transform:none}.lk-note.out{animation:none!important;opacity:0}}
 </style>
 </head>
 <body>
@@ -2679,215 +2762,62 @@ a.ed-card:hover{background:rgba(255,255,255,.62);color:#0A2540}
 </header>
 <main class="wrap" id="app"></main>
 
-<div class="gate" id="gate">
-  <canvas id="sky" aria-hidden="true"></canvas>
-  <div class="aurora" aria-hidden="true"></div>
-  <div class="moon" aria-hidden="true"></div>
-  <div class="drift d1" aria-hidden="true"><svg viewBox="0 0 200 70"><g fill="#FFFFFF"><circle cx="50" cy="45" r="25"/><circle cx="90" cy="32" r="32"/><circle cx="135" cy="42" r="26"/><rect x="25" y="45" width="135" height="25" rx="12"/></g></svg></div>
-  <div class="drift d2" aria-hidden="true"><svg viewBox="0 0 200 70"><g fill="#FFFFFF"><circle cx="60" cy="42" r="24"/><circle cx="100" cy="30" r="28"/><circle cx="140" cy="44" r="22"/><rect x="36" y="44" width="124" height="24" rx="12"/></g></svg></div>
-  <div class="drift d3" aria-hidden="true"><svg viewBox="0 0 200 70"><g fill="#FFE3F2"><circle cx="45" cy="45" r="25"/><circle cx="85" cy="30" r="30"/><circle cx="128" cy="38" r="28"/><circle cx="165" cy="48" r="20"/><rect x="20" y="45" width="160" height="25" rx="12"/></g></svg></div>
-  <div class="fx" id="fx" aria-hidden="true"></div>
-  <div class="gate-inner">
-    <div class="scene" aria-hidden="true">
-      <svg viewBox="0 0 520 420">
-        <defs>
-          <linearGradient id="hornG" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFE38A"/><stop offset=".55" stop-color="#FFF6C9"/><stop offset="1" stop-color="#F7B733"/></linearGradient>
-          <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFF6C9" stop-opacity=".55"/><stop offset="1" stop-color="#FFF6C9" stop-opacity="0"/></radialGradient>
-        </defs>
-        <circle cx="300" cy="190" r="170" fill="url(#halo)"/>
-        <g class="rb" transform="translate(0,6)">
-          <path d="M60 330 A200 200 0 0 1 460 330" stroke="#FF9EC7"/>
-          <path d="M76 330 A184 184 0 0 1 444 330" stroke="#FFC48A"/>
-          <path d="M92 330 A168 168 0 0 1 428 330" stroke="#FFE88A"/>
-          <path d="M108 330 A152 152 0 0 1 412 330" stroke="#9EF0C0"/>
-          <path d="M124 330 A136 136 0 0 1 396 330" stroke="#9CCBFF"/>
-          <path d="M140 330 A120 120 0 0 1 380 330" stroke="#C9A8FF"/>
-        </g>
-        <g id="uniMove"><g class="uni">
-          <g transform="translate(124,88) scale(1.16)">
-            <g class="uni-body">
-              <g class="tail">
-                <circle cx="60" cy="98" r="13" fill="#C9A8FF"/>
-                <circle cx="48" cy="106" r="15" fill="#FF9EC7"/>
-                <circle cx="36" cy="120" r="14" fill="#FFC48A"/>
-                <circle cx="30" cy="136" r="13" fill="#FFE88A"/>
-                <circle cx="33" cy="152" r="12" fill="#9EF0C0"/>
-                <circle cx="42" cy="165" r="10" fill="#9CCBFF"/>
-              </g>
-              <g class="leg" data-px="81" data-py="132" data-ph="3.14"><rect x="72" y="126" width="18" height="56" rx="9" fill="#EDE3F9"/><rect x="72" y="171" width="18" height="12" rx="5" fill="#E89BC4"/></g>
-              <g class="leg" data-px="139" data-py="132" data-ph="3.74"><rect x="130" y="126" width="18" height="56" rx="9" fill="#EDE3F9"/><rect x="130" y="171" width="18" height="12" rx="5" fill="#E89BC4"/></g>
-              <ellipse cx="108" cy="118" rx="57" ry="39" fill="#FFFFFF"/>
-              <ellipse cx="112" cy="134" rx="40" ry="17" fill="#F4EDFC"/>
-              <g class="leg" data-px="97" data-py="134" data-ph="0"><rect x="88" y="128" width="18" height="56" rx="9" fill="#FFFFFF"/><rect x="88" y="173" width="18" height="12" rx="5" fill="#F2A7CF"/></g>
-              <g class="leg" data-px="155" data-py="132" data-ph="0.6"><rect x="146" y="126" width="18" height="56" rx="9" fill="#FFFFFF"/><rect x="146" y="171" width="18" height="12" rx="5" fill="#F2A7CF"/></g>
-              <path d="M136 112 C140 86 148 66 160 52 L192 66 C184 84 176 104 170 126 Z" fill="#FFFFFF"/>
-              <circle cx="178" cy="56" r="29" fill="#FFFFFF"/>
-              <ellipse cx="203" cy="73" rx="20" ry="15.5" transform="rotate(22 203 73)" fill="#FFE2F1"/>
-              <path d="M158 38 L162 10 L178 33 Z" fill="#FFFFFF"/>
-              <path d="M163 32 L165 18 L172 31 Z" fill="#F9C6E0"/>
-              <g class="mane">
-                <circle cx="163" cy="30" r="12" fill="#FF9EC7"/>
-                <circle cx="149" cy="44" r="13.5" fill="#FFC48A"/>
-                <circle cx="140" cy="62" r="13.5" fill="#FFE88A"/>
-                <circle cx="134" cy="80" r="13" fill="#9EF0C0"/>
-                <circle cx="130" cy="98" r="12" fill="#9CCBFF"/>
-                <circle cx="128" cy="114" r="10" fill="#C9A8FF"/>
-              </g>
-              <circle cx="176" cy="30" r="10" fill="#C9A8FF"/>
-              <circle cx="185" cy="35" r="7" fill="#FF9EC7"/>
-              <path d="M181 32 L206 -6 L194 38 Z" fill="url(#hornG)"/>
-              <path d="M186 25 L198 21 M190 17 L201 13 M195 9 L203 6" stroke="#E9A21C" stroke-width="2" stroke-linecap="round"/>
-              <path class="shine" d="M188 30 L203 0" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"/>
-              <ellipse cx="187" cy="55" rx="6.4" ry="8" fill="#FFFFFF"/><g id="look"><g class="lid"><ellipse cx="187" cy="55" rx="5.2" ry="7" fill="#3B2A5C"/><circle cx="189" cy="52" r="2.1" fill="#FFFFFF"/></g></g><path class="shut" d="M180.5 55.5 Q187 49.5 193.5 55.5" stroke="#3B2A5C" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-              <path d="M182 47 L179 43 M185.5 46 L184.5 41.5" stroke="#3B2A5C" stroke-width="1.8" stroke-linecap="round"/>
-              <ellipse cx="197" cy="67" rx="6" ry="3.6" fill="#FF9EC7" opacity=".7"/><ellipse class="blush" cx="197" cy="67" rx="7.5" ry="4.4" fill="#FF7FB6" opacity="0"/>
-              <ellipse cx="213" cy="75" rx="2.4" ry="1.8" fill="#E089B8"/>
-              <path d="M199 84 Q205 88 211 83" stroke="#C86A9E" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </g>
-            <path class="twk" d="M206 -26 L209 -15 L220 -12 L209 -9 L206 2 L203 -9 L192 -12 L203 -15 Z" fill="#FFF6C9"/>
-            <path class="twk b" d="M232 6 L234 12 L240 14 L234 16 L232 22 L230 16 L224 14 L230 12 Z" fill="#FFFFFF"/>
-            <path class="twk b" d="M-6 60 L-4 66 L2 68 L-4 70 L-6 76 L-8 70 L-14 68 L-8 66 Z" fill="#FFE88A"/>
-          </g>
-        </g></g>
-        <g class="puff">
-          <ellipse cx="266" cy="398" rx="150" ry="14" fill="#3B1F72" opacity=".25"/>
-          <g fill="#FFFFFF">
-            <circle cx="160" cy="364" r="30"/><circle cx="208" cy="346" r="38"/><circle cx="262" cy="338" r="40"/><circle cx="318" cy="346" r="38"/><circle cx="366" cy="364" r="28"/>
-            <rect x="130" y="362" width="266" height="32" rx="16"/>
-          </g>
-          <g fill="#F4E8FF"><circle cx="196" cy="380" r="15"/><circle cx="290" cy="382" r="17"/></g>
-        </g>
-      </svg>
-    </div>
-
-    <div class="card-float"><div class="gate-card checking" id="gateCard">
-      <svg class="tsp" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z" fill="#FFF2A1"/></svg>
-      <svg class="tsp b" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z" fill="#FFB3D9"/></svg>
-      <div class="gate-brand"><svg class="brand-mark" viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="5" y="9" width="5" height="6" rx="1" fill="currentColor"/><rect x="16" y="9" width="5" height="6" rx="1" fill="currentColor"/><path d="M10 12h6" stroke="currentColor" stroke-width="1.6"/><circle cx="20" cy="5.5" r="1.6" fill="#9EF0C0"/></svg>JS Learning</div>
-      <h1>Welcome back</h1>
-      <p class="sub">Sign in to continue your learning journey.</p>
-      <div class="waking" role="status"><i></i><i></i><i></i>Waking the unicorn…</div>
-      <form class="gform" id="loginForm" novalidate>
-        <div class="gfield"><label for="email">Email</label>
-          <div class="ginput"><svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></svg><input id="email" type="email" autocomplete="username" placeholder="you@example.com" required></div></div>
-        <div class="gfield"><label for="password">Password</label>
-          <div class="ginput"><svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><input id="password" type="password" autocomplete="current-password" placeholder="Your password" required>
-            <button class="peek" id="peek" type="button" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
-        <button class="go" id="loginBtn" type="submit"><svg viewBox="0 0 24 24" fill="#2A1650" aria-hidden="true"><path d="M12 2l2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2z"/></svg><span>Sign in</span></button>
-        <p class="gate-msg" id="gateMsg" role="status"></p>
-      </form>
-      <div class="gate-foot">Private workbook · invited accounts only</div>
-    </div></div>
+<div class="gate lockgate" id="gate">
+  <svg class="lk-wall" viewBox="0 0 1333 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><defs><linearGradient id="lkSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DDEBE4"/><stop offset="1" stop-color="#F4F8F5"/></linearGradient></defs><rect width="1333" height="760" fill="url(#lkSky)"/><g fill="#A9C5B6" opacity="0.7"><path d="M-70 430 l35 -150 l35 150ZM0 430 l35 -150 l35 150ZM70 430 l35 -150 l35 150ZM140 430 l35 -150 l35 150ZM210 430 l35 -150 l35 150ZM280 430 l35 -150 l35 150ZM350 430 l35 -150 l35 150ZM420 430 l35 -150 l35 150ZM490 430 l35 -150 l35 150ZM560 430 l35 -150 l35 150ZM630 430 l35 -150 l35 150ZM700 430 l35 -150 l35 150ZM770 430 l35 -150 l35 150ZM840 430 l35 -150 l35 150ZM910 430 l35 -150 l35 150ZM980 430 l35 -150 l35 150ZM1050 430 l35 -150 l35 150ZM1120 430 l35 -150 l35 150ZM1190 430 l35 -150 l35 150ZM1260 430 l35 -150 l35 150ZM1330 430 l35 -150 l35 150ZM1400 430 l35 -150 l35 150Z"/><rect y="430" width="1333" height="330"/></g><g fill="#7FA591" opacity="0.85"><path d="M-40 520 l35 -170 l35 170ZM30 520 l35 -170 l35 170ZM100 520 l35 -170 l35 170ZM170 520 l35 -170 l35 170ZM240 520 l35 -170 l35 170ZM310 520 l35 -170 l35 170ZM380 520 l35 -170 l35 170ZM450 520 l35 -170 l35 170ZM520 520 l35 -170 l35 170ZM590 520 l35 -170 l35 170ZM660 520 l35 -170 l35 170ZM730 520 l35 -170 l35 170ZM800 520 l35 -170 l35 170ZM870 520 l35 -170 l35 170ZM940 520 l35 -170 l35 170ZM1010 520 l35 -170 l35 170ZM1080 520 l35 -170 l35 170ZM1150 520 l35 -170 l35 170ZM1220 520 l35 -170 l35 170ZM1290 520 l35 -170 l35 170ZM1360 520 l35 -170 l35 170ZM1430 520 l35 -170 l35 170Z"/><rect y="520" width="1333" height="240"/></g><g fill="#4F7A66" opacity="1"><path d="M-60 620 l35 -190 l35 190ZM10 620 l35 -190 l35 190ZM80 620 l35 -190 l35 190ZM150 620 l35 -190 l35 190ZM220 620 l35 -190 l35 190ZM290 620 l35 -190 l35 190ZM360 620 l35 -190 l35 190ZM430 620 l35 -190 l35 190ZM500 620 l35 -190 l35 190ZM570 620 l35 -190 l35 190ZM640 620 l35 -190 l35 190ZM710 620 l35 -190 l35 190ZM780 620 l35 -190 l35 190ZM850 620 l35 -190 l35 190ZM920 620 l35 -190 l35 190ZM990 620 l35 -190 l35 190ZM1060 620 l35 -190 l35 190ZM1130 620 l35 -190 l35 190ZM1200 620 l35 -190 l35 190ZM1270 620 l35 -190 l35 190ZM1340 620 l35 -190 l35 190ZM1410 620 l35 -190 l35 190Z"/><rect y="620" width="1333" height="140"/></g><g fill="#2E5545" opacity="1"><path d="M-30 720 l35 -200 l35 200ZM40 720 l35 -200 l35 200ZM110 720 l35 -200 l35 200ZM180 720 l35 -200 l35 200ZM250 720 l35 -200 l35 200ZM320 720 l35 -200 l35 200ZM390 720 l35 -200 l35 200ZM460 720 l35 -200 l35 200ZM530 720 l35 -200 l35 200ZM600 720 l35 -200 l35 200ZM670 720 l35 -200 l35 200ZM740 720 l35 -200 l35 200ZM810 720 l35 -200 l35 200ZM880 720 l35 -200 l35 200ZM950 720 l35 -200 l35 200ZM1020 720 l35 -200 l35 200ZM1090 720 l35 -200 l35 200ZM1160 720 l35 -200 l35 200ZM1230 720 l35 -200 l35 200ZM1300 720 l35 -200 l35 200ZM1370 720 l35 -200 l35 200ZM1440 720 l35 -200 l35 200Z"/><rect y="720" width="1333" height="40"/></g></svg>
+  <div class="lk-clock" aria-hidden="true"><div class="lk-date" id="lkDate"></div><div class="lk-time" id="lkTime"></div></div>
+  <div class="lk-card" id="gateCard">
+    <div class="lk-head lk-head-row"><span class="lk-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5l-6 5.5M12 11.5l6 5.5"/></svg></span><div><h1>JS Learning</h1><p>Sign in to continue</p></div></div>
+    <form class="lk-form" id="loginForm" novalidate>
+      <label class="lk-field"><span>Email</span><span class="lk-input"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><input id="email" type="email" autocomplete="username" placeholder="you@example.com" required></span></label>
+      <label class="lk-field"><span>Password</span><span class="lk-input"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><input id="password" type="password" autocomplete="current-password" placeholder="Your password" required><button class="lk-peek" id="peek" type="button" aria-pressed="false" aria-label="Show password">Show</button></span></label>
+      <button class="lk-go" id="loginBtn" type="submit"><span>Sign in</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <p class="gate-msg lk-msg" id="gateMsg" role="status"></p>
+    </form>
+    <div class="lk-foot">Approved accounts only</div>
+  </div>
+  <div class="lk-note" id="quoteNote" role="status" aria-live="polite" hidden>
+    <button type="button" class="lk-note-x" id="quoteClose" aria-label="Dismiss quote">×</button>
+    <span class="lk-note-ic" aria-hidden="true">“</span>
+    <div class="lk-note-body"><b id="quoteTitle">Quote of the day</b><p><span id="quoteText"></span> <small id="quoteBy"></small></p></div>
   </div>
 </div>
 <script>
 (function(){
   var gate=document.getElementById('gate'); if(!gate) return;
-  var card=document.getElementById('gateCard'), scene=gate.querySelector('.scene');
+  var card=document.getElementById('gateCard'), msg=document.getElementById('gateMsg');
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var COLORS=['#FF9EC7','#FFC48A','#FFE88A','#9EF0C0','#9CCBFF','#C9A8FF','#FFFFFF'];
-  /* starfield + shooting stars */
-  var cv=document.getElementById('sky'), cx=cv.getContext('2d'), W=0,H=0, stars=[], shoot=null;
-  function size(){var d=Math.min(window.devicePixelRatio||1,2); W=cv.clientWidth; H=cv.clientHeight; cv.width=W*d; cv.height=H*d; cx.setTransform(d,0,0,d,0,0);
-    stars=[]; var n=Math.round(W*H/5200); for(var i=0;i<n;i++) stars.push({x:Math.random()*W,y:Math.random()*H*.78,r:Math.random()*1.3+.3,p:Math.random()*6.28,s:.4+Math.random()*1.6}); draw(0);}
-  function draw(t){cx.clearRect(0,0,W,H);
-    for(var i=0;i<stars.length;i++){var s=stars[i]; cx.globalAlpha=reduce?.7:.3+.7*Math.abs(Math.sin(s.p+t/1000*s.s)); cx.fillStyle='#FFFFFF'; cx.beginPath(); cx.arc(s.x,s.y,s.r,0,6.283); cx.fill();}
-    if(!reduce){ if(!shoot&&Math.random()<.005) shoot={x:Math.random()*W*.6+W*.1,y:Math.random()*H*.3,k:0};
-      if(shoot){shoot.k++; var k=shoot.k, x=shoot.x+k*8, y=shoot.y+k*3.2, g=cx.createLinearGradient(x,y,x-110,y-44); g.addColorStop(0,'rgba(255,255,255,.95)'); g.addColorStop(1,'rgba(255,255,255,0)');
-        cx.globalAlpha=Math.max(0,1-k/50); cx.strokeStyle=g; cx.lineWidth=2; cx.beginPath(); cx.moveTo(x,y); cx.lineTo(x-110,y-44); cx.stroke(); if(k>50) shoot=null;}}
-    cx.globalAlpha=1;}
-  function loop(t){ if(!gate.hidden) draw(t); requestAnimationFrame(loop);}
-  size(); window.addEventListener('resize',size); if(!reduce) requestAnimationFrame(loop);
-  /* sparkles */
-  function sparkle(host,x,y,dx,dy,dur,sc){var e=document.createElement('i'); e.className='spk';
-    e.style.cssText='left:'+x+'px;top:'+y+'px;--c:'+COLORS[Math.floor(Math.random()*COLORS.length)]+';--dx:'+dx+'px;--dy:'+dy+'px;--s:'+sc+';animation-duration:'+dur+'ms';
-    host.appendChild(e); setTimeout(function(){e.remove();},dur+60);}
-  if(!reduce) setInterval(function(){ if(gate.hidden||document.hidden) return; var r=scene.getBoundingClientRect(); if(!r.width) return;
-    sparkle(scene, r.width*(.15+Math.random()*.7), r.height*(.25+Math.random()*.55), (Math.random()-.5)*50, -(50+Math.random()*90), 1800+Math.random()*1400, .5+Math.random()*.8);},240);
-  /* parallax */
-  /* show/hide password */
+  /* live clock */
+  function tick(){var d=new Date();document.getElementById('lkTime').textContent=d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',hour12:false});document.getElementById('lkDate').textContent=d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'});}
+  tick(); setInterval(tick,15000);
+  /* show / hide password */
   var peek=document.getElementById('peek'), pw=document.getElementById('password');
-  peek.addEventListener('click',function(){var on=pw.type==='password'; pw.type=on?'text':'password'; peek.setAttribute('aria-pressed',on); peek.setAttribute('aria-label',on?'Hide password':'Show password');});
-  var fx=document.getElementById('fx');
-  function fxSpark(x,y,dx,dy,dur,sc){var e=document.createElement('i'); e.className='spk'; e.style.cssText='left:'+x+'px;top:'+y+'px;--c:'+COLORS[Math.floor(Math.random()*COLORS.length)]+';--dx:'+dx+'px;--dy:'+dy+'px;--s:'+sc+';animation-duration:'+dur+'ms'; fx.appendChild(e); setTimeout(function(){e.remove();},dur+60);}
-  function burstAt(x,y,n){for(var i=0;i<n;i++){var a=Math.random()*6.283, d=40+Math.random()*90; fxSpark(x,y,Math.cos(a)*d,Math.sin(a)*d-20,800+Math.random()*700,.5+Math.random()*.9);}}
-  if(!reduce){
-    /* rising glow bubbles */
-    setInterval(function(){ if(gate.hidden||document.hidden) return; var e=document.createElement('i'), sz=5+Math.random()*12, d=9000+Math.random()*7000; e.className='bub';
-      e.style.cssText='left:'+(Math.random()*100)+'vw;width:'+sz+'px;height:'+sz+'px;--c:'+COLORS[Math.floor(Math.random()*6)]+';--sw:'+((Math.random()-.5)*120)+'px;animation-duration:'+d+'ms';
-      fx.appendChild(e); setTimeout(function(){e.remove();},d+100);},650);
-    /* rainbow trail from the tail */
-    var tail=gate.querySelector('.tail'), ti=0;
-    setInterval(function(){ if(gate.hidden||document.hidden) return; var r=tail.getBoundingClientRect(); if(!r.width) return; var e=document.createElement('i'), sz=6+Math.random()*7;
-      e.className='trl'; e.style.cssText='left:'+(r.left+r.width*.2)+'px;top:'+(r.top+r.height*(.25+Math.random()*.6))+'px;width:'+sz+'px;height:'+sz+'px;--c:'+COLORS[ti++%6]+';--dy:'+((Math.random()-.5)*30);
-      fx.appendChild(e); setTimeout(function(){e.remove();},1150);},90);
-    /* tap anywhere for sparkles */
-    gate.addEventListener('pointerdown',function(e){ if(e.target.closest('input,button')) return; burstAt(e.clientX,e.clientY,12);});
-    /* sparkles while typing */
-    ['email','password'].forEach(function(id){var el=document.getElementById(id); el.addEventListener('input',function(){var r=el.getBoundingClientRect(); for(var i=0;i<3;i++) fxSpark(r.left+Math.min(r.width-50,40+el.value.length*9),r.top+r.height/2,(Math.random()-.5)*40,-(20+Math.random()*40),700+Math.random()*400,.5+Math.random()*.4);});});
-  }
-  /* the unicorn politely looks away while you type your password */
-  pw.addEventListener('focus',function(){ if(pw.type==='password') gate.classList.add('shy');});
-  pw.addEventListener('blur',function(){gate.classList.remove('shy');});
-  peek.addEventListener('click',function(){gate.classList.toggle('shy',pw.type==='password'&&document.activeElement===pw);});
-  /* ---- smooth motion engine: one rAF loop drives the unicorn ---- */
-  var mover=document.getElementById('uniMove'), tailG=gate.querySelector('.tail'), maneG=gate.querySelector('.mane'), look=document.getElementById('look'), eyeEl=gate.querySelector('.lid');
-  var legs=[].slice.call(gate.querySelectorAll('.leg')).map(function(g){return {g:g,px:+g.dataset.px,py:+g.dataset.py,ph:+g.dataset.ph};});
-  var M={start:0,last:performance.now(),phase:0,leave:0,leaveRes:null,ptx:0,pty:0,px:0,py:0,etx:0,ety:0,ex:0,ey:0};
-  var ENTER=2.6;
-  function ease(p){return p<0?0:p>1?1:1-Math.pow(1-p,4);}
-  function smooth(p){p=p<0?0:p>1?1:p; return p*p*(3-2*p);}
-  gate.addEventListener('pointermove',function(e){
-    M.ptx=(e.clientX/window.innerWidth-.5)*16; M.pty=(e.clientY/window.innerHeight-.5)*10;
-    var r=eyeEl.getBoundingClientRect(); if(!r.width) return; var vx=e.clientX-(r.left+r.width/2), vy=e.clientY-(r.top+r.height/2), L=Math.hypot(vx,vy)||1, k=Math.min(1.8,L/80);
-    M.etx=vx/L*k; M.ety=vy/L*k*1.2;});
-  function step(now){
-    var dt=Math.min(.05,(now-M.last)/1000); M.last=now;
-    var t=(now-M.start)/1000, x=0,y=0,rot=0,gait=0,speed=7;
-    if(M.leave){
-      var lt=(now-M.leave)/1000, a=smooth(lt/1.1);
-      gait=1; speed=11;
-      x=lt*lt*520; y=-a*150+Math.sin(t*1.3)*9; rot=-9*a;
-      if(lt>1.15&&M.leaveRes){var r=M.leaveRes; M.leaveRes=null; r();}
-    }else{
-      var p=t/ENTER, e=ease(p);
-      x=-430*(1-e);
-      gait=1-smooth((p-.35)/.65);
-      var floatIn=smooth((t-ENTER*.55)/1.2);
-      y=Math.sin(t*1.35)*10*floatIn - gait*7*(.5-.5*Math.cos(2*M.phase));
-      rot=Math.sin(t*.7)*1.6*floatIn + gait*Math.sin(M.phase*2)*1.2;
-    }
-    M.phase+=dt*speed*(0.25+gait);
-    var idle=1-gait;
-    mover.setAttribute('transform','translate('+x.toFixed(2)+' '+y.toFixed(2)+') rotate('+rot.toFixed(2)+' 280 240)');
-    for(var i=0;i<legs.length;i++){var L=legs[i], ang=Math.sin(M.phase+L.ph)*26*gait + Math.sin(t*1.6+L.ph)*3*idle; L.g.setAttribute('transform','rotate('+ang.toFixed(2)+' '+L.px+' '+L.py+')');}
-    tailG.setAttribute('transform','rotate('+(Math.sin(t*2-0.6)*7+Math.sin(M.phase-0.9)*12*gait).toFixed(2)+' 62 98)');
-    maneG.setAttribute('transform','rotate('+(Math.sin(t*1.7-0.3)*2.4+Math.sin(M.phase-0.5)*3*gait).toFixed(2)+' 160 34)');
-    M.px+=(M.ptx-M.px)*Math.min(1,dt*3); M.py+=(M.pty-M.py)*Math.min(1,dt*3);
-    scene.style.transform='translate3d('+M.px.toFixed(2)+'px,'+M.py.toFixed(2)+'px,0)';
-    M.ex+=(M.etx-M.ex)*Math.min(1,dt*8); M.ey+=(M.ety-M.ey)*Math.min(1,dt*8);
-    look.setAttribute('transform','translate('+M.ex.toFixed(2)+' '+M.ey.toFixed(2)+')');
-  }
-  function run(now){ if(!M.start){M.start=now; M.last=now;} if(!gate.hidden&&!document.hidden) step(now); else M.last=now; requestAnimationFrame(run);}
-  if(!reduce) requestAnimationFrame(run);
-  var msg=document.getElementById('gateMsg');
+  peek.addEventListener('click',function(){var on=pw.type==='password'; pw.type=on?'text':'password'; peek.textContent=on?'Hide':'Show'; peek.setAttribute('aria-pressed',on); peek.setAttribute('aria-label',on?'Hide password':'Show password');});
+  /* quote of the day: a different quote each calendar day, shown as a notification on the login screen */
+  var Q=[["The expert in anything was once a beginner.", "Helen Hayes"], ["Learning never exhausts the mind.", "Leonardo da Vinci"], ["It always seems impossible until it’s done.", "Nelson Mandela"], ["The beautiful thing about learning is that nobody can take it away from you.", "B.B. King"], ["Success is the sum of small efforts, repeated day in and day out.", "Robert Collier"], ["Live as if you were to die tomorrow. Learn as if you were to live forever.", "Mahatma Gandhi"], ["An investment in knowledge pays the best interest.", "Benjamin Franklin"], ["Education is the most powerful weapon which you can use to change the world.", "Nelson Mandela"], ["The more that you read, the more things you will know. The more that you learn, the more places you’ll go.", "Dr. Seuss"], ["Well begun is half done.", "Aristotle"], ["We are what we repeatedly do. Excellence, then, is not an act, but a habit.", "Will Durant"], ["Don’t watch the clock; do what it does. Keep going.", "Sam Levenson"], ["Anyone who stops learning is old, whether at twenty or eighty.", "Henry Ford"], ["The mind is not a vessel to be filled, but a fire to be kindled.", "Plutarch"], ["Start where you are. Use what you have. Do what you can.", "Arthur Ashe"], ["In learning you will teach, and in teaching you will learn.", "Phil Collins"], ["Change is the end result of all true learning.", "Leo Buscaglia"], ["You don’t have to be great to start, but you have to start to be great.", "Zig Ziglar"], ["Learning is not attained by chance; it must be sought for with ardor and attended to with diligence.", "Abigail Adams"], ["Develop a passion for learning. If you do, you will never cease to grow.", "Anthony J. D’Angelo"], ["Be not afraid of growing slowly; be afraid only of standing still.", "Chinese proverb"], ["The journey of a thousand miles begins with one step.", "Lao Tzu"], ["Growth is never by mere chance; it is the result of forces working together.", "James Cash Penney"], ["The capacity to learn is a gift; the ability to learn is a skill; the willingness to learn is a choice.", "Brian Herbert"], ["Knowledge is power.", "Francis Bacon"], ["I am always ready to learn, although I do not always like being taught.", "Winston Churchill"], ["Study hard what interests you the most in the most undisciplined, irreverent and original manner possible.", "Richard Feynman"], ["Strive for progress, not perfection.", "Study proverb"], ["A little progress each day adds up to big results.", "Satya Nani"], ["Mistakes are proof that you are trying.", "Study proverb"], ["What we learn with pleasure we never forget.", "Alfred Mercier"]];
+  var day=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5), q=Q[day%Q.length], note=document.getElementById('quoteNote'), noteT=null;
+  document.getElementById('quoteText').textContent='“'+q[0]+'”'; document.getElementById('quoteBy').textContent='— '+q[1];
+  function showNote(){ if(gate.hidden) return; note.hidden=false; note.classList.remove('out'); void note.offsetWidth; note.classList.add('in'); clearTimeout(noteT); noteT=setTimeout(hideNote,12000);}
+  function hideNote(){ note.classList.remove('in'); note.classList.add('out'); setTimeout(function(){note.hidden=true;},400);}
+  document.getElementById('quoteClose').addEventListener('click',hideNote);
+  note.addEventListener('mouseenter',function(){clearTimeout(noteT);}); note.addEventListener('mouseleave',function(){clearTimeout(noteT); noteT=setTimeout(hideNote,4000);});
+  /* boot diagnostics (unchanged behaviour) */
   var bootErr='';
   window.addEventListener('error',function(e){ if(!window.__p2cLoaded&&e&&e.message) bootErr=e.message; });
   function bootProblem(){
     var hint=/already been declared/i.test(bootErr)?'"const firebaseConfig" appears twice. Keep only the block Firebase gave you.'
       :/Unexpected|SyntaxError|missing|Invalid or unexpected/i.test(bootErr)?'The Firebase settings were pasted with a typo (a missing quote, comma or bracket).'
       :'The sign-in code could not load. Check your internet connection, and that the Firebase settings at the top of index.html were pasted correctly.';
-    msg.textContent='Sign-in could not start. '+hint+(bootErr?' ('+bootErr+')':''); msg.className='gate-msg bad';
+    msg.textContent='Sign-in could not start. '+hint+(bootErr?' ('+bootErr+')':''); msg.className='gate-msg lk-msg bad';
   }
   document.getElementById('loginForm').addEventListener('submit',function(e){ e.preventDefault(); if(!window.__p2cLoaded){ bootProblem(); window.gateFX.shake(); }});
   window.gateFX={
-    ready:function(){card.classList.remove('checking');},
-    burst:function(el){ if(reduce) return; var r=el.getBoundingClientRect(); burstAt(r.left+r.width/2,r.top+r.height/2,24);},
+    ready:function(){card.classList.remove('checking'); setTimeout(showNote,reduce?0:700);},
+    burst:function(){},
     shake:function(){card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');},
-    leave:function(){return new Promise(function(res){ if(reduce){res();return;} gate.classList.add('leaving'); M.leaveRes=res; M.leave=performance.now(); setTimeout(function(){ if(M.leaveRes){M.leaveRes=null; res();}},1800);});},
-    reset:function(){gate.classList.remove('leaving'); gate.style.opacity=''; M.leave=0; M.start=performance.now()-ENTER*1000;}
+    leave:function(){return new Promise(function(res){ hideNote(); if(reduce){res();return;} gate.classList.add('leaving'); setTimeout(res,450);});},
+    reset:function(){gate.classList.remove('leaving'); tick(); setTimeout(showNote,reduce?0:700);}
   };
-  setTimeout(function(){ if(card.classList.contains('checking')){ card.classList.remove('checking'); if(!window.__p2cLoaded) bootProblem(); }},6000);
+  setTimeout(function(){ if(!window.__p2cLoaded) bootProblem(); },6000);
 })();
 </script>
 <script type="module">
@@ -3693,8 +3623,8 @@ if(!configured){
 }else{
   onAuthStateChanged(auth,async user=>{
     FX.ready();
-    if(user){ if(!ALLOWED_USER_UIDS.includes(user.uid)){await signOut(auth);say('This account is not approved for this private workbook.','bad');return;} if(justSubmitted){justSubmitted=false; await FX.leave();} showGate(false); window.scrollTo(0,0); startSession(user);}
-    else{ dbRef=null; v3uid=null; S=blank(); app.innerHTML=''; showGate(true); document.getElementById('password').value=''; }
+    if(user){ if(!ALLOWED_USER_UIDS.includes(user.uid)){await signOut(auth);say('This account is not approved for this private workbook.','bad');return;} if(justSubmitted){justSubmitted=false; await FX.leave();} else { let last=0; try{last=+localStorage.getItem('p2c-last-active')||0}catch(e){} if(last&&Date.now()-last>=10*60*1000){ await signOut(auth); say('Your session timed out after 10 minutes of inactivity. Please sign in again.',''); return; } } showGate(false); window.scrollTo(0,0); startSession(user); setTimeout(()=>idleReset(),0);}
+    else{ dbRef=null; v3uid=null; S=blank(); app.innerHTML=''; showGate(true); document.getElementById('password').value=''; clearTimeout(idleT); }
   });
 }
 document.getElementById('loginForm').addEventListener('submit',async e=>{
@@ -3708,6 +3638,15 @@ document.getElementById('loginForm').addEventListener('submit',async e=>{
   finally{btn.disabled=false; btn.querySelector('span').textContent='Sign in';}
 });
 document.getElementById('signout').onclick=async()=>{await flush(); await signOut(auth); go('dashboard');};
+/* ---------------- inactivity timeout: sign out after 10 minutes without activity ---------------- */
+const IDLE_MS=10*60*1000; let idleT=null, idleAt=Date.now();
+function idleReset(){ idleAt=Date.now(); try{localStorage.setItem('p2c-last-active',String(idleAt))}catch(e){} clearTimeout(idleT); if(dbRef) idleT=setTimeout(idleExpire,IDLE_MS); }
+async function idleExpire(){ if(!dbRef) return; let last=idleAt; try{last=Math.max(last,+localStorage.getItem('p2c-last-active')||0)}catch(e){}
+  if(Date.now()-last<IDLE_MS){ clearTimeout(idleT); idleT=setTimeout(idleExpire,IDLE_MS-(Date.now()-last)); return; }
+  try{await flush();}catch(e){} await signOut(auth); location.hash='dashboard'; say('You were signed out after 10 minutes of inactivity. Sign in again to continue.','');}
+let idleThrottle=0;
+['pointerdown','keydown','wheel','touchstart','mousemove','scroll'].forEach(ev=>window.addEventListener(ev,()=>{const n=Date.now(); if(n-idleThrottle>5000){idleThrottle=n; idleReset();}},{passive:true}));
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&dbRef){ let last=idleAt; try{last=Math.max(last,+localStorage.getItem('p2c-last-active')||0)}catch(e){} if(Date.now()-last>=IDLE_MS) idleExpire(); else idleReset(); }});
 </script>
 
 </body>

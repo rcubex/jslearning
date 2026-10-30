@@ -48,3 +48,21 @@ The Dashboard and the CISA Overview were rebuilt with large type, few boxes and 
   - The main card shows your next task with Read topic, Log a session and Review mistakes buttons. Beside it are four large numbers: topics covered, hours logged, readiness and mistakes due.
   - "Readiness by domain" is a clean list showing each domain's exam weight.
   - "Coming up" lists your next five planned sessions.
+
+## Update: new login, quote of the day, 10-minute timeout
+- **Lock-screen login.** The unicorn login page is replaced by a macOS-style lock screen: a live clock and date, a round "JS" avatar and a glass sign-in card. It has a Show/Hide password button, and Firebase sign-in works exactly as before.
+- **Quote of the day.** An Apple-style notification slides in at the top right of the login page. It shows a different quote each day, rotating through 31, and disappears after 12 seconds or when you tap ×.
+- **10-minute timeout.**
+  - After 10 minutes with no mouse, keyboard, scroll or touch activity, the app saves your progress, signs you out, and shows the login page with "You were signed out after 10 minutes of inactivity."
+  - The timer is shared across tabs, so working in one tab keeps the others signed in.
+  - Reopening the site after more than 10 minutes away also asks you to sign in again.
+
+## Update — Misty Forest login and Apple-style planner sheets
+- **Login:** the Misty Forest wallpaper (option 14), matching the mockup: pine layers, the clock at the top, the glass sign-in card with the logo on the left, and no footer.
+- **Quote notification:** slides in from the right like a macOS banner. It pauses while you hover over it, and a close button appears on hover. There are 31 study and growth quotes, one per day.
+- **CISA Study planner:**
+  - The tab now shows a minimal summary: plan name, dates, weekly hours, a timeline bar, four figures and the next four sessions.
+  - **View full plan** opens an Apple-style sheet with the whole plan, week by week. You can tick topics as done there.
+  - **Configure plan** opens a second sheet on top. It has plan type, dates, weekly hours and topic customisation (add, edit, reorder, include or exclude). **Save plan** recalculates the schedule and closes the sheet.
+  - Sheets have a blurred backdrop and a spring animation, and close on Esc, a backdrop click or ×.
+- Service worker cache: `p2c-theory-cisa-v23-forest`.
