@@ -2576,6 +2576,81 @@ a.ed-card:hover{background:rgba(255,255,255,.62);color:#0A2540}
 .cisa-hub .ed-hero+.ed-sect{margin-top:36px!important}
 @media (max-width:1100px){.ed-figures{grid-template-columns:repeat(2,minmax(0,1fr))}.ed-figures>*:nth-child(3){border-left:0}.ed-figures>*:nth-child(n+3){border-top:1px solid rgba(10,37,64,.07)}}
 @media (max-width:760px){.ed-hero{padding:24px 20px}.ed-ring,.ed-ring svg{width:110px!important;height:110px!important}.ed-ring b{font-size:26px}.ed-figures>*{padding:16px 18px}}
+
+/* ===== Compact v2: tuned for ~1000–1300px laptop windows ===== */
+@media (min-width:1000px){
+ :root[data-variant="tahoe"]{--side-w:244px}
+ :root[data-variant="tahoe"] #topbar{width:216px!important;padding:16px 10px 12px!important;gap:12px!important}
+ :root[data-variant="tahoe"] #topbar .side-head{padding:0 8px!important;row-gap:12px!important}
+ :root[data-variant="tahoe"] #topbar .brand{font-size:15px!important}
+ :root[data-variant="tahoe"] #topbar .tabs{gap:14px!important}
+ :root[data-variant="tahoe"] #topbar .nav-label{font-size:10.5px!important;padding:0 10px 4px!important}
+ :root[data-variant="tahoe"] #topbar .tab{min-height:32px!important;padding:6px 10px!important;font-size:13.5px!important;gap:10px!important}
+ :root[data-variant="tahoe"] #topbar .tab svg{width:16px!important;height:16px!important}
+ :root[data-variant="tahoe"] #topbar .side-foot{padding:12px 4px 0!important;gap:10px!important}
+ :root[data-variant="tahoe"] #topbar .acct #who{font-size:12px!important}
+ :root[data-variant="tahoe"] #topbar .side-btn{padding:7px!important;font-size:12.5px!important}
+ :root[data-variant="tahoe"] main#app.wrap{padding:26px 28px 72px 8px!important}
+ :root[data-variant="tahoe"] main#app.wrap>*{max-width:1080px!important}
+}
+:root[data-variant="tahoe"] .ed-head{margin-bottom:16px!important}
+:root[data-variant="tahoe"] .ed-head .eyebrow,:root[data-variant="tahoe"] .cisa-hub>.view-head .eyebrow{font-size:11.5px!important}
+:root[data-variant="tahoe"] .ed-head h2,:root[data-variant="tahoe"] .cisa-hub>.view-head h2{font-size:25px!important;margin-top:2px!important}
+.ed-hero{grid-template-columns:minmax(0,1fr) 104px;gap:24px;padding:22px 26px;border-radius:20px}
+.ed-kicker{font-size:10.5px}
+.ed-title{font-size:22px!important;margin:6px 0 4px!important}
+.ed-sub{font-size:13.5px}
+.ed-bar{height:5px;max-width:420px;margin-top:14px}
+.ed-actions{margin-top:16px;gap:8px}
+.ed-actions .btn{padding:8px 15px!important;font-size:13px!important}
+.ed-ring,.ed-ring svg{width:96px!important;height:96px!important}
+.ed-ring b{font-size:22px}
+.ed-ring small{font-size:11px;margin-top:2px}
+.ed-figures{margin:14px 0 28px;border-radius:16px}
+.ed-figures>*{padding:12px 18px;gap:2px}
+.ed-figures b{font-size:20px!important}
+.ed-figures span{font-size:12px}
+.ed-sect{font-size:16px!important;margin:0 0 10px!important}
+.ed-sect span{font-size:12.5px}
+.ed-acads{gap:12px;margin-bottom:28px}
+.ed-acad{padding:14px 18px;gap:8px;border-radius:16px}
+.ed-acad-n{font-size:14px}
+.ed-acad-p{font-size:17px}
+.ed-acad .d3-ic svg{width:17px;height:17px}
+.ed-acad .d3-bar{height:4px}
+.ed-acad-s{font-size:12px}
+.ed-path{padding:18px 22px;margin-bottom:28px;border-radius:16px}
+.ed-path .d3-levels{gap:18px}
+.ed-path .d3-level strong{font-size:13px}
+.ed-path .d3-lv-k,.ed-path .d3-lv-m{font-size:11.5px}
+:root[data-variant="tahoe"] .dash-grid{gap:12px!important;margin-bottom:28px!important}
+:root[data-variant="tahoe"] .dash-grid>.panel{padding:18px 20px!important;border-radius:16px!important}
+:root[data-variant="tahoe"] .badges{gap:10px!important}
+:root[data-variant="tahoe"] .badge{padding:10px 14px!important;border-radius:14px!important}
+:root[data-variant="tahoe"] .sect-title h3{font-size:16px!important}
+/* CISA */
+.cisa-hub .ed-title{font-size:20px!important}
+.cisa-hub .ed-hero{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px}
+.ed-stats{gap:14px 16px}
+.ed-stats b{font-size:20px}
+.ed-stats span{font-size:12px}
+.ed-count b{font-size:24px}
+.ed-count span{font-size:12px}
+:root[data-variant="tahoe"] .cisa-hub>.cisa-tabs{margin:16px 0 16px!important;padding:3px!important}
+:root[data-variant="tahoe"] .cisa-hub>.cisa-tabs button{padding:6px 11px!important;font-size:12.5px!important}
+.ed-list{padding:2px 20px;margin-bottom:28px;border-radius:16px}
+.ed-dom{grid-template-columns:28px minmax(0,1fr) 140px 40px;gap:14px;padding:10px 0}
+.ed-dom .k{font-size:13px}.ed-dom .n{font-size:13.5px}.ed-dom .n small{font-size:11.5px;margin-top:1px}.ed-dom .pc{font-size:13.5px}.ed-dom .d3-bar{height:5px}
+.ed-up{grid-template-columns:96px minmax(0,1fr) 60px;gap:14px;padding:10px 0}
+.ed-up .dt{font-size:12.5px}.ed-up .nm{font-size:13.5px}.ed-up .mn{font-size:12px}
+.cisa-hub .ed-hero+.ed-sect{margin-top:26px!important}
+.ed-count .d3-planbtns{margin-top:8px}
+@media (min-width:1000px) and (max-width:1100px){.ed-figures{grid-template-columns:repeat(4,minmax(0,1fr))}.ed-figures>*:nth-child(3){border-left:1px solid rgba(10,37,64,.07)}.ed-figures>*:nth-child(n+3){border-top:0}}
+:root[data-variant="tahoe"] #app .ed-head h2,:root[data-variant="tahoe"] #app .cisa-hub>.view-head h2{font-size:25px!important}
+:root[data-variant="tahoe"] #app .cisa-hub>.cisa-tabs{margin:14px 0 16px!important;padding:3px!important}
+:root[data-variant="tahoe"] #app .cisa-hub>.cisa-tabs button{padding:6px 11px!important;font-size:12.5px!important}
+#app .cisa-hub .ed-hero+.ed-sect{margin-top:26px!important}
+:root[data-variant="tahoe"] #app .view>.view-head.ed-head.ed-head:first-child h2,:root[data-variant="tahoe"] #app .cisa-hub>.view-head.cisa-head.ed-titlebar h2{font-size:25px!important;margin-top:2px!important}
 </style>
 </head>
 <body>
