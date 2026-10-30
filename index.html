@@ -2223,6 +2223,157 @@ h1,h2,h3,h4{font-weight:650;letter-spacing:-.022em}
 :root[data-hero="light"] .cockpit:not(.hero2) .pill{background:rgba(255,255,255,.7)!important;color:var(--ink-2)!important;border-color:rgba(255,255,255,.95)!important}
 :root[data-variant="tahoe"] .sec-level-tabs button{border-radius:999px!important;background:rgba(255,255,255,.55)!important;border:1px solid rgba(255,255,255,.95)!important;color:var(--ink)!important}
 :root[data-variant="tahoe"] .sec-level-tabs button.active{background:linear-gradient(180deg,#3B9BFF,#0A7AFF)!important;color:#fff!important;border:0!important}
+
+/* ===================== Tahoe: tidy layout system ===================== */
+/* one rhythm: 24px gaps, 22px radius, 24px padding */
+:root[data-variant="tahoe"]{--gap:24px;--card-r:22px;--card-p:24px}
+:root[data-variant="tahoe"] body::before{display:none!important}
+@media (min-width:1000px){:root[data-variant="tahoe"] main#app.wrap{padding:36px 48px 96px calc(48px)!important}:root[data-variant="tahoe"] main#app.wrap>*{max-width:1120px!important}}
+:root[data-variant="tahoe"] :is(.panel,.mcard,.lcard,.kpi,.acad,.cisa-card,.cisa-kpi,.read-tools,details.addcard,.q,.stat,.badge,.cert,.term-entry,.tscroll,.cockpit,.mhero){border-radius:var(--card-r)!important}
+:root[data-variant="tahoe"] :is(.panel,.acad,.cisa-card,details.addcard){padding:var(--card-p)!important}
+:root[data-variant="tahoe"] :is(.kpi,.cisa-kpi,.stat){padding:20px 22px!important}
+/* page titles */
+:root[data-variant="tahoe"] #app .view>.view-head:first-child,:root[data-variant="tahoe"] #app>.view-head:first-child,:root[data-variant="tahoe"] .cisa-hub>.view-head{margin:4px 0 28px!important}
+:root[data-variant="tahoe"] :is(#app .view>.view-head:first-child,.cisa-hub>.view-head) h2{font-size:34px!important;font-weight:700!important;letter-spacing:-.03em!important;margin-top:4px!important}
+/* section titles: same spacing everywhere */
+:root[data-variant="tahoe"] :is(.sect-title,.dash-sec,.msect>.h,.panel-h){display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+:root[data-variant="tahoe"] .view>:is(h3,.sect-title,.dash-sec){margin:40px 0 16px!important}
+:root[data-variant="tahoe"] :is(.panel-h){margin-bottom:16px!important}
+:root[data-variant="tahoe"] :is(.panel-h h3,.cisa-card h2,.acad h4){font-size:17px!important;font-weight:650!important;letter-spacing:-.015em}
+/* grids: equal columns, one gap */
+:root[data-variant="tahoe"] :is(.kpis,.dash3,.dash-grid,.cards,.cisa-hub .cisa-grid,.mgrid,.sn-grid,.cert-cols){gap:var(--gap)!important}
+:root[data-variant="tahoe"] .kpis{margin-top:var(--gap)!important}
+:root[data-variant="tahoe"] :is(.dash3,.dash-grid){margin-top:var(--gap)!important}
+:root[data-variant="tahoe"] .cisa-hub .cisa-section{margin:var(--gap) 0!important}
+:root[data-variant="tahoe"] .cisa-hub>.cisa-tabs{margin:0 0 28px!important}
+/* dashboard academies: 2 large + 3 small, no orphan card */
+@media (min-width:1101px){
+ :root[data-variant="tahoe"] .dash3{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+ :root[data-variant="tahoe"] .dash3>.acad{grid-column:span 2}
+ :root[data-variant="tahoe"] .dash3>.acad:nth-child(-n+2){grid-column:span 3}
+}
+:root[data-variant="tahoe"] .acad{display:flex;flex-direction:column;gap:12px!important;min-height:0}
+:root[data-variant="tahoe"] .acad .top-l{gap:12px}
+:root[data-variant="tahoe"] .acad .big{font-size:30px!important;line-height:1.1;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+:root[data-variant="tahoe"] .acad .big small{margin:0!important;font-size:13.5px!important}
+:root[data-variant="tahoe"] .acad p{font-size:13.5px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+:root[data-variant="tahoe"] .acad .go-l{margin-top:auto!important;padding-top:4px}
+/* KPI tiles: icon + number aligned */
+:root[data-variant="tahoe"] .kpi{align-items:center;gap:16px!important;min-height:84px;box-sizing:border-box}
+:root[data-variant="tahoe"] .kpi b{font-size:24px!important;line-height:1.1}
+:root[data-variant="tahoe"] .kpi span:not(.kpi-ic){font-size:13px!important;margin-top:2px;display:block}
+/* dashboard hero: wider side column, no awkward wraps */
+@media (min-width:1101px){:root[data-variant="tahoe"] .cockpit.hero2{grid-template-columns:minmax(0,1fr) 340px!important;gap:36px 44px!important;padding:40px 44px 34px!important}}
+:root[data-variant="tahoe"] .h2-ringcopy span,:root[data-variant="tahoe"] .h2-cisa-copy strong{white-space:nowrap}
+:root[data-variant="tahoe"] .h2-ringrow{grid-template-columns:96px minmax(0,1fr)!important}
+:root[data-variant="tahoe"] .cockpit.hero2 .ring-big{width:96px!important;height:96px!important}
+:root[data-variant="tahoe"] .h2-cisa{gap:16px;padding:14px 16px!important}
+:root[data-variant="tahoe"] .h2-levels{gap:20px!important}
+:root[data-variant="tahoe"] .h2-level strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* panels with chart/list: same height, content top-aligned */
+:root[data-variant="tahoe"] .dash-grid>.panel{display:flex;flex-direction:column}
+/* course/module cards: consistent internal rhythm, footer pinned */
+:root[data-variant="tahoe"] .mcard{display:flex!important;flex-direction:column;gap:10px;padding:22px!important}
+:root[data-variant="tahoe"] .mcard p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0}
+:root[data-variant="tahoe"] .mcard .bar{margin-top:auto}
+/* achievements: even tiles */
+:root[data-variant="tahoe"] .badges{gap:16px!important}
+:root[data-variant="tahoe"] .badge{padding:16px 18px!important;align-items:center}
+/* ---- CISA hub ---- */
+:root[data-variant="tahoe"] .cisa-hub .cisa-card{display:flex;flex-direction:column}
+:root[data-variant="tahoe"] .cisa-hub .cisa-card>.cisa-actions:last-child{margin-top:auto;padding-top:16px}
+:root[data-variant="tahoe"] .cisa-hub .cisa-card h2{margin-bottom:14px}
+:root[data-variant="tahoe"] .cisa-domain{padding:14px 0!important}
+:root[data-variant="tahoe"] .cisa-domain>.cisa-row:first-child{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:4px 16px}
+:root[data-variant="tahoe"] .cisa-domain>.cisa-row:first-child>strong{min-width:0;line-height:1.35}
+:root[data-variant="tahoe"] .cisa-domain>.cisa-row:first-child>.cisa-mini{white-space:nowrap;font-size:12.5px}
+:root[data-variant="tahoe"] .cisa-steps{gap:12px!important;padding:6px 0 4px!important}
+:root[data-variant="tahoe"] .cisa-step{border-radius:16px!important;padding:14px!important;font-size:13px!important;background:rgba(255,255,255,.55)!important;border:1px solid rgba(255,255,255,.95)!important}
+:root[data-variant="tahoe"] .cisa-kpi strong{margin:4px 0 2px}
+:root[data-variant="tahoe"] .cisa-callout{border-radius:16px!important;background:rgba(255,255,255,.45)!important;border:1px solid rgba(255,255,255,.95)!important;padding:14px 18px!important;font-size:13px!important}
+:root[data-variant="tahoe"] .cisa-help{border-radius:14px!important;background:rgba(255,255,255,.45)!important;border:0!important;border-left:3px solid var(--accent)!important}
+/* ---- lesson reader: single tidy column + outline ---- */
+:root[data-variant="tahoe"] .mbody{gap:var(--gap)!important}
+:root[data-variant="tahoe"] .lcard{padding:30px 34px!important}
+:root[data-variant="tahoe"] .read-tools{margin-bottom:var(--gap)!important}
+/* phones: same rhythm, tighter */
+@media (max-width:760px){:root[data-variant="tahoe"]{--gap:16px;--card-p:18px} :root[data-variant="tahoe"] :is(#app .view>.view-head:first-child,.cisa-hub>.view-head) h2{font-size:28px!important} :root[data-variant="tahoe"] main#app.wrap{padding:20px 16px 60px!important}}
+
+/* no boxes inside boxes */
+:root[data-variant="tahoe"] :is(.panel,.cisa-card,.lcard,.acad,details.addcard) :is(.tscroll,.rtable,.cisa-table-wrap,.panel,.stat,.cisa-empty){background:transparent!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:0!important;padding-left:0;padding-right:0}
+:root[data-variant="tahoe"] :is(.panel,.cisa-card) :is(table) thead th{background:transparent!important;border-bottom:1px solid rgba(10,37,64,.1)!important}
+:root[data-variant="tahoe"] :is(.panel,.cisa-card) table td{border-bottom:1px solid rgba(10,37,64,.06)!important}
+/* level header on Technical page */
+:root[data-variant="tahoe"] .lv-head{display:grid!important;grid-template-columns:auto minmax(0,1fr) 220px;align-items:center;gap:18px!important;padding:18px 22px!important;margin:32px 0 16px!important}
+:root[data-variant="tahoe"] .lv-head>:last-child{display:flex;flex-direction:column;gap:8px;align-items:stretch;text-align:right;font-size:12.5px;min-width:0}
+
+/* ===================== Focus reader for module pages ===================== */
+/* one wide reading column; outline becomes a floating chapter bar; side panels move below */
+:root[data-variant="tahoe"] .mbody{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:24px!important;align-items:start}
+:root[data-variant="tahoe"] .mbody>div:first-child{grid-column:1/-1;width:100%;max-width:860px;margin:0 auto;min-width:0}
+:root[data-variant="tahoe"] .mside{display:contents!important}
+:root[data-variant="tahoe"] .mside>.panel{order:2;margin:0!important}
+:root[data-variant="tahoe"] .mside>.outline-panel{order:-1;grid-column:1/-1;position:sticky;top:14px;z-index:8;display:flex;align-items:center;gap:14px;padding:10px 12px 10px 20px!important;border-radius:999px!important;max-width:980px;width:100%;justify-self:center;box-sizing:border-box}
+:root[data-variant="tahoe"] .mside>.outline-panel h5{margin:0!important;white-space:nowrap;font-size:11px!important;letter-spacing:.1em;color:var(--muted)}
+:root[data-variant="tahoe"] .mside>.outline-panel .outline{display:flex!important;flex-direction:row!important;flex-wrap:nowrap;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0;mask-image:linear-gradient(90deg,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,#000 92%,transparent)}
+:root[data-variant="tahoe"] .mside>.outline-panel .outline::-webkit-scrollbar{display:none}
+:root[data-variant="tahoe"] .mside>.outline-panel .outline button{flex:none;white-space:nowrap;border-radius:999px!important;padding:7px 14px!important;font-size:13px!important;background:rgba(255,255,255,.55)!important;border:1px solid rgba(255,255,255,.95)!important;display:inline-flex;align-items:center;gap:7px;color:var(--ink-2)!important;line-height:1.2}
+:root[data-variant="tahoe"] .mside>.outline-panel .outline button:hover{background:#fff!important}
+:root[data-variant="tahoe"] .mside>.outline-panel .outline button.on{background:linear-gradient(180deg,#3B9BFF,#0A7AFF)!important;color:#fff!important;border-color:transparent!important}
+:root[data-variant="tahoe"] .mside>.outline-panel .outline button i{flex:none}
+/* section rhythm */
+:root[data-variant="tahoe"] .mbody .msect{margin:0 0 56px!important}
+:root[data-variant="tahoe"] .mbody .msect>.h{margin-bottom:20px!important}
+:root[data-variant="tahoe"] .mbody .msect>.h h3{font-size:24px!important;font-weight:700!important;letter-spacing:-.025em}
+/* lessons as airy pages, no timeline */
+:root[data-variant="tahoe"] .timeline{display:flex!important;flex-direction:column;gap:32px!important}
+:root[data-variant="tahoe"] .timeline::before{display:none!important}
+:root[data-variant="tahoe"] .lesson{display:block!important;scroll-margin-top:90px}
+:root[data-variant="tahoe"] .lnode{display:none!important}
+:root[data-variant="tahoe"] .lcard{padding:48px 56px 44px!important;border-radius:28px!important}
+:root[data-variant="tahoe"] .lcard .ln{display:inline-flex;align-items:center;gap:8px;font-size:12.5px!important;font-weight:600!important;color:var(--accent-ink)!important;background:rgba(10,132,255,.08);border-radius:999px;padding:5px 12px;margin-bottom:14px}
+:root[data-variant="tahoe"] .lcard h4{font-size:30px!important;line-height:1.2!important;font-weight:700!important;letter-spacing:-.028em!important;margin:0 0 22px!important;color:#0A2540}
+:root[data-variant="tahoe"] .lbody{--reading-size:17.5px}
+:root[data-variant="tahoe"] .lbody :is(p,li),:root[data-variant="tahoe"] .sec-deep :is(p,.sec-deep-intro,.sec-deep-steps li),:root[data-variant="tahoe"] .sec-pitfall{font-size:17.5px!important;line-height:1.85!important;color:#1E2B3C!important;max-width:none!important}
+:root[data-variant="tahoe"] .lbody>*,:root[data-variant="tahoe"] .lbody .sec-deep{max-width:none!important}
+:root[data-variant="tahoe"] .lbody p{margin:0 0 1.15em!important}
+:root[data-variant="tahoe"] .lbody :is(h5,h6),:root[data-variant="tahoe"] .sec-deep h6{font-size:21px!important;font-weight:700!important;margin:36px 0 12px!important;color:#0A2540;letter-spacing:-.02em}
+:root[data-variant="tahoe"] .lbody ul.pts{padding:22px 26px!important;margin:26px 0!important;display:grid;gap:10px}
+:root[data-variant="tahoe"] .lbody ul.pts li{font-size:16.5px!important}
+:root[data-variant="tahoe"] .lbody ol.steps{display:grid;gap:12px;margin:24px 0!important}
+:root[data-variant="tahoe"] .lbody ol.steps li{padding:16px 18px 16px 56px!important}
+:root[data-variant="tahoe"] .callout{padding:18px 22px!important;margin:26px 0!important;font-size:16px!important;line-height:1.7}
+:root[data-variant="tahoe"] .ex{margin:26px 0!important}
+:root[data-variant="tahoe"] .ex pre{font-size:14.5px!important;line-height:1.75!important;padding:20px 22px!important}
+:root[data-variant="tahoe"] .sec-deep{padding:32px 34px!important;margin:32px 0!important}
+:root[data-variant="tahoe"] .lcard :is(.learn,.bm){padding:11px 20px!important;font-size:14.5px!important}
+:root[data-variant="tahoe"] .lcard>:last-child{margin-top:28px}
+:root[data-variant="tahoe"] .lbody b{color:#0A2540}
+/* big-picture flow & takeaways & quiz breathe too */
+:root[data-variant="tahoe"] .flow{gap:12px!important}
+:root[data-variant="tahoe"] .fstep{padding:16px!important;min-height:92px}
+:root[data-variant="tahoe"] .takeaways{padding:28px 32px!important;display:grid;gap:12px}
+:root[data-variant="tahoe"] .takeaways li{font-size:16.5px;line-height:1.7}
+:root[data-variant="tahoe"] .q{padding:28px 30px!important;margin-bottom:18px!important}
+:root[data-variant="tahoe"] .q>p{font-size:17px!important;line-height:1.6;margin:0 0 16px!important}
+:root[data-variant="tahoe"] .opts{display:grid;gap:10px}
+:root[data-variant="tahoe"] .opt{padding:14px 16px!important;font-size:15.5px!important;line-height:1.5}
+:root[data-variant="tahoe"] textarea.notes{min-height:160px;font-size:16px!important;line-height:1.7;padding:18px 20px!important}
+:root[data-variant="tahoe"] .pager{display:flex;justify-content:space-between;gap:12px}
+/* below-content panels (key terms, reading, quick log) */
+:root[data-variant="tahoe"] .mside>.panel h5{font-size:11px!important;letter-spacing:.1em;margin:0 0 12px!important}
+:root[data-variant="tahoe"] .mside>.panel .terms{display:flex;flex-wrap:wrap;gap:6px}
+@media (max-width:1100px){:root[data-variant="tahoe"] .mbody{grid-template-columns:1fr!important}}
+@media (max-width:760px){
+ :root[data-variant="tahoe"] .mside>.outline-panel{top:64px;border-radius:18px!important;padding:8px 10px!important}
+ :root[data-variant="tahoe"] .mside>.outline-panel h5{display:none}
+ :root[data-variant="tahoe"] .lcard{padding:26px 20px 24px!important;border-radius:22px!important}
+ :root[data-variant="tahoe"] .lcard h4{font-size:24px!important}
+ :root[data-variant="tahoe"] .lbody :is(p,li),:root[data-variant="tahoe"] .sec-deep :is(p,.sec-deep-intro,.sec-deep-steps li){font-size:16.5px!important;line-height:1.8!important}
+ :root[data-variant="tahoe"] .sec-deep{padding:20px!important}
+}
+:root[data-variant="tahoe"] .mside>.outline-panel{background:rgba(240,246,255,.86)!important;-webkit-backdrop-filter:blur(30px) saturate(200%)!important;backdrop-filter:blur(30px) saturate(200%)!important;box-shadow:inset 0 1px 0 #fff,0 12px 30px -14px rgba(20,60,140,.4)!important}
+:root[data-variant="tahoe"] .mside>.outline-panel h5{line-height:1!important}
 </style>
 </head>
 <body>
