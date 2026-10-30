@@ -36,3 +36,11 @@ Upload `index.html` and `service-worker.js` (plus the `cisa/` folder if it isn't
   - A light shine sweeps across the main button every few seconds.
   - The current stage glows gently.
 - **Reduced motion.** All motion turns off automatically if your device has "reduce motion" switched on.
+
+## Update: new dashboard banner
+The dashboard banner was redesigned, and the drifting glows, button shine and pulsing effects were removed.
+- **Left side:** your next module as the headline, its level and next lesson, a progress bar for that module, and "Continue module" and "All modules" buttons.
+- **Right panel:** a Technical Academy progress ring, lessons learned, modules complete, quiz accuracy and day streak. Below them is a CISA card with days to the exam, topics covered and any mistakes due; it opens the CISA hub.
+- **Bottom row:** the five levels as cards, each with its tier, a progress bar and module count. The current level is highlighted, and clicking a card opens that level.
+- **New info row:** under the banner, total study time, this week's hours, GRC lessons read and Workbook sessions.
+- **Motion:** content fades in once, and the ring and bars fill when the page opens. There is no looping animation, and motion is off when your device's reduce-motion setting is on.

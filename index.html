@@ -1773,49 +1773,84 @@ a{color:var(--accent-ink)}
 .cockpit .nextup b{color:#FFFFFF}
 .nextup-dot{width:8px;height:8px;border-radius:50%;background:var(--pink);flex:none;box-shadow:0 0 0 0 rgba(255,143,177,.6)}
 
-/* ---------- dashboard banner motion ---------- */
-.cockpit{position:relative;isolation:isolate}
-.cockpit::after{content:"";position:absolute;inset:-20%;z-index:-1;pointer-events:none;border-radius:inherit;
-  background:radial-gradient(closest-side,rgba(255,111,156,.34),transparent 70%) 78% 8%/46% 70% no-repeat,
-             radial-gradient(closest-side,rgba(255,122,89,.24),transparent 70%) 12% 92%/42% 64% no-repeat,
-             radial-gradient(closest-side,rgba(255,196,140,.14),transparent 70%) 50% 50%/38% 52% no-repeat}
-.cockpit .btn.glow{position:relative;overflow:hidden}
+/* ---------- dashboard hero: "command centre" layout ---------- */
+.cockpit.hero2{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);grid-template-areas:"main side" "lv lv";gap:26px 36px;padding:32px 34px 26px;border-radius:22px;
+  background:radial-gradient(80% 120% at 100% 0%,rgba(255,111,156,.20),transparent 55%),linear-gradient(155deg,#3A1D2C 0%,#2A1420 55%,#24101B 100%)}
+.cockpit.hero2::before,.cockpit.hero2::after{display:none}
+.hero2>*{position:relative;min-width:0}
+.h2-main{grid-area:main;display:flex;flex-direction:column;gap:10px}
+.h2-meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--hero-muted)}
+.h2-sep{width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.6}
+.h2-kicker{align-self:flex-start;margin-top:10px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pink);background:rgba(255,143,177,.1);border:1px solid rgba(255,143,177,.28);border-radius:999px;padding:5px 11px}
+.cockpit.hero2 h1{margin:2px 0 0;font-size:clamp(28px,3.1vw,40px);line-height:1.1;letter-spacing:-.035em;font-weight:800;color:#FFFFFF}
+.h2-sub{margin:0;color:var(--hero-muted);font-size:15px;line-height:1.5}
+.h2-modbar{height:6px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;max-width:440px;margin-top:10px}
+.h2-modbar i{display:block;height:100%;min-width:6px;border-radius:inherit;background:linear-gradient(90deg,#FF8FB1,#FFB08A)}
+.h2-modpct{font-size:12.5px;color:var(--hero-muted)}
+.cockpit.hero2 .next{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.cockpit.hero2 .btn.glow,.cockpit.hero2 .btn.ghost{padding:12px 20px;font-size:14.5px;border-radius:12px}
+.cockpit.hero2 .btn.ghost{background:rgba(255,255,255,.06);color:#FFFFFF;border:1px solid rgba(255,255,255,.2)}
+.cockpit.hero2 .btn.ghost:hover{background:rgba(255,255,255,.12)}
+.h2-side{grid-area:side;display:flex;flex-direction:column;gap:16px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:20px}
+.h2-ringrow{display:grid;grid-template-columns:116px minmax(0,1fr);gap:20px;align-items:center}
+.cockpit.hero2 .ring-big{width:116px;height:116px;justify-self:center;order:0;margin:0}
+.cockpit.hero2 .ring-lbl b{font-size:26px}
+.cockpit.hero2 .ring-lbl span{font-size:10px}
+.h2-stats{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.h2-stats div{min-width:0}
+.h2-stats dt{font-size:12px;color:var(--hero-muted)}
+.h2-stats dd{margin:3px 0 0;font-size:22px;font-weight:700;color:#FFFFFF;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.h2-stats dd small{font-size:13px;color:var(--hero-muted);font-weight:500}
+.h2-cisa{display:flex;align-items:center;gap:14px;text-decoration:none;color:#FFFFFF;background:rgba(255,143,177,.08);border:1px solid rgba(255,143,177,.22);border-radius:14px;padding:12px 14px;transition:background .2s ease,border-color .2s ease}
+.h2-cisa:hover{background:rgba(255,143,177,.15);border-color:rgba(255,143,177,.45);color:#FFFFFF}
+.h2-cisa-days{display:flex;flex-direction:column;align-items:center;min-width:54px;line-height:1}
+.h2-cisa-days b{font-size:26px;font-weight:800;color:var(--pink);letter-spacing:-.03em}
+.h2-cisa-days small{font-size:11px;color:var(--hero-muted);margin-top:4px}
+.h2-cisa-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+.h2-cisa-copy strong{font-size:14px;font-weight:700}
+.h2-cisa-copy small{font-size:12.5px;color:var(--hero-muted)}
+.h2-cisa-copy em{font-style:normal;color:#FFD3E0;font-weight:600}
+.h2-cisa-go{margin-left:auto;color:var(--pink);font-size:18px;transition:transform .2s ease}
+.h2-cisa:hover .h2-cisa-go{transform:translateX(3px)}
+.h2-levels{grid-area:lv;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding-top:22px;border-top:1px solid rgba(255,255,255,.1)}
+.h2-level{appearance:none;text-align:left;font:inherit;color:#FFFFFF;cursor:pointer;display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.09);transition:background .2s ease,border-color .2s ease,transform .2s ease;min-width:0}
+.h2-level:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22);transform:translateY(-2px)}
+.h2-level:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+.h2-level.is-current{background:rgba(255,143,177,.1);border-color:rgba(255,143,177,.5)}
+.h2-lv-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.h2-lv-n{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--hero-muted)}
+.h2-level.is-current .h2-lv-n,.h2-level.is-done .h2-lv-n{color:var(--pink)}
+.h2-lv-tier{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--hero-muted)}
+.h2-level.is-current .h2-lv-tier{color:#2A1420;background:var(--pink);border-radius:999px;padding:2px 8px}
+.h2-level strong{font-size:14px;font-weight:700;line-height:1.25}
+.h2-lv-bar{height:4px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden}
+.h2-lv-bar i{display:block;height:100%;border-radius:inherit;background:var(--pink)}
+.h2-level small{font-size:12px;color:var(--hero-muted)}
+.kpis.kpis-extra{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:1100px){
+  .cockpit.hero2{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "side" "lv"}
+  .kpis.kpis-extra{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .cockpit.hero2{padding:22px 18px 20px;gap:20px}
+  .h2-levels{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(170px,1fr);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px}
+  .h2-level{scroll-snap-align:start}
+  .h2-ringrow{grid-template-columns:92px minmax(0,1fr);gap:14px}
+  .cockpit.hero2 .ring-big{width:92px;height:92px}
+  .cockpit.hero2 .ring-lbl b{font-size:20px}
+  .h2-stats dd{font-size:19px}
+}
 @media (prefers-reduced-motion:no-preference){
-  @keyframes ss-rise{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
-  @keyframes ss-up{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
-  @keyframes ss-pop{0%{opacity:0;transform:scale(.7) rotate(-20deg)}70%{transform:scale(1.04)}100%{opacity:1;transform:none}}
-  @keyframes ss-drift{0%{transform:translate3d(0,0,0) rotate(0deg)}50%{transform:translate3d(-4%,3%,0) rotate(6deg)}100%{transform:translate3d(3%,-2%,0) rotate(-4deg)}}
-  @keyframes ss-ring{from{stroke-dashoffset:390}}
-  @keyframes ss-draw{from{stroke-dasharray:0 1200}}
-  @keyframes ss-shine{0%,72%{transform:translateX(-120%) skewX(-20deg)}100%{transform:translateX(260%) skewX(-20deg)}}
-  @keyframes ss-pulse{0%{box-shadow:0 0 0 0 rgba(255,143,177,.55)}70%{box-shadow:0 0 0 12px rgba(255,143,177,0)}100%{box-shadow:0 0 0 0 rgba(255,143,177,0)}}
-  @keyframes ss-glow{0%,100%{box-shadow:0 0 0 0 rgba(255,143,177,0)}50%{box-shadow:0 0 0 4px rgba(255,143,177,.18),0 0 28px -6px rgba(255,143,177,.55)}}
-  .view>.cockpit:first-child{animation:ss-rise .6s cubic-bezier(.2,.8,.2,1) both}
-  .view>.cockpit:first-child::after{animation:ss-drift 16s ease-in-out infinite alternate}
-  .view>.cockpit:first-child .hero-top>div:first-child>*{animation:ss-up .55s cubic-bezier(.2,.8,.2,1) both}
-  .view>.cockpit:first-child .hero-top>div:first-child>:nth-child(1){animation-delay:.12s}
-  .view>.cockpit:first-child .hero-top>div:first-child>:nth-child(2){animation-delay:.2s}
-  .view>.cockpit:first-child .hero-top>div:first-child>:nth-child(3){animation-delay:.28s}
-  .view>.cockpit:first-child .hero-top>div:first-child>:nth-child(4){animation-delay:.36s}
-  .view>.cockpit:first-child .ring-big{animation:ss-pop .7s cubic-bezier(.2,.8,.2,1) .25s both}
-  .view>.cockpit:first-child .ring-big .nf{animation:ss-ring 1.4s cubic-bezier(.3,.7,.2,1) .45s both}
-  .view>.cockpit:first-child .flow-lit{animation:ss-draw 1.6s cubic-bezier(.3,.7,.2,1) .6s both}
-  .view>.cockpit:first-child .flow-title{animation:ss-up .5s ease .4s both}
-  .view>.cockpit:first-child .flow-stage{animation:ss-up .5s cubic-bezier(.2,.8,.2,1) both}
-  .view>.cockpit:first-child .flow-stage:nth-child(1){animation-delay:.48s}
-  .view>.cockpit:first-child .flow-stage:nth-child(2){animation-delay:.56s}
-  .view>.cockpit:first-child .flow-stage:nth-child(3){animation-delay:.64s}
-  .view>.cockpit:first-child .flow-stage:nth-child(4){animation-delay:.72s}
-  .view>.cockpit:first-child .flow-stage:nth-child(5){animation-delay:.8s}
-  .view>.cockpit:first-child .flow-stage.flow-current{animation:ss-up .5s cubic-bezier(.2,.8,.2,1) .48s both,ss-glow 2.8s ease-in-out 1.4s infinite}
-  .view>.cockpit:first-child .flow-stage:nth-child(even).flow-current{animation-delay:.56s,1.4s}
-  .cockpit .btn.glow::after{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);animation:ss-shine 4.5s ease-in-out 1.2s infinite;pointer-events:none}
-  .nextup-dot{animation:ss-pulse 2s ease-out 1s infinite}
-  .cockpit .btn.glow{transition:transform .18s ease,box-shadow .18s ease}
-  .cockpit .btn.glow:hover{transform:translateY(-2px);box-shadow:0 10px 22px -10px rgba(255,143,177,.9)}
-  .flow-stage{transition:transform .2s ease,background .2s ease,border-color .2s ease}
-  .kpis>.kpi{animation:ss-up .5s cubic-bezier(.2,.8,.2,1) both}
-  .kpis>.kpi:nth-child(1){animation-delay:.3s}.kpis>.kpi:nth-child(2){animation-delay:.36s}.kpis>.kpi:nth-child(3){animation-delay:.42s}.kpis>.kpi:nth-child(4){animation-delay:.48s}.kpis>.kpi:nth-child(5){animation-delay:.54s}
+  @keyframes h2-in{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+  @keyframes h2-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  @keyframes h2-ring{from{stroke-dashoffset:390}}
+  .hero2 .h2-main>*,.hero2 .h2-side,.hero2 .h2-level{animation:h2-in .5s cubic-bezier(.2,.7,.2,1) both}
+  .hero2 .h2-main>:nth-child(2){animation-delay:.05s}.hero2 .h2-main>:nth-child(3){animation-delay:.1s}.hero2 .h2-main>:nth-child(4){animation-delay:.15s}
+  .hero2 .h2-main>:nth-child(n+5){animation-delay:.2s}
+  .hero2 .h2-side{animation-delay:.12s}
+  .hero2 .h2-level:nth-child(1){animation-delay:.2s}.hero2 .h2-level:nth-child(2){animation-delay:.25s}.hero2 .h2-level:nth-child(3){animation-delay:.3s}.hero2 .h2-level:nth-child(4){animation-delay:.35s}.hero2 .h2-level:nth-child(5){animation-delay:.4s}
+  .hero2 .h2-modbar i,.hero2 .h2-lv-bar i{transform-origin:left center;animation:h2-fill 1s cubic-bezier(.3,.7,.2,1) .35s both}
+  .hero2 .ring-big .nf{animation:h2-ring 1.2s cubic-bezier(.3,.7,.2,1) .25s both}
 }
 </style>
 </head>
@@ -2242,26 +2277,42 @@ function vDashboard(){
   const secProgress=secOverall();
   const wbMins=bookEntries.reduce((a,e)=>a+(Number(e.minutes)||0),0), lastE=bookEntries[0];
   const allMins=totalMins()+wbMins;
+  const cz=S.cisa||{}, cplan=(cz.plans&&cz.plans[cz.planMode||'normal'])||{}, examD=cplan.examDate||'2027-01-13', todayK=dayKey(new Date());
+  const cDays=Math.max(0,Math.round((new Date(examD+'T12:00:00')-new Date(todayK+'T12:00:00'))/864e5));
+  const examLabel=new Date(examD+'T12:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
+  const cDue=Object.values(cz.mistakes||{}).filter(x=>x&&!x.x&&x.d<=todayK).length, cTopics=Object.values(cz.complete||{}).filter(Boolean).length;
   const K=(c,ic,b,s)=>`<div class="kpi" style="--c:var(${c})"><span class="kpi-ic"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg></span><div><b>${b}</b><span>${s}</span></div></div>`;
   app.innerHTML=`<div class="view">
-  <section class="cockpit">
-    <div class="hero-top">
-      <div>
-        <div class="eyebrow">${greet}${nm?', '+esc(nm):''} · ${esc(dateStr)}</div>
-        <h1>${headline}</h1>
-        ${nu&&!fresh?`<p class="nextup"><span class="nextup-dot" aria-hidden="true"></span>Next up: <b>${pad(nu.m.n)} ${esc(nu.m.t)}</b>, ${esc(nu.what)}</p>`:''}
-        <div class="next">${nu?`<a class="btn glow" href="#${nu.m.id}">${fresh?'Start module 01':'Continue learning'} →</a>`:''}<a class="btn ghost" href="#courses">Browse Technical Academy</a></div>
-      </div>
-      <div class="ring-big">${ringSVG(148,62,12,p,'rgba(255,255,255,.22)','#fff')}<div class="ring-lbl"><b>${p}%</b><span>technical</span></div></div>
+  <section class="cockpit hero2" aria-labelledby="hero2-title">
+    <div class="h2-main">
+      <div class="h2-meta"><span>${greet}${nm?', '+esc(nm):''}</span><span class="h2-sep" aria-hidden="true"></span><span>${esc(dateStr)}</span></div>
+      <span class="h2-kicker">${fresh?'Start here':p===100?'Technical Academy complete':'Continue learning'}</span>
+      <h1 id="hero2-title">${nu?`${esc(nu.m.t)}`:'Every module finished'}</h1>
+      <p class="h2-sub">${nu?`Module ${pad(nu.m.n)} · Level ${nu.m.lv} ${esc(LV[nu.m.lv-1].name)} · next: ${esc(nu.what)}`:'Pick a certification from Cert Paths and book it.'}</p>
+      ${nu?`<div class="h2-modbar" role="img" aria-label="Module progress ${modPct(nu.m)} percent"><i style="width:${modPct(nu.m)}%"></i></div><span class="h2-modpct">${modPct(nu.m)}% of this module</span>`:''}
+      <div class="next">${nu?`<a class="btn glow" href="#${nu.m.id}">${fresh?'Start module 01':'Continue module'} →</a>`:''}<a class="btn ghost" href="#courses">All modules</a></div>
     </div>
-    <div class="journey-flow"><div class="flow-title"><span>LEARNING JOURNEY</span><span>5 levels · tap a stage</span></div><div class="journey-map">${flowPath}<div class="flow-stages">${journey}</div></div></div>
+    <aside class="h2-side" aria-label="Progress summary">
+      <div class="h2-ringrow">
+        <div class="ring-big">${ringSVG(148,62,12,p,'rgba(255,255,255,.14)','#fff')}<div class="ring-lbl"><b>${p}%</b><span>technical</span></div></div>
+        <dl class="h2-stats">
+          <div><dt>Lessons learned</dt><dd>${lessonsDone()}</dd></div>
+          <div><dt>Modules complete</dt><dd>${doneMods}<small> / ${M.length}</small></dd></div>
+          <div><dt>Quiz accuracy</dt><dd>${answered?Math.round(correct()/answered*100)+'%':'–'}</dd></div>
+          <div><dt>Day streak</dt><dd>${streak()}</dd></div>
+        </dl>
+      </div>
+      <a class="h2-cisa" href="#cisa"><span class="h2-cisa-days"><b>${cDays}</b><small>days</small></span><span class="h2-cisa-copy"><strong>CISA exam · ${esc(examLabel)}</strong><small>${cTopics}/60 topics covered${cDue?` · <em>${cDue} mistake${cDue===1?'':'s'} due</em>`:''}</small></span><span class="h2-cisa-go" aria-hidden="true">→</span></a>
+    </aside>
+    <nav class="h2-levels" aria-label="Technical Academy levels">
+      ${LV.map(Lv=>{const st=levelStats(Lv.n),cur=Lv.n===cl&&p<100,done=st.p===100;return `<button type="button" class="h2-level ${cur?'is-current':''} ${done?'is-done':''}" data-level="${Lv.n}" aria-label="Open level ${Lv.n}, ${esc(Lv.name)}, ${st.p} percent"><span class="h2-lv-top"><span class="h2-lv-n">${done?'✓':'0'+Lv.n}</span><span class="h2-lv-tier">${esc(Lv.tier)}</span></span><strong>${esc(Lv.name)}</strong><span class="h2-lv-bar"><i style="width:${Math.max(st.p,0)}%"></i></span><small>${st.done}/${st.ms.length} modules · ${st.p}%</small></button>`;}).join('')}
+    </nav>
   </section>
-  <div class="kpis">
-    ${K('--ok','<path d="M4 12l5 5L20 6"/>',`${doneMods}/${M.length}`,'Modules complete')}
-    ${K('--accent','<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/>',lessonsDone(),'Lessons learned')}
-    ${K('--accent-2','<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/>',answered?Math.round(correct()/answered*100)+'%':'–','Quiz accuracy')}
+  <div class="kpis kpis-extra">
     ${K('--signal','<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',(allMins/60).toFixed(1)+'h','Total study time')}
-    ${K('--bad','<path d="M12 3c1 4 5 5.5 5 10a5 5 0 0 1-10 0c0-3 2-4.2 2-7 1.6 1 2.6 2.5 3 4 .2-2.6-.8-4.8 0-7z"/>',streak(),'Day streak')}
+    ${K('--accent-3','<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',(wk/60).toFixed(1)+'h','Studied this week')}
+    ${K('--ok','<path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',grcDone+'/'+grcTotal,'GRC lessons read')}
+    ${K('--accent','<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/>',bookEntries.length,'Workbook sessions')}
   </div>
   <div class="dash3">
     <a class="acad" href="#courses" style="--c:var(--ok)"><div class="top-l"><span class="kpi-ic" style="--c:var(--ok)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.6 17M12 11.5l5.4 5.5"/></svg></span><h4>Technical Academy</h4></div><div class="big">${p}%<small>${lessonsDone()} lessons</small></div><div class="track"><i style="width:${p}%"></i></div><span class="go-l">${fresh?'Start learning':'Continue'} →</span></a>
