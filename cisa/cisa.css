@@ -87,3 +87,19 @@ html.ap-lock,html.ap-lock body{overflow:hidden!important}
 .ap-sheet .cisa-table .cisa-btn.sm{padding:4px 8px;font-size:11.5px;min-height:0}
 .ap-sheet .cisa-table-wrap{overflow-x:visible;border:0}
 .ap-sheet form[data-form="topic"]{background:rgba(10,108,255,.04);border:1px solid rgba(10,108,255,.15);border-radius:14px;padding:14px;margin:12px 0}
+
+/* ===== One-time plan setup + lock ===== */
+.pl-setup{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 16px;padding:16px 20px;border-radius:18px;background:linear-gradient(135deg,rgba(10,132,255,.10),rgba(90,200,250,.10));border:1px solid rgba(10,132,255,.22)}
+.pl-setup b{display:block;font-size:15px;color:#0A2540;margin-bottom:3px}
+.pl-setup span{font-size:13px;color:#33415C;line-height:1.45}
+.pl-setup .cisa-btn{flex:none}
+.pl-lockbadge{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;background:rgba(52,199,89,.12);border:1px solid rgba(52,199,89,.3);color:#1F7A3A;font-size:13px;font-weight:600}
+.cisa-btn.pl-ghost{background:transparent!important;box-shadow:none!important;color:#6B7A90!important;border:1px dashed rgba(107,122,144,.4)!important}
+.cisa-btn.pl-off,.cisa-btn.pl-off:hover{opacity:.45;filter:grayscale(1);cursor:not-allowed;background:rgba(120,120,128,.12)!important;color:#6E6E73!important;box-shadow:none!important;transform:none!important}
+.cisa-btn.pl-static{cursor:default;pointer-events:none}
+.pl-note{margin:0 0 14px;padding:12px 14px;border-radius:14px;background:rgba(255,159,10,.10);border:1px solid rgba(255,159,10,.28);color:#6B4300;font-size:13px;line-height:1.5}
+.pl-err{margin:10px 0 0;color:#D70015;font-size:13px;font-weight:600}
+.ap-sheet.ap-admin{width:min(440px,100%)}
+@media (max-width:640px){.pl-setup{flex-direction:column;align-items:flex-start}}
+:root[data-palette] #app .ap-sheet input:not([type=checkbox]):not([type=radio]):not([type=range]),:root[data-palette] #app .ap-sheet select,:root[data-palette] #app .ap-sheet textarea{background:rgba(118,118,128,.12)!important;border:1px solid rgba(60,60,67,.12)!important;border-radius:10px!important;box-shadow:none!important}
+:root[data-palette] #app .ap-sheet input:not([type=checkbox]):not([type=radio]):not([type=range]):focus,:root[data-palette] #app .ap-sheet select:focus,:root[data-palette] #app .ap-sheet textarea:focus{background:#fff!important;box-shadow:0 0 0 3.5px rgba(10,132,255,.35)!important}

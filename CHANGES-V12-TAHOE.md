@@ -85,3 +85,16 @@ The Dashboard and the CISA Overview were rebuilt with large type, few boxes and 
 - The login page shows a different scene, picked at random, every time it appears: on refresh, after you sign out, and after the 10-minute timeout. It never repeats the previous scene.
 - While the login page stays open, it also changes every 30 minutes.
 - Service worker cache: `p2c-theory-cisa-v26-walls`.
+
+## Update — One-time study plan setup with admin unlock
+- The Study planner first asks the learner to **Set up your study plan**: choose Normal or Relaxed, then set dates, weekly hours and topics.
+- **Save & lock plan** asks for confirmation, then locks the plan (`cisa.planLock` in `progress/{uid}`). After that:
+  - The chosen plan shows as "🔒 Relaxed" (or Normal), and the other plan button is greyed out and disabled.
+  - Set up/Configure, topic Edit, reorder, include/exclude, catch-up and Restore default are hidden and blocked.
+  - The learner can still view the full plan and tick topics as done.
+- **Admin:** UID `Yk0WCbGfCOfiy7fnXqMgcfxjvze2` (`ADMIN_UID` in `index.html`).
+  - Signed in as the admin, the planner shows **Unlock plan**.
+  - On a learner's account, **Admin unlock** opens a sheet where the admin types their email and password. These are checked on a separate, temporary Firebase app instance, which is signed out and deleted straight away. The learner stays signed in.
+- The lock is enforced in the app only; Firestore rules are unchanged.
+- Fixed form fields inside popups being invisible on the Sonoma glass palette.
+- Service worker cache: `p2c-theory-cisa-v27-planlock`.

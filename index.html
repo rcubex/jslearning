@@ -2894,9 +2894,11 @@ const firebaseConfig = {
 /* Only these approved Firebase Authentication UIDs may sign in.
    Access to saved data is also enforced by deployed Firestore rules. */
 const ALLOWED_USER_UIDS=['Yk0WCbGfCOfiy7fnXqMgcfxjvze2','m6ybLppag7e9ky7UMVqnc80gwxA3'];
+/* Admin account: can unlock a learner's locked CISA study plan. */
+const ADMIN_UID='Yk0WCbGfCOfiy7fnXqMgcfxjvze2';
 /* ============================================================================================ */
 import { GRC_V31 } from "./grc-v31.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, getDocs, collection, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 window.__p2cLoaded=true;
@@ -3571,7 +3573,7 @@ async function vCisa(){
   try{
     if(!CisaModule) CisaModule=await import('./cisa/cisa-app.js');
     if(location.hash.replace('#','')!=='cisa'||!dbRef)return;
-    await CisaModule.mount({root:app,read:()=>S.cisa||{},write:(next)=>{S.cisa=next;save()}});
+    await CisaModule.mount({root:app,read:()=>S.cisa||{},write:(next)=>{S.cisa=next;save()},isAdmin:!!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID),verifyAdmin});
   }catch(e){console.error('CISA load failed',e);app.innerHTML='<div class="cisa-hub"><section class="cisa-error">Unable to load CISA Hub. Verify the whole <code>cisa/</code> directory was uploaded alongside <code>index.html</code>.</section></div>'}
 }
 const VIEWS={dashboard:vDashboard,courses:vCourses,grc:vGRC,appsec:vApplication,cisa:vCisa,workbook:vWorkbook,insights:vInsights,explore:vExplore,rosetta:vRosetta,subnets:vSubnets,certs:vCerts,log:vLog};
@@ -3634,6 +3636,18 @@ window.addEventListener('scroll',()=>{const bar=document.getElementById('readbar
 const configured=!firebaseConfig.apiKey.startsWith('PASTE');
 const fbApp=configured?initializeApp(firebaseConfig):null;
 const auth=fbApp?getAuth(fbApp):null;
+async function verifyAdmin(email,password){
+  if(!configured||!email||!password) return false;
+  let tmp=null;
+  try{
+    tmp=initializeApp(firebaseConfig,'admin-verify-'+Date.now());
+    const a2=getAuth(tmp); const cred=await signInWithEmailAndPassword(a2,email,password);
+    const ok=!!(cred&&cred.user&&cred.user.uid===ADMIN_UID);
+    try{await signOut(a2);}catch(e){}
+    return ok;
+  }catch(e){ return false; }
+  finally{ if(tmp){ try{ await deleteApp(tmp); }catch(e){} } }
+}
 const fdb=fbApp?getFirestore(fbApp):null;
 let KEY='p2c-guest', dbRef=null, writing=Promise.resolve(), dbTimer=null;
 function setSync(txt,ok){const el=document.getElementById('sync'); el.textContent=txt; el.classList.toggle('ok',!!ok);}
