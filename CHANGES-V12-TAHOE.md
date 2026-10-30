@@ -73,3 +73,10 @@ The Dashboard and the CISA Overview were rebuilt with large type, few boxes and 
 - The quote of the day shows once per day: only the first time the login page opens that day. The quote changes every day.
 - Removed the "How these statistics work" panel from Study Insights.
 - Service worker cache: `p2c-theory-cisa-v24-beach`.
+
+## Update — Rotating login wallpapers
+- The login wallpaper changes every 30 minutes, at :00 and :30. It cycles through 25 scenes, starting with Tropical Beach.
+- Each change crossfades smoothly. On dark scenes (Twilight Lake, Northern Lights) the clock text turns white.
+- The wallpapers live in the new file `login-walls.js`, which is cached offline by the service worker.
+- Sign-in card proportions adjusted to 344 × 308 px (about 1.1:1), with more even padding.
+- Service worker cache: `p2c-theory-cisa-v25-walls`.
