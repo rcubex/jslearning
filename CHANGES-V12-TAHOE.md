@@ -66,3 +66,10 @@ The Dashboard and the CISA Overview were rebuilt with large type, few boxes and 
   - **Configure plan** opens a second sheet on top. It has plan type, dates, weekly hours and topic customisation (add, edit, reorder, include or exclude). **Save plan** recalculates the schedule and closes the sheet.
   - Sheets have a blurred backdrop and a spring animation, and close on Esc, a backdrop click or ×.
 - Service worker cache: `p2c-theory-cisa-v23-forest`.
+
+## Update — Tropical Beach login
+- The login wallpaper is now Tropical Beach (palms, turquoise sea, sand, with gently moving surf).
+- The sign-in card is smaller (340 px) and centred, with the clock above it.
+- The quote of the day shows once per day: only the first time the login page opens that day. The quote changes every day.
+- Removed the "How these statistics work" panel from Study Insights.
+- Service worker cache: `p2c-theory-cisa-v24-beach`.
