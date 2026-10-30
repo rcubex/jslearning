@@ -35,3 +35,16 @@ Technical, GRC and Application module pages no longer squeeze the lesson text in
 - **Lessons as pages.** Each lesson is its own spacious page with a "Lesson 3.1 · 2 min read" tag and a large title. The timeline dots and connecting line are gone.
 - **Roomier content blocks.** Key points, steps, tips, code examples, deep-dive sections, takeaways, quizzes and notes all have more padding and spacing.
 - **Side panels moved.** Key terms, official reading and quick-log now sit in a row below the lesson content instead of crowding its side.
+
+## Update: "Spacious Editorial" dashboards
+The Dashboard and the CISA Overview were rebuilt with large type, few boxes and generous space. The Tahoe glass theme is unchanged.
+- **Dashboard.**
+  - A large greeting, then one main card with your next module, a progress bar, "Continue lesson" and a large Technical progress ring.
+  - Four large numbers sit on the background without boxes: hours this week, day streak, quiz accuracy and days to the CISA exam (with any mistakes due).
+  - "Your academies" are four equal cards in a 2×2 grid, with the percentage on the right.
+  - Below them come the learning path, the weekly chart, cloud mastery and achievements.
+- **CISA hub header.** Your exam countdown ("75 days") sits in large type on the right of the title, with the Normal/Relaxed plan switch under it.
+- **CISA overview.**
+  - The main card shows your next task with Read topic, Log a session and Review mistakes buttons. Beside it are four large numbers: topics covered, hours logged, readiness and mistakes due.
+  - "Readiness by domain" is a clean list showing each domain's exam weight.
+  - "Coming up" lists your next five planned sessions.
