@@ -117,3 +117,93 @@
 - **Tables (e.g. Cloud Rosetta):** scroll sideways inside their card.
 - Larger tap targets for buttons.
 - Service worker cache: `p2c-theory-v33-mobile`.
+
+## V16 — Admin portal: activity monitoring
+
+**Admin account (monitoring only)**
+- Signing in with the admin account opens the **Admin portal**. All study pages (academies, CISA Hub, tools, search) are hidden for the admin.
+- Four views per learner:
+  - **Overview:** plan and lock status, readiness, topics, logged hours, quizzes, mistakes, manual progress, a 14-day activity chart and the latest 10 entries. Includes the Unlock plan button.
+  - **Activity log:** a table grouped by day with time, area, activity, time spent and device. It can be filtered by period, area and type, and downloaded as CSV.
+  - **Weekly report (Mon–Sun):** a summary sentence, KPIs compared with the previous period, a needs-attention list, daily chart, time by area, results and progress, and topics covered. You can browse earlier weeks, print or save as PDF, and download a CSV.
+  - **2-week report:** the same, plus a week-by-week comparison table.
+- A live status shows "Active now", the current area and when the learner was last active. The portal refreshes every 2 minutes.
+
+**Learner tracking**
+- Active time is measured per area and topic. It only counts while the page is visible and the learner has used the mouse, keyboard or touch within the last 3 minutes (9 minutes during a mock exam or the focus timer). When the learner goes idle, the time counted after their last input is taken back.
+- The following actions are recorded:
+  - Sign-in and sign-out (including the automatic timeout)
+  - Mock exam started
+  - Mistakes reviewed
+  - Manual section read
+  - Revision note revised
+  - Topic completed
+  - Plan locked
+- Mock and quiz results and the learner's own study logs come from their saved progress.
+- Stored in Firestore as `activity/{uid}` (profile and last seen) and `activity/{uid}/days/{YYYY-MM-DD}`. Writes are small merged updates, about one a minute.
+
+**Files**
+- New: `cisa/admin-portal.js`
+- Changed: `index.html`, `cisa/cisa-app.js`, `cisa/cisa.css`, `service-worker.js` (cache `p2c-theory-v34-admin`), `firestore.rules`
+- **Publish `firestore.rules` again.** The activity log needs the new `activity` rules. Learners can add entries but cannot delete them.
+
+## V17 — Admin coaching: popup messages, live chat, targets, assigned work, insights
+
+**Messaging**
+- **Popup messages:** the admin sends an Apple-style popup.
+  - If the learner is signed in, it appears straight away.
+  - If they're signed out, it waits and pops up at their next sign-in.
+  - The learner can press OK or Reply. The admin sees "Waiting for sign-in", "Delivering…" or "Seen".
+- **Live chat (admin and learner):**
+  - The learner has a chat button in the bottom-right corner, with an unread badge, a notification banner and Seen/Sent receipts.
+  - The admin has a Chat tab with an unread count. Any message can also be sent as a popup.
+
+**Coaching (Admin portal → Coaching)**
+- **Weekly targets** (study hours, active days, quick quizzes, mocks every 2 weeks). They are shown to the learner as progress rings.
+- **Assigned work:** a syllabus topic, manual section, mock exam, quick quiz or custom task, with a due date and a note.
+  - Topics, manual sections, mocks and quizzes tick themselves off automatically. The learner marks custom tasks done.
+  - Each item shows as open, done or overdue.
+  - The learner sees a "From your admin" card on the dashboard and on the CISA Overview.
+- **Sessions and devices:** devices used and the last sign-in, plus **Sign out learner now**, which signs the learner out on every open device.
+
+**Insights**
+- **Exams tab:**
+  - Readiness trend chart: exam-weighted mock first attempts, retakes and weekly quiz accuracy.
+  - Projection to the exam date: needs at least 4 scores over 3 weeks, and is capped at ±20 points from the recent average.
+  - Topic accuracy heatmap.
+  - Question-by-question mock review.
+- **Habits tab:** a 20-week calendar heatmap, current and best streak, time of day, day of week, focus quality and devices.
+- **Reports:** Weekly, 2-week and the new **Monthly** report, with targets and a week-by-week table.
+- **Alerts bell:** new chat messages, inactive for 3 or more days, overdue work, behind the weekly target, popup unseen for 2 days, a low mock score, or the exam is close and readiness is low.
+- **Audit trail:** every admin action (unlocks, popups, targets, assigned work, remote sign-outs), with CSV export.
+
+**Files and setup**
+- New: `cisa/learner-coach.js`
+- Changed: `cisa/admin-portal.js`, `index.html`, `cisa/cisa.css`, `service-worker.js` (cache `p2c-theory-v35-coach`), `firestore.rules`
+- New Firestore data: `coach/{uid}` (admin writes, learner reads) and `chats/{uid}/messages/{id}`.
+  - Each side can only send as itself, and can only mark the other side's messages as seen.
+- **Publish `firestore.rules` again.**
+
+## V18 — Apple-style messages, dialogs and coaching UI
+
+- **New dialogs everywhere:** every browser "OK/Cancel" box in the app (CISA, academies, workbook, backup, admin portal) is now an Apple-style alert.
+  - Clear titles and named buttons, for example "Start exam", "Save & lock", or "Delete" in red.
+  - Keyboard support: Esc cancels, Enter confirms, Tab moves between buttons.
+  - Implemented in the new `cisa/ui-dialog.js`.
+- **Popup messages:** an iOS-style alert with a bell icon, sender and time, Reply and OK.
+  - When several are waiting, the alert shows "· 2 more" and an OK button labelled "Next".
+  - Popups wait until the tab is visible.
+- **Chat (both sides):** an iMessage-style thread.
+  - Blue and grey bubbles that group consecutive messages.
+  - Time stamps when there's a gap, and Delivered / Read receipts.
+  - Popup messages shown as highlighted notices with their seen status.
+  - A pill-shaped message field with a send button that only lights up when there's text.
+  - Done button; on phones the chat opens as a full-height sheet.
+- **New-message banner:** an iOS notification banner that drops in from the top. The chat button bounces when a new message arrives.
+- **"From your admin" card:** Apple Watch-style activity rings for the weekly targets, and a Reminders-style task list (overdue items in red, Done button for custom tasks).
+- **Admin portal:**
+  - Segmented tab bar and avatar with a live green dot.
+  - Message button with an unread count.
+  - Grouped popup composer, a recently-sent list with Seen / Waiting pills, and a notification-centre style alerts panel.
+  - Popup toggle switch in the chat, and cleaner KPI tiles and form fields.
+- Cache bumped to `p2c-theory-v36-ui`.

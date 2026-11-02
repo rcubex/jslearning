@@ -32,6 +32,34 @@ service cloud.firestore {
       allow update: if approved() && (isAdmin() || (request.auth.uid == uid && planIntact()));
       allow delete: if approved() && request.auth.uid == uid;
     }
+    // Activity log: written by the learner's own app, read by the learner and the admin.
+    // Learners can add and update entries but cannot delete them.
+    match /activity/{uid} {
+      allow read: if approved() && (request.auth.uid == uid || isAdmin());
+      allow create, update: if approved() && request.auth.uid == uid;
+      match /days/{day} {
+        allow read: if approved() && (request.auth.uid == uid || isAdmin());
+        allow create, update: if approved() && request.auth.uid == uid;
+      }
+    }
+    // Coaching set by the admin (targets, assigned work, audit trail, remote sign-out).
+    // The learner can read it; only the admin can write it.
+    match /coach/{uid} {
+      allow read: if approved() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
+    }
+    // Chat and popup messages between the admin and one learner.
+    // Each side can only send as itself, and can only mark the other side's messages as seen.
+    match /chats/{uid}/messages/{msgId} {
+      allow read: if approved() && (request.auth.uid == uid || isAdmin());
+      allow create: if approved() && (
+        (request.auth.uid == uid && !isAdmin() && request.resource.data.from == 'learner') ||
+        (isAdmin() && request.resource.data.from == 'admin'));
+      allow update: if approved()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['seenAt'])
+        && ((request.auth.uid == uid && resource.data.from == 'admin') || (isAdmin() && resource.data.from == 'learner'));
+      allow delete: if isAdmin();
+    }
     match /users/{uid}/{area}/{entryId} {
       allow read, write: if approved() && request.auth.uid == uid
         && area in ['grcProgress', 'studyEntries'];
