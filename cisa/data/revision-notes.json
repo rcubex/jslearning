@@ -1,0 +1,1304 @@
+{
+ "title": "Revision notes",
+ "basis": "Condensed exam notes covering every concept in your CISA revision material (Domains 1-5) plus the 28th edition CRM Domain 4 changes, rewritten in short exam-ready points and mapped to the current syllabus topics.",
+ "outdated": [
+  {
+   "item": "Domain weights shown as 21% (Domain 1) etc.",
+   "now": "Current outline (Aug 2024): D1 18%, D2 18%, D3 12%, D4 26%, D5 26%."
+  },
+  {
+   "item": "COBIT 5",
+   "now": "COBIT 2019 is the current framework (governance system, design factors, focus areas)."
+  },
+  {
+   "item": "ISO 20000-1:2011",
+   "now": "ISO/IEC 20000-1:2018."
+  },
+  {
+   "item": "BCP/BIA under Domain 2",
+   "now": "BIA, BCP, DRP and backups now sit in Domain 4B (Business Resilience)."
+  },
+  {
+   "item": "No Operational Log Management section",
+   "now": "New 4.9 in the 28th edition CRM (topic 4A9) - added below."
+  },
+  {
+   "item": "Shadow IT not covered",
+   "now": "4.5 Shadow IT and EUC is emphasised in the new syllabus (topic 4A5) - added below."
+  }
+ ],
+ "cards": [
+  {
+   "id": "n1-r01",
+   "domain": 1,
+   "topic": "1A1",
+   "title": "Audit charter",
+   "points": [
+    "Formal document giving the audit function its purpose, authority, responsibility and accountability.",
+    "Approved by the audit committee or the board (the most senior governing body), not by IT or line management.",
+    "Gives auditors unrestricted access to records, people and systems needed for the work.",
+    "Changes rarely; the annual audit plan changes every year."
+   ],
+   "tip": "If asked who approves the charter, pick the most senior governance body offered (audit committee / board).",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r02",
+   "domain": 1,
+   "topic": "1A1",
+   "title": "Independence and professional ethics",
+   "points": [
+    "Auditors must be independent in fact and in appearance; report functionally to the audit committee.",
+    "Do not audit work you designed, implemented or operated; disclose any impairment.",
+    "ISACA Code of Professional Ethics: due care, objectivity, confidentiality, competence, support standards.",
+    "The auditor recommends; management decides and implements."
+   ],
+   "tip": "Answers where the auditor fixes, approves or implements controls are almost always wrong.",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r03",
+   "domain": 1,
+   "topic": "1A1",
+   "title": "ISACA ITAF: standards, guidelines, tools",
+   "points": [
+    "Standards are mandatory; guidelines explain how to apply them; tools and techniques are examples.",
+    "General standards (independence, proficiency), performance standards (planning, evidence, sampling) and reporting standards."
+   ],
+   "tip": "Mandatory = standards. Everything else supports them.",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r17",
+   "domain": 1,
+   "topic": "1A2",
+   "title": "Types of audits",
+   "points": [
+    "Compliance, financial, operational, integrated, administrative, IS, specialized (e.g. third-party / SOC reports) and forensic audits.",
+    "Forensic audits gather evidence for investigation of fraud or crime and must preserve chain of custody.",
+    "Relying on other auditors or experts requires assessing their competence, independence and work quality."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n1-r04",
+   "domain": 1,
+   "topic": "1A3",
+   "title": "Audit planning steps",
+   "points": [
+    "Understand the business, its objectives, processes and the IT that supports them.",
+    "Identify laws and regulations, perform a risk assessment, then set scope and objectives.",
+    "Build the audit program: procedures, resources, timing and evidence needed.",
+    "Long-term (annual) plans are risk-based and reviewed by the audit committee."
+   ],
+   "tip": "The FIRST step in planning is understanding the business and its objectives.",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r05",
+   "domain": 1,
+   "topic": "1A3",
+   "title": "Risk analysis and risk-based audit",
+   "points": [
+    "Risk = likelihood x impact of a threat exploiting a vulnerability against an asset.",
+    "Risk-based auditing focuses effort on areas of highest risk, so audit resources give the most assurance.",
+    "Audit risk = inherent risk x control risk x detection risk; the auditor can only influence detection risk.",
+    "Inherent risk exists before controls; control risk is that controls fail to prevent/detect; detection risk is that the auditor misses an error."
+   ],
+   "tip": "When resources are limited, audit the highest-risk areas first.",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r06",
+   "domain": 1,
+   "topic": "1A3",
+   "title": "Risk treatment options",
+   "points": [
+    "Mitigate (reduce with controls), transfer/share (insurance, outsourcing), avoid (stop the activity), accept (within appetite).",
+    "Risk acceptance must be a documented decision by an authorized owner, not by the auditor.",
+    "Residual risk is what remains after treatment and should be within risk appetite."
+   ],
+   "tip": "Transferring risk moves the financial impact, not accountability.",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r07",
+   "domain": 1,
+   "topic": "1A4",
+   "title": "Internal controls: preventive, detective, corrective",
+   "points": [
+    "Preventive controls stop problems before they occur (segregation of duties, access controls, input validation).",
+    "Detective controls find problems after they occur (logs review, reconciliations, hash totals, IDS).",
+    "Corrective controls reduce impact and restore (backups, BCP/DRP, incident procedures).",
+    "Compensating controls offset a weakness elsewhere, e.g. log review where segregation of duties is not possible."
+   ],
+   "tip": "Preventive is usually the BEST control; when it is not possible, look for a compensating detective control.",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r08",
+   "domain": 1,
+   "topic": "1A4",
+   "title": "General controls vs application controls",
+   "points": [
+    "IT general controls (ITGC) cover the environment: access, change management, operations, backup.",
+    "Application controls work inside a system: input, processing and output controls.",
+    "Weak ITGCs mean application controls cannot be relied on."
+   ],
+   "tip": "Test ITGCs before relying on automated application controls.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r03",
+   "domain": 1,
+   "topic": "1A4",
+   "title": "Fraud risk factors",
+   "points": [
+    "Fraud triangle: pressure/incentive, opportunity, rationalisation.",
+    "Controls reduce opportunity: segregation of duties, approvals, monitoring, mandatory leave."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n1-r10",
+   "domain": 1,
+   "topic": "1B1",
+   "title": "Audit project management",
+   "points": [
+    "Plan, staff and schedule the audit; monitor progress against the audit program.",
+    "Use skilled staff; supervise and review work papers.",
+    "Communicate early with auditee management to agree scope and timing."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n1-r11",
+   "domain": 1,
+   "topic": "1B2",
+   "title": "Compliance vs substantive testing",
+   "points": [
+    "Compliance (test of controls) checks whether a control exists and operates as designed.",
+    "Substantive testing checks the integrity of actual data and transactions (balances, records).",
+    "Strong controls from compliance testing allow less substantive testing; weak controls require more."
+   ],
+   "tip": "Testing whether access is approved = compliance test. Recalculating balances = substantive test.",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r13",
+   "domain": 1,
+   "topic": "1B2",
+   "title": "Audit sampling",
+   "points": [
+    "Statistical sampling uses probability to set size and evaluate results objectively; non-statistical (judgmental) relies on auditor judgment.",
+    "Attribute sampling estimates a rate of occurrence (compliance tests); variable sampling estimates a monetary value (substantive tests).",
+    "Stop-or-go sampling halts early when few errors are expected; discovery sampling looks for at least one instance (e.g. fraud).",
+    "Key terms: confidence coefficient, level of risk, precision, expected error rate, tolerable error, population standard deviation."
+   ],
+   "tip": "Higher confidence or lower tolerable error means a larger sample. A higher expected error rate also needs a larger sample.",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r12",
+   "domain": 1,
+   "topic": "1B3",
+   "title": "Audit evidence",
+   "points": [
+    "Good evidence is sufficient, reliable, relevant and useful.",
+    "Most reliable: independent external sources, evidence obtained directly by the auditor, system-generated data.",
+    "Less reliable: verbal statements and evidence provided by the auditee.",
+    "Techniques: observation, inquiry, inspection, reperformance, CAATs, data analytics; protect evidence chain of custody."
+   ],
+   "tip": "Evidence the auditor obtains directly beats evidence handed over by management.",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r15",
+   "domain": 1,
+   "topic": "1B4",
+   "title": "Audit data analytics and CAATs",
+   "points": [
+    "CAATs (e.g. generalized audit software) test whole populations, find exceptions and duplicates.",
+    "Continuous auditing gives near real-time assurance on high-volume automated processes.",
+    "Validate the completeness and integrity of extracted data before analysis."
+   ],
+   "tip": "For very large transaction volumes, CAATs/data analytics give the best coverage.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r17",
+   "domain": 1,
+   "topic": "1B4",
+   "title": "Online (continuous) auditing techniques",
+   "points": [
+    "SCARF/EAM: embedded audit modules collect selected transactions continuously.",
+    "Integrated test facility (ITF): dummy entity processed with live data; must be removed from results.",
+    "Snapshots record transaction paths; audit hooks flag suspicious transactions; CIS (continuous and intermittent simulation)."
+   ],
+   "tip": "ITF risk: test data contaminating real results.",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r16",
+   "domain": 1,
+   "topic": "1B5",
+   "title": "Reporting and follow-up",
+   "points": [
+    "Report findings with condition, criteria, cause, effect and recommendation; discuss with management first.",
+    "Management responds with action plans, owners and dates; the auditor follows up later.",
+    "The auditor may not suppress significant findings because management disagrees; include management’s response."
+   ],
+   "tip": "Before finalising a report, discuss findings with the auditee to confirm facts.",
+   "src": "revision"
+  },
+  {
+   "id": "n1-r14",
+   "domain": 1,
+   "topic": "1B6",
+   "title": "Control self-assessment (CSA)",
+   "points": [
+    "Management and staff assess their own controls, usually in facilitated workshops.",
+    "Benefits: early detection of risk, ownership of controls, better employee awareness.",
+    "CSA supplements, but does not replace, the internal audit function; the auditor acts as facilitator."
+   ],
+   "tip": "The objective of CSA is to make control monitoring a business responsibility.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-g01",
+   "domain": 2,
+   "topic": "2A1",
+   "title": "Laws, regulations and industry standards",
+   "points": [
+    "Identify laws and regulations that affect the business (privacy, financial reporting, sector rules) and map them to controls.",
+    "Management owns compliance; the auditor checks that obligations are identified, owned and monitored.",
+    "Industry standards (PCI DSS, ISO 27001, NIST) may be contractual or voluntary."
+   ],
+   "tip": "First step in a compliance review: identify the applicable legal and regulatory requirements.",
+   "src": "gap"
+  },
+  {
+   "id": "n1-r09",
+   "domain": 2,
+   "topic": "2A2",
+   "title": "COBIT (governance framework)",
+   "points": [
+    "COBIT separates governance (evaluate, direct, monitor: board) from management (plan, build, run, monitor).",
+    "COBIT 2019 is current; it replaced COBIT 5 and adds design factors and focus areas.",
+    "Principles include meeting stakeholder needs, a holistic approach and a dynamic governance system.",
+    "Enablers/components: processes, structures, principles and policies, information, culture, people/skills, services/infrastructure/applications."
+   ],
+   "tip": "Your revision PDF still says COBIT 5. The current exam uses COBIT 2019 concepts.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-r01",
+   "domain": 2,
+   "topic": "2A2",
+   "title": "Corporate governance and GEIT",
+   "points": [
+    "Corporate governance: the board sets direction and holds management accountable for performance and risk.",
+    "Governance of enterprise IT (GEIT) makes IT deliver value, manage risk and use resources in line with business goals.",
+    "Governance (board) evaluates, directs and monitors; management plans, builds, runs and monitors."
+   ],
+   "tip": "IT strategy must be derived from business strategy, not the other way round.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-r02",
+   "domain": 2,
+   "topic": "2A2",
+   "title": "Auditor’s role in IT governance",
+   "points": [
+    "Assess whether governance structures align IT with business objectives and manage risk.",
+    "Review that roles, accountability and reporting to the board are clear.",
+    "Provide independent assurance; do not set strategy."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n2-r04",
+   "domain": 2,
+   "topic": "2A2",
+   "title": "IT strategy committee vs IT steering committee",
+   "points": [
+    "IT strategy committee: board level; advises the board on IT strategy and alignment.",
+    "IT steering committee: executive level; prioritises projects, approves investments, monitors delivery and resources.",
+    "Steering committee members come from business and IT management."
+   ],
+   "tip": "Project prioritisation and approval of IT investment = steering committee.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-r09",
+   "domain": 2,
+   "topic": "2A3",
+   "title": "Information security roles and responsibilities",
+   "points": [
+    "Board and senior management own security governance; the CISO manages the programme.",
+    "Data owners classify data and approve access; custodians implement controls; users follow policy.",
+    "Security administrators should be segregated from users and developers."
+   ],
+   "tip": "Data owners, not IT, are responsible for classifying data and authorizing access.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-g02",
+   "domain": 2,
+   "topic": "2A4",
+   "title": "Enterprise architecture (EA)",
+   "points": [
+    "EA describes business, data, application and technology layers and how they fit together (e.g. Zachman, TOGAF).",
+    "It reduces duplication and complexity and guides investment decisions.",
+    "Auditors check that new projects comply with the target architecture and exceptions are approved."
+   ],
+   "tip": null,
+   "src": "gap"
+  },
+  {
+   "id": "n2-r06",
+   "domain": 2,
+   "topic": "2A5",
+   "title": "Enterprise risk management",
+   "points": [
+    "Identify assets, threats and vulnerabilities; assess impact and likelihood; treat; monitor.",
+    "Risk appetite is set by senior management/board; risk owners accept residual risk.",
+    "Losses can be direct (money, assets) or indirect (reputation, legal, productivity)."
+   ],
+   "tip": "Risk assessment must start with identifying and valuing information assets.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r06",
+   "domain": 2,
+   "topic": "2A6",
+   "title": "Privacy vs confidentiality",
+   "points": [
+    "Privacy concerns the rights of individuals over personal data (collection, use, consent, retention).",
+    "Confidentiality is protecting any information from unauthorized disclosure.",
+    "Privacy principles: notice, choice/consent, purpose limitation, minimisation, access, security, retention, accountability.",
+    "Auditor checks privacy impact assessments, legal compliance (e.g. GDPR) and controls over personal data."
+   ],
+   "tip": "A privacy impact assessment should be done early, when a system handling personal data is designed.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r02",
+   "domain": 2,
+   "topic": "2A7",
+   "title": "Classification of information assets",
+   "points": [
+    "Classify by sensitivity and criticality; the data owner decides the class.",
+    "Classification defines access rules, handling, retention and destruction.",
+    "Example levels: public, internal, confidential, restricted/secret."
+   ],
+   "tip": "Classification is the basis for choosing appropriate access controls.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-r07",
+   "domain": 2,
+   "topic": "2B1",
+   "title": "Human resource management",
+   "points": [
+    "Hiring with background checks, signed confidentiality and acceptable-use agreements.",
+    "Training, mandatory leave and job rotation help detect fraud.",
+    "Termination: revoke access immediately, recover assets, conduct exit procedures."
+   ],
+   "tip": "Mandatory vacation / job rotation are detective controls against fraud.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-r08",
+   "domain": 2,
+   "topic": "2B2",
+   "title": "Sourcing and outsourcing",
+   "points": [
+    "Options: insourced, outsourced, hybrid; onsite, offsite, offshore.",
+    "Accountability stays with the organisation; outsource the activity, not the responsibility.",
+    "Contracts need SLAs, right-to-audit, security, confidentiality, exit and data return clauses.",
+    "Offshore risks: legal/jurisdiction, privacy, communication and continuity."
+   ],
+   "tip": "Right-to-audit clause and SLA monitoring are key controls for outsourced services.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-r03",
+   "domain": 2,
+   "topic": "2B3",
+   "title": "IT balanced scorecard",
+   "points": [
+    "Measures IT across four perspectives: business contribution, user orientation, operational excellence and future orientation.",
+    "Links IT performance to business goals using leading and lagging indicators.",
+    "Prerequisite: defined key performance indicators that matter to the business."
+   ],
+   "tip": "The BSC is a management/performance tool, not a risk assessment tool.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-r05",
+   "domain": 2,
+   "topic": "2B3",
+   "title": "Maturity and process improvement models",
+   "points": [
+    "Capability/maturity models (e.g. CMMI) measure process maturity from initial/ad hoc to optimized.",
+    "IDEAL model for improvement: Initiating, Diagnosing, Establishing, Acting, Learning.",
+    "Used to set a target maturity and plan improvement steps."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n4-r06",
+   "domain": 2,
+   "topic": "2B4",
+   "title": "Quality assurance",
+   "points": [
+    "QA ensures that staff follow standards and processes; quality control tests the product.",
+    "QA function should be independent of development."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n3-r02",
+   "domain": 3,
+   "topic": "3A1",
+   "title": "Portfolio and program management",
+   "points": [
+    "Portfolio management selects and prioritises the right projects for the strategy and optimises resources.",
+    "A program is a group of related projects managed together to deliver a common outcome.",
+    "Projects have defined start/end, scope, budget and deliverables."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n3-r03",
+   "domain": 3,
+   "topic": "3A1",
+   "title": "Project organisation forms",
+   "points": [
+    "Functional (influence) structure: project manager has little authority.",
+    "Pure project: project manager has full authority over the team.",
+    "Matrix: authority shared between functional and project managers."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n3-r04",
+   "domain": 3,
+   "topic": "3A1",
+   "title": "Project roles",
+   "points": [
+    "Senior management/sponsor provides funding and is accountable for success; steering committee gives direction.",
+    "Project manager runs day-to-day delivery; user management owns requirements and acceptance; QA verifies quality.",
+    "Security officer ensures security controls are designed in."
+   ],
+   "tip": "The project sponsor owns the business case and approves funding.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r05",
+   "domain": 3,
+   "topic": "3A1",
+   "title": "Planning tools: WBS, OBS, estimating",
+   "points": [
+    "Work breakdown structure (WBS) splits the project into manageable work packages; OBS shows who is responsible.",
+    "Estimating: analogous, parametric, bottom-up, and actual costs. Function point analysis sizes software by functionality.",
+    "PERT uses optimistic, most likely and pessimistic estimates: (O + 4M + P) / 6.",
+    "Critical path = longest path with zero slack; Gantt charts show schedule; earned value compares planned, earned and actual cost."
+   ],
+   "tip": "Function point analysis is the BEST way to estimate size of business software early.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r06",
+   "domain": 3,
+   "topic": "3A1",
+   "title": "Executing, controlling and closing",
+   "points": [
+    "Control scope changes through formal change requests; manage resources and risks continuously.",
+    "Risk process: identify, assess, manage, monitor, evaluate the risk process.",
+    "Closing: formal acceptance, lessons learned, release resources, archive documentation."
+   ],
+   "tip": "Uncontrolled scope change (scope creep) is a leading cause of project failure.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r01",
+   "domain": 3,
+   "topic": "3A2",
+   "title": "Benefits realization and business case",
+   "points": [
+    "The business case justifies an investment: benefits, costs, risks, alternatives and alignment with strategy.",
+    "Revisit the business case at each major phase gate; stop the project if it is no longer viable.",
+    "Benefits realization continues after go-live and is measured against the business case."
+   ],
+   "tip": "The business case should be reviewed throughout the project, not only at approval.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r07",
+   "domain": 3,
+   "topic": "3A3",
+   "title": "Traditional SDLC (waterfall)",
+   "points": [
+    "Phases: feasibility, requirements, design, build, test, implementation, post-implementation review.",
+    "Each phase has deliverables and sign-off before the next; good for stable, well-understood requirements.",
+    "Requirements errors found late are the most expensive to fix."
+   ],
+   "tip": "User involvement in requirements definition is the most important success factor.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r08",
+   "domain": 3,
+   "topic": "3A3",
+   "title": "Agile, prototyping and re-engineering",
+   "points": [
+    "Agile delivers small increments in short iterations (sprints) with close user involvement; less documentation.",
+    "Prototyping quickly shows users a working model; risk: weak controls and scope growth.",
+    "Re-engineering updates an existing system; reverse engineering analyses a system to learn its design."
+   ],
+   "tip": "In agile, controls and documentation still matter; the auditor checks they are built into the process.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r12",
+   "domain": 3,
+   "topic": "3A3",
+   "title": "AI and expert systems",
+   "points": [
+    "Expert systems use a knowledge base (rules, decision trees, semantic nets), inference engine and explanation module.",
+    "Risks: incorrect or outdated rules, poor validation of decisions, lack of explainability.",
+    "Auditors check how knowledge is validated and changes to rules are controlled."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n3-r14",
+   "domain": 3,
+   "topic": "3A4",
+   "title": "Input controls and data validation edits",
+   "points": [
+    "Sequence check (no gaps/duplicates in numbering), limit check (upper bound), range check (between limits).",
+    "Validity check (allowed values), reasonableness check (sensible against norms), existence check (data entered correctly against criteria).",
+    "Key verification (re-keyed by a second person), check digit (detects transcription errors), completeness check (no missing fields).",
+    "Duplicate check (no repeated transactions) and logical relationship check (fields consistent with each other)."
+   ],
+   "tip": "Check digit = detects transposition and transcription errors at input.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r15",
+   "domain": 3,
+   "topic": "3A4",
+   "title": "Processing and output controls",
+   "points": [
+    "Processing: run-to-run totals, control totals, reconciliation, limit checks on calculated amounts, exception reports.",
+    "Output: distribution lists, report balancing, secure storage of sensitive forms, retention rules.",
+    "Batch controls: record counts, financial totals, hash totals."
+   ],
+   "tip": "Hash totals are meaningless sums used only to detect missing or altered records.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r16",
+   "domain": 3,
+   "topic": "3A4",
+   "title": "Data integrity testing and ACID",
+   "points": [
+    "Relational integrity tests check data within a table; referential integrity tests check relationships between tables (foreign keys).",
+    "Online transaction processing relies on ACID: Atomicity, Consistency, Isolation, Durability."
+   ],
+   "tip": "Atomicity = all or nothing; a failed transaction is fully rolled back.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r09",
+   "domain": 3,
+   "topic": "3B1",
+   "title": "Test approaches and test classification",
+   "points": [
+    "Bottom-up testing starts with modules; top-down starts with interfaces and finds interface errors early.",
+    "Unit, interface/integration, system (recovery, security, load, volume, stress, performance) and final acceptance testing.",
+    "QA testing checks technical quality; user acceptance testing (UAT) checks business requirements and is signed off by users.",
+    "Other tests: alpha/beta, pilot, white-box/black-box, regression, parallel, sociability."
+   ],
+   "tip": "Regression testing ensures changes did not break existing functionality.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r11",
+   "domain": 3,
+   "topic": "3B1",
+   "title": "Certification and accreditation",
+   "points": [
+    "Certification is the technical evaluation of a system’s controls against requirements.",
+    "Accreditation is management’s formal acceptance of the residual risk and authorization to operate."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n3-g03",
+   "domain": 3,
+   "topic": "3B2",
+   "title": "Implementation configuration and release management",
+   "points": [
+    "Configuration management keeps baselines of approved system settings in a CMDB.",
+    "Releases are planned, tested, approved and deployed with rollback plans.",
+    "Production access for developers is restricted; migration done by an independent function."
+   ],
+   "tip": "Version control and configuration baselines prevent unauthorized changes reaching production.",
+   "src": "gap"
+  },
+  {
+   "id": "n3-r10",
+   "domain": 3,
+   "topic": "3B3",
+   "title": "Changeover (go-live) techniques",
+   "points": [
+    "Parallel changeover: old and new run together; safest but costly.",
+    "Phased changeover: modules introduced in stages.",
+    "Abrupt (direct cut-over): fastest, highest risk; needs a fallback plan."
+   ],
+   "tip": "Data conversion controls (record counts, control totals) are critical at changeover.",
+   "src": "revision"
+  },
+  {
+   "id": "n3-r13",
+   "domain": 3,
+   "topic": "3B4",
+   "title": "Post-implementation review and benchmarking",
+   "points": [
+    "PIR checks whether objectives and benefits were achieved and identifies lessons learned.",
+    "Benchmarking compares processes with best performers: plan, research, observe, analyse, adapt, improve."
+   ],
+   "tip": "A PIR is done after the system has stabilised, typically several months after go-live.",
+   "src": "revision"
+  },
+  {
+   "id": "n4-r01",
+   "domain": 4,
+   "topic": "4A1",
+   "title": "IS operations and IT service management",
+   "points": [
+    "IS operations run, monitor and support systems: job scheduling, monitoring, incident handling, backups.",
+    "ITSM frameworks: ITIL (service lifecycle/value system) and ISO/IEC 20000-1 (certifiable service management standard).",
+    "Management should monitor operations with performance reports, logs and exception reports."
+   ],
+   "tip": "Your PDF cites ISO 20000-1:2011; the current version is ISO/IEC 20000-1:2018.",
+   "src": "revision"
+  },
+  {
+   "id": "n4-r08",
+   "domain": 4,
+   "topic": "4A1",
+   "title": "Networks: OSI and LAN/WAN",
+   "points": [
+    "OSI layers: physical, data link, network, transport, session, presentation, application.",
+    "LAN media: twisted pair (cheap, interference), fibre (secure, fast, hard to tap), wireless (convenient, needs encryption).",
+    "Devices: hubs (L1), switches/bridges (L2), routers (L3), gateways (higher layers).",
+    "WAN: leased lines, packet switching, MPLS, VPN (remote access, intranet, extranet)."
+   ],
+   "tip": "Fibre optic is the most secure medium against eavesdropping.",
+   "src": "revision"
+  },
+  {
+   "id": "n4-r02",
+   "domain": 4,
+   "topic": "4A10",
+   "title": "SLA, OLA and service monitoring",
+   "points": [
+    "SLA: agreement between IT/provider and the business on service levels and measures.",
+    "OLA: internal agreement between IT groups that supports the SLA.",
+    "Monitoring tools: exception reports, system and application logs, availability and performance reports."
+   ],
+   "tip": "SLA reports must be based on measured data, not provider self-statements.",
+   "src": "revision"
+  },
+  {
+   "id": "n4-r07",
+   "domain": 4,
+   "topic": "4A11",
+   "title": "Database management (DBMS)",
+   "points": [
+    "DBMS architecture: external, conceptual and internal schemas; metadata held in a data dictionary/directory.",
+    "Models: hierarchical, network and relational (tables, keys, normalization to reduce redundancy).",
+    "Controls: access via DBMS only, referential integrity, backup and recovery, logging of changes, DBA activity review."
+   ],
+   "tip": "The DBA’s activities should be logged and reviewed by someone independent.",
+   "src": "revision"
+  },
+  {
+   "id": "n4-g04",
+   "domain": 4,
+   "topic": "4A2",
+   "title": "IT asset management",
+   "points": [
+    "Maintain a complete, accurate inventory of hardware, software and licences, with owners.",
+    "Asset lifecycle: acquire, deploy, maintain, retire and securely dispose (data sanitisation).",
+    "An accurate inventory is the foundation for risk assessment, patching and licensing compliance."
+   ],
+   "tip": "You cannot protect assets you do not know you have.",
+   "src": "gap"
+  },
+  {
+   "id": "n4-g05",
+   "domain": 4,
+   "topic": "4A3",
+   "title": "Job scheduling and production automation",
+   "points": [
+    "Scheduling software runs batch jobs in the right order with dependencies and restart points.",
+    "Controls: approved schedules, restricted changes to job definitions, review of job logs and exceptions.",
+    "Reduces operator errors compared to manual job initiation."
+   ],
+   "tip": "Changes to production job schedules need the same change control as program changes.",
+   "src": "gap"
+  },
+  {
+   "id": "n4-g06",
+   "domain": 4,
+   "topic": "4A4",
+   "title": "System interfaces",
+   "points": [
+    "Interfaces move data between systems (APIs, file transfers, messaging).",
+    "Controls: reconciliation of record counts/totals, error handling and alerts, encryption in transit, ownership of each interface.",
+    "Undocumented interfaces are a common audit finding."
+   ],
+   "tip": "Reconcile source and target totals to confirm complete, accurate transfer.",
+   "src": "gap"
+  },
+  {
+   "id": "n4-e05",
+   "domain": 4,
+   "topic": "4A5",
+   "title": "4.5 Shadow IT (emphasised in the new syllabus)",
+   "points": [
+    "Systems, software, cloud services or hardware used without approval from IT or security.",
+    "Risks: unvetted tools, security vulnerabilities, data leakage and loss of data control, non-compliance.",
+    "Controls: shadow IT policy (approve before use); IT as a service-delivery partner; IT review of all technology purchases; consolidate platforms.",
+    "Also: restrict admin rights and software installation; user education; monitor user activity and network traffic for unapproved tools (e.g. CASB)."
+   ],
+   "tip": "Example: a marketing team adopts an unapproved cloud project tool. Best response: policy plus IT working with the team to provide an approved, secure alternative.",
+   "src": "edition28"
+  },
+  {
+   "id": "n4-r09",
+   "domain": 4,
+   "topic": "4A6",
+   "title": "Network performance and management",
+   "points": [
+    "Metrics: latency, throughput, availability, error rates, utilisation.",
+    "Tools: network performance monitors, protocol analysers, SNMP, help desk reports.",
+    "Capacity planning prevents performance problems as demand grows."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n4-r03",
+   "domain": 4,
+   "topic": "4A7",
+   "title": "Incident vs problem management",
+   "points": [
+    "Incident management restores normal service as quickly as possible.",
+    "Problem management finds and removes the root cause of one or more incidents to prevent recurrence.",
+    "Known errors are documented with workarounds until fixed."
+   ],
+   "tip": "Root cause = problem management.",
+   "src": "revision"
+  },
+  {
+   "id": "n4-r04",
+   "domain": 4,
+   "topic": "4A7",
+   "title": "Help desk / support",
+   "points": [
+    "Logs every incident, prioritises, resolves or escalates, and tracks to closure.",
+    "Trend analysis of tickets feeds problem management."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n4-r05",
+   "domain": 4,
+   "topic": "4A8",
+   "title": "Change, patch and release management",
+   "points": [
+    "Change management: request, impact assessment, approval, testing, scheduled implementation, post-change review.",
+    "Emergency changes are allowed but must be documented and approved after the fact.",
+    "Patch management: inventory, assess, test, deploy, verify; prioritise by risk.",
+    "Release management groups approved changes into planned releases; segregate development, test and production."
+   ],
+   "tip": "Developers must not migrate their own code to production.",
+   "src": "revision"
+  },
+  {
+   "id": "n4-e01",
+   "domain": 4,
+   "topic": "4A9",
+   "title": "NEW 4.9: Operational log management",
+   "points": [
+    "Operational logs (audit trails) record system events, user actions and changes in day-to-day IT operations.",
+    "A log record should capture: type of event, time, location, source (who/what triggered it), outcome and identity of parties involved.",
+    "Purposes: monitoring and investigation, accountability, and a compensating control where small teams cannot segregate duties."
+   ],
+   "tip": "Log review is a classic compensating control when segregation of duties is not possible.",
+   "src": "edition28"
+  },
+  {
+   "id": "n4-e02",
+   "domain": 4,
+   "topic": "4A9",
+   "title": "NEW 4.9.1: Types of logs",
+   "points": [
+    "Event log (logins, failed passwords, network/app events); server log; system log (OS start-up, errors, shutdowns).",
+    "Access log (who accessed which file or app); change log (chronological changes); availability log (uptime vs SLA).",
+    "Threat log (traffic matching a security profile); database log (inserts, updates, deletes); error log; firewall log (traffic allowed/blocked)."
+   ],
+   "tip": "Availability logs are the evidence for SLA uptime reporting.",
+   "src": "edition28"
+  },
+  {
+   "id": "n4-e03",
+   "domain": 4,
+   "topic": "4A9",
+   "title": "NEW 4.9.2: Log management cycle",
+   "points": [
+    "1 Collect data from servers, network devices and applications; 2 generate alerts on suspicious activity.",
+    "3 Store logs centrally (log server or SIEM); 4 analyse stored data for issues alerts missed.",
+    "5 Report concerns to the right teams; 6 implement action plans (contain, remediate, patch, update rules).",
+    "Infrastructure: log generation (hosts), log analysis and storage (log servers), log monitoring (real-time, e.g. SIEM rules and thresholds)."
+   ],
+   "tip": null,
+   "src": "edition28"
+  },
+  {
+   "id": "n4-e04",
+   "domain": 4,
+   "topic": "4A9",
+   "title": "Securing logs",
+   "points": [
+    "Intruders try to alter or delete logs to hide activity; logs must be protected so they remain authentic evidence.",
+    "Centralize logs on a secure server/SIEM, restrict access, protect integrity (write-once, hashing) and synchronise time sources.",
+    "Define retention to meet legal and investigation needs."
+   ],
+   "tip": "Best protection for audit trails: send them to a separate, secured central log server that administrators of the source system cannot change.",
+   "src": "edition28"
+  },
+  {
+   "id": "n2-r11",
+   "domain": 4,
+   "topic": "4B1",
+   "title": "Business impact analysis (BIA)",
+   "points": [
+    "Identifies critical processes, impact of disruption over time, and recovery requirements (RTO, RPO).",
+    "Approaches: questionnaires, interviews with key users, workshops.",
+    "Results drive classification of systems and the recovery strategy."
+   ],
+   "tip": "Input from business process owners is the most important source for a BIA.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-r12",
+   "domain": 4,
+   "topic": "4B1",
+   "title": "Classifying systems by criticality",
+   "points": [
+    "Critical: cannot be replaced by manual methods; very low tolerance.",
+    "Vital: can be done manually for a short time.",
+    "Sensitive: manual for a tolerable period at higher cost.",
+    "Non-critical: can be interrupted for a long time at little cost."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n4-r11",
+   "domain": 4,
+   "topic": "4B2",
+   "title": "RPO, RTO and related parameters",
+   "points": [
+    "RPO: maximum acceptable data loss, measured in time back from the incident; drives backup frequency.",
+    "RTO: maximum acceptable downtime; drives the recovery strategy.",
+    "Lower RTO/RPO means higher cost. Other parameters: interruption window, service delivery objective, maximum tolerable outage."
+   ],
+   "tip": "Low RPO -> frequent backups or mirroring. Low RTO -> hot site or high availability.",
+   "src": "revision"
+  },
+  {
+   "id": "n4-r12",
+   "domain": 4,
+   "topic": "4B2",
+   "title": "Recovery strategies and sites",
+   "points": [
+    "Hot site: fully equipped, ready in hours. Warm site: partly equipped. Cold site: space and utilities only.",
+    "Mirrored/duplicate sites, mobile sites and reciprocal agreements (hard to enforce).",
+    "Choice depends on criticality, RTO/RPO and cost."
+   ],
+   "tip": "Reciprocal agreements are the least reliable recovery option.",
+   "src": "revision"
+  },
+  {
+   "id": "n4-r14",
+   "domain": 4,
+   "topic": "4B3",
+   "title": "Backup and restoration",
+   "points": [
+    "Full, incremental (changes since last backup of any type) and differential (changes since last full) backups.",
+    "Rotation schemes such as grandfather-father-son; store copies offsite and test restores.",
+    "Restore requires the last full plus all incrementals, or the last full plus the latest differential."
+   ],
+   "tip": "Backups that are never test-restored give no assurance.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-r10",
+   "domain": 4,
+   "topic": "4B4",
+   "title": "Business continuity planning (BCP)",
+   "points": [
+    "Lifecycle: policy, BIA, strategy, plan development, training, testing, maintenance.",
+    "The BCP covers people, processes and business functions; DRP covers IT recovery.",
+    "Senior management approves and is ultimately responsible for the BCP."
+   ],
+   "tip": "The first step in BCP is the business impact analysis.",
+   "src": "revision"
+  },
+  {
+   "id": "n2-r13",
+   "domain": 4,
+   "topic": "4B4",
+   "title": "BCP plan testing",
+   "points": [
+    "Checklist review, structured walk-through/table-top, simulation, parallel test, full interruption test.",
+    "Paper tests first; full interruption tests carry the highest risk and are done rarely.",
+    "Every test needs objectives, results measured against them and lessons learned."
+   ],
+   "tip": "Parallel test = recovery site processes live data alongside production without disrupting it.",
+   "src": "revision"
+  },
+  {
+   "id": "n4-r10",
+   "domain": 4,
+   "topic": "4B5",
+   "title": "Disaster recovery planning (DRP)",
+   "points": [
+    "DRP restores IT systems after a disaster; the BCP keeps the whole business running.",
+    "DRP is driven by the BIA: recovery priorities, RTO and RPO."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n4-r13",
+   "domain": 4,
+   "topic": "4B5",
+   "title": "Recovery teams",
+   "points": [
+    "Incident response, emergency action, damage assessment, offsite storage, software, application, network, user and relocation teams.",
+    "Each team has clear responsibilities and contact lists kept current."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n4-r15",
+   "domain": 4,
+   "topic": "4B5",
+   "title": "DR testing methods",
+   "points": [
+    "Checklist, walk-through, simulation, parallel and full interruption tests.",
+    "Test results are compared with objectives; failures feed plan updates."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n5-r01",
+   "domain": 5,
+   "topic": "5A1",
+   "title": "ISMS and security management",
+   "points": [
+    "An ISMS (ISO/IEC 27001) is a management system to establish, implement, maintain and improve information security.",
+    "Key elements: senior management commitment, policies and procedures, organisation, awareness, monitoring and compliance, incident handling.",
+    "ISO 27000 family: 27001 requirements (certifiable), 27002 controls guidance, 27005 risk management."
+   ],
+   "tip": "Senior management commitment is the most critical success factor for information security.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r04",
+   "domain": 5,
+   "topic": "5A1",
+   "title": "Security control design",
+   "points": [
+    "Categories: managerial/administrative, technical/logical, physical.",
+    "Functions: preventive, detective, corrective, deterrent, recovery, compensating."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n5-r17",
+   "domain": 5,
+   "topic": "5A2",
+   "title": "Environmental exposures and controls",
+   "points": [
+    "Power problems: blackout (total failure), brownout (reduced voltage), sags, spikes, surges, electromagnetic interference.",
+    "Controls: UPS and generators, surge protectors and line conditioners, alarm panels, water detectors, fire/smoke detectors, extinguishers.",
+    "Fire suppression: dry-pipe/pre-action sprinklers and clean-agent gas systems (e.g. FM-200) for data centres; halon is banned.",
+    "Raised floors, humidity/temperature control, fire-resistant materials, regular inspections, emergency power-off switch."
+   ],
+   "tip": "Dry-pipe sprinklers reduce risk of water leaks; test fire systems regularly.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r18",
+   "domain": 5,
+   "topic": "5A2",
+   "title": "Physical access exposures and controls",
+   "points": [
+    "Exposures: unauthorized entry, tailgating/piggybacking, theft, damage, viewing sensitive data.",
+    "Controls: badges/smart cards, biometric locks, mantraps/deadman doors, guards, CCTV, visitor logs and escorts.",
+    "Keep data centres in low-profile locations; review access lists and logs regularly."
+   ],
+   "tip": "Mantrap (deadman door) is the best control against piggybacking.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r05",
+   "domain": 5,
+   "topic": "5A3",
+   "title": "Access control models",
+   "points": [
+    "Physical access controls protect facilities; logical access controls protect systems and data.",
+    "Mandatory access control (MAC): system-enforced labels; users cannot change. Discretionary (DAC): owner grants access.",
+    "Role-based access control (RBAC) assigns rights to roles; least privilege and need-to-know apply."
+   ],
+   "tip": "MAC is stricter than DAC because users cannot pass on rights.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r10",
+   "domain": 5,
+   "topic": "5A3",
+   "title": "Identification and authentication",
+   "points": [
+    "Identification = who you claim to be; authentication = proof; authorization = what you can do.",
+    "Factors: something you know, something you have, something you are/do. Multi-factor uses two or more different types.",
+    "Weaknesses: weak or shared passwords, no lockout, credentials sent in clear text."
+   ],
+   "tip": "Two passwords is still single-factor; MFA requires different factor types.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r11",
+   "domain": 5,
+   "topic": "5A3",
+   "title": "Biometrics",
+   "points": [
+    "Process: enrolment, then a sensor captures, quality is assessed, features are compared, decision is made.",
+    "Physical: palm, hand geometry, iris, retina, fingerprint, face. Behavioural: signature, voice, keystroke.",
+    "FRR (false rejection, type I) inconveniences users; FAR (false acceptance, type II) is the security risk.",
+    "Equal error rate (EER/CER) where FAR = FRR: lower is better."
+   ],
+   "tip": "For high security, focus on a low FAR. To compare devices, use the EER.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r12",
+   "domain": 5,
+   "topic": "5A3",
+   "title": "Single sign-on (SSO)",
+   "points": [
+    "One authentication gives access to many systems; improves usability and administration.",
+    "Risk: a single compromised credential exposes everything; single point of failure.",
+    "Mitigate with strong authentication (MFA) on the SSO."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n5-r13",
+   "domain": 5,
+   "topic": "5A4",
+   "title": "Firewalls",
+   "points": [
+    "Packet filter: checks addresses/ports; fast but simple, vulnerable to spoofing.",
+    "Application-level (proxy) firewall: inspects application data; circuit-level: controls sessions.",
+    "Stateful inspection: tracks connection state; more secure than packet filters.",
+    "Architectures: screened host, dual-homed host, screened subnet (DMZ) - the DMZ is the most secure."
+   ],
+   "tip": "Application-level gateways give the most granular control; DMZ isolates public-facing servers.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-g07",
+   "domain": 5,
+   "topic": "5A5",
+   "title": "Data loss prevention (DLP)",
+   "points": [
+    "DLP discovers, monitors and blocks sensitive data at rest, in motion and in use.",
+    "Depends on good data classification and well-tuned policies.",
+    "Alerts need a defined response process."
+   ],
+   "tip": "Data classification must come before DLP rules can be effective.",
+   "src": "gap"
+  },
+  {
+   "id": "n5-r15",
+   "domain": 5,
+   "topic": "5A6",
+   "title": "Cryptography and encryption",
+   "points": [
+    "Symmetric (one shared key, e.g. AES): fast; problem is key distribution.",
+    "Asymmetric (public/private key pair, e.g. RSA, ECC): solves key exchange; slower.",
+    "Hashing (SHA-2) gives integrity; digital signatures (hash signed with sender’s private key) give integrity, authentication and non-repudiation.",
+    "Encrypt with recipient’s public key for confidentiality."
+   ],
+   "tip": "Non-repudiation comes from the sender’s private key; confidentiality from the recipient’s public key.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r16",
+   "domain": 5,
+   "topic": "5A7",
+   "title": "PKI and digital certificates",
+   "points": [
+    "Certificate authority (CA) issues and signs certificates binding a public key to an identity; RA verifies identity.",
+    "Certificate revocation list (CRL) / OCSP show revoked certificates.",
+    "Protect the CA’s private key above everything else."
+   ],
+   "tip": null,
+   "src": "revision"
+  },
+  {
+   "id": "n5-g08",
+   "domain": 5,
+   "topic": "5A8",
+   "title": "Cloud and virtualized environments",
+   "points": [
+    "Shared responsibility: provider secures the cloud; customer secures configuration, identities and data (varies by IaaS/PaaS/SaaS).",
+    "Assurance: SOC 2 / ISO 27001 reports, right-to-audit, data location, exit and encryption key management.",
+    "Virtualization risks: hypervisor compromise, VM sprawl, weak isolation; harden and patch the hypervisor."
+   ],
+   "tip": "The customer remains accountable for its data in the cloud.",
+   "src": "gap"
+  },
+  {
+   "id": "n5-g09",
+   "domain": 5,
+   "topic": "5A9",
+   "title": "Mobile, wireless and IoT devices",
+   "points": [
+    "Mobile: mobile device management (MDM), encryption, remote wipe, app control, BYOD policy.",
+    "Wireless: WPA3/WPA2-Enterprise, strong authentication, disable WPS, detect rogue access points.",
+    "IoT: change default passwords, patch firmware, segment IoT networks."
+   ],
+   "tip": "Remote wipe and encryption are key controls for lost mobile devices.",
+   "src": "gap"
+  },
+  {
+   "id": "n5-r07",
+   "domain": 5,
+   "topic": "5B1",
+   "title": "Security awareness and HR security",
+   "points": [
+    "Awareness programmes are continuous, role-based and measured.",
+    "Before employment: screening/background checks; during: policies, training, disciplinary process; termination: remove access, return assets."
+   ],
+   "tip": "The most effective control against social engineering is user awareness.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r08",
+   "domain": 5,
+   "topic": "5B2",
+   "title": "Computer crime and attack methods",
+   "points": [
+    "Perpetrators: insiders (biggest risk), former employees, hackers, crackers, organised crime, nation states.",
+    "Attacks: botnets, brute force, war dialing/driving/chalking, eavesdropping, man-in-the-middle, masquerading, pharming, piggybacking.",
+    "Salami (small amounts skimmed), logic bomb (if-then trigger), denial of service (e.g. ping of death), traffic analysis (passive).",
+    "Phishing and social engineering target people rather than technology."
+   ],
+   "tip": "Passive attacks (eavesdropping, traffic analysis) are hard to detect; encryption is the best control.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-r14",
+   "domain": 5,
+   "topic": "5B3",
+   "title": "IDS, IPS, honeypots and honeynets",
+   "points": [
+    "IDS detects and alerts: network-based or host-based; signature-based, statistical/anomaly-based or neural network.",
+    "IDS cannot fix weak policy, authentication or application flaws, and needs tuning to reduce false positives.",
+    "IPS sits in-line and blocks attacks automatically (risk: blocking legitimate traffic).",
+    "Honeypots/honeynets are decoys to study attackers: high-interaction or low-interaction."
+   ],
+   "tip": "Anomaly-based IDS can detect new attacks but produces more false positives.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-g10",
+   "domain": 5,
+   "topic": "5B4",
+   "title": "Security monitoring logs, tools and techniques",
+   "points": [
+    "SIEM collects and correlates logs from many sources and alerts on suspicious patterns.",
+    "Monitoring needs defined use cases, tuned thresholds and a response process; protect log integrity.",
+    "Related to 4A9 Operational log management; see those notes."
+   ],
+   "tip": null,
+   "src": "gap"
+  },
+  {
+   "id": "n5-r09",
+   "domain": 5,
+   "topic": "5B5",
+   "title": "Incident response phases",
+   "points": [
+    "Preparation, identification/detection, containment, eradication, recovery, lessons learned.",
+    "Preserve evidence during response; escalate per plan."
+   ],
+   "tip": "Containment comes before eradication.",
+   "src": "revision"
+  },
+  {
+   "id": "n5-g11",
+   "domain": 5,
+   "topic": "5B6",
+   "title": "Evidence collection and forensics",
+   "points": [
+    "Preserve evidence: identify, collect, preserve, analyse, present; keep chain of custody.",
+    "Work on bit-for-bit forensic images, verified with hash values; never on the original.",
+    "Involve legal counsel and law enforcement as appropriate."
+   ],
+   "tip": "Chain of custody is essential for evidence to be admissible.",
+   "src": "gap"
+  }
+ ],
+ "gaps": [
+  "2A1",
+  "2A4",
+  "3B2",
+  "4A2",
+  "4A3",
+  "4A4",
+  "5A5",
+  "5A8",
+  "5A9",
+  "5B4",
+  "5B6"
+ ]
+}

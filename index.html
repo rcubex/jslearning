@@ -3678,7 +3678,7 @@ async function vCisa(){
   try{
     if(!CisaModule) CisaModule=await import('./cisa/cisa-app.js');
     if(location.hash.replace('#','')!=='cisa'||!dbRef)return;
-    await CisaModule.mount({root:app,read:()=>S.cisa||{},write:(next)=>{S.cisa=next;save()},isAdmin:!!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID),verifyAdmin,tab:window.__cisaTab||null,topic:window.__cisaTopic||null}); window.__cisaTab=null; window.__cisaTopic=null;
+    await CisaModule.mount({root:app,read:()=>S.cisa||{},write:(next)=>{S.cisa=next;save()},isAdmin:!!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID),verifyAdmin,tab:window.__cisaTab||null,topic:window.__cisaTopic||null,section:window.__cisaSection||null}); window.__cisaTab=null; window.__cisaTopic=null; window.__cisaSection=null;
   }catch(e){console.error('CISA load failed',e);app.innerHTML='<div class="cisa-hub"><section class="cisa-error">Unable to load CISA Hub. Verify the whole <code>cisa/</code> directory was uploaded alongside <code>index.html</code>.</section></div>'}
 }
 const VIEWS={dashboard:vDashboard,courses:vCourses,grc:vGRC,appsec:vApplication,cisa:vCisa,workbook:vWorkbook,insights:vInsights,explore:vExplore,flash:vFlash,rosetta:vRosetta,subnets:vSubnets,certs:vCerts,log:vLog};
@@ -3687,7 +3687,7 @@ let pendingLevel=null;
 /* ================= Today card, backup, flashcards, quick search ================= */
 const FL_INT=[1,3,7,14,30];
 function flashDeck(){const g=Object.keys(GLOSS).map(t=>({k:'g:'+t,front:t,back:GLOSS[t],deck:'Glossary'}));const c=(window.__cisaTopics||[]).map(t=>({k:'c:'+t.id,front:t.id+' · '+t.title,back:t.intro||'',deck:'CISA'}));return g.concat(c);}
-async function loadCisaTopics(){if(window.__cisaTopics)return window.__cisaTopics;try{const r=await fetch('cisa/data/syllabus.json');const d=await r.json();window.__cisaTopics=d.domains.flatMap(x=>x.topics.map(t=>({id:t.id,title:t.title,intro:t.intro,domain:t.domain})));}catch(e){window.__cisaTopics=[];}return window.__cisaTopics;}
+async function loadCisaTopics(){if(window.__cisaTopics)return window.__cisaTopics;try{const g=await (await fetch('cisa/data/manual-guide.json')).json();window.__manualSecs=g.chapters.flatMap(c=>c.parts.flatMap(p=>p.sections.map(x=>({id:x.id,title:x.title,page:x.page,ch:c.n}))));}catch(e){window.__manualSecs=[];}try{const r=await fetch('cisa/data/syllabus.json');const d=await r.json();window.__cisaTopics=d.domains.flatMap(x=>x.topics.map(t=>({id:t.id,title:t.title,intro:t.intro,domain:t.domain})));}catch(e){window.__cisaTopics=[];}return window.__cisaTopics;}
 function flashState(){S.flash=S.flash||{};return S.flash;}
 function flashStats(deckName){const F=flashState(),t=today(),deck=flashDeck().filter(c=>!deckName||deckName==='All'||c.deck===deckName);let due=0,learned=0,mastered=0;for(const c of deck){const r=F[c.k];if(!r)continue;learned++;if(r.x)mastered++;else if(r.d<=t)due++;}const newToday=(S.flashNew&&S.flashNew.d===t)?S.flashNew.n:0;const fresh=deck.filter(c=>!F[c.k]).length;return {total:deck.length,due,learned,mastered,fresh,newLeft:Math.max(0,Math.min(fresh,10-newToday))};}
 function todayCardHTML(){const t=today(),fs=flashStats('All');const studied=S.log.filter(x=>x.d===t).reduce((a,x)=>a+(+x.m||0),0)+bookEntries.filter(e=>String(e.date||'').slice(0,10)===t).reduce((a,e)=>a+(Number(e.minutes)||0),0);
@@ -3764,6 +3764,7 @@ function cmdkIndex(){if(cmdkItems)return cmdkItems;const it=[];
  SEC_ACADEMY.forEach(m=>{it.push({k:'Application',t:m.name,s:m.id.toUpperCase(),run:()=>go(m.id)});(m.lessons||[]).forEach(l=>it.push({k:'App lesson',t:l.t,s:m.name,run:()=>go(m.id)}));});
  Object.keys(GLOSS).forEach(t=>it.push({k:'Glossary',t,s:GLOSS[t],run:()=>{exploreQ=t;glossLetter='';go('explore');}}));
  (window.__cisaTopics||[]).forEach(t=>it.push({k:'CISA',t:t.id+' · '+t.title,s:'Domain '+t.domain,run:()=>{window.__cisaTab='syllabus';window.__cisaTopic=t.id;if((location.hash||'')==='#cisa')route();else go('cisa');}}));
+ (window.__manualSecs||[]).forEach(x=>it.push({k:'Manual',t:x.id+' '+x.title,s:'CISA Manual · Chapter '+x.ch+(x.page?' · p. '+x.page:''),run:()=>{window.__cisaTab='manual';window.__cisaSection=x.id;if((location.hash||'')==='#cisa')route();else go('cisa');}}));
  cmdkItems=it.map(x=>({...x,h:(x.t+' '+x.s+' '+x.k).toLowerCase()}));return cmdkItems;}
 function cmdkSearch(q){q=q.trim().toLowerCase();const all=cmdkIndex();if(!q)return all.filter(x=>x.k==='Go to').slice(0,14);const words=q.split(/\s+/);const sc=x=>{const tl=x.t.toLowerCase();let s=0;if(tl===q)s+=100;if(tl.startsWith(q))s+=50;if(tl.includes(q))s+=25;if(x.k==='Go to'||x.k==='Technical'||x.k==='GRC'||x.k==='Application')s+=6;if(x.k==='Glossary'&&tl.startsWith(q))s+=10;return s;};return all.filter(x=>words.every(w=>x.h.includes(w))).map(x=>({x,s:sc(x)})).sort((a,b)=>b.s-a.s).slice(0,40).map(o=>o.x);}
 function cmdkDraw(){const list=document.getElementById('cmdkList');cmdkRes=cmdkSearch(document.getElementById('cmdkInput').value);cmdkSel=Math.min(cmdkSel,Math.max(0,cmdkRes.length-1));

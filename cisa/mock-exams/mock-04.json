@@ -1,0 +1,1290 @@
+{
+ "id": 4,
+ "title": "Workbook Mock · Domains 1 & 2",
+ "durationMinutes": 128,
+ "kind": "Built from your Domain 1 (50) and Domain 2 (30) exam-style workbooks. Options are shuffled each attempt.",
+ "version": 1,
+ "rewrittenInV2": [],
+ "questions": [
+  {
+   "id": "M4-001",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "Which of the following is the PRIMARY objective of an IS audit?",
+   "choices": [
+    "To detect fraud within an organization",
+    "To ensure IT systems align with business objectives",
+    "To enhance IT security frameworks",
+    "To evaluate the effectiveness of internal controls"
+   ],
+   "answer": 3,
+   "explanation": "The primary objective of an IS audit is to assess whether internal controls are effective in mitigating risks and ensuring the reliability of IT systems.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q1"
+  },
+  {
+   "id": "M4-002",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "During an IT audit, an auditor identifies an outdated access control policy. What should the auditor do FIRST?",
+   "choices": [
+    "Recommend immediate policy revision",
+    "Report the finding to senior management",
+    "Assess the risk impact of the outdated policy",
+    "Verify whether compensating controls exist"
+   ],
+   "answer": 2,
+   "explanation": "Before recommending actions, auditors must evaluate the potential risks associated with the outdated policy and determine whether additional controls are mitigating those risks.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q2"
+  },
+  {
+   "id": "M4-003",
+   "domain": 1,
+   "topicId": "1A3",
+   "question": "Which audit approach is MOST effective in identifying high-risk areas in an organization’s IT environment?",
+   "choices": [
+    "Compliance-based audit",
+    "Risk-based audit",
+    "IT general controls audit",
+    "Continuous auditing"
+   ],
+   "answer": 1,
+   "explanation": "A risk-based audit prioritizes areas with the highest likelihood and impact of risks, ensuring that critical vulnerabilities are addressed effectively.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q3"
+  },
+  {
+   "id": "M4-004",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "Which of the following BEST describes the purpose of an IS audit charter?",
+   "choices": [
+    "To define the authority, scope, and responsibilities of the audit function",
+    "To document the findings of the audit",
+    "To serve as a checklist for conducting audits",
+    "To define the penalties for non-compliance"
+   ],
+   "answer": 0,
+   "explanation": "An IS audit charter establishes the framework for audit activities, outlining scope, responsibilities, and authority.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q4"
+  },
+  {
+   "id": "M4-005",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "An IS auditor discovers that employees are using unauthorized cloud storage services to store company data. What is the auditor’s PRIMARY concern?",
+   "choices": [
+    "Reduced IT department control over employee actions",
+    "Increased risk of data leakage and non-compliance with regulations",
+    "Difficulty in tracking employee productivity",
+    "Additional costs for IT resources"
+   ],
+   "answer": 1,
+   "explanation": "Unauthorized cloud storage poses security risks such as data leakage and regulatory non-compliance, making it a critical audit concern.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q5"
+  },
+  {
+   "id": "M4-006",
+   "domain": 1,
+   "topicId": "1B3",
+   "question": "Which of the following provides the MOST reliable audit evidence?",
+   "choices": [
+    "Employee interviews",
+    "System-generated logs",
+    "Management assertions",
+    "Auditor observations"
+   ],
+   "answer": 1,
+   "explanation": "System-generated logs provide objective, verifiable data, making them one of the most reliable sources of audit evidence.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q6"
+  },
+  {
+   "id": "M4-007",
+   "domain": 1,
+   "topicId": "1A3",
+   "question": "Which of the following is the PRIMARY objective of fraud risk assessment in an IS audit?",
+   "choices": [
+    "To identify financial irregularities",
+    "To ensure compliance with industry standards",
+    "To detect and prevent fraudulent activities",
+    "To improve IT system efficiency"
+   ],
+   "answer": 2,
+   "explanation": "Fraud risk assessment helps identify and mitigate risks associated with fraudulent activities, protecting the integrity of IT systems.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q7"
+  },
+  {
+   "id": "M4-008",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "Which of the following BEST ensures that IT governance supports business objectives?",
+   "choices": [
+    "Aligning IT strategies with business goals",
+    "Increasing IT security spending",
+    "Implementing strict access control policies",
+    "Reducing the IT budget"
+   ],
+   "answer": 0,
+   "explanation": "Effective IT governance ensures that IT strategies align with business goals to optimize value and minimize risk.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q8"
+  },
+  {
+   "id": "M4-009",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "Which control is MOST effective in preventing unauthorized access to critical systems?",
+   "choices": [
+    "Conducting security awareness training",
+    "Implementing multi-factor authentication (MFA)",
+    "Regularly updating security policies",
+    "Performing vulnerability assessments"
+   ],
+   "answer": 1,
+   "explanation": "MFA enhances security by requiring multiple forms of authentication, significantly reducing the risk of unauthorized access.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q9"
+  },
+  {
+   "id": "M4-010",
+   "domain": 1,
+   "topicId": "1B5",
+   "question": "Which of the following is the PRIMARY purpose of audit reporting?",
+   "choices": [
+    "To communicate audit findings and recommendations to stakeholders",
+    "To document IT policies and procedures",
+    "To summarize security incidents",
+    "To develop new IT security frameworks"
+   ],
+   "answer": 0,
+   "explanation": "Audit reports provide stakeholders with findings, risks, and recommendations, enabling informed decision-making.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q10"
+  },
+  {
+   "id": "M4-011",
+   "domain": 1,
+   "topicId": "1B3",
+   "question": "Which of the following audit procedures is MOST effective in identifying unauthorized changes to an application system?",
+   "choices": [
+    "Reviewing system documentation",
+    "Conducting user interviews",
+    "Analyzing system change logs",
+    "Testing system performance"
+   ],
+   "answer": 2,
+   "explanation": "Change logs record modifications to systems, allowing auditors to track unauthorized or improper changes.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q11"
+  },
+  {
+   "id": "M4-012",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "Which of the following would provide the BEST assurance that IT controls are effective?",
+   "choices": [
+    "Self-assessments by IT management",
+    "Independent IS audit reviews",
+    "Internal IT staff confirmations",
+    "External penetration testing"
+   ],
+   "answer": 1,
+   "explanation": "An independent audit ensures objective evaluation of IT controls without bias from internal IT staff.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q12"
+  },
+  {
+   "id": "M4-013",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "What is the PRIMARY objective of an IS auditor when evaluating disaster recovery (DR) procedures?",
+   "choices": [
+    "Ensuring DR procedures align with business continuity objectives",
+    "Reducing the costs of backup solutions",
+    "Maximizing IT system uptime",
+    "Enhancing IT department efficiency"
+   ],
+   "answer": 0,
+   "explanation": "DR procedures should support business continuity to minimize operational disruptions.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q13"
+  },
+  {
+   "id": "M4-014",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "Which of the following is the PRIMARY reason for conducting a forensic audit?",
+   "choices": [
+    "To evaluate financial statement accuracy",
+    "To identify policy non-compliance",
+    "To investigate fraud or security breaches",
+    "To improve IT security policies"
+   ],
+   "answer": 2,
+   "explanation": "Forensic audits focus on gathering evidence to analyze fraud, misconduct, or security breaches.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q14"
+  },
+  {
+   "id": "M4-015",
+   "domain": 1,
+   "topicId": "1B4",
+   "question": "Which audit technique is MOST effective for detecting unauthorized modifications in financial transactions?",
+   "choices": [
+    "Interviewing key personnel",
+    "Reviewing system error logs",
+    "Performing data analytics and trend analysis",
+    "Observing system users"
+   ],
+   "answer": 2,
+   "explanation": "Data analytics enables auditors to detect unusual patterns in financial transactions that may indicate fraud or unauthorized changes.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q15"
+  },
+  {
+   "id": "M4-016",
+   "domain": 1,
+   "topicId": "1A3",
+   "question": "Which of the following BEST ensures that an IT audit plan remains relevant and effective?",
+   "choices": [
+    "Conducting annual risk assessments",
+    "Following a predefined checklist",
+    "Relying solely on management’s input",
+    "Focusing only on financial controls"
+   ],
+   "answer": 0,
+   "explanation": "Risk assessments help ensure that audits focus on current threats and vulnerabilities, keeping the audit plan effective.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q16"
+  },
+  {
+   "id": "M4-017",
+   "domain": 1,
+   "topicId": "1B6",
+   "question": "What is the PRIMARY purpose of a control self-assessment (CSA) in an IT audit?",
+   "choices": [
+    "To replace external audits",
+    "To allow management to review internal controls proactively",
+    "To identify inefficiencies in IT operations",
+    "To test network vulnerabilities"
+   ],
+   "answer": 1,
+   "explanation": "A CSA allows business and IT management to assess control effectiveness and identify gaps before an external audit.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q17"
+  },
+  {
+   "id": "M4-018",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "An IS auditor is reviewing an organization’s IT governance structure. Which of the following should be of GREATEST concern?",
+   "choices": [
+    "IT reports directly to the CEO",
+    "IT strategic plans are updated annually",
+    "There is no formal IT steering committee",
+    "IT performance metrics are reviewed quarterly"
+   ],
+   "answer": 2,
+   "explanation": "An IT steering committee ensures IT aligns with business objectives, manages risks, and provides strategic oversight.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q18"
+  },
+  {
+   "id": "M4-019",
+   "domain": 1,
+   "topicId": "1B3",
+   "question": "Which of the following provides the BEST evidence of compliance with an organization’s IT security policy?",
+   "choices": [
+    "Employee awareness training logs",
+    "Security incident reports",
+    "System access control configurations",
+    "Internal audit findings"
+   ],
+   "answer": 3,
+   "explanation": "Internal audits provide documented evidence on whether IT security policies are followed and effective.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q19"
+  },
+  {
+   "id": "M4-020",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "Which of the following is the MOST effective way to ensure that terminated employees no longer have access to critical IT systems?",
+   "choices": [
+    "Reviewing user access logs quarterly",
+    "Implementing an automated user deprovisioning system",
+    "Conducting exit interviews",
+    "Requiring employees to sign a security policy agreement upon termination"
+   ],
+   "answer": 1,
+   "explanation": "Automated systems ensure immediate removal of access, reducing the risk of unauthorized access by former employees.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q20"
+  },
+  {
+   "id": "M4-021",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "Which of the following provides the BEST assurance that an organization’s IT controls are effective?",
+   "choices": [
+    "Management self-assessment reports",
+    "Regular external audits",
+    "IT department review meetings",
+    "Periodic vulnerability scans"
+   ],
+   "answer": 1,
+   "explanation": "External audits provide an independent and objective evaluation of IT controls, ensuring that security and compliance measures are in place and functioning as expected.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q21"
+  },
+  {
+   "id": "M4-022",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "Which type of audit assesses whether an organization is following its established IT policies and procedures?",
+   "choices": [
+    "Financial audit",
+    "Compliance audit",
+    "Operational audit",
+    "Risk-based audit"
+   ],
+   "answer": 1,
+   "explanation": "A compliance audit ensures that the organization adheres to its internal policies, industry regulations, and legal requirements.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q22"
+  },
+  {
+   "id": "M4-023",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "An IS auditor is reviewing a company’s change management process. What is the auditor’s PRIMARY concern?",
+   "choices": [
+    "Whether changes are documented and approved",
+    "Whether system downtime is minimized",
+    "Whether the IT team follows best practices",
+    "Whether end users are satisfied with changes"
+   ],
+   "answer": 0,
+   "explanation": "Change management ensures that modifications are properly recorded, reviewed, and approved before implementation to maintain system integrity.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q23"
+  },
+  {
+   "id": "M4-024",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "Which of the following is the PRIMARY objective of an IS audit in an organization using cloud computing?",
+   "choices": [
+    "To evaluate service provider performance",
+    "To ensure regulatory compliance and data security",
+    "To improve cost efficiency",
+    "To assess network latency"
+   ],
+   "answer": 1,
+   "explanation": "Cloud audits focus on ensuring that cloud-based IT services comply with regulations and maintain data security and privacy.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q24"
+  },
+  {
+   "id": "M4-025",
+   "domain": 1,
+   "topicId": "1B3",
+   "question": "Which of the following is the PRIMARY reason for an IS auditor to review system logs?",
+   "choices": [
+    "To assess IT personnel productivity",
+    "To verify compliance with security policies",
+    "To evaluate network performance",
+    "To analyze software licensing agreements"
+   ],
+   "answer": 1,
+   "explanation": "System logs provide a record of user activity, access attempts, and security events, helping auditors ensure compliance with security policies.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q25"
+  },
+  {
+   "id": "M4-026",
+   "domain": 1,
+   "topicId": "1A3",
+   "question": "An IS auditor finds that an organization lacks a formal IT risk management process. What is the GREATEST risk?",
+   "choices": [
+    "Increased likelihood of security breaches",
+    "Inefficiencies in IT operations",
+    "Delays in IT project implementations",
+    "Higher IT operational costs"
+   ],
+   "answer": 0,
+   "explanation": "Without a structured IT risk management process, the organization may not identify, assess, or mitigate risks effectively, increasing exposure to security threats.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q26"
+  },
+  {
+   "id": "M4-027",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "Which of the following BEST ensures that an IS auditor remains independent and objective?",
+   "choices": [
+    "Reporting directly to the IT department",
+    "Being part of IT security team decision-making",
+    "Having a functional reporting line to the audit committee",
+    "Consulting with IT management before issuing reports"
+   ],
+   "answer": 2,
+   "explanation": "Independence is preserved when the IS auditor reports to an oversight body like the audit committee, preventing conflicts of interest.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q27"
+  },
+  {
+   "id": "M4-028",
+   "domain": 1,
+   "topicId": "1B3",
+   "question": "Which of the following audit procedures is MOST effective for detecting unauthorized user access to critical systems?",
+   "choices": [
+    "Reviewing IT policies and procedures",
+    "Conducting vulnerability assessments",
+    "Analyzing system access logs",
+    "Interviewing IT staff"
+   ],
+   "answer": 2,
+   "explanation": "System access logs provide direct evidence of who accessed systems and whether access was authorized.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q28"
+  },
+  {
+   "id": "M4-029",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "What is the PRIMARY purpose of an IT general controls (ITGC) audit?",
+   "choices": [
+    "To ensure IT policies are documented",
+    "To evaluate the effectiveness of IT management",
+    "To assess controls that support the reliability of applications and data",
+    "To analyze financial transactions"
+   ],
+   "answer": 2,
+   "explanation": "ITGC audits assess broader IT controls that impact the reliability, security, and integrity of IT applications and data.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q29"
+  },
+  {
+   "id": "M4-030",
+   "domain": 1,
+   "topicId": "1B5",
+   "question": "Which of the following is the MOST important reason for conducting IT audit follow-ups?",
+   "choices": [
+    "To reassess IT budgets",
+    "To verify that management has addressed audit findings",
+    "To update IT compliance policies",
+    "To ensure auditors maintain good relationships with IT staff"
+   ],
+   "answer": 1,
+   "explanation": "Follow-ups ensure corrective actions have been implemented, reducing risks identified in prior audits.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q30"
+  },
+  {
+   "id": "M4-031",
+   "domain": 1,
+   "topicId": "1B5",
+   "question": "Which of the following BEST ensures that IT audit recommendations are implemented effectively?",
+   "choices": [
+    "Having IT management review audit reports",
+    "Establishing a follow-up audit process",
+    "Requiring auditors to monitor IT projects",
+    "Increasing the frequency of audits"
+   ],
+   "answer": 1,
+   "explanation": "Follow-up audits verify that recommended actions have been implemented, ensuring that risks are mitigated effectively.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q31"
+  },
+  {
+   "id": "M4-032",
+   "domain": 1,
+   "topicId": "1B4",
+   "question": "Which of the following is the PRIMARY benefit of using automated audit tools?",
+   "choices": [
+    "Reducing the need for auditors",
+    "Improving the efficiency and accuracy of audit processes",
+    "Increasing the number of audit findings",
+    "Lowering IT infrastructure costs"
+   ],
+   "answer": 1,
+   "explanation": "Automated audit tools enhance accuracy, efficiency, and consistency in audit processes, reducing human error and effort.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q32"
+  },
+  {
+   "id": "M4-033",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "What is the PRIMARY objective of an IS audit of an organization’s incident response process?",
+   "choices": [
+    "To evaluate the effectiveness of incident handling and recovery",
+    "To ensure security incidents do not occur",
+    "To reduce the cost of security tools",
+    "To review the organization’s firewall settings"
+   ],
+   "answer": 0,
+   "explanation": "An IS audit assesses whether the organization can effectively detect, respond to, and recover from security incidents.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q33"
+  },
+  {
+   "id": "M4-034",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "Which of the following BEST demonstrates compliance with data retention policies?",
+   "choices": [
+    "Documenting the data retention policy",
+    "Deleting records based on predefined retention periods",
+    "Encrypting stored data",
+    "Reviewing backup logs regularly"
+   ],
+   "answer": 1,
+   "explanation": "Compliance with data retention policies requires the proper disposal of records according to predefined legal and organizational timelines.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q34"
+  },
+  {
+   "id": "M4-035",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "Which of the following is the PRIMARY objective of an IT governance audit?",
+   "choices": [
+    "Ensuring compliance with industry regulations",
+    "Assessing whether IT aligns with business objectives",
+    "Reducing IT operational costs",
+    "Ensuring IT staff follow best practices"
+   ],
+   "answer": 1,
+   "explanation": "IT governance audits evaluate how well IT supports overall business strategy and risk management.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q35"
+  },
+  {
+   "id": "M4-036",
+   "domain": 1,
+   "topicId": "1B4",
+   "question": "Which of the following is the PRIMARY benefit of continuous auditing?",
+   "choices": [
+    "Reducing overall audit costs",
+    "Identifying control deficiencies in real-time",
+    "Ensuring full compliance with regulations",
+    "Automating all audit activities"
+   ],
+   "answer": 1,
+   "explanation": "Continuous auditing allows for real-time monitoring of controls, enabling organizations to detect and correct deficiencies promptly.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q36"
+  },
+  {
+   "id": "M4-037",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "An IS auditor is evaluating a company's user access review process. Which of the following is the MOST important aspect to review?",
+   "choices": [
+    "The frequency of access reviews",
+    "Whether terminated users' access has been removed",
+    "Whether employees use strong passwords",
+    "The cost of access control tools"
+   ],
+   "answer": 1,
+   "explanation": "Ensuring that former employees no longer have access to critical systems is a key control to prevent unauthorized access and data breaches.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q37"
+  },
+  {
+   "id": "M4-038",
+   "domain": 1,
+   "topicId": "1A3",
+   "question": "Which of the following BEST describes the role of an IS auditor in an organization’s risk management process?",
+   "choices": [
+    "Implementing risk mitigation strategies",
+    "Identifying and assessing risks",
+    "Creating risk management policies",
+    "Deciding on risk appetite"
+   ],
+   "answer": 1,
+   "explanation": "IS auditors play a critical role in risk management by evaluating existing risks and ensuring controls effectively mitigate them. ISACA tip: the auditor evaluates and gives assurance on the risk management process; identifying and owning risks is management's job. Here B is the least-wrong option because the others are management decisions.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q38"
+  },
+  {
+   "id": "M4-039",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "Which of the following should an IS auditor review FIRST when auditing an organization's backup and recovery processes?",
+   "choices": [
+    "The frequency of backups",
+    "The effectiveness of data encryption",
+    "Whether backups are tested regularly",
+    "The cost of backup solutions"
+   ],
+   "answer": 2,
+   "explanation": "Regular testing ensures that backups are functional and can be successfully restored in case of data loss.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q39"
+  },
+  {
+   "id": "M4-040",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "What is the PRIMARY risk of not segregating duties within an IT department?",
+   "choices": [
+    "Increased IT operational costs",
+    "Higher likelihood of fraud or unauthorized transactions",
+    "Reduced IT system efficiency",
+    "Increased reliance on external audits"
+   ],
+   "answer": 1,
+   "explanation": "Proper segregation of duties prevents conflicts of interest and reduces the risk of fraud or unauthorized access.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q40"
+  },
+  {
+   "id": "M4-041",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "Which of the following is the BEST way for an IS auditor to assess the adequacy of IT policies?",
+   "choices": [
+    "Comparing policies with industry best practices",
+    "Conducting employee surveys on policy awareness",
+    "Reviewing the IT budget for policy implementation",
+    "Checking whether IT policies are easily accessible"
+   ],
+   "answer": 0,
+   "explanation": "IT policies should align with recognized frameworks and industry standards to ensure adequacy and effectiveness.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q41"
+  },
+  {
+   "id": "M4-042",
+   "domain": 1,
+   "topicId": "1A3",
+   "question": "Which of the following is the PRIMARY purpose of an audit risk assessment?",
+   "choices": [
+    "To reduce the time required to complete an audit",
+    "To identify areas that require increased audit focus",
+    "To improve relationships between auditors and IT staff",
+    "To ensure audits are completed on time"
+   ],
+   "answer": 1,
+   "explanation": "Risk assessments help auditors prioritize areas with higher risks to improve audit effectiveness.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q42"
+  },
+  {
+   "id": "M4-043",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "Which of the following is the MOST important reason for an IS auditor to review an organization's service level agreements (SLAs) with vendors?",
+   "choices": [
+    "To ensure vendors are providing cost-effective services",
+    "To verify that vendors are meeting security and performance commitments",
+    "To confirm that the organization is not overpaying for services",
+    "To assess whether vendors are using the latest technology"
+   ],
+   "answer": 1,
+   "explanation": "SLAs define the expected service levels and security requirements, ensuring vendors meet contractual obligations.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q43"
+  },
+  {
+   "id": "M4-044",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "An IS auditor is evaluating an organization’s software development lifecycle (SDLC). What is the MOST important factor to review?",
+   "choices": [
+    "Whether developers are trained in secure coding practices",
+    "The use of project management methodologies",
+    "The frequency of software updates",
+    "The cost of software development"
+   ],
+   "answer": 0,
+   "explanation": "Secure coding practices help prevent vulnerabilities and ensure software security.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q44"
+  },
+  {
+   "id": "M4-045",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "Which of the following is the BEST way to ensure that security patches are applied in a timely manner?",
+   "choices": [
+    "Conducting monthly IT security training",
+    "Implementing an automated patch management system",
+    "Reviewing logs for missing patches",
+    "Assigning a dedicated patch management team"
+   ],
+   "answer": 1,
+   "explanation": "Automated patch management ensures timely updates, reducing vulnerabilities and security risks.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q45"
+  },
+  {
+   "id": "M4-046",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "Which of the following BEST ensures that audit trails are protected from unauthorized access?",
+   "choices": [
+    "Storing audit logs on a separate secure server",
+    "Allowing only IT administrators to modify audit logs",
+    "Encrypting all log files",
+    "Deleting logs after six months"
+   ],
+   "answer": 0,
+   "explanation": "Storing logs separately helps prevent unauthorized access or modification.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q46"
+  },
+  {
+   "id": "M4-047",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "Which of the following is the PRIMARY reason for conducting periodic penetration tests?",
+   "choices": [
+    "To improve IT department efficiency",
+    "To identify security weaknesses before attackers exploit them",
+    "To comply with internal policies",
+    "To reduce IT operational costs"
+   ],
+   "answer": 1,
+   "explanation": "Penetration tests help organizations proactively find and fix vulnerabilities before cybercriminals exploit them.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q47"
+  },
+  {
+   "id": "M4-048",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "What is the MOST effective way to ensure employees comply with IT security policies?",
+   "choices": [
+    "Conducting regular security awareness training",
+    "Implementing strict disciplinary measures",
+    "Increasing the complexity of security policies",
+    "Hiring external auditors to enforce compliance"
+   ],
+   "answer": 0,
+   "explanation": "Employees must be educated about security policies to understand their importance and follow best practices.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q48"
+  },
+  {
+   "id": "M4-049",
+   "domain": 1,
+   "topicId": "1A3",
+   "question": "Which of the following is the PRIMARY purpose of an IT risk register?",
+   "choices": [
+    "To document and track identified risks and mitigation strategies",
+    "To provide IT management with a budget for security improvements",
+    "To store information on previous audit findings",
+    "To ensure IT staff follow industry best practices"
+   ],
+   "answer": 0,
+   "explanation": "A risk register records IT risks, their potential impact, and actions taken to mitigate them.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q49"
+  },
+  {
+   "id": "M4-050",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "Which of the following is the MOST important reason for an IS auditor to review an organization’s IT disaster recovery plan (DRP)?",
+   "choices": [
+    "To reduce IT downtime",
+    "To ensure business continuity in case of a major disruption",
+    "To lower operational costs",
+    "To comply with industry regulations"
+   ],
+   "answer": 1,
+   "explanation": "A well-designed DRP helps organizations recover quickly from IT failures, minimizing operational disruptions.",
+   "level": "knowledge",
+   "source": "Workbook D1 Q50"
+  },
+  {
+   "id": "M4-051",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which of the following is the PRIMARY objective of IT governance?",
+   "choices": [
+    "To ensure IT investments align with business objectives",
+    "To establish a technical framework for IT security",
+    "To implement an IT risk management program",
+    "To ensure IT budgets are efficiently managed"
+   ],
+   "answer": 0,
+   "explanation": "IT governance ensures that IT supports business goals by aligning IT strategies with enterprise objectives, managing resources efficiently, and ensuring accountability.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q1"
+  },
+  {
+   "id": "M4-052",
+   "domain": 2,
+   "topicId": "2A3",
+   "question": "Which framework is MOST commonly used for IT governance?",
+   "choices": [
+    "ISO 27001",
+    "ITIL",
+    "COBIT",
+    "NIST"
+   ],
+   "answer": 2,
+   "explanation": "COBIT (Control Objectives for Information and Related Technologies) is a widely used IT governance framework that provides guidelines on managing and governing enterprise IT.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q2"
+  },
+  {
+   "id": "M4-053",
+   "domain": 2,
+   "topicId": "2A3",
+   "question": "Which of the following is the MOST important factor when defining IT governance policies?",
+   "choices": [
+    "Compliance with legal requirements",
+    "Industry best practices",
+    "Business objectives and risk tolerance",
+    "IT department recommendations"
+   ],
+   "answer": 2,
+   "explanation": "IT governance must be aligned with the organization's business goals and risk appetite to be effective in ensuring IT supports business needs.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q3"
+  },
+  {
+   "id": "M4-054",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "What is the PRIMARY role of an IS auditor when evaluating an organization's IT governance structure?",
+   "choices": [
+    "To recommend security controls",
+    "To ensure IT supports business objectives",
+    "To approve IT policies and procedures",
+    "To manage IT projects"
+   ],
+   "answer": 1,
+   "explanation": "An IS auditor assesses whether IT governance aligns with and supports the organization's strategic business objectives.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q4"
+  },
+  {
+   "id": "M4-055",
+   "domain": 2,
+   "topicId": "2A3",
+   "question": "Which IT governance framework focuses on IT service management and delivery?",
+   "choices": [
+    "COBIT",
+    "ITIL",
+    "ISO 27001",
+    "COSO"
+   ],
+   "answer": 1,
+   "explanation": "ITIL (Information Technology Infrastructure Library) is a framework focused on IT service management, ensuring IT services are aligned with business needs and provide value.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q5"
+  },
+  {
+   "id": "M4-056",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which of the following BEST defines the role of an IT steering committee?",
+   "choices": [
+    "Managing IT service desk operations",
+    "Approving IT budgets and investment plans",
+    "Monitoring technical configurations of IT systems",
+    "Implementing security measures for compliance"
+   ],
+   "answer": 1,
+   "explanation": "An IT steering committee provides oversight on IT investment decisions, ensuring they align with business strategy and financial goals.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q6"
+  },
+  {
+   "id": "M4-057",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "What is the PRIMARY purpose of an information security governance program?",
+   "choices": [
+    "To ensure IT compliance with industry regulations",
+    "To align security with business objectives",
+    "To implement strong encryption policies",
+    "To restrict unauthorized access to IT systems"
+   ],
+   "answer": 1,
+   "explanation": "Security governance ensures that security policies and practices support business goals while managing risks effectively.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q7"
+  },
+  {
+   "id": "M4-058",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which of the following is a KEY responsibility of senior management in IT governance?",
+   "choices": [
+    "Conducting penetration testing",
+    "Approving IT risk assessments",
+    "Monitoring daily security logs",
+    "Enforcing firewall policies"
+   ],
+   "answer": 1,
+   "explanation": "Senior management is responsible for defining risk tolerance and approving risk assessments to align IT with business strategy.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q8"
+  },
+  {
+   "id": "M4-059",
+   "domain": 2,
+   "topicId": "2A5",
+   "question": "An IS auditor is reviewing an organization's risk management process. Which of the following should be of GREATEST concern?",
+   "choices": [
+    "The IT department conducts risk assessments annually",
+    "There is no formal IT risk register",
+    "Risk mitigation actions are documented",
+    "Risk reporting is included in quarterly management meetings"
+   ],
+   "answer": 1,
+   "explanation": "An IT risk register is a critical component of risk management, ensuring risks are identified, documented, and tracked for mitigation.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q9"
+  },
+  {
+   "id": "M4-060",
+   "domain": 2,
+   "topicId": "2A1",
+   "question": "Which of the following is a PRIMARY goal of an IT compliance program?",
+   "choices": [
+    "Reducing IT operational costs",
+    "Detecting insider threats",
+    "Ensuring adherence to regulatory requirements",
+    "Implementing zero-trust security models"
+   ],
+   "answer": 2,
+   "explanation": "IT compliance programs focus on meeting regulatory, legal, and contractual obligations to avoid penalties and operational risks.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q10"
+  },
+  {
+   "id": "M4-061",
+   "domain": 2,
+   "topicId": "2B3",
+   "question": "Which of the following BEST describes the role of IT performance management in governance?",
+   "choices": [
+    "Measuring IT efficiency based on technical KPIs",
+    "Ensuring IT is aligned with business objectives through performance tracking",
+    "Monitoring daily IT security incidents",
+    "Evaluating compliance with ISO 27001"
+   ],
+   "answer": 1,
+   "explanation": "IT performance management involves measuring IT service delivery against business goals, ensuring efficiency and alignment.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q11"
+  },
+  {
+   "id": "M4-062",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which of the following is a KEY factor in ensuring successful IT strategic alignment?",
+   "choices": [
+    "IT infrastructure investments are approved by IT personnel",
+    "Business executives participate in IT decision-making",
+    "IT teams independently define their own strategic objectives",
+    "IT budgets are strictly limited to operational expenses"
+   ],
+   "answer": 1,
+   "explanation": "Engaging business leaders ensures that IT strategies support enterprise goals, fostering collaboration between IT and business units.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q12"
+  },
+  {
+   "id": "M4-063",
+   "domain": 2,
+   "topicId": "2B1",
+   "question": "Which of the following is the PRIMARY goal of IT resource management?",
+   "choices": [
+    "Optimizing the allocation of IT assets and personnel",
+    "Increasing IT staff headcount",
+    "Reducing IT service response times",
+    "Ensuring all IT systems are upgraded annually"
+   ],
+   "answer": 0,
+   "explanation": "IT resource management ensures that IT capabilities, personnel, and infrastructure align with business needs for maximum efficiency.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q13"
+  },
+  {
+   "id": "M4-064",
+   "domain": 2,
+   "topicId": "2A5",
+   "question": "Which of the following is the BEST way to manage risks associated with third-party IT service providers?",
+   "choices": [
+    "Conducting a cybersecurity awareness program for employees",
+    "Establishing a detailed Service Level Agreement (SLA)",
+    "Outsourcing IT governance to an external auditor",
+    "Requiring IT teams to monitor vendor contracts manually"
+   ],
+   "answer": 1,
+   "explanation": "An SLA defines the responsibilities, performance metrics, and security requirements for third-party service providers, ensuring risk mitigation.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q14"
+  },
+  {
+   "id": "M4-065",
+   "domain": 2,
+   "topicId": "2A3",
+   "question": "Which of the following BEST describes the role of an IT control framework?",
+   "choices": [
+    "Ensuring IT infrastructure is fully automated",
+    "Establishing structured IT governance policies and procedures",
+    "Increasing IT budget allocation",
+    "Allowing IT teams to bypass regulatory requirements"
+   ],
+   "answer": 1,
+   "explanation": "IT control frameworks like COBIT and NIST help organizations implement effective governance, risk management, and compliance strategies.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q15"
+  },
+  {
+   "id": "M4-066",
+   "domain": 2,
+   "topicId": "2A5",
+   "question": "Which of the following is a key consideration when implementing IT risk management practices?",
+   "choices": [
+    "Risk assessments should be conducted regularly and aligned with business objectives",
+    "IT risk management should be handled only by the security team",
+    "IT risks should not be communicated to senior management",
+    "Risk mitigation strategies should focus only on cybersecurity threats"
+   ],
+   "answer": 0,
+   "explanation": "IT risk management must be proactive and aligned with enterprise objectives to minimize business impact and ensure resilience.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q16"
+  },
+  {
+   "id": "M4-067",
+   "domain": 2,
+   "topicId": "2A7",
+   "question": "Which of the following BEST defines data governance?",
+   "choices": [
+    "The process of ensuring data security policies are enforced",
+    "Managing data accuracy, integrity, security, and availability",
+    "Storing all organizational data in cloud environments",
+    "Allowing business users unrestricted access to all data"
+   ],
+   "answer": 1,
+   "explanation": "Data governance ensures that enterprise data is trustworthy, protected, and used effectively in business decision-making.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q17"
+  },
+  {
+   "id": "M4-068",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which IT governance principle ensures that IT-related incidents do not disrupt business operations?",
+   "choices": [
+    "Incident management and business continuity planning",
+    "Increasing IT infrastructure spending",
+    "Relying solely on cybersecurity training",
+    "Allowing IT teams to manage incidents without oversight"
+   ],
+   "answer": 0,
+   "explanation": "IT governance must include incident response and continuity plans to mitigate disruptions and maintain operations.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q18"
+  },
+  {
+   "id": "M4-069",
+   "domain": 2,
+   "topicId": "2A1",
+   "question": "Which of the following is the PRIMARY focus of an IT compliance audit?",
+   "choices": [
+    "Evaluating IT risk tolerance",
+    "Ensuring adherence to regulatory and legal requirements",
+    "Implementing new IT policies",
+    "Optimizing IT project budgets"
+   ],
+   "answer": 1,
+   "explanation": "IT compliance audits verify that an organization meets legal, regulatory, and contractual obligations related to IT operations.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q19"
+  },
+  {
+   "id": "M4-070",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which of the following is a critical responsibility of a Chief Information Officer (CIO) in IT governance?",
+   "choices": [
+    "Monitoring daily IT security logs",
+    "Defining IT strategy to align with business objectives",
+    "Conducting routine system patching",
+    "Writing detailed software development policies"
+   ],
+   "answer": 1,
+   "explanation": "The CIO plays a strategic role in ensuring IT investments and initiatives support overall enterprise goals.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q20"
+  },
+  {
+   "id": "M4-071",
+   "domain": 2,
+   "topicId": "2A1",
+   "question": "Which of the following BEST ensures IT governance policies are effectively implemented across an organization?",
+   "choices": [
+    "Establishing a central IT compliance office",
+    "Conducting mandatory annual IT training for all employees",
+    "Requiring IT policies to be reviewed by external auditors",
+    "Assigning IT governance responsibilities to senior management"
+   ],
+   "answer": 0,
+   "explanation": "A dedicated IT compliance office ensures consistent enforcement of policies, monitors compliance, and provides guidance on governance practices. ISACA tip: in the real exam, accountability placed with senior management (\"tone at the top\") is usually preferred over creating a separate compliance office. Know both views.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q21"
+  },
+  {
+   "id": "M4-072",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which of the following IT governance components is MOST critical for ensuring IT investments provide business value?",
+   "choices": [
+    "IT project management methodologies",
+    "Business case evaluations for IT projects",
+    "IT vendor selection criteria",
+    "IT hardware and software procurement policies"
+   ],
+   "answer": 1,
+   "explanation": "Business case evaluations help ensure IT investments align with strategic objectives, justify costs, and provide measurable benefits.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q22"
+  },
+  {
+   "id": "M4-073",
+   "domain": 2,
+   "topicId": "2B1",
+   "question": "Which IT governance principle ensures IT services and projects remain cost-effective and sustainable?",
+   "choices": [
+    "Enterprise risk management",
+    "IT financial management",
+    "IT compliance reporting",
+    "Cybersecurity resilience planning"
+   ],
+   "answer": 1,
+   "explanation": "IT financial management ensures that IT services and projects remain financially viable while supporting business objectives and maximizing value.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q23"
+  },
+  {
+   "id": "M4-074",
+   "domain": 2,
+   "topicId": "2B3",
+   "question": "Which of the following is the MOST effective way to measure IT governance effectiveness?",
+   "choices": [
+    "Conducting IT governance maturity assessments",
+    "Increasing IT security investments annually",
+    "Performing quarterly IT penetration tests",
+    "Outsourcing IT audits to third parties"
+   ],
+   "answer": 0,
+   "explanation": "IT governance maturity assessments evaluate the effectiveness of governance processes and identify areas for improvement.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q24"
+  },
+  {
+   "id": "M4-075",
+   "domain": 2,
+   "topicId": "2B2",
+   "question": "Which of the following is a PRIMARY objective of IT outsourcing governance?",
+   "choices": [
+    "Reducing IT staffing costs",
+    "Ensuring third-party services align with business goals and security requirements",
+    "Transferring all IT risks to an external provider",
+    "Eliminating the need for internal IT audits"
+   ],
+   "answer": 1,
+   "explanation": "IT outsourcing governance ensures vendors meet service level agreements (SLAs) and align with business and security requirements.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q25"
+  },
+  {
+   "id": "M4-076",
+   "domain": 2,
+   "topicId": "2B3",
+   "question": "Which of the following is the MOST important factor when designing IT governance performance metrics?",
+   "choices": [
+    "Ensuring the metrics are easy to measure",
+    "Aligning the metrics with business goals and objectives",
+    "Focusing only on IT security performance",
+    "Avoiding frequent reviews of governance metrics"
+   ],
+   "answer": 1,
+   "explanation": "IT governance metrics should directly measure how IT contributes to business objectives and decision-making.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q26"
+  },
+  {
+   "id": "M4-077",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which IT governance function is responsible for prioritizing IT projects based on business needs?",
+   "choices": [
+    "IT Operations Team",
+    "IT Project Management Office (PMO)",
+    "Chief Security Officer (CSO)",
+    "Helpdesk Support Team"
+   ],
+   "answer": 1,
+   "explanation": "The PMO ensures IT projects align with business objectives, prioritizing them based on business value and risk factors.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q27"
+  },
+  {
+   "id": "M4-078",
+   "domain": 2,
+   "topicId": "2A3",
+   "question": "Which of the following is the MOST effective method to ensure IT governance policies remain relevant?",
+   "choices": [
+    "Requiring annual updates to all IT policies",
+    "Benchmarking IT policies against industry standards",
+    "Outsourcing IT governance to external consultants",
+    "Eliminating IT governance policies that require frequent changes"
+   ],
+   "answer": 1,
+   "explanation": "Regular benchmarking helps organizations maintain policies that reflect current best practices and regulatory requirements.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q28"
+  },
+  {
+   "id": "M4-079",
+   "domain": 2,
+   "topicId": "2A3",
+   "question": "Which of the following BEST ensures that IT governance frameworks are effectively adopted by employees?",
+   "choices": [
+    "Implementing a mandatory IT policy training program",
+    "Hiring additional IT governance consultants",
+    "Limiting employee access to IT governance documents",
+    "Increasing IT security investments"
+   ],
+   "answer": 0,
+   "explanation": "Training programs educate employees on IT governance policies and procedures, increasing compliance and awareness.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q29"
+  },
+  {
+   "id": "M4-080",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which of the following governance practices is MOST effective for managing emerging technologies like AI and cloud computing?",
+   "choices": [
+    "Implementing a dedicated emerging technology committee",
+    "Waiting for regulatory bodies to set guidelines",
+    "Prohibiting the use of new technologies until fully tested",
+    "Requiring manual approval for all AI-driven processes"
+   ],
+   "answer": 0,
+   "explanation": "A dedicated governance committee helps organizations proactively assess and manage risks associated with new technologies.",
+   "level": "knowledge",
+   "source": "Workbook D2 Q30"
+  }
+ ]
+}

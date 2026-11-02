@@ -48,3 +48,32 @@
 ## Also
 - The sidebar is more compact on laptop-height screens, so every item fits without scrolling.
 - Service worker cache: `p2c-theory-v28-all`.
+
+## Update: Workbook mock and revision notes
+- **Mock exam 04, "Workbook Mock · Domains 1 & 2":** all 80 questions from your two workbooks (Domain 1: 50, Domain 2: 30).
+  - Timed at 128 minutes, the same pace as the real exam.
+  - Options are shuffled on every attempt; your workbooks had 55% of answers on "B".
+  - It feeds the readiness score, Mistakes notebook and quick quizzes.
+  - The mock engine now supports exams of any length (`MOCKS` table in `cisa-app.js`).
+  - Two keyed answers have an "ISACA tip" added to the explanation (D1 Q38, D2 Q21); the keys themselves are unchanged.
+- **Revision notes (Revision tab):** 96 short exam-ready notes.
+  - 80 cover every concept in your revision PDF, rewritten as short points.
+  - 5 cover the 28th edition CRM Domain 4 changes: 4.9 Operational Log Management and 4.5 Shadow IT.
+  - 11 fill topics the PDF does not cover.
+  - All 60 current syllabus topics are now covered.
+  - Filter by domain or "New in 28th ed.", tick "Mark revised", and track progress.
+- **Coverage check:** lists what is outdated in the PDF (old weights, COBIT 5, ISO 20000:2011, BCP/BIA location).
+- New files: `cisa/mock-exams/mock-04.json`, `cisa/data/revision-notes.json`. Service worker cache: `p2c-theory-v29-mock4`.
+
+## Update: CISA Manual (new tab in the CISA Hub)
+- **Study guide:** 60 sections in the exact 28th edition order (Chapters 1–5, Parts A/B, 1.1 to 5.15), with the printed page number for each.
+  - Every section has a summary, key points, key terms, the auditor's perspective and exam traps, all written fresh rather than copied from the manual.
+  - The contents list in the sidebar ticks off sections as you read them.
+  - Previous/Next buttons, "Mark as read", and links to Revision notes and to your PDF.
+  - File: `cisa/data/manual-guide.json`.
+- **My PDF:** choose your own copy of the Review Manual once.
+  - It is stored only in this browser (IndexedDB, database `jsl-manual`) and never uploaded to GitHub or Firebase.
+  - Jump to any section (PDF page = printed page + 8, adjustable), go to any page, and keep bookmarks; bookmarks sync, the PDF does not.
+  - "Remove PDF" deletes it from the device.
+- Links: "Read in manual" on every revision note and syllabus topic, plus manual sections in ⌘K search.
+- Service worker cache: `p2c-theory-v30-manual`.
