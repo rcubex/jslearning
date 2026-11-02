@@ -102,3 +102,18 @@
    - Needs the published Firestore rules.
 - The CISA tab bar now scrolls sideways when there are many tabs.
 - Service worker cache: `p2c-theory-v32-coach`.
+
+## Update V15: Phone layout fixes
+- Audited all 31 screens at iPhone (390 px), small Android (360 px) and iPad (820 px) widths: no sideways scrolling anywhere.
+- **Menu (☰ / More):** the full menu now opens over the page. It was clipped to a thin strip because the header's blur effect trapped it.
+- **Courses:** level headers no longer squeeze into a one-letter-wide column.
+- **Dashboard "Today" card:** fits the screen; Download/Restore sit on one line.
+- **CISA tabs:** one swipeable row instead of a two-column oval.
+- **Readiness and Up next:** stacked rows.
+- **Revision notes:** titles use the full width.
+- **Manual:** the article shows first and the contents list below it; previous/next buttons are stacked.
+- **Exam review:** 2×2 stats; 6-column question grid.
+- **Forms:** single-column fields; dropdown text no longer cut off.
+- **Tables (e.g. Cloud Rosetta):** scroll sideways inside their card.
+- Larger tap targets for buttons.
+- Service worker cache: `p2c-theory-v33-mobile`.
