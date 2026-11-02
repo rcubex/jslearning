@@ -207,3 +207,39 @@
   - Grouped popup composer, a recently-sent list with Seen / Waiting pills, and a notification-centre style alerts panel.
   - Popup toggle switch in the chat, and cleaner KPI tiles and form fields.
 - Cache bumped to `p2c-theory-v36-ui`.
+
+## V18.1 — Messages are easier to find
+- New **Messages** item in the learner's menu, under CISA Hub, with an unread badge. On phones it's under More.
+- On laptops the chat button is now a labelled "Messages" pill in the bottom-right corner.
+- If the chat module hasn't loaded (for example `cisa/learner-coach.js` wasn't uploaded), clicking Messages explains why instead of doing nothing.
+- Cache `p2c-theory-v37-msg`.
+
+## V18.2 — Menu items by role
+- The "Admin portal" menu item is now hidden by the app itself for learners (it was relying on `cisa/cisa.css`, so an old cached stylesheet showed it). "Messages" shows only for learners.
+- A learner who opens `#admin` is sent to the dashboard.
+- Cache `p2c-theory-v38-nav`.
+
+## V18.3 — Reliable sign-out
+- One shared sign-out routine for the Sign out button, the 10-minute timeout and the admin's remote sign-out.
+  - The button shows "Signing out…" while it works.
+  - Saving is given at most about 5 seconds, then the account is always signed out, even when the connection is slow or offline.
+  - The mobile menu closes afterwards.
+- Admin portal: signing out now stops its live chat and coaching listeners and its refresh timer, so the portal can no longer redraw behind the sign-in screen.
+- Cache `p2c-theory-v39-signout`.
+
+## V18.4 — Edit and delete chat messages (5 minutes)
+- Both the learner and the admin can tap their own message to **Edit** or **Delete** it for 5 minutes after sending; the button row shows the minutes left.
+- Edited messages are marked "Edited". Deleted messages leave a "Message deleted" placeholder, so the conversation still makes sense.
+- The admin can **cancel a popup** within 5 minutes; if the learner hasn't seen it yet, it never pops up.
+- Chat history is kept permanently in Firestore; nothing is cleared automatically.
+- `firestore.rules`: the sender may change only text/title/editedAt/deleted, only within 5 minutes (6 allowed for clock differences), and only on their own messages. **Publish the rules again.**
+- Cache `p2c-theory-v40-edit`.
+
+## V19 — Admin portal matches the learner's layout
+- The admin's sections now live in the **left sidebar**, like the learner's menu: Overview, Activity log, Reports, Exams, Habits, Coaching, Messages and Audit trail. On a phone they open from the menu button.
+- Each section has its own address (`#admin`, `#admin-log`, `#admin-reports`, …) and the page title shows the section name. The horizontal tab bar is gone.
+- **Chat is a floating window**, the same iMessage-style panel the learner uses:
+  - It opens from the blue **Messages** button (bottom-right), the sidebar's Messages item or the learner card's Message button.
+  - It has a Popup switch, edit and delete within 5 minutes, and Read/Delivered receipts.
+  - A banner appears when the learner writes while the window is closed, and unread badges show on the button and in the sidebar.
+- Cache `p2c-theory-v41-adminnav`.

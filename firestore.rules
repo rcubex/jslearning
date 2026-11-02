@@ -49,15 +49,25 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
     // Chat and popup messages between the admin and one learner.
-    // Each side can only send as itself, and can only mark the other side's messages as seen.
+    // Each side can only send as itself, mark the other side's messages as seen,
+    // and edit or delete its own messages for 5 minutes after sending.
     match /chats/{uid}/messages/{msgId} {
       allow read: if approved() && (request.auth.uid == uid || isAdmin());
       allow create: if approved() && (
         (request.auth.uid == uid && !isAdmin() && request.resource.data.from == 'learner') ||
         (isAdmin() && request.resource.data.from == 'admin'));
-      allow update: if approved()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['seenAt'])
-        && ((request.auth.uid == uid && resource.data.from == 'admin') || (isAdmin() && resource.data.from == 'learner'));
+      allow update: if approved() && (
+        // the recipient marks a message as seen
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['seenAt'])
+          && ((request.auth.uid == uid && resource.data.from == 'admin') || (isAdmin() && resource.data.from == 'learner')))
+        ||
+        // the sender edits or deletes their own message within 5 minutes (6 allowed for clock differences)
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['text', 'title', 'editedAt', 'deleted'])
+          && request.time.toMillis() < resource.data.at + 360000
+          && resource.data.get('deleted', false) != true
+          && request.resource.data.text is string && request.resource.data.text.size() <= 2000
+          && ((resource.data.from == 'learner' && request.auth.uid == uid && !isAdmin()) || (resource.data.from == 'admin' && isAdmin())))
+      );
       allow delete: if isAdmin();
     }
     match /users/{uid}/{area}/{entryId} {

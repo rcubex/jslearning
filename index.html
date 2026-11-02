@@ -1934,6 +1934,9 @@ h1,h2,h3,h4{font-weight:650;letter-spacing:-.022em}
 .lbody p,.lbody li{line-height:1.8}
 </style>
 <style id="palettes-extra">
+#tabs [hidden]{display:none!important}
+:root.admin-mode #tabs .tab:not(.adm-only),:root.admin-mode #tabs .nav-drop,:root.admin-mode #tabs .nav-main>.nav-label:not(.adm-only),:root.admin-mode .side-search,:root.admin-mode .side-prog,:root.admin-mode #bottomBar{display:none!important}
+
 /* Extra colour themes (same layout) */
 :root[data-palette="ocean"]{--hl:#7DD3FC;--hl-2:#38BDF8;--hl-soft:#BAE6FD;--hl-hover:#BAE6FD;--hl-rgb:125,211,252;--glow-rgb:14,165,233;--glow2-rgb:45,212,191;--hero-0:#04111F;--hero-1:#0A2540;--hero-2:#0E3A5F;--hero-rgb:10,37,64;--hero-ink:#FFFFFF;--hero-muted:color-mix(in srgb,#FFFFFF 72%,#0E3A5F);--hero-line:rgba(255,255,255,.1);--side-bg:#0A2540;--side-bg-2:#0D2C4A;--plum:#0A2540;--pink:#7DD3FC;--pink-soft:#BAE6FD;--bg:#F3F5F9;--surface:#FFFFFF;--surface-2:#F7F8FB;--surface-3:#ECEFF5;--ink:#0F172A;--ink-2:#334155;--muted:#5B6577;--line:#E3E7EF;--line-2:#CDD4E0;--accent:#0284C7;--accent-ink:#0369A1;--accent-soft:#E0F2FE;--on-accent:#FFFFFF;--btn-bg:#0A2540;--btn-ink:#FFFFFF;--btn-hover:#0E3A5F;--band:linear-gradient(135deg,#0A2540 0%,#0C4A6E 55%,#075985 100%);}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"])[data-palette="ocean"]{--bg:#090E18;--surface:#111827;--surface-2:#162033;--surface-3:#1E293B;--ink:#E8EDF5;--ink-2:#CBD5E1;--muted:#94A3B8;--line:#1F2A3D;--line-2:#2C3A52;color-scheme:dark;--accent:#38BDF8;--accent-ink:#7DD3FC;--accent-soft:#082F49;--on-accent:#04111F;--btn-bg:#7DD3FC;--btn-ink:#0A2540;--btn-hover:#BAE6FD;--band:linear-gradient(135deg,#071C31 0%,#0A3A57 55%,#0B4C70 100%);}}
@@ -2921,7 +2924,7 @@ a.td-row:hover{background:rgba(255,255,255,.6)}
   <div class="side-nav" id="sideNav">
     <button class="side-search" id="cmdkBtn" type="button" aria-label="Search everything"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span>Search</span><kbd>⌘K</kbd></button>
     <nav class="tabs" id="tabs" aria-label="Workbook sections">
-      <div class="nav-group nav-main"><span class="nav-label">Learn</span><span class="nav-label adm-only">Admin</span><button class="tab adm-only" data-v="admin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><circle cx="12" cy="10" r="2.6"/><path d="M7.8 16.2c.9-1.8 2.4-2.7 4.2-2.7s3.3.9 4.2 2.7"/></svg><span>Admin portal</span></button><button class="tab" data-v="dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button><button class="tab" data-v="courses"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.6 17M12 11.5l5.4 5.5"/></svg><span>Technical</span></button><button class="tab" data-v="grc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span>GRC</span></button><button class="tab" data-v="appsec"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14l-2 2 2 2M16 14l2 2-2 2M13 12l-2 8"/></svg><span>Application</span></button><button class="tab" data-v="cisa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4zM6 10v6c4 3 8 3 12 0v-6M21 8v7"/></svg><span>CISA Hub</span></button></div>
+      <div class="nav-group nav-main"><span class="nav-label">Learn</span><span class="nav-label adm-only" hidden>Admin</span><button class="tab adm-only" data-v="admin" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Overview</span></button><button class="tab adm-only" data-v="admin-log" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Activity log</span></button><button class="tab adm-only" data-v="admin-reports" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 17v-3M12 17v-6M15 17v-4"/></svg><span>Reports</span></button><button class="tab adm-only" data-v="admin-exams" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><path d="M6 16l4-5 3 3 5-7"/></svg><span>Exams</span></button><button class="tab adm-only" data-v="admin-habits" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M12 14h2M16 14h2M8 17h2"/></svg><span>Habits</span></button><button class="tab adm-only" data-v="admin-coaching" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg><span>Coaching</span></button><button class="tab adm-only" data-v="admin-chat" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg><span>Messages</span><b class="lc-navbadge" id="admNavBadge" hidden>0</b></button><button class="tab adm-only" data-v="admin-audit" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span>Audit trail</span></button><button class="tab" data-v="dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button><button class="tab" data-v="courses"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.6 17M12 11.5l5.4 5.5"/></svg><span>Technical</span></button><button class="tab" data-v="grc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span>GRC</span></button><button class="tab" data-v="appsec"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14l-2 2 2 2M16 14l2 2-2 2M13 12l-2 8"/></svg><span>Application</span></button><button class="tab" data-v="cisa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4zM6 10v6c4 3 8 3 12 0v-6M21 8v7"/></svg><span>CISA Hub</span></button><button class="tab lc-navbtn" data-v="messages" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg><span>Messages</span><b class="lc-navbadge" id="lcNavBadge" hidden>0</b></button></div>
       <div class="nav-group nav-drop"><button class="nav-label" type="button" aria-expanded="false">Track<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="drop-panel"><button class="tab" data-v="workbook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 7h6M9 10.5h6"/></svg><span>My Workbook</span></button><button class="tab" data-v="log"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M7.5 14h3M7.5 17h6"/></svg><span>Study Log</span></button><button class="tab" data-v="insights"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><rect x="5.5" y="11" width="3" height="6" rx="1"/><rect x="10.5" y="6" width="3" height="11" rx="1"/><rect x="15.5" y="9" width="3" height="8" rx="1"/></svg><span>Study Insights</span></button></div></div>
       <div class="nav-group nav-drop"><button class="nav-label" type="button" aria-expanded="false">Tools<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="drop-panel"><button class="tab" data-v="explore"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span>Explore & Glossary</span></button><button class="tab" data-v="flash"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="14" height="13" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v11"/><path d="M7 12.5h6"/></svg><span>Flashcards</span></button><button class="tab" data-v="rosetta"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h9M8.5 4v2M6 6c0 4 3 7 6 8M11 6c-.5 3-3 6-6 8"/><path d="M13 20l4-9 4 9M14.5 17h5"/></svg><span>Cloud Rosetta</span></button><button class="tab" data-v="subnets"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18M12 7.5h9"/></svg><span>Subnet Calculator</span></button><button class="tab" data-v="certs"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.5 7 21l5-3 5 3-1.5-7.5"/></svg><span>Cert Paths</span></button></div></div>
     </nav>
@@ -3712,12 +3715,14 @@ function vApplicationModule(id,keepY){
 }
 
 /* ---------------- router ---------------- */
-let CisaModule=null;
+let CisaModule=null, AdminMod=null;
+function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
-async function vAdmin(){
-  if(app.querySelector(':scope > .adm-portal')) return;
+async function vAdmin(ah){
+  const sub=(ah||'admin').replace(/^admin-?/,'')||'overview';
+  if(app.querySelector(':scope > .adm-portal')&&AdminMod&&AdminMod.showView){ AdminMod.showView(sub); return; }
   app.innerHTML='<div class="cisa-hub adm-portal"><section class="cisa-card">Loading admin portal…</section></div>';
-  try{ const M=await import('./cisa/admin-portal.js'); if(!IS_ADMIN||!dbRef) return; await M.mountAdmin({root:app,readLearners,readActivity,unlockLearner,fb:FB}); }
+  try{ const M=await import('./cisa/admin-portal.js'); AdminMod=M; if(!IS_ADMIN||!dbRef) return; await M.mountAdmin({root:app,readLearners,readActivity,unlockLearner,fb:FB,view:sub}); }
   catch(e){ console.error('Admin portal failed',e); app.innerHTML='<div class="cisa-hub adm-portal"><section class="cisa-error">Unable to load the admin portal. Upload the whole <code>cisa/</code> folder alongside <code>index.html</code>.</section></div>'; }
 }
 async function vCisa(){
@@ -3833,8 +3838,11 @@ document.addEventListener('keydown',e=>{const open=!document.getElementById('cmd
  if(!open)return;if(e.key==='Escape'){e.preventDefault();cmdkClose();}else if(e.key==='ArrowDown'){e.preventDefault();cmdkSel=Math.min(cmdkRes.length-1,cmdkSel+1);cmdkDraw();}else if(e.key==='ArrowUp'){e.preventDefault();cmdkSel=Math.max(0,cmdkSel-1);cmdkDraw();}else if(e.key==='Enter'){e.preventDefault();cmdkRun(cmdkSel);}});
 
 let IS_ADMIN=false;
+/* Show the Admin portal item only to the admin, and Messages only to learners (no reliance on CSS). */
+function navForRole(){ document.querySelectorAll('#tabs .adm-only').forEach(el=>el.hidden=!IS_ADMIN); const m=document.querySelector('#tabs .lc-navbtn'); if(m) m.hidden=IS_ADMIN||!dbRef; }
 function route(){
-  if(IS_ADMIN){ document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-current',String(t.dataset.v==='admin'))); vAdmin(); return; }
+  if(!IS_ADMIN&&location.hash==='#admin'){ history.replaceState(null,'','#dashboard'); }
+  if(IS_ADMIN){ let ah=(location.hash||'').replace('#',''); if(!/^admin(-[a-z]+)?$/.test(ah)||ah==='admin-chat'){ ah='admin'; history.replaceState(null,'','#admin'); } document.querySelectorAll('#tabs .tab').forEach(t=>t.setAttribute('aria-current',String(t.dataset.v===ah))); vAdmin(ah); return; }
   let h=(location.hash||'').replace('#','')||'dashboard'; if(h==='contents') h='courses';
   const isMod=/^m\d\d$/.test(h); const isGRC=/^g\d\d$/.test(h); const isApp=/^a\d\d$/.test(h);
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-current',String(t.dataset.v===(isMod?'courses':isGRC?'grc':isApp?'appsec':h))));
@@ -3843,7 +3851,7 @@ function route(){
   updateTop();
 }
 function afterRoute(){ if(pendingLevel){const el=document.getElementById('lv-'+pendingLevel); pendingLevel=null; if(el){el.scrollIntoView({block:'start'}); return;}} window.scrollTo(0,0);}
-function go(view,level){pendingLevel=level||null; if(location.hash.replace('#','')===view){route(); afterRoute();} else location.hash=view;}
+function go(view,level){if(view==='admin-chat'){if(IS_ADMIN&&AdminMod&&AdminMod.openChat)AdminMod.openChat();setMenu(false);return;}if(view==='messages'){if(window.__openChat)window.__openChat();else if(window.uiAlert)uiAlert('Messages are loading. Try again in a moment. If this keeps happening, the latest cisa/learner-coach.js file has not been uploaded.',{title:'Messages not ready'});return;}pendingLevel=level||null; if(location.hash.replace('#','')===view){route(); afterRoute();} else location.hash=view;}
 document.getElementById('tabs').onclick=e=>{const b=e.target.closest('.tab'); if(b) go(b.dataset.v);};
 
 /* ---------------- V4 shell: mobile drawer, theme, avatar ---------------- */
@@ -3921,7 +3929,7 @@ let CoachMod=null;
 async function coachStart(user){
   if(!fdb||!user||user.uid===ADMIN_UID) return;
   try{ CoachMod=CoachMod||await import('./cisa/learner-coach.js'); if(!dbRef) return;
-    CoachMod.startCoach({fb:FB,uid:user.uid,getS:()=>S,save:()=>save(),onRemoteSignOut:async()=>{ try{await actStop('Signed out by the admin');}catch(e){} try{await flush();}catch(e){} await signOut(auth); say('The admin signed you out. Sign in again to continue.',''); }});
+    CoachMod.startCoach({fb:FB,uid:user.uid,getS:()=>S,save:()=>save(),onRemoteSignOut:()=>doSignOut('Signed out by the admin','The admin signed you out. Sign in again to continue.')});
   }catch(e){ console.warn('Coach module failed',e); }
 }
 function coachStop(){ try{ CoachMod&&CoachMod.stopCoach(); }catch(e){} }
@@ -3971,7 +3979,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 async function startSession(user){
   KEY='p2c-'+user.uid;
   dbRef=doc(fdb,'progress',user.uid);
-  IS_ADMIN=user.uid===ADMIN_UID; document.documentElement.classList.toggle('admin-mode',IS_ADMIN);
+  IS_ADMIN=user.uid===ADMIN_UID; document.documentElement.classList.toggle('admin-mode',IS_ADMIN); navForRole();
   if(IS_ADMIN&&location.hash!=='#admin') history.replaceState(null,'','#admin');
   actStart(user); coachStart(user);
   S=loadLocal()||blank();
@@ -4062,7 +4070,7 @@ if(!configured){
   onAuthStateChanged(auth,async user=>{
     FX.ready();
     if(user){ if(!ALLOWED_USER_UIDS.includes(user.uid)){await signOut(auth);say('This account is not approved for this private workbook.','bad');return;} if(justSubmitted){justSubmitted=false; await FX.leave();} else { let last=0; try{last=+localStorage.getItem('p2c-last-active')||0}catch(e){} if(last&&Date.now()-last>=10*60*1000){ await signOut(auth); say('Your session timed out after 10 minutes of inactivity. Please sign in again.',''); return; } } showGate(false); window.scrollTo(0,0); startSession(user); setTimeout(()=>idleReset(),0);}
-    else{ dbRef=null; v3uid=null; IS_ADMIN=false; document.documentElement.classList.remove('admin-mode'); actUid=null; clearInterval(actTimer); coachStop(); S=blank(); app.innerHTML=''; showGate(true); document.getElementById('password').value=''; clearTimeout(idleT); }
+    else{ adminStop(); dbRef=null; v3uid=null; IS_ADMIN=false; document.documentElement.classList.remove('admin-mode'); navForRole(); actUid=null; clearInterval(actTimer); coachStop(); S=blank(); app.innerHTML=''; showGate(true); document.getElementById('password').value=''; clearTimeout(idleT); }
   });
 }
 document.getElementById('loginForm').addEventListener('submit',async e=>{
@@ -4075,13 +4083,32 @@ document.getElementById('loginForm').addEventListener('submit',async e=>{
   catch(err){justSubmitted=false; FX.shake(); say(ERR[err.code]||'Sign-in failed ('+(err.code||'unknown error')+').','bad');}
   finally{btn.disabled=false; btn.querySelector('span').textContent='Sign in';}
 });
-document.getElementById('signout').onclick=async()=>{coachStop(); await actStop('Signed out'); await flush(); IS_ADMIN=false; document.documentElement.classList.remove('admin-mode'); await signOut(auth); go('dashboard');};
+/* Sign-out: stop live features, try to save for at most 3 seconds, then always sign out. */
+const withTimeout=(pr,ms)=>Promise.race([Promise.resolve(pr).catch(()=>{}),new Promise(r=>setTimeout(r,ms))]);
+let signingOut=false;
+async function doSignOut(reason,note){
+  if(signingOut) return; signingOut=true;
+  const b=document.getElementById('signout'); if(b){ b.disabled=true; const t=b.querySelector('span'); if(t) t.textContent='Signing out…'; }
+  try{
+    coachStop(); adminStop();
+    await withTimeout(actStop(reason||'Signed out'),2000);
+    await withTimeout(flush(),3000);
+  }finally{
+    IS_ADMIN=false; document.documentElement.classList.remove('admin-mode'); navForRole(); setMenu(false);
+    try{ await signOut(auth); }catch(e){ console.warn('signOut failed',e); }
+    if(b){ b.disabled=false; const t=b.querySelector('span'); if(t) t.textContent='Sign out'; }
+    signingOut=false;
+    if(location.hash!=='#dashboard') history.replaceState(null,'','#dashboard');
+    if(note) say(note,'');
+  }
+}
+document.getElementById('signout').onclick=()=>doSignOut('Signed out');
 /* ---------------- inactivity timeout: sign out after 10 minutes without activity ---------------- */
 const IDLE_MS=10*60*1000; let idleT=null, idleAt=Date.now();
 function idleReset(){ idleAt=Date.now(); try{localStorage.setItem('p2c-last-active',String(idleAt))}catch(e){} clearTimeout(idleT); if(dbRef) idleT=setTimeout(idleExpire,IDLE_MS); }
 async function idleExpire(){ if(!dbRef) return; let last=idleAt; try{last=Math.max(last,+localStorage.getItem('p2c-last-active')||0)}catch(e){}
   if(Date.now()-last<IDLE_MS){ clearTimeout(idleT); idleT=setTimeout(idleExpire,IDLE_MS-(Date.now()-last)); return; }
-  coachStop(); try{await actStop('Signed out automatically after 10 minutes without activity');}catch(e){} try{await flush();}catch(e){} IS_ADMIN=false; document.documentElement.classList.remove('admin-mode'); await signOut(auth); location.hash='dashboard'; say('You were signed out after 10 minutes of inactivity. Sign in again to continue.','');}
+  await doSignOut('Signed out automatically after 10 minutes without activity','You were signed out after 10 minutes of inactivity. Sign in again to continue.');}
 let idleThrottle=0;
 ['pointerdown','keydown','wheel','touchstart','mousemove','scroll'].forEach(ev=>window.addEventListener(ev,()=>{const n=Date.now(); if(n-idleThrottle>5000){idleThrottle=n; idleReset();}},{passive:true}));
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&dbRef){ let last=idleAt; try{last=Math.max(last,+localStorage.getItem('p2c-last-active')||0)}catch(e){} if(Date.now()-last>=IDLE_MS) idleExpire(); else idleReset(); }});
