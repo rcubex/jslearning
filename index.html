@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#E3EEFB">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="JS Learning">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="./cisa/cisa.css">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
 
@@ -3678,7 +3685,7 @@ async function vCisa(){
   try{
     if(!CisaModule) CisaModule=await import('./cisa/cisa-app.js');
     if(location.hash.replace('#','')!=='cisa'||!dbRef)return;
-    await CisaModule.mount({root:app,read:()=>S.cisa||{},write:(next)=>{S.cisa=next;save()},isAdmin:!!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID),verifyAdmin,tab:window.__cisaTab||null,topic:window.__cisaTopic||null,section:window.__cisaSection||null}); window.__cisaTab=null; window.__cisaTopic=null; window.__cisaSection=null;
+    await CisaModule.mount({root:app,read:()=>S.cisa||{},write:(next)=>{S.cisa=next;save()},isAdmin:!!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID),verifyAdmin,readLearners,unlockLearner,tab:window.__cisaTab||null,topic:window.__cisaTopic||null,section:window.__cisaSection||null}); window.__cisaTab=null; window.__cisaTopic=null; window.__cisaSection=null;
   }catch(e){console.error('CISA load failed',e);app.innerHTML='<div class="cisa-hub"><section class="cisa-error">Unable to load CISA Hub. Verify the whole <code>cisa/</code> directory was uploaded alongside <code>index.html</code>.</section></div>'}
 }
 const VIEWS={dashboard:vDashboard,courses:vCourses,grc:vGRC,appsec:vApplication,cisa:vCisa,workbook:vWorkbook,insights:vInsights,explore:vExplore,flash:vFlash,rosetta:vRosetta,subnets:vSubnets,certs:vCerts,log:vLog};
@@ -3687,13 +3694,14 @@ let pendingLevel=null;
 /* ================= Today card, backup, flashcards, quick search ================= */
 const FL_INT=[1,3,7,14,30];
 function flashDeck(){const g=Object.keys(GLOSS).map(t=>({k:'g:'+t,front:t,back:GLOSS[t],deck:'Glossary'}));const c=(window.__cisaTopics||[]).map(t=>({k:'c:'+t.id,front:t.id+' · '+t.title,back:t.intro||'',deck:'CISA'}));return g.concat(c);}
-async function loadCisaTopics(){if(window.__cisaTopics)return window.__cisaTopics;try{const g=await (await fetch('cisa/data/manual-guide.json')).json();window.__manualSecs=g.chapters.flatMap(c=>c.parts.flatMap(p=>p.sections.map(x=>({id:x.id,title:x.title,page:x.page,ch:c.n}))));}catch(e){window.__manualSecs=[];}try{const r=await fetch('cisa/data/syllabus.json');const d=await r.json();window.__cisaTopics=d.domains.flatMap(x=>x.topics.map(t=>({id:t.id,title:t.title,intro:t.intro,domain:t.domain})));}catch(e){window.__cisaTopics=[];}return window.__cisaTopics;}
+async function loadCisaTopics(){if(window.__cisaTopics)return window.__cisaTopics;try{const g=await (await fetch('cisa/data/manual-guide.json')).json();window.__manualSecs=g.chapters.flatMap(c=>c.parts.flatMap(p=>p.sections.flatMap(x=>[{id:x.id,title:x.title,page:x.page,ch:c.n},...(x.subs||[]).map(y=>({id:y.id,title:y.title,page:y.page,ch:c.n}))])));}catch(e){window.__manualSecs=[];}try{const r=await fetch('cisa/data/syllabus.json');const d=await r.json();window.__cisaTopics=d.domains.flatMap(x=>x.topics.map(t=>({id:t.id,title:t.title,intro:t.intro,domain:t.domain})));}catch(e){window.__cisaTopics=[];}return window.__cisaTopics;}
 function flashState(){S.flash=S.flash||{};return S.flash;}
 function flashStats(deckName){const F=flashState(),t=today(),deck=flashDeck().filter(c=>!deckName||deckName==='All'||c.deck===deckName);let due=0,learned=0,mastered=0;for(const c of deck){const r=F[c.k];if(!r)continue;learned++;if(r.x)mastered++;else if(r.d<=t)due++;}const newToday=(S.flashNew&&S.flashNew.d===t)?S.flashNew.n:0;const fresh=deck.filter(c=>!F[c.k]).length;return {total:deck.length,due,learned,mastered,fresh,newLeft:Math.max(0,Math.min(fresh,10-newToday))};}
 function todayCardHTML(){const t=today(),fs=flashStats('All');const studied=S.log.filter(x=>x.d===t).reduce((a,x)=>a+(+x.m||0),0)+bookEntries.filter(e=>String(e.date||'').slice(0,10)===t).reduce((a,e)=>a+(Number(e.minutes)||0),0);
  const lb=S.lastBackup||0, days=lb?Math.floor((Date.now()-lb)/864e5):null, due=days===null||days>=7;
  return `<section class="ed-card ed-today"><div class="td-main"><div class="td-head"><b>CISA study</b><span id="tdMeta"></span></div><div class="td-list" id="tdCisa"><div class="td-empty">Loading today’s plan…</div></div></div>
  <div class="td-side">
+  <a class="td-row" href="#cisa" data-cisa-tab="overview" id="tdCoach"><span class="td-ic" style="--c:#0A84FF"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></span><span class="td-txt"><b>Today’s coach</b><small>Loading…</small></span><span class="td-go">›</span></a>
   <a class="td-row" href="#cisa" data-cisa-tab="mistakes"><span class="td-ic" style="--c:#FF3B30"><svg viewBox="0 0 24 24"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg></span><span class="td-txt"><b id="tdMx">–</b><small>mistakes due</small></span><span class="td-go">›</span></a>
   <a class="td-row" href="#flash"><span class="td-ic" style="--c:#AF52DE"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="14" height="13" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v11"/></svg></span><span class="td-txt"><b>${fs.due+fs.newLeft}</b><small>flashcards ready${fs.due?` · ${fs.due} due`:''}</small></span><span class="td-go">›</span></a>
   <a class="td-row" href="#cisa" data-cisa-tab="recorder"><span class="td-ic" style="--c:#34C759"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></span><span class="td-txt"><b id="tdMin" data-base="${studied}">${studied}</b><small>minutes studied today · focus timer</small></span><span class="td-go">›</span></a>
@@ -3705,7 +3713,8 @@ async function wireToday(){
  if(dl) dl.onclick=exportAll; if(rs) rs.onclick=()=>fi.click(); if(fi) fi.onchange=()=>{const f=fi.files&&fi.files[0]; if(f) importAll(f); fi.value='';};
  try{
   if(!CisaModule) CisaModule=await import('./cisa/cisa-app.js');
-  const info=await CisaModule.todayInfo(()=>S.cisa||{});
+  const info=await (CisaModule.coachInfo||CisaModule.todayInfo)(()=>S.cisa||{});
+  const cr=document.getElementById('tdCoach'); if(cr&&info.coach){cr.querySelector('b').textContent=info.coach.done+'/3 coach steps';cr.querySelector('small').textContent='Domain '+info.coach.dom+(info.coach.sec?' · '+info.coach.sec:'');}
   const box=document.getElementById('tdCisa'); if(!box) return;
   const mx=document.getElementById('tdMx'); if(mx) mx.textContent=info.mistakesDue;
   const mn=document.getElementById('tdMin'); if(mn) mn.textContent=(+mn.dataset.base||0)+info.loggedToday;
@@ -3713,7 +3722,7 @@ async function wireToday(){
   box.innerHTML=info.items.length?info.items.map(x=>`<a class="td-task ${x.done?'done':''}" href="#cisa" data-cisa-tab="planner"><span class="td-check" aria-hidden="true">${x.done?'✓':''}</span><span class="td-t"><b>${esc(x.id.startsWith('mock')||x.id==='exam'?x.title:x.id+' · '+x.title)}</b><small>${x.minutes} min</small></span></a>`).join('')
    :`<div class="td-empty">${info.next?`No CISA study planned today. Next session: ${esc(new Date(info.next.date+'T12:00:00').toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'}))}.`:'No CISA sessions scheduled. Open the CISA planner to set up your plan.'}</div>`;
   box.querySelectorAll('[data-cisa-tab]').forEach(a=>a.addEventListener('click',()=>{window.__cisaTab=a.dataset.cisaTab;}));
- }catch(e){const box=document.getElementById('tdCisa'); if(box) box.innerHTML='<div class="td-empty">CISA plan unavailable offline.</div>';}
+ }catch(e){console.warn('Today card',e);const box=document.getElementById('tdCisa'); if(box) box.innerHTML='<div class="td-empty">CISA plan unavailable offline.</div>';}
 }
 function exportAll(){
  const data={kind:'jslearning-full-v1',exportedAt:new Date().toISOString(),account:(document.getElementById('who').textContent||''),progress:S,grcState,bookEntries};
@@ -3864,6 +3873,21 @@ async function verifyAdmin(email,password){
   finally{ if(tmp){ try{ await deleteApp(tmp); }catch(e){} } }
 }
 const fdb=fbApp?getFirestore(fbApp):null;
+/* Admin: read other approved accounts' progress (allowed by Firestore rules for the admin only). */
+async function readLearners(){
+  if(!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID)) return [];
+  const out=[];
+  for(const uid of ALLOWED_USER_UIDS.filter(u=>u!==ADMIN_UID)){
+    try{ const snap=await getDoc(doc(fdb,'progress',uid)); out.push({uid,ok:true,data:snap.exists()?snap.data():null}); }
+    catch(e){ out.push({uid,ok:false,error:String(e&&e.code||e&&e.message||e)}); }
+  }
+  return out;
+}
+async function unlockLearner(uid){
+  if(!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID)) return false;
+  try{ await setDoc(doc(fdb,'progress',uid),{cisa:{planLock:{locked:false,unlockedAt:new Date().toISOString(),by:'admin'}}},{merge:true}); return true; }catch(e){ return false; }
+}
+
 let KEY='p2c-guest', dbRef=null, writing=Promise.resolve(), dbTimer=null;
 function setSync(txt,ok){const el=document.getElementById('sync'); el.textContent=txt; el.classList.toggle('ok',!!ok);}
 function loadLocal(){try{const raw=localStorage.getItem(KEY); return raw?Object.assign(blank(),JSON.parse(raw)):null;}catch(e){return null;}}

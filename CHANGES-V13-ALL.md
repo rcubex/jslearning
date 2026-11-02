@@ -77,3 +77,28 @@
   - "Remove PDF" deletes it from the device.
 - Links: "Read in manual" on every revision note and syllabus topic, plus manual sections in ⌘K search.
 - Service worker cache: `p2c-theory-v30-manual`.
+
+## Update: Manual study guide expanded to every subsection
+- All 308 numbered subsections of the 28th edition (1.1.1 to 5.15.8) are now in the study guide, inside their section under "In this section".
+  - Each shows its printed page, short notes, exam tips where useful, and "Read in my PDF" at the exact page.
+  - "Expand all" opens every subsection at once.
+- ⌘K search finds subsections (e.g. "zero trust", "types of logs") and opens them directly.
+- Service worker cache: `p2c-theory-v31-manual-subs`.
+
+## Update V14: full study-coach release
+1. **Questions linked to the manual.** After answering in quick quizzes, the Mistakes review or mock results, "📖 Read x.y.z … in the manual · p. N" opens the matching section or subsection. About 70% of questions match a specific subsection; the rest open the section.
+2. **Today's coach.** A card on the CISA Overview and a row on the Dashboard pick, each day, the domain with the most marks to gain (exam weight × weakness × unread sections).
+   - Step 1: read a manual section. Step 2: review its revision notes. Step 3: a 10-question quiz from that domain.
+   - Steps tick off automatically.
+3. **Mock 05, "Exam Simulation 05":** 150 new original questions, weighted 27/27/18/39/39, with an explanation for every option.
+   - The correct answer is the longest option in only 21% of questions, so length is not a clue.
+   - The linter now checks Mocks 1, 2, 3 and 5 (0 errors).
+4. **Deeper Domain 4 & 5 notes:** 240 extra points and tips across all 186 subsections of chapters 4 and 5.
+5. **Exam rehearsal:** a pacing guide (on pace or behind, by minutes per question) and keyboard shortcuts (A–D, N/P, F).
+   - "Submit exam" now opens a review screen listing unanswered and flagged questions before the final submit.
+6. **Manual extras:** tap key points to highlight them ★, write "My notes" per section (synced; ✎ in contents), and use 🔊 Listen (read aloud with the device voice).
+7. **Install as an app:** `manifest.webmanifest` and `icons/` (home-screen icon, standalone full-screen mode).
+8. **Admin "Learners" tab (admin account only):** the other account's plan, lock, readiness, topics, hours, quizzes, mistakes, manual progress and domain bars, plus "Unlock plan".
+   - Needs the published Firestore rules.
+- The CISA tab bar now scrolls sideways when there are many tabs.
+- Service worker cache: `p2c-theory-v32-coach`.

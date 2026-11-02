@@ -1,0 +1,3160 @@
+{
+ "id": 5,
+ "title": "Exam Simulation 05",
+ "durationMinutes": 240,
+ "kind": "Original practice exam. Not an official ISACA exam or score predictor.",
+ "version": 1,
+ "rewrittenInV2": [],
+ "questions": [
+  {
+   "id": "M5-001",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "The chief audit executive is asked by the CFO to delay issuing a report on weak payment controls until after the year-end close. What should the chief audit executive do FIRST?",
+   "choices": [
+    "Agree to the delay because year-end close is a critical business period and the findings can wait",
+    "Issue the report only to the CFO to avoid wider disruption",
+    "Remove the payment findings and audit them again next year",
+    "Inform the audit committee of the request and the planned reporting timeline"
+   ],
+   "answer": 3,
+   "explanation": "The audit committee oversees audit independence; pressure to delay reporting must be escalated to it.",
+   "choiceExplanations": [
+    "Not the best answer. Accepting management pressure impairs independence.",
+    "Not the best answer. Restricting distribution to the requester undermines reporting to governance.",
+    "Not the best answer. Suppressing findings breaches professional standards.",
+    "Best answer. The audit committee oversees audit independence; pressure to delay reporting must be escalated to it."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-002",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "An IS auditor was the project lead for a new access management system before joining internal audit six months ago. The audit plan now includes a review of that system. What is the BEST course of action?",
+   "choices": [
+    "Perform the review because six months have passed since the move",
+    "Limit the review to areas the auditor did not personally design",
+    "Disclose the impairment and have another auditor perform the review",
+    "Perform the review but ask the system owner to sign off the work papers"
+   ],
+   "answer": 2,
+   "explanation": "Auditing one’s own recent work is a self-review threat; disclosure and reassignment preserve objectivity.",
+   "choiceExplanations": [
+    "Not the best answer. Elapsed time alone does not remove a self-review threat.",
+    "Not the best answer. The auditor’s involvement still taints the overall conclusion.",
+    "Best answer. Auditing one’s own recent work is a self-review threat; disclosure and reassignment preserve objectivity.",
+    "Not the best answer. Auditee sign-off does not restore auditor independence."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-003",
+   "domain": 1,
+   "topicId": "1A1",
+   "question": "Which document should grant the internal audit function unrestricted access to records, personnel and systems?",
+   "choices": [
+    "Information security policy issued by the CISO",
+    "Annual audit plan approved by the CIO",
+    "Audit charter approved by the audit committee",
+    "Engagement letter for each individual audit"
+   ],
+   "answer": 2,
+   "explanation": "The audit charter establishes authority and access for the audit function as a whole.",
+   "choiceExplanations": [
+    "Not the best answer. The security policy does not establish the audit mandate.",
+    "Not the best answer. The CIO is an auditee and cannot grant audit authority.",
+    "Best answer. The audit charter establishes authority and access for the audit function as a whole.",
+    "Not the best answer. Engagement letters cover single engagements, not overall authority."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-004",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "A company relies on a payroll provider’s SOC 1 Type 1 report covering controls as at 30 June. The audit period is the full calendar year. What is the GREATEST limitation of this report?",
+   "choices": [
+    "It does not show that controls operated effectively during the year",
+    "It does not cover the provider’s information security policy, incident handling or physical security controls",
+    "It was issued by an independent service auditor",
+    "It only describes controls relevant to financial reporting"
+   ],
+   "answer": 0,
+   "explanation": "A Type 1 report covers design at a point in time; operating effectiveness over the period is untested.",
+   "choiceExplanations": [
+    "Best answer. A Type 1 report covers design at a point in time; operating effectiveness over the period is untested.",
+    "Not the best answer. Policy coverage is secondary to evidence of operation.",
+    "Not the best answer. Independence of the service auditor is a strength.",
+    "Not the best answer. Financial reporting focus is appropriate for payroll."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-005",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "Which type of engagement BEST evaluates the controls over an entire order-to-cash process, including the application, the infrastructure it runs on and the financial results it produces?",
+   "choices": [
+    "Integrated audit",
+    "Compliance audit",
+    "Forensic audit",
+    "Administrative audit"
+   ],
+   "answer": 0,
+   "explanation": "An integrated audit combines financial, operational and IS audit procedures across a process.",
+   "choiceExplanations": [
+    "Best answer. An integrated audit combines financial, operational and IS audit procedures across a process.",
+    "Not the best answer. A compliance audit checks adherence to specific requirements only.",
+    "Not the best answer. A forensic audit investigates suspected fraud or crime.",
+    "Not the best answer. An administrative audit focuses on operational efficiency."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-006",
+   "domain": 1,
+   "topicId": "1A2",
+   "question": "During an investigation of suspected data theft, an IS auditor collects a laptop for analysis. What is MOST important to ensure the evidence can be used in legal proceedings?",
+   "choices": [
+    "Maintaining a documented chain of custody",
+    "Analysing the original disk to save time",
+    "Copying relevant files to a shared audit folder",
+    "Asking the suspect to confirm the files found"
+   ],
+   "answer": 0,
+   "explanation": "Chain of custody proves the evidence has not been altered and is admissible.",
+   "choiceExplanations": [
+    "Best answer. Chain of custody proves the evidence has not been altered and is admissible.",
+    "Not the best answer. Working on the original risks altering evidence.",
+    "Not the best answer. Copying files to shared folders breaks integrity and custody.",
+    "Not the best answer. A suspect’s confirmation is not a substitute for preserved evidence."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-007",
+   "domain": 1,
+   "topicId": "1A3",
+   "question": "An IS auditor has limited time to plan next year’s audits across 40 applications. Which approach is MOST appropriate?",
+   "choices": [
+    "Ask each business unit which applications they would most like audited and schedule those first in the plan",
+    "Audit each application once every 40 months on a rotation",
+    "Audit applications that had findings last year only",
+    "Rank applications by business criticality and risk and audit the highest first"
+   ],
+   "answer": 3,
+   "explanation": "Risk-based planning directs limited resources to the areas of greatest exposure.",
+   "choiceExplanations": [
+    "Not the best answer. Auditee preference is not a risk-based criterion.",
+    "Not the best answer. Fixed rotation ignores differences in risk.",
+    "Not the best answer. Prior findings are one input, not the full risk picture.",
+    "Best answer. Risk-based planning directs limited resources to the areas of greatest exposure."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-008",
+   "domain": 1,
+   "topicId": "1A3",
+   "question": "Which risk can the IS auditor directly control when planning an audit?",
+   "choices": [
+    "Inherent risk",
+    "Control risk",
+    "Business risk",
+    "Detection risk"
+   ],
+   "answer": 3,
+   "explanation": "The nature, timing and extent of audit procedures determine detection risk.",
+   "choiceExplanations": [
+    "Not the best answer. Inherent risk exists before controls and is not influenced by the auditor.",
+    "Not the best answer. Control risk depends on management’s controls.",
+    "Not the best answer. Business risk is owned by management.",
+    "Best answer. The nature, timing and extent of audit procedures determine detection risk."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-009",
+   "domain": 1,
+   "topicId": "1A3",
+   "question": "A new privacy regulation takes effect halfway through the audit year. What should the IS auditor do FIRST?",
+   "choices": [
+    "Add a full privacy audit to next year’s plan",
+    "Wait for the regulator’s first enforcement action",
+    "Reassess the audit plan for areas affected by the regulation",
+    "Ask legal to confirm whether audit should be involved"
+   ],
+   "answer": 2,
+   "explanation": "Significant changes in the risk environment require the risk assessment and plan to be revisited.",
+   "choiceExplanations": [
+    "Not the best answer. Deferring to next year may leave a significant risk unaddressed.",
+    "Not the best answer. Waiting for enforcement is reactive.",
+    "Best answer. Significant changes in the risk environment require the risk assessment and plan to be revisited.",
+    "Not the best answer. Legal input is useful but the audit plan is audit’s responsibility."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-010",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "A small branch cannot separate the duties of creating and approving vendor payments. Which control BEST reduces the risk?",
+   "choices": [
+    "A stronger password policy for the branch payment system with monthly changes and complexity rules",
+    "Annual security awareness training for branch staff",
+    "Independent daily review of payment logs by a manager at head office",
+    "Encrypting the vendor master file"
+   ],
+   "answer": 2,
+   "explanation": "When segregation is not possible, a compensating detective review by an independent person reduces the risk.",
+   "choiceExplanations": [
+    "Not the best answer. Passwords do not address the conflict of duties.",
+    "Not the best answer. Training does not prevent misuse by the person holding both duties.",
+    "Best answer. When segregation is not possible, a compensating detective review by an independent person reduces the risk.",
+    "Not the best answer. Encryption protects confidentiality, not payment authorization."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-011",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "Which control type is a reconciliation of daily batch totals between two systems?",
+   "choices": [
+    "Preventive",
+    "Deterrent",
+    "Detective",
+    "Directive"
+   ],
+   "answer": 2,
+   "explanation": "Reconciliation identifies discrepancies after processing has occurred.",
+   "choiceExplanations": [
+    "Not the best answer. Preventive controls stop errors before they occur.",
+    "Not the best answer. Deterrent controls discourage behaviour.",
+    "Best answer. Reconciliation identifies discrepancies after processing has occurred.",
+    "Not the best answer. Directive controls instruct or require behaviour."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-012",
+   "domain": 1,
+   "topicId": "1A4",
+   "question": "An IS auditor finds that IT general controls over change management are ineffective. What is the MOST significant impact on the audit?",
+   "choices": [
+    "Only manual controls need to be reported",
+    "Reliance cannot be placed on automated application controls without further testing",
+    "The change management finding should be excluded from the report because it is outside the agreed audit scope",
+    "The audit must be terminated and reported as incomplete"
+   ],
+   "answer": 1,
+   "explanation": "Weak ITGCs mean automated controls may have been altered, so they cannot be relied on without more testing.",
+   "choiceExplanations": [
+    "Not the best answer. Automated controls are also affected and must be considered.",
+    "Best answer. Weak ITGCs mean automated controls may have been altered, so they cannot be relied on without more testing.",
+    "Not the best answer. The finding is directly relevant to reliance and must be reported.",
+    "Not the best answer. Termination is not required; scope and procedures are adjusted."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-013",
+   "domain": 1,
+   "topicId": "1B1",
+   "question": "During fieldwork, the auditee asks the IS auditor to also review a new cloud application that was not in the agreed scope. What should the auditor do?",
+   "choices": [
+    "Review the application informally without documentation",
+    "Assess the request, agree any scope change with the audit manager and document it",
+    "Add the application to the fieldwork immediately so the auditee stays satisfied and cooperative throughout",
+    "Refuse because scope changes are never permitted"
+   ],
+   "answer": 1,
+   "explanation": "Scope changes are possible but must be evaluated, approved and documented.",
+   "choiceExplanations": [
+    "Not the best answer. Undocumented work cannot support conclusions.",
+    "Best answer. Scope changes are possible but must be evaluated, approved and documented.",
+    "Not the best answer. Unplanned additions can compromise resources and quality.",
+    "Not the best answer. Scope can change if properly controlled."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-014",
+   "domain": 1,
+   "topicId": "1B1",
+   "question": "What is the PRIMARY purpose of reviewing audit work papers before the report is issued?",
+   "choices": [
+    "To allow the auditee to correct the auditors’ notes",
+    "To measure how long each auditor spent on tasks",
+    "To check the spelling and formatting of findings",
+    "To confirm that evidence supports the conclusions reached"
+   ],
+   "answer": 3,
+   "explanation": "Supervisory review ensures findings are supported by sufficient, appropriate evidence.",
+   "choiceExplanations": [
+    "Not the best answer. Auditees do not edit audit work papers.",
+    "Not the best answer. Time tracking is a management matter, not the purpose of review.",
+    "Not the best answer. Formatting is minor compared with evidential support.",
+    "Best answer. Supervisory review ensures findings are supported by sufficient, appropriate evidence."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-015",
+   "domain": 1,
+   "topicId": "1B1",
+   "question": "Which is the MOST appropriate response when an IS auditor discovers indicators of fraud during a routine audit?",
+   "choices": [
+    "Ignore the indicators because fraud detection is not part of the agreed audit objectives or the engagement letter",
+    "Report the indicators to the appropriate level of management or the audit committee",
+    "Interview the suspected employee to obtain a confession",
+    "Expand testing until fraud is proven beyond doubt"
+   ],
+   "answer": 1,
+   "explanation": "Auditors communicate fraud indicators to the right authority; investigation follows established procedures.",
+   "choiceExplanations": [
+    "Not the best answer. Ignoring indicators breaches due professional care.",
+    "Best answer. Auditors communicate fraud indicators to the right authority; investigation follows established procedures.",
+    "Not the best answer. Confronting suspects may compromise an investigation.",
+    "Not the best answer. Auditors are not required to prove fraud before reporting."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-016",
+   "domain": 1,
+   "topicId": "1B2",
+   "question": "An IS auditor wants to estimate the rate of access requests approved without a manager’s signature. Which sampling method is MOST appropriate?",
+   "choices": [
+    "Discovery sampling",
+    "Attribute sampling",
+    "Haphazard sampling",
+    "Variable sampling"
+   ],
+   "answer": 1,
+   "explanation": "Attribute sampling estimates how often a characteristic (a control exception) occurs.",
+   "choiceExplanations": [
+    "Not the best answer. Discovery sampling only detects whether at least one exception exists.",
+    "Best answer. Attribute sampling estimates how often a characteristic (a control exception) occurs.",
+    "Not the best answer. Haphazard selection is not statistical and gives no rate estimate.",
+    "Not the best answer. Variable sampling estimates monetary amounts."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-017",
+   "domain": 1,
+   "topicId": "1B2",
+   "question": "Compliance testing shows that a key reconciliation control is not operating. What should the IS auditor do NEXT?",
+   "choices": [
+    "Retest the control with a larger sample until it passes",
+    "Rely on management’s statement that the control usually works",
+    "Increase substantive testing of the related balances",
+    "Stop testing and report that no assurance can be given"
+   ],
+   "answer": 2,
+   "explanation": "When controls fail, more substantive testing is needed to reach a conclusion on the data.",
+   "choiceExplanations": [
+    "Not the best answer. Retesting until a pass is achieved is biased.",
+    "Not the best answer. Management statements are weak evidence.",
+    "Best answer. When controls fail, more substantive testing is needed to reach a conclusion on the data.",
+    "Not the best answer. The auditor can still obtain assurance through substantive work."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-018",
+   "domain": 1,
+   "topicId": "1B2",
+   "question": "Which change would require a LARGER statistical sample?",
+   "choices": [
+    "Reducing the expected error rate",
+    "Increasing the confidence level",
+    "Reducing the population variability",
+    "Increasing the tolerable error rate"
+   ],
+   "answer": 1,
+   "explanation": "Higher confidence requires more items to be tested.",
+   "choiceExplanations": [
+    "Not the best answer. A lower expected error rate allows a smaller sample.",
+    "Best answer. Higher confidence requires more items to be tested.",
+    "Not the best answer. Less variability allows a smaller sample.",
+    "Not the best answer. A higher tolerable error allows a smaller sample."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-019",
+   "domain": 1,
+   "topicId": "1B3",
+   "question": "Which evidence is MOST reliable for confirming that terminated employees lost system access?",
+   "choices": [
+    "A signed memo from the IT manager confirming that all leavers in the period were removed from every system",
+    "Comparison of the HR termination list with system account status extracted by the auditor",
+    "A screenshot provided by the system administrator",
+    "Interviews with team managers about recent leavers"
+   ],
+   "answer": 1,
+   "explanation": "Data obtained directly by the auditor and compared to an independent source is the most reliable.",
+   "choiceExplanations": [
+    "Not the best answer. A memo is management’s assertion.",
+    "Best answer. Data obtained directly by the auditor and compared to an independent source is the most reliable.",
+    "Not the best answer. Auditee-provided screenshots can be selective or altered.",
+    "Not the best answer. Interviews are verbal, unverified evidence."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-020",
+   "domain": 1,
+   "topicId": "1B3",
+   "question": "An IS auditor observes a backup operator performing a restore test. What is the MAIN limitation of this evidence?",
+   "choices": [
+    "It is less reliable than an interview with the operator",
+    "It shows only that the procedure worked at the time observed",
+    "It cannot be documented in the work papers",
+    "It violates the operator’s confidentiality"
+   ],
+   "answer": 1,
+   "explanation": "Observation provides evidence only for the moment it was made.",
+   "choiceExplanations": [
+    "Not the best answer. Observation is generally stronger than interview.",
+    "Best answer. Observation provides evidence only for the moment it was made.",
+    "Not the best answer. Observations can and should be documented.",
+    "Not the best answer. Observing work duties does not breach confidentiality."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-021",
+   "domain": 1,
+   "topicId": "1B3",
+   "question": "An IS auditor receives a vendor’s security questionnaire answered by the vendor. How should the auditor treat this evidence?",
+   "choices": [
+    "As sufficient evidence because it is in writing",
+    "As a starting point that requires corroboration",
+    "As irrelevant because it comes from a third party",
+    "As stronger evidence than an independent assurance report"
+   ],
+   "answer": 1,
+   "explanation": "Self-assessments are useful but need corroboration with independent evidence.",
+   "choiceExplanations": [
+    "Not the best answer. Written form does not make it independent.",
+    "Best answer. Self-assessments are useful but need corroboration with independent evidence.",
+    "Not the best answer. It is relevant, just not sufficient alone.",
+    "Not the best answer. Independent reports are more reliable than self-assessment."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-022",
+   "domain": 1,
+   "topicId": "1B4",
+   "question": "Which technique would BEST identify duplicate vendor payments across three years of transactions?",
+   "choices": [
+    "Reviewing the payment procedure document",
+    "Selecting a judgmental sample of the largest payments made to each vendor in the three-year period",
+    "Running data analytics on the full payment population",
+    "Interviewing accounts payable staff"
+   ],
+   "answer": 2,
+   "explanation": "Analytics over the whole population can find all duplicates efficiently.",
+   "choiceExplanations": [
+    "Not the best answer. Procedures describe intent, not actual payments.",
+    "Not the best answer. A sample may miss duplicates.",
+    "Best answer. Analytics over the whole population can find all duplicates efficiently.",
+    "Not the best answer. Interviews do not reveal transaction-level duplicates."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-023",
+   "domain": 1,
+   "topicId": "1B4",
+   "question": "An integrated test facility is used in a live payroll system. What is the GREATEST risk?",
+   "choices": [
+    "Test transactions affecting real payroll totals if not reversed",
+    "Audit staff needing standing access to the production payroll system throughout the year",
+    "The test entity being visible to payroll clerks",
+    "Increased processing time for the payroll run"
+   ],
+   "answer": 0,
+   "explanation": "ITF data must be isolated or reversed so it does not corrupt production results.",
+   "choiceExplanations": [
+    "Best answer. ITF data must be isolated or reversed so it does not corrupt production results.",
+    "Not the best answer. Access can be controlled; the main risk is data contamination.",
+    "Not the best answer. Visibility is a minor concern compared with corrupted results.",
+    "Not the best answer. Performance impact is usually small."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-024",
+   "domain": 1,
+   "topicId": "1B4",
+   "question": "Before analysing data extracted from a production system, what should the IS auditor do FIRST?",
+   "choices": [
+    "Select the analytics tool with the most features",
+    "Delete fields that appear irrelevant",
+    "Verify the completeness and accuracy of the extracted data",
+    "Present preliminary results to management"
+   ],
+   "answer": 2,
+   "explanation": "Analysis of incomplete or inaccurate data leads to wrong conclusions.",
+   "choiceExplanations": [
+    "Not the best answer. Tool selection is secondary to data integrity.",
+    "Not the best answer. Removing data before validation may lose evidence.",
+    "Best answer. Analysis of incomplete or inaccurate data leads to wrong conclusions.",
+    "Not the best answer. Results should not be shared before data is validated."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-025",
+   "domain": 1,
+   "topicId": "1B5",
+   "question": "Management disagrees with an audit finding about excessive privileged access. How should the IS auditor proceed?",
+   "choices": [
+    "Report the finding with management’s response and the auditor’s position",
+    "Downgrade the finding to an observation",
+    "Remove the finding from the report to maintain a good working relationship with management for future audits",
+    "Delay the report until management agrees"
+   ],
+   "answer": 0,
+   "explanation": "The report should present the finding and management’s view; disagreement does not remove a valid finding.",
+   "choiceExplanations": [
+    "Best answer. The report should present the finding and management’s view; disagreement does not remove a valid finding.",
+    "Not the best answer. Changing the rating without new evidence lacks objectivity.",
+    "Not the best answer. Removing valid findings breaches standards.",
+    "Not the best answer. Indefinite delay prevents timely reporting."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-026",
+   "domain": 1,
+   "topicId": "1B5",
+   "question": "Six months after the audit, management states all corrective actions are complete. What should the IS auditor do?",
+   "choices": [
+    "Ask the external auditor to confirm closure",
+    "Wait until the next full audit to check",
+    "Close the findings based on management’s written statement that all agreed corrective actions are complete",
+    "Perform follow-up procedures to verify the actions are implemented and effective"
+   ],
+   "answer": 3,
+   "explanation": "Follow-up must verify implementation, not rely on management assertions.",
+   "choiceExplanations": [
+    "Not the best answer. Internal audit is responsible for its own follow-up.",
+    "Not the best answer. Waiting may leave risks unaddressed.",
+    "Not the best answer. Assertions are not evidence of closure.",
+    "Best answer. Follow-up must verify implementation, not rely on management assertions."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-027",
+   "domain": 1,
+   "topicId": "1B6",
+   "question": "What is the PRIMARY benefit of a control self-assessment program?",
+   "choices": [
+    "It removes the need for documented evidence",
+    "It replaces the need for an internal audit function",
+    "Business staff take ownership of identifying and monitoring controls",
+    "It allows auditors to design and implement controls for the business so that weaknesses are fixed faster"
+   ],
+   "answer": 2,
+   "explanation": "CSA builds control ownership and awareness within the business.",
+   "choiceExplanations": [
+    "Not the best answer. Evidence is still needed for assurance.",
+    "Not the best answer. CSA complements, not replaces, internal audit.",
+    "Best answer. CSA builds control ownership and awareness within the business.",
+    "Not the best answer. Auditors facilitate; they do not design business controls."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-028",
+   "domain": 2,
+   "topicId": "2A1",
+   "question": "A company plans to launch a service in a new country. Which action should the IS auditor expect management to take FIRST regarding compliance?",
+   "choices": [
+    "Identify the legal and regulatory requirements that apply in that country",
+    "Purchase cyber insurance for the new operations",
+    "Request an external audit after launch",
+    "Implement exactly the same controls that are used in the home country so the group remains consistent everywhere"
+   ],
+   "answer": 0,
+   "explanation": "Obligations must be identified before controls can be designed to meet them.",
+   "choiceExplanations": [
+    "Best answer. Obligations must be identified before controls can be designed to meet them.",
+    "Not the best answer. Insurance does not ensure compliance.",
+    "Not the best answer. Post-launch audit is too late to design compliance.",
+    "Not the best answer. Home-country controls may not meet local laws."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-029",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which is the BEST indicator that IT strategy is aligned with business strategy?",
+   "choices": [
+    "IT has the largest share of the corporate budget",
+    "IT initiatives are prioritised against documented business objectives by business and IT leaders",
+    "IT staff hold up-to-date technical certifications and attend industry conferences on emerging technologies",
+    "The CIO reports directly to the CFO"
+   ],
+   "answer": 1,
+   "explanation": "Alignment is shown when business objectives drive IT priorities through joint governance.",
+   "choiceExplanations": [
+    "Not the best answer. Budget size does not show alignment.",
+    "Best answer. Alignment is shown when business objectives drive IT priorities through joint governance.",
+    "Not the best answer. Certifications show skills, not alignment.",
+    "Not the best answer. Reporting line alone does not ensure alignment."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-030",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which body is MOST appropriate to approve and prioritise a portfolio of IT projects?",
+   "choices": [
+    "IT strategy committee of the board",
+    "Information security team",
+    "IT steering committee",
+    "Project management office"
+   ],
+   "answer": 2,
+   "explanation": "The steering committee, with business and IT executives, prioritises and approves projects and investments.",
+   "choiceExplanations": [
+    "Not the best answer. The board strategy committee sets direction, not project priorities.",
+    "Not the best answer. Security advises on risk but does not prioritise the portfolio.",
+    "Best answer. The steering committee, with business and IT executives, prioritises and approves projects and investments.",
+    "Not the best answer. The PMO supports delivery but does not set business priorities."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-031",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "An IS auditor finds that developers can move their own code into production. What is the PRIMARY risk?",
+   "choices": [
+    "Unauthorized or untested changes reaching production",
+    "Reduced developer productivity",
+    "Slower release cycles for urgent fixes",
+    "Higher licensing costs for development tools that are also installed in the production environment"
+   ],
+   "answer": 0,
+   "explanation": "This breaks segregation of duties and allows unapproved changes.",
+   "choiceExplanations": [
+    "Best answer. This breaks segregation of duties and allows unapproved changes.",
+    "Not the best answer. Productivity is not the primary control risk.",
+    "Not the best answer. The concern is control, not speed.",
+    "Not the best answer. Licensing is unrelated."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-032",
+   "domain": 2,
+   "topicId": "2A2",
+   "question": "Which governance activity belongs to the board rather than management in COBIT 2019?",
+   "choices": [
+    "Planning and building IT solutions",
+    "Evaluating, directing and monitoring enterprise I&T",
+    "Monitoring service desk performance",
+    "Running day-to-day IT operations"
+   ],
+   "answer": 1,
+   "explanation": "Governance evaluates, directs and monitors; management plans, builds, runs and monitors.",
+   "choiceExplanations": [
+    "Not the best answer. Building solutions is management’s role.",
+    "Best answer. Governance evaluates, directs and monitors; management plans, builds, runs and monitors.",
+    "Not the best answer. Service desk monitoring is operational management.",
+    "Not the best answer. Operations are management’s role."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-033",
+   "domain": 2,
+   "topicId": "2A3",
+   "question": "An IS auditor finds that the information security policy was last approved four years ago. What is the GREATEST concern?",
+   "choices": [
+    "The policy may be too long to read",
+    "The policy may not have a version number, an owner’s name or a footer showing its classification",
+    "Staff may not know the policy exists",
+    "The policy may not reflect current risks, technology and regulations"
+   ],
+   "answer": 3,
+   "explanation": "Outdated policies may not address the current threat and regulatory environment.",
+   "choiceExplanations": [
+    "Not the best answer. Length is a usability issue.",
+    "Not the best answer. Version numbering is administrative.",
+    "Not the best answer. Awareness is important but secondary to relevance.",
+    "Best answer. Outdated policies may not address the current threat and regulatory environment."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-034",
+   "domain": 2,
+   "topicId": "2A3",
+   "question": "Which is a characteristic of a standard rather than a guideline?",
+   "choices": [
+    "It is mandatory and supports a policy",
+    "It gives detailed steps to perform a task",
+    "It describes recommended good practice",
+    "It states management’s overall intent"
+   ],
+   "answer": 0,
+   "explanation": "Standards are mandatory requirements supporting policy.",
+   "choiceExplanations": [
+    "Best answer. Standards are mandatory requirements supporting policy.",
+    "Not the best answer. Procedures give step-by-step instructions.",
+    "Not the best answer. Guidelines are recommended practice.",
+    "Not the best answer. Policies state management intent."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-035",
+   "domain": 2,
+   "topicId": "2A3",
+   "question": "A business unit wants an exception to the password standard for a legacy system. What should be in place?",
+   "choices": [
+    "A documented risk assessment, compensating controls and approval by the risk owner",
+    "Verbal approval from the IT manager",
+    "An instruction to staff not to discuss the exception outside the business unit until the system is replaced",
+    "Removal of the system from the asset inventory"
+   ],
+   "answer": 0,
+   "explanation": "Exceptions must be risk-assessed, approved and tracked.",
+   "choiceExplanations": [
+    "Best answer. Exceptions must be risk-assessed, approved and tracked.",
+    "Not the best answer. Verbal approval is not auditable.",
+    "Not the best answer. Secrecy does not manage risk.",
+    "Not the best answer. Hiding the asset removes oversight."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-036",
+   "domain": 2,
+   "topicId": "2A4",
+   "question": "What is the PRIMARY benefit of enterprise architecture to IT governance?",
+   "choices": [
+    "It guides investment decisions toward a consistent target state",
+    "It replaces the need for project management",
+    "It documents only the network topology",
+    "It ensures that all applications across the enterprise are purchased from the same strategic technology vendor"
+   ],
+   "answer": 0,
+   "explanation": "EA links business strategy to technology decisions and reduces duplication.",
+   "choiceExplanations": [
+    "Best answer. EA links business strategy to technology decisions and reduces duplication.",
+    "Not the best answer. EA does not replace project management.",
+    "Not the best answer. EA covers business, data, application and technology layers.",
+    "Not the best answer. Single-vendor policies are not the goal of EA."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-037",
+   "domain": 2,
+   "topicId": "2A4",
+   "question": "A new project proposes a database platform not in the approved technology standards. What should the IS auditor expect?",
+   "choices": [
+    "Installation in production to test compatibility",
+    "An architecture review and formal approval of the exception",
+    "Approval of the platform as long as the project budget can absorb any extra licensing and support costs",
+    "Immediate rejection of the project"
+   ],
+   "answer": 1,
+   "explanation": "Deviations from the target architecture should be reviewed and approved.",
+   "choiceExplanations": [
+    "Not the best answer. Production experiments create unmanaged risk.",
+    "Best answer. Deviations from the target architecture should be reviewed and approved.",
+    "Not the best answer. Budget alone does not address architecture risk.",
+    "Not the best answer. Exceptions can be justified."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-038",
+   "domain": 2,
+   "topicId": "2A5",
+   "question": "Who should accept residual risk for a business application?",
+   "choices": [
+    "The external auditor at year end",
+    "The business risk owner within the defined risk appetite",
+    "The IT administrator who runs the system day to day and best understands its technical weaknesses",
+    "The IS auditor after testing controls"
+   ],
+   "answer": 1,
+   "explanation": "Risk acceptance is a management decision by the accountable owner.",
+   "choiceExplanations": [
+    "Not the best answer. External auditors do not own the organisation’s risks.",
+    "Best answer. Risk acceptance is a management decision by the accountable owner.",
+    "Not the best answer. Administrators lack authority over business risk.",
+    "Not the best answer. Auditors must not accept risk."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-039",
+   "domain": 2,
+   "topicId": "2A5",
+   "question": "Which is the FIRST step in a risk assessment?",
+   "choices": [
+    "Identify and value the information assets",
+    "Purchase risk management software",
+    "Select controls from a framework",
+    "Calculate the annual loss expectancy"
+   ],
+   "answer": 0,
+   "explanation": "Assets must be identified before threats, vulnerabilities and impacts can be assessed.",
+   "choiceExplanations": [
+    "Best answer. Assets must be identified before threats, vulnerabilities and impacts can be assessed.",
+    "Not the best answer. Tools are not the first step.",
+    "Not the best answer. Controls come after risks are understood.",
+    "Not the best answer. ALE needs asset values and threat rates first."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-040",
+   "domain": 2,
+   "topicId": "2A5",
+   "question": "A risk register shows many high risks with no owner assigned. What is the MAIN concern?",
+   "choices": [
+    "The register format is inconsistent",
+    "The register is too large to review",
+    "The risk ratings may be too conservative and overstate the exposure reported to the board",
+    "Risks may not be treated because no one is accountable"
+   ],
+   "answer": 3,
+   "explanation": "Without ownership, risk treatment and monitoring are unlikely to happen.",
+   "choiceExplanations": [
+    "Not the best answer. Format is secondary.",
+    "Not the best answer. Size is not the main issue.",
+    "Not the best answer. Conservative ratings are less important than accountability.",
+    "Best answer. Without ownership, risk treatment and monitoring are unlikely to happen."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-041",
+   "domain": 2,
+   "topicId": "2A6",
+   "question": "A company plans to use customer purchase history for a new marketing analytics project. What should be performed FIRST?",
+   "choices": [
+    "A review of the marketing budget",
+    "A penetration test of the analytics platform",
+    "A user acceptance test of the dashboards",
+    "A privacy impact assessment"
+   ],
+   "answer": 3,
+   "explanation": "A PIA identifies privacy risks and lawful basis before personal data is used in new ways.",
+   "choiceExplanations": [
+    "Not the best answer. Budget is unrelated to privacy risk.",
+    "Not the best answer. Security testing comes later and does not address lawful use.",
+    "Not the best answer. UAT checks functionality, not privacy.",
+    "Best answer. A PIA identifies privacy risks and lawful basis before personal data is used in new ways."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-042",
+   "domain": 2,
+   "topicId": "2A6",
+   "question": "What is the MAIN difference between privacy and confidentiality?",
+   "choices": [
+    "Confidentiality applies only to paper records",
+    "Privacy concerns individuals’ rights over their personal data; confidentiality protects any information from disclosure",
+    "There is no difference between the two terms",
+    "Privacy applies only to health data"
+   ],
+   "answer": 1,
+   "explanation": "Privacy is about rights and appropriate use of personal data; confidentiality is about protecting information.",
+   "choiceExplanations": [
+    "Not the best answer. Confidentiality covers all formats.",
+    "Best answer. Privacy is about rights and appropriate use of personal data; confidentiality is about protecting information.",
+    "Not the best answer. The terms have distinct meanings.",
+    "Not the best answer. Privacy covers all personal data."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-043",
+   "domain": 2,
+   "topicId": "2A7",
+   "question": "Who is responsible for classifying a customer database?",
+   "choices": [
+    "The information security officer",
+    "The database administrator",
+    "The data owner in the business",
+    "The IS auditor"
+   ],
+   "answer": 2,
+   "explanation": "Data owners understand the value and sensitivity of data and decide classification.",
+   "choiceExplanations": [
+    "Not the best answer. Security advises but does not own the data.",
+    "Not the best answer. DBAs are custodians implementing controls.",
+    "Best answer. Data owners understand the value and sensitivity of data and decide classification.",
+    "Not the best answer. Auditors evaluate, not classify."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-044",
+   "domain": 2,
+   "topicId": "2A7",
+   "question": "Which is the BEST evidence that data classification is effective?",
+   "choices": [
+    "A training slide explaining the classification levels that is shown to all employees during induction",
+    "Handling controls such as encryption and access restrictions match each classification level",
+    "An inventory listing all databases",
+    "A classification policy approved by the board"
+   ],
+   "answer": 1,
+   "explanation": "Effectiveness is shown when controls applied match the assigned classification.",
+   "choiceExplanations": [
+    "Not the best answer. Training shows awareness only.",
+    "Best answer. Effectiveness is shown when controls applied match the assigned classification.",
+    "Not the best answer. An inventory without classification controls is incomplete.",
+    "Not the best answer. A policy shows intent, not operation."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-045",
+   "domain": 2,
+   "topicId": "2B1",
+   "question": "Which HR control BEST helps detect fraud by employees in sensitive roles?",
+   "choices": [
+    "Annual performance appraisals",
+    "Background checks at hiring",
+    "Signed acceptable-use agreements",
+    "Mandatory leave with duties performed by someone else"
+   ],
+   "answer": 3,
+   "explanation": "When someone else performs the duties, concealed fraud is more likely to surface.",
+   "choiceExplanations": [
+    "Not the best answer. Appraisals assess performance, not fraud.",
+    "Not the best answer. Background checks are preventive at hiring only.",
+    "Not the best answer. Agreements set expectations but do not detect fraud.",
+    "Best answer. When someone else performs the duties, concealed fraud is more likely to surface."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-046",
+   "domain": 2,
+   "topicId": "2B1",
+   "question": "An organisation has one administrator who knows how to run its core banking batch processes. What is the PRIMARY risk?",
+   "choices": [
+    "Key-person dependency affecting continuity of operations",
+    "Higher salary costs for the administrator",
+    "Lack of segregation between the developers and the testers who work on the core banking batch processes",
+    "Excessive documentation of procedures"
+   ],
+   "answer": 0,
+   "explanation": "Reliance on one person threatens operations if that person is unavailable.",
+   "choiceExplanations": [
+    "Best answer. Reliance on one person threatens operations if that person is unavailable.",
+    "Not the best answer. Cost is secondary.",
+    "Not the best answer. Developer/tester segregation is a different issue.",
+    "Not the best answer. Excess documentation is not the problem."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-047",
+   "domain": 2,
+   "topicId": "2B2",
+   "question": "Which contract clause is MOST important to allow the organisation to verify a cloud provider’s controls?",
+   "choices": [
+    "A requirement that the provider’s main data centre is located in the capital city near the head office",
+    "Right to audit or to receive independent assurance reports",
+    "Free training for the customer’s staff",
+    "Fixed pricing for three years"
+   ],
+   "answer": 1,
+   "explanation": "Assurance rights let the customer verify controls it remains accountable for.",
+   "choiceExplanations": [
+    "Not the best answer. Location matters for law, not verification.",
+    "Best answer. Assurance rights let the customer verify controls it remains accountable for.",
+    "Not the best answer. Training does not verify controls.",
+    "Not the best answer. Pricing does not provide assurance."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-048",
+   "domain": 2,
+   "topicId": "2B2",
+   "question": "A critical vendor has repeatedly missed SLA targets. What should the IS auditor recommend FIRST?",
+   "choices": [
+    "Use the contract’s performance management and escalation provisions",
+    "Bring the service in-house without analysis",
+    "Terminate the contract immediately",
+    "Ignore the missed targets as long as users have not raised formal complaints with the service desk"
+   ],
+   "answer": 0,
+   "explanation": "Contractual mechanisms should be applied before drastic action.",
+   "choiceExplanations": [
+    "Best answer. Contractual mechanisms should be applied before drastic action.",
+    "Not the best answer. Insourcing without analysis may increase risk.",
+    "Not the best answer. Immediate termination may disrupt operations.",
+    "Not the best answer. Missed SLAs are a risk even without complaints."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-049",
+   "domain": 2,
+   "topicId": "2B2",
+   "question": "After outsourcing the help desk, who remains accountable for protecting customer data handled by the provider?",
+   "choices": [
+    "The regulator",
+    "The provider’s subcontractors",
+    "The service provider only",
+    "The outsourcing organisation"
+   ],
+   "answer": 3,
+   "explanation": "Accountability cannot be transferred, even when the activity is outsourced.",
+   "choiceExplanations": [
+    "Not the best answer. Regulators supervise but are not accountable.",
+    "Not the best answer. Subcontractors are further removed.",
+    "Not the best answer. The provider is responsible for performance under contract, but accountability stays with the customer.",
+    "Best answer. Accountability cannot be transferred, even when the activity is outsourced."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-050",
+   "domain": 2,
+   "topicId": "2B3",
+   "question": "Which metric is a key risk indicator rather than a key performance indicator?",
+   "choices": [
+    "Number of critical patches overdue by more than 30 days",
+    "Percentage of IT projects delivered on time and within the approved budget during the quarter",
+    "Average help desk resolution time",
+    "User satisfaction score"
+   ],
+   "answer": 0,
+   "explanation": "KRIs signal increasing exposure to risk.",
+   "choiceExplanations": [
+    "Best answer. KRIs signal increasing exposure to risk.",
+    "Not the best answer. On-time delivery is performance.",
+    "Not the best answer. Resolution time is performance.",
+    "Not the best answer. Satisfaction is performance."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-051",
+   "domain": 2,
+   "topicId": "2B3",
+   "question": "IT reports 99.9% availability, but users report frequent outages. What should the IS auditor do FIRST?",
+   "choices": [
+    "Accept IT’s availability figure because it is generated automatically by the monitoring system",
+    "Recommend a new monitoring tool",
+    "Verify how availability is measured against source data",
+    "Survey users to replace the IT metric"
+   ],
+   "answer": 2,
+   "explanation": "The calculation and data source must be validated before relying on the metric.",
+   "choiceExplanations": [
+    "Not the best answer. System-generated figures can still be defined or calculated wrongly.",
+    "Not the best answer. A new tool is premature without understanding the gap.",
+    "Best answer. The calculation and data source must be validated before relying on the metric.",
+    "Not the best answer. Surveys are subjective."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-052",
+   "domain": 2,
+   "topicId": "2B3",
+   "question": "What is the PRIMARY purpose of an IT balanced scorecard?",
+   "choices": [
+    "To rank IT staff for promotion",
+    "To measure IT performance against business-related goals",
+    "To replace financial reporting",
+    "To calculate the financial return on a single IT project after it has been implemented"
+   ],
+   "answer": 1,
+   "explanation": "The BSC links IT performance measures to business objectives.",
+   "choiceExplanations": [
+    "Not the best answer. It is not a staff ranking tool.",
+    "Best answer. The BSC links IT performance measures to business objectives.",
+    "Not the best answer. It complements financial reporting.",
+    "Not the best answer. Single project ROI is a business case matter."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-053",
+   "domain": 2,
+   "topicId": "2B4",
+   "question": "Which is MOST important for an effective IT quality assurance function?",
+   "choices": [
+    "Reporting to the development manager",
+    "Performing all testing on behalf of users",
+    "Using only automated tools",
+    "Independence from the teams whose work it reviews"
+   ],
+   "answer": 3,
+   "explanation": "Independence ensures objective quality reviews.",
+   "choiceExplanations": [
+    "Not the best answer. Reporting to development impairs objectivity.",
+    "Not the best answer. Users still need to perform acceptance testing.",
+    "Not the best answer. Tools support but do not ensure QA.",
+    "Best answer. Independence ensures objective quality reviews."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-054",
+   "domain": 2,
+   "topicId": "2B4",
+   "question": "What distinguishes quality assurance from quality control?",
+   "choices": [
+    "QA focuses on processes; QC focuses on inspecting products",
+    "QA is performed only by external auditors, while QC is performed by the internal IT department",
+    "There is no practical difference",
+    "QC is only required for hardware"
+   ],
+   "answer": 0,
+   "explanation": "QA ensures processes are followed; QC tests outputs for defects.",
+   "choiceExplanations": [
+    "Best answer. QA ensures processes are followed; QC tests outputs for defects.",
+    "Not the best answer. QA is usually internal.",
+    "Not the best answer. They have distinct purposes.",
+    "Not the best answer. QC applies to software and services too."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-055",
+   "domain": 3,
+   "topicId": "3A1",
+   "question": "A project is 40% complete but has used 70% of its budget. Which technique would BEST give management an objective view of progress?",
+   "choices": [
+    "Function point analysis",
+    "Gantt chart review",
+    "Critical path method",
+    "Earned value analysis"
+   ],
+   "answer": 3,
+   "explanation": "Earned value compares planned value, earned value and actual cost to show cost and schedule performance.",
+   "choiceExplanations": [
+    "Not the best answer. Function points estimate software size, not progress.",
+    "Not the best answer. Gantt charts show schedule only.",
+    "Not the best answer. CPM identifies the longest path but not cost variance.",
+    "Best answer. Earned value compares planned value, earned value and actual cost to show cost and schedule performance."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-056",
+   "domain": 3,
+   "topicId": "3A1",
+   "question": "Users keep adding new features during development without formal approval. What is the GREATEST risk?",
+   "choices": [
+    "Better user satisfaction at go-live",
+    "Scope creep causing cost and schedule overruns",
+    "Simplified testing, because users who requested the features are already closely involved in development",
+    "Reduced need for documentation"
+   ],
+   "answer": 1,
+   "explanation": "Uncontrolled scope change is a leading cause of project failure.",
+   "choiceExplanations": [
+    "Not the best answer. User satisfaction is not a risk.",
+    "Best answer. Uncontrolled scope change is a leading cause of project failure.",
+    "Not the best answer. More features usually complicate testing.",
+    "Not the best answer. Documentation needs increase, not decrease."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-057",
+   "domain": 3,
+   "topicId": "3A1",
+   "question": "Who should be accountable for the business case and benefits of a new CRM project?",
+   "choices": [
+    "The quality assurance analyst",
+    "The project manager",
+    "The IT steering committee secretary",
+    "The project sponsor from the business"
+   ],
+   "answer": 3,
+   "explanation": "The sponsor provides funding and owns the business case and benefits.",
+   "choiceExplanations": [
+    "Not the best answer. QA checks quality, not benefits.",
+    "Not the best answer. The project manager owns delivery, not benefits.",
+    "Not the best answer. A secretary has no accountability.",
+    "Best answer. The sponsor provides funding and owns the business case and benefits."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-058",
+   "domain": 3,
+   "topicId": "3A2",
+   "question": "During a mid-project review, the expected savings in the business case are no longer achievable. What should happen NEXT?",
+   "choices": [
+    "Reduce testing to save money",
+    "Continue the project without change because the funds were already approved by the steering committee at the start",
+    "Hide the change until implementation",
+    "Present an updated business case to the decision body to continue, change or stop the project"
+   ],
+   "answer": 3,
+   "explanation": "The business case must be revisited when assumptions change.",
+   "choiceExplanations": [
+    "Not the best answer. Cutting testing raises risk.",
+    "Not the best answer. Sunk costs should not drive the decision.",
+    "Not the best answer. Concealment breaches governance.",
+    "Best answer. The business case must be revisited when assumptions change."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-059",
+   "domain": 3,
+   "topicId": "3A2",
+   "question": "Which feasibility factor assesses whether users will be able to adopt a new system?",
+   "choices": [
+    "Technical feasibility",
+    "Operational feasibility",
+    "Economic feasibility",
+    "Legal feasibility"
+   ],
+   "answer": 1,
+   "explanation": "Operational feasibility considers whether the organisation and users can use the system effectively.",
+   "choiceExplanations": [
+    "Not the best answer. Technical feasibility concerns technology.",
+    "Best answer. Operational feasibility considers whether the organisation and users can use the system effectively.",
+    "Not the best answer. Economic feasibility concerns cost and benefit.",
+    "Not the best answer. Legal feasibility concerns laws and contracts."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-060",
+   "domain": 3,
+   "topicId": "3A3",
+   "question": "In an agile project, which control is MOST important for an IS auditor to verify?",
+   "choices": [
+    "The team produces a complete and fully approved design document before the first sprint is allowed to begin",
+    "Security and control requirements are included in the backlog and acceptance criteria",
+    "Each sprint lasts exactly two weeks",
+    "The product owner writes the code reviews"
+   ],
+   "answer": 1,
+   "explanation": "Controls must be built into agile practices through backlog items and definitions of done.",
+   "choiceExplanations": [
+    "Not the best answer. Upfront full design is a waterfall practice.",
+    "Best answer. Controls must be built into agile practices through backlog items and definitions of done.",
+    "Not the best answer. Sprint length is not a control.",
+    "Not the best answer. Product owners prioritise; code reviews are by developers."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-061",
+   "domain": 3,
+   "topicId": "3A3",
+   "question": "A company buys a critical application from a small vendor. Which clause BEST protects it if the vendor goes out of business?",
+   "choices": [
+    "Volume discount",
+    "Vendor-provided training",
+    "Source code escrow",
+    "Annual licence renewal"
+   ],
+   "answer": 2,
+   "explanation": "Escrow gives access to source code if the vendor fails.",
+   "choiceExplanations": [
+    "Not the best answer. Discounts do not protect continuity.",
+    "Not the best answer. Training does not help maintain the software.",
+    "Best answer. Escrow gives access to source code if the vendor fails.",
+    "Not the best answer. Renewal terms do not provide code."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-062",
+   "domain": 3,
+   "topicId": "3A3",
+   "question": "What is the MAIN risk of prototyping without controls?",
+   "choices": [
+    "Prototypes become production systems without proper controls or documentation",
+    "Users see the system too early",
+    "Testing becomes unnecessary",
+    "Development takes considerably longer than a traditional waterfall project because of repeated user reviews"
+   ],
+   "answer": 0,
+   "explanation": "Prototypes may be promoted to production without adequate controls.",
+   "choiceExplanations": [
+    "Best answer. Prototypes may be promoted to production without adequate controls.",
+    "Not the best answer. Early user feedback is a benefit.",
+    "Not the best answer. Testing remains necessary.",
+    "Not the best answer. Prototyping is usually faster."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-063",
+   "domain": 3,
+   "topicId": "3A4",
+   "question": "Which input control would BEST detect a transposition error in an account number?",
+   "choices": [
+    "Completeness check",
+    "Sequence check",
+    "Limit check",
+    "Check digit"
+   ],
+   "answer": 3,
+   "explanation": "A check digit is calculated from the number and detects transcription and transposition errors.",
+   "choiceExplanations": [
+    "Not the best answer. Completeness checks find missing fields.",
+    "Not the best answer. Sequence checks find gaps or duplicates in numbering.",
+    "Not the best answer. Limit checks test amounts against a maximum.",
+    "Best answer. A check digit is calculated from the number and detects transcription and transposition errors."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-064",
+   "domain": 3,
+   "topicId": "3A4",
+   "question": "A batch of 500 invoices is processed. Which control BEST confirms none were lost?",
+   "choices": [
+    "A validity check on vendor codes",
+    "A logical relationship check on dates",
+    "A reasonableness check on invoice amounts compared with the average value of previous invoices",
+    "Record counts reconciled between input and output"
+   ],
+   "answer": 3,
+   "explanation": "Record counts reconcile the number of items processed.",
+   "choiceExplanations": [
+    "Not the best answer. Validity checks confirm allowed codes.",
+    "Not the best answer. Logical checks compare related fields.",
+    "Not the best answer. Reasonableness checks detect unusual values.",
+    "Best answer. Record counts reconcile the number of items processed."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-065",
+   "domain": 3,
+   "topicId": "3A4",
+   "question": "A transaction fails halfway, leaving one account debited but the other not credited. Which database property was not met?",
+   "choices": [
+    "Isolation",
+    "Normalisation",
+    "Durability",
+    "Atomicity"
+   ],
+   "answer": 3,
+   "explanation": "Atomicity requires a transaction to complete fully or be rolled back.",
+   "choiceExplanations": [
+    "Not the best answer. Isolation concerns concurrent transactions.",
+    "Not the best answer. Normalisation is a design property.",
+    "Not the best answer. Durability concerns persistence after commit.",
+    "Best answer. Atomicity requires a transaction to complete fully or be rolled back."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-066",
+   "domain": 3,
+   "topicId": "3B1",
+   "question": "Who should formally accept a new system before it goes live?",
+   "choices": [
+    "The development team lead",
+    "The external auditor",
+    "Business users through user acceptance testing",
+    "The database administrator who configured the production database and loaded the converted data"
+   ],
+   "answer": 2,
+   "explanation": "Users confirm the system meets business requirements.",
+   "choiceExplanations": [
+    "Not the best answer. Developers have a conflict of interest.",
+    "Not the best answer. External auditors do not accept systems.",
+    "Best answer. Users confirm the system meets business requirements.",
+    "Not the best answer. DBAs confirm technical readiness only."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-067",
+   "domain": 3,
+   "topicId": "3B1",
+   "question": "Production customer data is copied to the test environment. What should the IS auditor expect?",
+   "choices": [
+    "Test environments to be connected to the internet so external testers can access the data remotely",
+    "Data masking or anonymisation and controlled access to the test data",
+    "A note in the project plan only",
+    "Developers to delete the data after each test"
+   ],
+   "answer": 1,
+   "explanation": "Personal data in testing must be protected like production.",
+   "choiceExplanations": [
+    "Not the best answer. Internet exposure increases risk.",
+    "Best answer. Personal data in testing must be protected like production.",
+    "Not the best answer. Documentation alone is not a control.",
+    "Not the best answer. Deletion after tests does not protect data during use."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-068",
+   "domain": 3,
+   "topicId": "3B1",
+   "question": "Which testing confirms that a code fix did not break existing functions?",
+   "choices": [
+    "Regression testing",
+    "Stress testing",
+    "Unit testing of the new module",
+    "Pilot testing"
+   ],
+   "answer": 0,
+   "explanation": "Regression testing re-runs previous tests after a change.",
+   "choiceExplanations": [
+    "Best answer. Regression testing re-runs previous tests after a change.",
+    "Not the best answer. Stress testing checks behaviour under load.",
+    "Not the best answer. Unit testing checks the changed module only.",
+    "Not the best answer. Pilot testing checks a limited live rollout."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-069",
+   "domain": 3,
+   "topicId": "3B2",
+   "question": "Which control BEST ensures that only approved code is moved to production?",
+   "choices": [
+    "Developers sign a declaration that the code is tested",
+    "Production passwords shared with senior developers so that urgent fixes can be applied without waiting for operations",
+    "Migration performed by a team independent of developers using a controlled release process",
+    "The project manager emails the code to operations"
+   ],
+   "answer": 2,
+   "explanation": "Independent migration with approval enforces segregation of duties.",
+   "choiceExplanations": [
+    "Not the best answer. Declarations are not a control over migration.",
+    "Not the best answer. Shared passwords break accountability.",
+    "Best answer. Independent migration with approval enforces segregation of duties.",
+    "Not the best answer. Email transfer is uncontrolled."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-070",
+   "domain": 3,
+   "topicId": "3B3",
+   "question": "Which changeover approach carries the HIGHEST risk?",
+   "choices": [
+    "Parallel changeover",
+    "Phased changeover",
+    "Abrupt (direct) changeover",
+    "Pilot changeover"
+   ],
+   "answer": 2,
+   "explanation": "Switching directly offers no fallback if the new system fails.",
+   "choiceExplanations": [
+    "Not the best answer. Parallel keeps the old system running.",
+    "Not the best answer. Phased limits impact to parts.",
+    "Best answer. Switching directly offers no fallback if the new system fails.",
+    "Not the best answer. Pilot limits impact to a group."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-071",
+   "domain": 3,
+   "topicId": "3B3",
+   "question": "After migrating customer records, which control BEST confirms the migration was complete and accurate?",
+   "choices": [
+    "Interviews with the migration vendor",
+    "Reconciliation of record counts and control totals between old and new systems, signed off by users",
+    "A walkthrough of the new user interface",
+    "A detailed review of the migration project schedule, milestones and vendor invoices for the conversion work"
+   ],
+   "answer": 1,
+   "explanation": "Reconciliation provides evidence of complete and accurate conversion.",
+   "choiceExplanations": [
+    "Not the best answer. Vendor statements are not evidence.",
+    "Best answer. Reconciliation provides evidence of complete and accurate conversion.",
+    "Not the best answer. UI walkthroughs do not verify data.",
+    "Not the best answer. Schedules show timing only."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-072",
+   "domain": 3,
+   "topicId": "3B4",
+   "question": "When is the BEST time to perform a postimplementation review?",
+   "choices": [
+    "Only if the project ran over its approved budget or missed its planned go-live date",
+    "After the system has stabilised and benefits can be measured",
+    "On the day of go-live",
+    "Before user acceptance testing"
+   ],
+   "answer": 1,
+   "explanation": "A PIR needs enough operating history to assess benefits and controls.",
+   "choiceExplanations": [
+    "Not the best answer. PIRs are valuable for every significant project.",
+    "Best answer. A PIR needs enough operating history to assess benefits and controls.",
+    "Not the best answer. Go-live day is too early.",
+    "Not the best answer. Before UAT the system is not implemented."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-073",
+   "domain": 4,
+   "topicId": "4A1",
+   "question": "Which network medium is MOST resistant to eavesdropping?",
+   "choices": [
+    "Unshielded twisted pair",
+    "Coaxial cable",
+    "Wireless LAN",
+    "Fibre-optic cable"
+   ],
+   "answer": 3,
+   "explanation": "Fibre carries light and is very difficult to tap without detection.",
+   "choiceExplanations": [
+    "Not the best answer. UTP emits signals that can be intercepted.",
+    "Not the best answer. Coax can be tapped.",
+    "Not the best answer. Wireless signals can be captured remotely.",
+    "Best answer. Fibre carries light and is very difficult to tap without detection."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-074",
+   "domain": 4,
+   "topicId": "4A1",
+   "question": "At which OSI layer do routers make forwarding decisions?",
+   "choices": [
+    "Session layer",
+    "Transport layer",
+    "Data link layer",
+    "Network layer"
+   ],
+   "answer": 3,
+   "explanation": "Routers use logical (IP) addresses at layer 3.",
+   "choiceExplanations": [
+    "Not the best answer. Layer 5 manages sessions.",
+    "Not the best answer. Layer 4 handles end-to-end transport.",
+    "Not the best answer. Switches work at layer 2.",
+    "Best answer. Routers use logical (IP) addresses at layer 3."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-075",
+   "domain": 4,
+   "topicId": "4A1",
+   "question": "An IS auditor reviews server hardware. Which finding is MOST significant?",
+   "choices": [
+    "Servers have spare memory slots",
+    "Servers are of different brands",
+    "Critical servers are past vendor support with no replacement plan",
+    "Servers from several different vendors are installed in the same rack row in the data centre"
+   ],
+   "answer": 2,
+   "explanation": "Unsupported hardware may fail without repair options, affecting availability.",
+   "choiceExplanations": [
+    "Not the best answer. Spare slots are not a risk.",
+    "Not the best answer. Mixed brands are not a direct risk.",
+    "Best answer. Unsupported hardware may fail without repair options, affecting availability.",
+    "Not the best answer. Rack placement is a minor concern."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-076",
+   "domain": 4,
+   "topicId": "4A2",
+   "question": "What is the MOST important reason for maintaining an accurate IT asset inventory?",
+   "choices": [
+    "It reduces electricity costs",
+    "It is required to calculate staff bonuses",
+    "It replaces the need for change management because every asset is already recorded with its owner",
+    "Assets that are unknown cannot be protected, patched or recovered"
+   ],
+   "answer": 3,
+   "explanation": "Asset management underpins security, patching and continuity.",
+   "choiceExplanations": [
+    "Not the best answer. Energy cost is not the main purpose.",
+    "Not the best answer. Bonuses are unrelated.",
+    "Not the best answer. Inventories support but do not replace change management.",
+    "Best answer. Asset management underpins security, patching and continuity."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-077",
+   "domain": 4,
+   "topicId": "4A2",
+   "question": "Old laptops are being sold to staff. Which control is MOST important?",
+   "choices": [
+    "Secure data wiping verified before disposal",
+    "Updating the warranty register",
+    "Recording the sale price",
+    "Removing company stickers"
+   ],
+   "answer": 0,
+   "explanation": "Residual data on disposed devices is a major leakage risk.",
+   "choiceExplanations": [
+    "Best answer. Residual data on disposed devices is a major leakage risk.",
+    "Not the best answer. Warranty records are administrative.",
+    "Not the best answer. Price recording is financial.",
+    "Not the best answer. Stickers do not protect data."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-078",
+   "domain": 4,
+   "topicId": "4A3",
+   "question": "Operators can change the production job schedule without approval. What is the MAIN risk?",
+   "choices": [
+    "Jobs finishing faster than expected, leaving the processing window underused at month end",
+    "Higher storage use",
+    "Unauthorized jobs or sequence changes affecting data integrity",
+    "Operators needing more training"
+   ],
+   "answer": 2,
+   "explanation": "Uncontrolled schedule changes can run unapproved programs or wrong sequences.",
+   "choiceExplanations": [
+    "Not the best answer. Speed is not the risk.",
+    "Not the best answer. Storage is a minor issue.",
+    "Best answer. Uncontrolled schedule changes can run unapproved programs or wrong sequences.",
+    "Not the best answer. Training does not address authorization."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-079",
+   "domain": 4,
+   "topicId": "4A3",
+   "question": "Which is the PRIMARY benefit of automated job scheduling?",
+   "choices": [
+    "Reducing errors from manual job initiation",
+    "Removing the need for operations staff",
+    "Allowing developers to run production jobs",
+    "Eliminating change management for jobs"
+   ],
+   "answer": 0,
+   "explanation": "Automation improves reliability and reduces human error.",
+   "choiceExplanations": [
+    "Best answer. Automation improves reliability and reduces human error.",
+    "Not the best answer. Staff are still needed.",
+    "Not the best answer. Developers should not run production jobs.",
+    "Not the best answer. Change control still applies."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-080",
+   "domain": 4,
+   "topicId": "4A4",
+   "question": "Data is transferred nightly from the order system to the billing system. Which control BEST detects incomplete transfers?",
+   "choices": [
+    "Encryption of the transfer file",
+    "Reconciliation of record counts and totals between source and target",
+    "Granting billing staff read access to the order system so they can check orders themselves",
+    "Increasing the transfer frequency"
+   ],
+   "answer": 1,
+   "explanation": "Reconciliation detects lost or duplicated records.",
+   "choiceExplanations": [
+    "Not the best answer. Encryption protects confidentiality, not completeness.",
+    "Best answer. Reconciliation detects lost or duplicated records.",
+    "Not the best answer. Extra access adds risk.",
+    "Not the best answer. Frequency does not ensure completeness."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-081",
+   "domain": 4,
+   "topicId": "4A4",
+   "question": "Which finding about system interfaces is of GREATEST concern?",
+   "choices": [
+    "Interfaces are listed in a spreadsheet",
+    "Interfaces use different file formats",
+    "Some interfaces run during business hours, which can slow down the systems used by customer service staff",
+    "Several interfaces have no documented owner or error handling"
+   ],
+   "answer": 3,
+   "explanation": "Unowned interfaces with no error handling may silently lose data.",
+   "choiceExplanations": [
+    "Not the best answer. A spreadsheet inventory is acceptable if maintained.",
+    "Not the best answer. Format differences are normal.",
+    "Not the best answer. Timing is a minor issue.",
+    "Best answer. Unowned interfaces with no error handling may silently lose data."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-082",
+   "domain": 4,
+   "topicId": "4A5",
+   "question": "The finance team uses a complex spreadsheet to calculate regulatory capital. What should the IS auditor recommend FIRST?",
+   "choices": [
+    "Include it in an inventory of critical end-user applications with change, access and backup controls",
+    "Rewrite the spreadsheet as a mobile app",
+    "Ban the use of spreadsheets in finance",
+    "Ask the external auditor to review and approve all formulas in the spreadsheet before each regulatory submission"
+   ],
+   "answer": 0,
+   "explanation": "Critical EUC tools need to be identified and controlled.",
+   "choiceExplanations": [
+    "Best answer. Critical EUC tools need to be identified and controlled.",
+    "Not the best answer. Rewriting is not a first step.",
+    "Not the best answer. Banning is impractical and may disrupt operations.",
+    "Not the best answer. External approval does not create ongoing controls."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-083",
+   "domain": 4,
+   "topicId": "4A5",
+   "question": "Employees are using an unapproved online file-sharing service. What is the BEST long-term response?",
+   "choices": [
+    "Provide an approved secure alternative supported by a shadow IT policy and monitoring",
+    "Block all internet access",
+    "Ignore it because it improves productivity",
+    "Discipline every employee who has used the service so that others understand the policy is enforced strictly"
+   ],
+   "answer": 0,
+   "explanation": "Approved alternatives plus policy and monitoring address the business need and the risk.",
+   "choiceExplanations": [
+    "Best answer. Approved alternatives plus policy and monitoring address the business need and the risk.",
+    "Not the best answer. Blocking all internet is disproportionate.",
+    "Not the best answer. Ignoring leaves data leakage risk.",
+    "Not the best answer. Discipline alone does not address the need."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-084",
+   "domain": 4,
+   "topicId": "4A5",
+   "question": "What is the GREATEST risk of shadow IT?",
+   "choices": [
+    "More help desk tickets",
+    "Higher IT budgets",
+    "Too many approved vendors in the procurement system, which increases the effort needed to manage contracts",
+    "Organisational data stored in services without security or compliance review"
+   ],
+   "answer": 3,
+   "explanation": "Unapproved services bypass security and compliance controls.",
+   "choiceExplanations": [
+    "Not the best answer. Tickets are a minor effect.",
+    "Not the best answer. Budget impact is secondary.",
+    "Not the best answer. The issue is unapproved, not approved, vendors.",
+    "Best answer. Unapproved services bypass security and compliance controls."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-085",
+   "domain": 4,
+   "topicId": "4A6",
+   "question": "A system regularly runs at 95% CPU during month-end. What should the IS auditor recommend?",
+   "choices": [
+    "Replacing the system immediately",
+    "Removing performance monitoring agents from the system to reduce the load during month-end processing",
+    "Capacity planning based on business demand forecasts",
+    "Restricting month-end processing"
+   ],
+   "answer": 2,
+   "explanation": "Capacity management anticipates demand to avoid performance failures.",
+   "choiceExplanations": [
+    "Not the best answer. Immediate replacement may be unnecessary.",
+    "Not the best answer. Monitoring is needed.",
+    "Best answer. Capacity management anticipates demand to avoid performance failures.",
+    "Not the best answer. Restricting business processing is not a solution."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-086",
+   "domain": 4,
+   "topicId": "4A6",
+   "question": "Which control BEST limits the risk of misuse of powerful system utilities?",
+   "choices": [
+    "Allowing all system administrators to use utility programs freely so that support issues are resolved quickly",
+    "Restricting access to utilities and logging their use",
+    "Documenting utilities in the asset list only",
+    "Installing utilities on all servers"
+   ],
+   "answer": 1,
+   "explanation": "Utilities can bypass application controls, so access must be restricted and logged.",
+   "choiceExplanations": [
+    "Not the best answer. Unrestricted use defeats control.",
+    "Best answer. Utilities can bypass application controls, so access must be restricted and logged.",
+    "Not the best answer. Listing alone does not restrict use.",
+    "Not the best answer. Wider installation increases risk."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-087",
+   "domain": 4,
+   "topicId": "4A7",
+   "question": "The same network outage has occurred five times this quarter. Which process should address it?",
+   "choices": [
+    "Release management",
+    "Problem management",
+    "Incident management",
+    "Capacity management"
+   ],
+   "answer": 1,
+   "explanation": "Problem management finds and removes the root cause of recurring incidents.",
+   "choiceExplanations": [
+    "Not the best answer. Release management deploys changes.",
+    "Best answer. Problem management finds and removes the root cause of recurring incidents.",
+    "Not the best answer. Incident management restores service only.",
+    "Not the best answer. Capacity management handles demand."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-088",
+   "domain": 4,
+   "topicId": "4A7",
+   "question": "Which help desk practice BEST supports problem management?",
+   "choices": [
+    "Allowing users to fix their own issues",
+    "Closing tickets as quickly as possible to keep the average resolution time within the SLA target",
+    "Logging and categorising every incident consistently",
+    "Deleting tickets older than 90 days"
+   ],
+   "answer": 2,
+   "explanation": "Consistent incident data enables trend and root cause analysis.",
+   "choiceExplanations": [
+    "Not the best answer. Self-fixing bypasses records.",
+    "Not the best answer. Speed without data loses trends.",
+    "Best answer. Consistent incident data enables trend and root cause analysis.",
+    "Not the best answer. Deleting history removes evidence."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-089",
+   "domain": 4,
+   "topicId": "4A8",
+   "question": "An emergency change was made without prior approval to fix a payment outage. What should the IS auditor expect?",
+   "choices": [
+    "No documentation because it was an emergency",
+    "Disciplinary action against the engineer",
+    "Rollback of the fix until formal approval has been obtained from the change advisory board",
+    "Retrospective documentation, review and approval of the change"
+   ],
+   "answer": 3,
+   "explanation": "Emergency changes are allowed but must be documented and approved afterwards.",
+   "choiceExplanations": [
+    "Not the best answer. Emergencies still need records.",
+    "Not the best answer. Following the emergency process is not misconduct.",
+    "Not the best answer. Rolling back would recreate the outage.",
+    "Best answer. Emergency changes are allowed but must be documented and approved afterwards."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-090",
+   "domain": 4,
+   "topicId": "4A8",
+   "question": "Which is the BEST evidence that patches are applied in a timely manner?",
+   "choices": [
+    "A signed statement from the system administrator confirming that all patches were installed on time",
+    "The patch management policy",
+    "The vendor’s patch announcement email",
+    "Vulnerability scan results compared with patch release dates"
+   ],
+   "answer": 3,
+   "explanation": "Scan results show actual patch status against timelines.",
+   "choiceExplanations": [
+    "Not the best answer. Statements are assertions.",
+    "Not the best answer. Policies state intent only.",
+    "Not the best answer. Announcements show availability, not application.",
+    "Best answer. Scan results show actual patch status against timelines."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-091",
+   "domain": 4,
+   "topicId": "4A8",
+   "question": "Which control BEST prevents unauthorized changes to production programs?",
+   "choices": [
+    "Publishing a change calendar",
+    "Requiring developers to keep personal backups of every program version they move into production",
+    "Reviewing source code annually",
+    "Restricting production access to an independent migration team"
+   ],
+   "answer": 3,
+   "explanation": "Access restriction prevents unapproved code reaching production.",
+   "choiceExplanations": [
+    "Not the best answer. Calendars do not restrict access.",
+    "Not the best answer. Personal backups are not a control.",
+    "Not the best answer. Annual review is detective and late.",
+    "Best answer. Access restriction prevents unapproved code reaching production."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-092",
+   "domain": 4,
+   "topicId": "4A9",
+   "question": "Which log type would BEST show whether a website met its uptime commitment?",
+   "choices": [
+    "Error log",
+    "Access log",
+    "Change log",
+    "Availability log"
+   ],
+   "answer": 3,
+   "explanation": "Availability logs track uptime and performance against SLAs.",
+   "choiceExplanations": [
+    "Not the best answer. Error logs record failures but not overall uptime.",
+    "Not the best answer. Access logs record who accessed resources.",
+    "Not the best answer. Change logs record modifications.",
+    "Best answer. Availability logs track uptime and performance against SLAs."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-093",
+   "domain": 4,
+   "topicId": "4A9",
+   "question": "Administrators can delete security logs on the servers they manage. What is the BEST recommendation?",
+   "choices": [
+    "Review logs once a year",
+    "Increase local log file size",
+    "Forward logs in real time to a central log server or SIEM that administrators cannot alter",
+    "Ask administrators to sign a policy confirming that they will never delete or edit the security logs on their servers"
+   ],
+   "answer": 2,
+   "explanation": "Central, protected storage keeps logs reliable as evidence.",
+   "choiceExplanations": [
+    "Not the best answer. Annual review is too infrequent.",
+    "Not the best answer. Larger files do not stop deletion.",
+    "Best answer. Central, protected storage keeps logs reliable as evidence.",
+    "Not the best answer. Policies do not technically prevent deletion."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-094",
+   "domain": 4,
+   "topicId": "4A9",
+   "question": "In a small office where duties cannot be separated, which control BEST compensates?",
+   "choices": [
+    "Independent review of activity logs",
+    "Installing faster workstations",
+    "Longer passwords for staff",
+    "Annual staff rotation"
+   ],
+   "answer": 0,
+   "explanation": "Log monitoring provides oversight where segregation is not possible.",
+   "choiceExplanations": [
+    "Best answer. Log monitoring provides oversight where segregation is not possible.",
+    "Not the best answer. Hardware is irrelevant.",
+    "Not the best answer. Passwords do not address conflicting duties.",
+    "Not the best answer. Annual rotation is too infrequent."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-095",
+   "domain": 4,
+   "topicId": "4A9",
+   "question": "Which information is MOST important in a log record for investigating an incident?",
+   "choices": [
+    "The colour coding and severity icons used by the log viewer to display each event",
+    "The name of the log vendor",
+    "The size of the log file",
+    "Who triggered the event, when, where and with what outcome"
+   ],
+   "answer": 3,
+   "explanation": "Identity, time, location and outcome allow reconstruction of events.",
+   "choiceExplanations": [
+    "Not the best answer. Display formatting is irrelevant.",
+    "Not the best answer. Vendor name is not useful.",
+    "Not the best answer. File size is not evidence.",
+    "Best answer. Identity, time, location and outcome allow reconstruction of events."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-096",
+   "domain": 4,
+   "topicId": "4A9",
+   "question": "What is the MAIN purpose of synchronising time across systems that generate logs?",
+   "choices": [
+    "Allowing events from different systems to be correlated accurately",
+    "Reducing log storage",
+    "Meeting software licensing requirements that apply to time-based log management products",
+    "Improving user login speed"
+   ],
+   "answer": 0,
+   "explanation": "Consistent timestamps are needed to build accurate timelines.",
+   "choiceExplanations": [
+    "Best answer. Consistent timestamps are needed to build accurate timelines.",
+    "Not the best answer. Time sync does not reduce storage.",
+    "Not the best answer. Licensing is unrelated.",
+    "Not the best answer. Login speed is unrelated."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-097",
+   "domain": 4,
+   "topicId": "4A10",
+   "question": "Which is MOST important when reviewing a service level agreement?",
+   "choices": [
+    "The provider’s logo on the cover",
+    "A clause allowing either party to change the service targets at any time by giving written notice",
+    "Measurable service levels with defined monitoring and reporting",
+    "The length of the agreement"
+   ],
+   "answer": 2,
+   "explanation": "Measurable targets with monitoring make the SLA enforceable.",
+   "choiceExplanations": [
+    "Not the best answer. Branding is irrelevant.",
+    "Not the best answer. Unilateral changes undermine the SLA.",
+    "Best answer. Measurable targets with monitoring make the SLA enforceable.",
+    "Not the best answer. Length is irrelevant."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-098",
+   "domain": 4,
+   "topicId": "4A10",
+   "question": "What supports an SLA between IT and the business internally?",
+   "choices": [
+    "The project charter",
+    "Operational level agreements between IT teams",
+    "Underpinning contracts with customers",
+    "The IT balanced scorecard"
+   ],
+   "answer": 1,
+   "explanation": "OLAs define internal commitments that support the SLA.",
+   "choiceExplanations": [
+    "Not the best answer. Project charters are for projects.",
+    "Best answer. OLAs define internal commitments that support the SLA.",
+    "Not the best answer. Underpinning contracts are with vendors, not customers.",
+    "Not the best answer. The BSC measures performance generally."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-099",
+   "domain": 4,
+   "topicId": "4A11",
+   "question": "Which control is MOST important for database administrator activity?",
+   "choices": [
+    "Allowing the DBA to approve their own changes",
+    "Logging DBA actions and having them reviewed by someone independent",
+    "Giving the DBA access to all application passwords so problems can be resolved without delay",
+    "Disabling database audit logs for performance"
+   ],
+   "answer": 1,
+   "explanation": "Privileged DBA activity needs independent monitoring.",
+   "choiceExplanations": [
+    "Not the best answer. Self-approval breaks segregation.",
+    "Best answer. Privileged DBA activity needs independent monitoring.",
+    "Not the best answer. Wider access increases risk.",
+    "Not the best answer. Disabling logs removes accountability."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-100",
+   "domain": 4,
+   "topicId": "4A11",
+   "question": "A child record refers to a customer ID that does not exist. Which control failed?",
+   "choices": [
+    "Referential integrity",
+    "Data dictionary maintenance",
+    "Backup and recovery",
+    "Normalisation"
+   ],
+   "answer": 0,
+   "explanation": "Referential integrity ensures foreign keys match existing primary keys.",
+   "choiceExplanations": [
+    "Best answer. Referential integrity ensures foreign keys match existing primary keys.",
+    "Not the best answer. The dictionary describes data but does not enforce links.",
+    "Not the best answer. Backups do not prevent orphan records.",
+    "Not the best answer. Normalisation reduces redundancy."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-101",
+   "domain": 4,
+   "topicId": "4B1",
+   "question": "What should be the PRIMARY input for determining recovery priorities?",
+   "choices": [
+    "The age of each application",
+    "A business impact analysis approved by business process owners",
+    "The IT department’s list of servers ranked by how many applications each one supports",
+    "The insurance policy limits"
+   ],
+   "answer": 1,
+   "explanation": "The BIA shows which processes are most critical and how quickly they must recover.",
+   "choiceExplanations": [
+    "Not the best answer. Age is not a criticality measure.",
+    "Best answer. The BIA shows which processes are most critical and how quickly they must recover.",
+    "Not the best answer. Server lists lack business context.",
+    "Not the best answer. Insurance does not set priorities."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-102",
+   "domain": 4,
+   "topicId": "4B1",
+   "question": "During a BIA, which source provides the MOST reliable information on the impact of downtime?",
+   "choices": [
+    "The external auditor",
+    "The software vendor",
+    "The IT help desk",
+    "Business process owners"
+   ],
+   "answer": 3,
+   "explanation": "Process owners best understand the operational and financial impact.",
+   "choiceExplanations": [
+    "Not the best answer. External auditors are not process experts.",
+    "Not the best answer. Vendors do not know the business impact.",
+    "Not the best answer. Help desk knows incidents, not business impact.",
+    "Best answer. Process owners best understand the operational and financial impact."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-103",
+   "domain": 4,
+   "topicId": "4B2",
+   "question": "A business requires that no more than 15 minutes of transaction data is lost. Which parameter does this define?",
+   "choices": [
+    "Maximum tolerable downtime",
+    "Service delivery objective",
+    "Recovery time objective",
+    "Recovery point objective"
+   ],
+   "answer": 3,
+   "explanation": "RPO is the maximum acceptable data loss measured in time.",
+   "choiceExplanations": [
+    "Not the best answer. MTD is total tolerable outage.",
+    "Not the best answer. SDO is service level during recovery.",
+    "Not the best answer. RTO is downtime, not data loss.",
+    "Best answer. RPO is the maximum acceptable data loss measured in time."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-104",
+   "domain": 4,
+   "topicId": "4B2",
+   "question": "Which strategy BEST supports a very low recovery time objective for a payment system?",
+   "choices": [
+    "Weekly tape backups stored offsite",
+    "Hot site or active high-availability configuration",
+    "Cold site with equipment shipped on demand by the hardware vendor under a support contract",
+    "Reciprocal agreement with a partner firm"
+   ],
+   "answer": 1,
+   "explanation": "Low RTO requires near-immediate failover.",
+   "choiceExplanations": [
+    "Not the best answer. Tape restores are slow.",
+    "Best answer. Low RTO requires near-immediate failover.",
+    "Not the best answer. Cold sites take days to equip.",
+    "Not the best answer. Reciprocal agreements are unreliable and slow."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-105",
+   "domain": 4,
+   "topicId": "4B3",
+   "question": "Which backup approach requires only the last full backup and the latest backup to restore?",
+   "choices": [
+    "Full plus differential backups",
+    "Snapshots without full backups",
+    "Full plus incremental backups",
+    "Incremental backups only"
+   ],
+   "answer": 0,
+   "explanation": "A differential contains all changes since the last full backup.",
+   "choiceExplanations": [
+    "Best answer. A differential contains all changes since the last full backup.",
+    "Not the best answer. Snapshots alone may not be independent copies.",
+    "Not the best answer. Incremental restore needs every incremental since the full.",
+    "Not the best answer. Incrementals alone have no base."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-106",
+   "domain": 4,
+   "topicId": "4B3",
+   "question": "Backups complete successfully every night, but restores have never been tested. What is the MAIN risk?",
+   "choices": [
+    "Data may not be recoverable when needed",
+    "Backup windows may be too long",
+    "Operators may forget the backup schedule",
+    "Backup storage costs may rise"
+   ],
+   "answer": 0,
+   "explanation": "Without restore tests, there is no assurance backups are usable.",
+   "choiceExplanations": [
+    "Best answer. Without restore tests, there is no assurance backups are usable.",
+    "Not the best answer. Window length is secondary.",
+    "Not the best answer. Automation addresses schedules; recovery is the risk.",
+    "Not the best answer. Cost is secondary."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-107",
+   "domain": 4,
+   "topicId": "4B3",
+   "question": "Which control BEST protects backups from ransomware?",
+   "choices": [
+    "Immutable or offline backup copies",
+    "Longer file names for backup sets",
+    "Storing backups on the same file server",
+    "Daily email confirmation of backups"
+   ],
+   "answer": 0,
+   "explanation": "Immutable or offline copies cannot be encrypted by malware on the network.",
+   "choiceExplanations": [
+    "Best answer. Immutable or offline copies cannot be encrypted by malware on the network.",
+    "Not the best answer. File names are irrelevant.",
+    "Not the best answer. Same-server backups can be encrypted too.",
+    "Not the best answer. Emails do not protect data."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-108",
+   "domain": 4,
+   "topicId": "4B4",
+   "question": "Which is the FIRST step in developing a business continuity plan?",
+   "choices": [
+    "Purchase backup generators",
+    "Select a recovery site",
+    "Perform a business impact analysis",
+    "Write team contact lists"
+   ],
+   "answer": 2,
+   "explanation": "The BIA determines what must be recovered and how fast.",
+   "choiceExplanations": [
+    "Not the best answer. Equipment choices follow strategy.",
+    "Not the best answer. Site selection depends on BIA results.",
+    "Best answer. The BIA determines what must be recovered and how fast.",
+    "Not the best answer. Contact lists are part of the plan, later."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-109",
+   "domain": 4,
+   "topicId": "4B4",
+   "question": "Which test of a continuity plan carries the GREATEST operational risk?",
+   "choices": [
+    "Checklist review",
+    "Table-top walk-through",
+    "Full interruption test",
+    "Simulation exercise"
+   ],
+   "answer": 2,
+   "explanation": "Shutting down production to test recovery risks real disruption.",
+   "choiceExplanations": [
+    "Not the best answer. Checklists are paper reviews.",
+    "Not the best answer. Walk-throughs are discussion-based.",
+    "Best answer. Shutting down production to test recovery risks real disruption.",
+    "Not the best answer. Simulations do not stop production."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-110",
+   "domain": 4,
+   "topicId": "4B5",
+   "question": "Which recovery option is the LEAST reliable?",
+   "choices": [
+    "Cloud-based disaster recovery service",
+    "Hot site contract",
+    "Reciprocal agreement with another company",
+    "Mirrored site"
+   ],
+   "answer": 2,
+   "explanation": "Reciprocal agreements are hard to enforce and depend on the partner’s spare capacity.",
+   "choiceExplanations": [
+    "Not the best answer. Cloud DR is contracted and tested.",
+    "Not the best answer. Hot sites are contracted and ready.",
+    "Best answer. Reciprocal agreements are hard to enforce and depend on the partner’s spare capacity.",
+    "Not the best answer. Mirrored sites run in parallel."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-111",
+   "domain": 4,
+   "topicId": "4B5",
+   "question": "After a DR test, several recovery steps failed. What should the IS auditor verify NEXT?",
+   "choices": [
+    "That the plan has been updated and the failed steps retested",
+    "That the next full test date was set for the same time next year and added to the calendar",
+    "That the team was thanked for participating",
+    "That the test report has been filed"
+   ],
+   "answer": 0,
+   "explanation": "Testing is only useful if gaps are corrected and retested.",
+   "choiceExplanations": [
+    "Best answer. Testing is only useful if gaps are corrected and retested.",
+    "Not the best answer. Waiting a year leaves gaps open.",
+    "Not the best answer. Recognition is not a control.",
+    "Not the best answer. Filing does not fix gaps."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-112",
+   "domain": 5,
+   "topicId": "5A1",
+   "question": "What is the MOST important factor for a successful information security program?",
+   "choices": [
+    "Visible commitment and support from senior management",
+    "Annual penetration tests",
+    "A large security team",
+    "The latest security tools from a leading vendor, deployed across all servers and endpoints"
+   ],
+   "answer": 0,
+   "explanation": "Without senior management support, security lacks authority and resources.",
+   "choiceExplanations": [
+    "Best answer. Without senior management support, security lacks authority and resources.",
+    "Not the best answer. Testing is one activity, not a success factor.",
+    "Not the best answer. Team size does not ensure support.",
+    "Not the best answer. Tools without governance are ineffective."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-113",
+   "domain": 5,
+   "topicId": "5A1",
+   "question": "Which document should define minimum security settings for all Windows servers?",
+   "choices": [
+    "A security baseline standard",
+    "The information security policy",
+    "The incident response plan",
+    "The acceptable use policy"
+   ],
+   "answer": 0,
+   "explanation": "Baselines define minimum configurations for system types.",
+   "choiceExplanations": [
+    "Best answer. Baselines define minimum configurations for system types.",
+    "Not the best answer. The policy states intent at a high level.",
+    "Not the best answer. The IR plan covers incidents.",
+    "Not the best answer. Acceptable use addresses user behaviour."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-114",
+   "domain": 5,
+   "topicId": "5A1",
+   "question": "Which framework provides certifiable requirements for an information security management system?",
+   "choices": [
+    "NIST SP 800-53",
+    "ITIL 4",
+    "ISO/IEC 27001",
+    "ISO/IEC 27002"
+   ],
+   "answer": 2,
+   "explanation": "ISO/IEC 27001 specifies ISMS requirements that can be certified.",
+   "choiceExplanations": [
+    "Not the best answer. 800-53 is a control catalogue.",
+    "Not the best answer. ITIL covers service management.",
+    "Best answer. ISO/IEC 27001 specifies ISMS requirements that can be certified.",
+    "Not the best answer. 27002 is guidance on controls."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-115",
+   "domain": 5,
+   "topicId": "5A2",
+   "question": "Which control BEST prevents tailgating into a data centre?",
+   "choices": [
+    "CCTV cameras at the entrance",
+    "A mantrap with single-person entry",
+    "Security awareness posters",
+    "A visitor sign-in book"
+   ],
+   "answer": 1,
+   "explanation": "A mantrap physically allows only one person through at a time.",
+   "choiceExplanations": [
+    "Not the best answer. CCTV detects but does not prevent.",
+    "Best answer. A mantrap physically allows only one person through at a time.",
+    "Not the best answer. Posters only raise awareness.",
+    "Not the best answer. Sign-in books do not stop tailgating."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-116",
+   "domain": 5,
+   "topicId": "5A2",
+   "question": "Which fire suppression approach is BEST for a data centre where water damage must be minimised?",
+   "choices": [
+    "Halon system",
+    "Wet-pipe sprinklers",
+    "Portable fire extinguishers placed at every exit, with staff trained to use them",
+    "Clean-agent gas system or pre-action dry-pipe sprinklers"
+   ],
+   "answer": 3,
+   "explanation": "Clean agents and pre-action systems reduce accidental water damage.",
+   "choiceExplanations": [
+    "Not the best answer. Halon is banned for environmental reasons.",
+    "Not the best answer. Wet-pipe systems hold water in pipes and can leak.",
+    "Not the best answer. Portables alone are insufficient.",
+    "Best answer. Clean agents and pre-action systems reduce accidental water damage."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-117",
+   "domain": 5,
+   "topicId": "5A2",
+   "question": "A data centre experiences short, sudden voltage increases. What is this called and what is the control?",
+   "choices": [
+    "Spike; surge protection",
+    "Blackout; UPS only",
+    "Sag; raised floor",
+    "Brownout; generator"
+   ],
+   "answer": 0,
+   "explanation": "Spikes are momentary voltage increases controlled by surge protectors.",
+   "choiceExplanations": [
+    "Best answer. Spikes are momentary voltage increases controlled by surge protectors.",
+    "Not the best answer. A blackout is total loss of power.",
+    "Not the best answer. A sag is a short voltage drop and floors do not help.",
+    "Not the best answer. A brownout is reduced voltage."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-118",
+   "domain": 5,
+   "topicId": "5A3",
+   "question": "Which is an example of multi-factor authentication?",
+   "choices": [
+    "A password plus a one-time code from a hardware token",
+    "A PIN plus a memorised passphrase",
+    "A password plus a security question",
+    "Two different passwords"
+   ],
+   "answer": 0,
+   "explanation": "MFA combines different factor types: something you know and something you have.",
+   "choiceExplanations": [
+    "Best answer. MFA combines different factor types: something you know and something you have.",
+    "Not the best answer. Both are knowledge factors.",
+    "Not the best answer. Both are knowledge factors.",
+    "Not the best answer. Both are knowledge factors."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-119",
+   "domain": 5,
+   "topicId": "5A3",
+   "question": "Who should approve access to a finance application?",
+   "choices": [
+    "The data or system owner in finance",
+    "The network administrator",
+    "The help desk analyst",
+    "The new user"
+   ],
+   "answer": 0,
+   "explanation": "Owners know who needs access and are accountable for it.",
+   "choiceExplanations": [
+    "Best answer. Owners know who needs access and are accountable for it.",
+    "Not the best answer. Network staff lack business context.",
+    "Not the best answer. Help desk executes, not approves.",
+    "Not the best answer. Users cannot approve their own access."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-120",
+   "domain": 5,
+   "topicId": "5A3",
+   "question": "A biometric system has a high false acceptance rate. What is the MAIN concern?",
+   "choices": [
+    "Unauthorized people may be granted access",
+    "Authorized users will be rejected more often",
+    "Enrolment will take longer",
+    "The system will cost more to maintain"
+   ],
+   "answer": 0,
+   "explanation": "FAR measures impostors accepted, which is a security risk.",
+   "choiceExplanations": [
+    "Best answer. FAR measures impostors accepted, which is a security risk.",
+    "Not the best answer. That describes false rejection.",
+    "Not the best answer. Enrolment speed is unrelated.",
+    "Not the best answer. Cost is secondary."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-121",
+   "domain": 5,
+   "topicId": "5A3",
+   "question": "Quarterly access reviews are performed, but managers approve all lists without changes. What is the MAIN concern?",
+   "choices": [
+    "Reviews may be performed without real scrutiny of excessive access",
+    "The reviews take too long",
+    "The access lists are too short",
+    "Managers are not using the latest version of the identity governance software to approve the lists"
+   ],
+   "answer": 0,
+   "explanation": "Rubber-stamp approvals mean inappropriate access may remain.",
+   "choiceExplanations": [
+    "Best answer. Rubber-stamp approvals mean inappropriate access may remain.",
+    "Not the best answer. Duration is secondary.",
+    "Not the best answer. List length is not the issue.",
+    "Not the best answer. Software version is irrelevant."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-122",
+   "domain": 5,
+   "topicId": "5A3",
+   "question": "What is the PRIMARY principle of a zero-trust architecture?",
+   "choices": [
+    "Trust all devices inside the corporate network and verify only connections that come from the internet",
+    "Allow administrators unrestricted access",
+    "Use one firewall at the perimeter",
+    "Never trust by default; verify every request continuously"
+   ],
+   "answer": 3,
+   "explanation": "Zero trust removes implicit trust based on network location.",
+   "choiceExplanations": [
+    "Not the best answer. Internal trust is what zero trust removes.",
+    "Not the best answer. Unrestricted admin access contradicts least privilege.",
+    "Not the best answer. A single perimeter is the old model.",
+    "Best answer. Zero trust removes implicit trust based on network location."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-123",
+   "domain": 5,
+   "topicId": "5A4",
+   "question": "Where should a public web server be placed?",
+   "choices": [
+    "Directly on the internet with no firewall",
+    "In a screened subnet (DMZ) between external and internal firewalls",
+    "On the internal network next to the customer database so that web pages load more quickly",
+    "On the same subnet as the payroll system"
+   ],
+   "answer": 1,
+   "explanation": "A DMZ isolates public services from internal systems.",
+   "choiceExplanations": [
+    "Not the best answer. No firewall leaves it unprotected.",
+    "Best answer. A DMZ isolates public services from internal systems.",
+    "Not the best answer. Internal placement exposes the network.",
+    "Not the best answer. Payroll should be isolated from public services."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-124",
+   "domain": 5,
+   "topicId": "5A4",
+   "question": "Which firewall type inspects the content of application traffic such as HTTP commands?",
+   "choices": [
+    "Application-level (proxy) firewall",
+    "Circuit-level gateway",
+    "Packet-filtering firewall",
+    "Network address translation device"
+   ],
+   "answer": 0,
+   "explanation": "Application gateways examine application-layer data.",
+   "choiceExplanations": [
+    "Best answer. Application gateways examine application-layer data.",
+    "Not the best answer. Circuit gateways control sessions, not content.",
+    "Not the best answer. Packet filters check headers only.",
+    "Not the best answer. NAT changes addresses."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-125",
+   "domain": 5,
+   "topicId": "5A4",
+   "question": "An IS auditor finds firewall rules allowing \"any to any\" traffic for a legacy server. What should be recommended?",
+   "choices": [
+    "Document the rule as accepted",
+    "Replace the rule with specific, justified rules following least privilege",
+    "Move the server to the DMZ",
+    "Increase logging on the legacy server and keep the existing rule until the server is retired"
+   ],
+   "answer": 1,
+   "explanation": "Overly permissive rules should be restricted to required traffic.",
+   "choiceExplanations": [
+    "Not the best answer. Acceptance without justification leaves risk.",
+    "Best answer. Overly permissive rules should be restricted to required traffic.",
+    "Not the best answer. Moving the server does not fix the rule.",
+    "Not the best answer. Logging does not prevent misuse."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-126",
+   "domain": 5,
+   "topicId": "5A4",
+   "question": "What is the PRIMARY benefit of network segmentation?",
+   "choices": [
+    "Reducing the number of users",
+    "Removing the need for firewalls between internal networks because each segment is trusted",
+    "Limiting the spread of an attack between parts of the network",
+    "Increasing internet bandwidth"
+   ],
+   "answer": 2,
+   "explanation": "Segmentation contains compromises within zones.",
+   "choiceExplanations": [
+    "Not the best answer. User numbers are unaffected.",
+    "Not the best answer. Segmentation uses firewalls and ACLs.",
+    "Best answer. Segmentation contains compromises within zones.",
+    "Not the best answer. Bandwidth is not the purpose."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-127",
+   "domain": 5,
+   "topicId": "5A5",
+   "question": "Before deploying data loss prevention, what should be done FIRST?",
+   "choices": [
+    "Encrypt all email",
+    "Purchase the most expensive DLP tool",
+    "Classify data so DLP policies know what to protect",
+    "Block all USB ports"
+   ],
+   "answer": 2,
+   "explanation": "DLP depends on knowing which data is sensitive.",
+   "choiceExplanations": [
+    "Not the best answer. Encrypting all email does not identify sensitive data.",
+    "Not the best answer. Cost does not ensure effectiveness.",
+    "Best answer. DLP depends on knowing which data is sensitive.",
+    "Not the best answer. USB blocking is one control, not the first step."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-128",
+   "domain": 5,
+   "topicId": "5A5",
+   "question": "DLP alerts are generated daily but never reviewed. What is the MAIN risk?",
+   "choices": [
+    "The DLP licence will expire",
+    "Data leakage may occur without any response",
+    "Users will complain about frequent DLP warning messages and productivity will decrease",
+    "Storage costs will increase"
+   ],
+   "answer": 1,
+   "explanation": "Alerts without response provide no protection.",
+   "choiceExplanations": [
+    "Not the best answer. Licensing is unrelated.",
+    "Best answer. Alerts without response provide no protection.",
+    "Not the best answer. Complaints are minor.",
+    "Not the best answer. Cost is secondary."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-129",
+   "domain": 5,
+   "topicId": "5A6",
+   "question": "A sender wants to guarantee that a message came from them and was not altered. What should they use?",
+   "choices": [
+    "Encryption with the recipient’s public key",
+    "A digital signature using the sender’s private key",
+    "A checksum sent in the same email",
+    "Encryption with a shared symmetric key"
+   ],
+   "answer": 1,
+   "explanation": "Signing with the private key gives authenticity, integrity and non-repudiation.",
+   "choiceExplanations": [
+    "Not the best answer. That provides confidentiality.",
+    "Best answer. Signing with the private key gives authenticity, integrity and non-repudiation.",
+    "Not the best answer. An attacker can recompute a checksum.",
+    "Not the best answer. Shared keys do not prove who sent it."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-130",
+   "domain": 5,
+   "topicId": "5A6",
+   "question": "Which provides confidentiality for a message sent to a business partner?",
+   "choices": [
+    "Signing it with the sender’s private key",
+    "Encrypting it with the partner’s public key",
+    "Compressing it before sending",
+    "Hashing it with SHA-256"
+   ],
+   "answer": 1,
+   "explanation": "Only the partner’s private key can decrypt it.",
+   "choiceExplanations": [
+    "Not the best answer. Signing gives integrity, not confidentiality.",
+    "Best answer. Only the partner’s private key can decrypt it.",
+    "Not the best answer. Compression is not security.",
+    "Not the best answer. Hashing is not reversible encryption."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-131",
+   "domain": 5,
+   "topicId": "5A6",
+   "question": "What is a digital envelope?",
+   "choices": [
+    "Data encrypted with a symmetric key that is itself encrypted with the recipient’s public key",
+    "A certificate issued by a CA",
+    "A signed hash of the message attached to an email so that the recipient can verify the sender",
+    "A password-protected zip file"
+   ],
+   "answer": 0,
+   "explanation": "It combines fast symmetric encryption with secure key exchange.",
+   "choiceExplanations": [
+    "Best answer. It combines fast symmetric encryption with secure key exchange.",
+    "Not the best answer. That is a certificate.",
+    "Not the best answer. That is a digital signature.",
+    "Not the best answer. Zip passwords are weak and not an envelope."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-132",
+   "domain": 5,
+   "topicId": "5A7",
+   "question": "Which is the GREATEST risk to a public key infrastructure?",
+   "choices": [
+    "Slow certificate issuance",
+    "Large certificate revocation lists",
+    "Expiry of one user certificate",
+    "Compromise of the certificate authority’s private key"
+   ],
+   "answer": 3,
+   "explanation": "A compromised CA key undermines trust in all certificates it issued.",
+   "choiceExplanations": [
+    "Not the best answer. Speed is operational.",
+    "Not the best answer. CRL size is manageable.",
+    "Not the best answer. One expiry affects one user.",
+    "Best answer. A compromised CA key undermines trust in all certificates it issued."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-133",
+   "domain": 5,
+   "topicId": "5A7",
+   "question": "A certificate is suspected to be compromised. What should happen?",
+   "choices": [
+    "Revoke it and publish the revocation through CRL or OCSP",
+    "Change the certificate’s display name and serial number so that attackers cannot recognise it",
+    "Email users to stop trusting it",
+    "Wait for it to expire"
+   ],
+   "answer": 0,
+   "explanation": "Revocation tells relying parties the certificate is no longer valid.",
+   "choiceExplanations": [
+    "Best answer. Revocation tells relying parties the certificate is no longer valid.",
+    "Not the best answer. Renaming does not revoke trust.",
+    "Not the best answer. Email is not a reliable trust mechanism.",
+    "Not the best answer. Waiting leaves it trusted."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-134",
+   "domain": 5,
+   "topicId": "5A8",
+   "question": "Under the shared responsibility model for IaaS, who is responsible for patching the guest operating system?",
+   "choices": [
+    "The internet service provider",
+    "The cloud provider",
+    "The customer",
+    "The hypervisor vendor"
+   ],
+   "answer": 2,
+   "explanation": "In IaaS the customer manages the OS and above.",
+   "choiceExplanations": [
+    "Not the best answer. ISPs provide connectivity only.",
+    "Not the best answer. The provider manages physical infrastructure and virtualisation.",
+    "Best answer. In IaaS the customer manages the OS and above.",
+    "Not the best answer. The hypervisor vendor does not manage guests."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-135",
+   "domain": 5,
+   "topicId": "5A8",
+   "question": "Which is the MOST common cause of cloud data breaches?",
+   "choices": [
+    "Failure of the provider’s power supply",
+    "Outdated provider marketing material",
+    "Misconfiguration of cloud resources such as storage permissions",
+    "Physical theft of disks and servers from the cloud provider’s data centres by insiders"
+   ],
+   "answer": 2,
+   "explanation": "Customer misconfiguration is the leading cause of cloud exposure.",
+   "choiceExplanations": [
+    "Not the best answer. Power failure affects availability, not breaches.",
+    "Not the best answer. Marketing is irrelevant.",
+    "Best answer. Customer misconfiguration is the leading cause of cloud exposure.",
+    "Not the best answer. Physical theft is rare."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-136",
+   "domain": 5,
+   "topicId": "5A8",
+   "question": "What is the MAIN security concern specific to virtualisation?",
+   "choices": [
+    "Slower backup times",
+    "Higher electricity use",
+    "Licence costs for the guest operating systems running inside each hosted virtual machine",
+    "Compromise of the hypervisor affecting all hosted virtual machines"
+   ],
+   "answer": 3,
+   "explanation": "The hypervisor controls all VMs; its compromise breaks isolation.",
+   "choiceExplanations": [
+    "Not the best answer. Backup speed is operational.",
+    "Not the best answer. Power is not a security concern.",
+    "Not the best answer. Licensing is financial.",
+    "Best answer. The hypervisor controls all VMs; its compromise breaks isolation."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-137",
+   "domain": 5,
+   "topicId": "5A9",
+   "question": "A company allows employees to read email on personal phones. Which control is MOST important?",
+   "choices": [
+    "Mobile device management with encryption, passcode and remote wipe",
+    "Disabling phone cameras",
+    "Allowing only one brand of phone",
+    "A policy requiring that personal phones are newer than two years and run the latest operating system"
+   ],
+   "answer": 0,
+   "explanation": "MDM enforces protection of corporate data on devices.",
+   "choiceExplanations": [
+    "Best answer. MDM enforces protection of corporate data on devices.",
+    "Not the best answer. Cameras are not the primary risk.",
+    "Not the best answer. Brand restriction does not secure data.",
+    "Not the best answer. Device age does not ensure security."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-138",
+   "domain": 5,
+   "topicId": "5A9",
+   "question": "Which wireless configuration is MOST secure for corporate users?",
+   "choices": [
+    "WPA3-Enterprise with individual authentication",
+    "WEP with a long key",
+    "WPA2-Personal with a shared password",
+    "Hidden SSID with no encryption"
+   ],
+   "answer": 0,
+   "explanation": "Enterprise mode uses individual credentials and strong encryption.",
+   "choiceExplanations": [
+    "Best answer. Enterprise mode uses individual credentials and strong encryption.",
+    "Not the best answer. WEP is broken.",
+    "Not the best answer. Shared passwords cannot be revoked per user.",
+    "Not the best answer. Hiding SSID is not security."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-139",
+   "domain": 5,
+   "topicId": "5A9",
+   "question": "IoT sensors in a warehouse use factory default passwords. What should be done FIRST?",
+   "choices": [
+    "Document the default passwords in a protected spreadsheet so the operations team can find them",
+    "Replace all devices with a new brand",
+    "Change default credentials and place devices on a segmented network",
+    "Turn off the devices permanently"
+   ],
+   "answer": 2,
+   "explanation": "Defaults are widely known; changing them and segmenting reduces exposure.",
+   "choiceExplanations": [
+    "Not the best answer. Documenting defaults leaves them exploitable.",
+    "Not the best answer. Replacement is not the first step.",
+    "Best answer. Defaults are widely known; changing them and segmenting reduces exposure.",
+    "Not the best answer. Shutting down removes business value."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-140",
+   "domain": 5,
+   "topicId": "5B1",
+   "question": "What is the BEST measure of an awareness program’s effectiveness?",
+   "choices": [
+    "Number of slides in the course",
+    "The cost of the training vendor",
+    "Reduction in risky behaviour, such as lower phishing simulation click rates",
+    "Training attendance on the first day of the program and the number of completion certificates issued"
+   ],
+   "answer": 2,
+   "explanation": "Effectiveness is shown by changed behaviour.",
+   "choiceExplanations": [
+    "Not the best answer. Content volume is not effectiveness.",
+    "Not the best answer. Cost is not a measure of effect.",
+    "Best answer. Effectiveness is shown by changed behaviour.",
+    "Not the best answer. Attendance shows reach only."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-141",
+   "domain": 5,
+   "topicId": "5B2",
+   "question": "An employee receives a call from someone claiming to be IT support asking for their password. What type of attack is this?",
+   "choices": [
+    "Social engineering (pretexting)",
+    "Salami attack",
+    "Brute force attack",
+    "Denial of service"
+   ],
+   "answer": 0,
+   "explanation": "The attacker uses a false pretext to manipulate a person.",
+   "choiceExplanations": [
+    "Best answer. The attacker uses a false pretext to manipulate a person.",
+    "Not the best answer. Salami skims small amounts.",
+    "Not the best answer. Brute force guesses passwords technically.",
+    "Not the best answer. DoS disrupts availability."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-142",
+   "domain": 5,
+   "topicId": "5B2",
+   "question": "Which control BEST protects against eavesdropping on network traffic?",
+   "choices": [
+    "Installing antivirus software",
+    "Using longer passwords",
+    "Encrypting data in transit",
+    "Running vulnerability scans"
+   ],
+   "answer": 2,
+   "explanation": "Encryption keeps captured traffic unreadable.",
+   "choiceExplanations": [
+    "Not the best answer. Antivirus targets malware.",
+    "Not the best answer. Passwords protect accounts, not traffic.",
+    "Best answer. Encryption keeps captured traffic unreadable.",
+    "Not the best answer. Scans find weaknesses but do not protect traffic."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-143",
+   "domain": 5,
+   "topicId": "5B2",
+   "question": "A program in a payroll system rounds down each salary by a fraction of a cent and diverts the remainder. What is this?",
+   "choices": [
+    "Salami attack",
+    "Piggybacking",
+    "Logic bomb",
+    "Trojan horse"
+   ],
+   "answer": 0,
+   "explanation": "Salami attacks take tiny amounts from many transactions.",
+   "choiceExplanations": [
+    "Best answer. Salami attacks take tiny amounts from many transactions.",
+    "Not the best answer. Piggybacking is physical or session tailgating.",
+    "Not the best answer. A logic bomb triggers on a condition.",
+    "Not the best answer. A trojan hides malicious function in a legitimate program."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-144",
+   "domain": 5,
+   "topicId": "5B3",
+   "question": "What is the MOST important prerequisite before a penetration test?",
+   "choices": [
+    "Informing all employees in advance",
+    "Disabling the intrusion detection system so that it does not interfere with the testing activities",
+    "Written authorisation from management defining scope and rules of engagement",
+    "Purchasing commercial testing tools"
+   ],
+   "answer": 2,
+   "explanation": "Testing without authorisation may be illegal and disruptive.",
+   "choiceExplanations": [
+    "Not the best answer. Wide notice may invalidate realistic testing.",
+    "Not the best answer. Disabling IDS removes protection.",
+    "Best answer. Testing without authorisation may be illegal and disruptive.",
+    "Not the best answer. Tools are secondary."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-145",
+   "domain": 5,
+   "topicId": "5B4",
+   "question": "Which is the PRIMARY benefit of a SIEM?",
+   "choices": [
+    "Correlating events from many sources to detect security incidents",
+    "Managing software licences",
+    "Encrypting stored data",
+    "Replacing the need for firewalls and intrusion prevention systems at the network perimeter"
+   ],
+   "answer": 0,
+   "explanation": "SIEM aggregates and correlates logs to generate meaningful alerts.",
+   "choiceExplanations": [
+    "Best answer. SIEM aggregates and correlates logs to generate meaningful alerts.",
+    "Not the best answer. Licence management is unrelated.",
+    "Not the best answer. Encryption is a different control.",
+    "Not the best answer. It complements firewalls."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-146",
+   "domain": 5,
+   "topicId": "5B4",
+   "question": "An anomaly-based intrusion detection system has been installed. What is its MAIN drawback?",
+   "choices": [
+    "It blocks traffic automatically",
+    "Inability to detect new attacks",
+    "Higher rate of false positives until it is tuned",
+    "No need for a baseline"
+   ],
+   "answer": 2,
+   "explanation": "Anomaly detection flags deviations, which can include legitimate activity.",
+   "choiceExplanations": [
+    "Not the best answer. IDS alerts; IPS blocks.",
+    "Not the best answer. Anomaly IDS can detect new attacks.",
+    "Best answer. Anomaly detection flags deviations, which can include legitimate activity.",
+    "Not the best answer. It needs a baseline."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-147",
+   "domain": 5,
+   "topicId": "5B5",
+   "question": "A ransomware infection is detected on two workstations. What should the incident response team do FIRST?",
+   "choices": [
+    "Restore all servers from backup",
+    "Pay the ransom to recover the encrypted files quickly and avoid any interruption to the business",
+    "Notify all customers immediately",
+    "Contain the infection by isolating the affected workstations"
+   ],
+   "answer": 3,
+   "explanation": "Containment limits spread before eradication and recovery.",
+   "choiceExplanations": [
+    "Not the best answer. Restoring before containment risks reinfection.",
+    "Not the best answer. Paying is not a response step and is discouraged.",
+    "Not the best answer. Notification depends on assessment.",
+    "Best answer. Containment limits spread before eradication and recovery."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-148",
+   "domain": 5,
+   "topicId": "5B5",
+   "question": "What is the PRIMARY purpose of the lessons-learned phase of incident response?",
+   "choices": [
+    "Closing the incident ticket",
+    "Calculating insurance claims",
+    "Improving controls and procedures to prevent recurrence",
+    "Identifying the members of staff responsible so that disciplinary action can be taken"
+   ],
+   "answer": 2,
+   "explanation": "Lessons learned feed improvements to the security program.",
+   "choiceExplanations": [
+    "Not the best answer. Closing tickets is administrative.",
+    "Not the best answer. Insurance is secondary.",
+    "Best answer. Lessons learned feed improvements to the security program.",
+    "Not the best answer. Blame is not the purpose."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-149",
+   "domain": 5,
+   "topicId": "5B6",
+   "question": "A forensic investigator needs to analyse a suspect’s hard drive. What should be done FIRST?",
+   "choices": [
+    "Copy important documents to a USB drive",
+    "Run antivirus on the original disk",
+    "Create a bit-for-bit image and verify it with a hash",
+    "Boot the computer and browse the most recent files to decide whether a full investigation is needed"
+   ],
+   "answer": 2,
+   "explanation": "Working on a verified image preserves original evidence.",
+   "choiceExplanations": [
+    "Not the best answer. Selective copying loses evidence and integrity.",
+    "Not the best answer. Scanning the original may alter it.",
+    "Best answer. Working on a verified image preserves original evidence.",
+    "Not the best answer. Booting changes data on the disk."
+   ],
+   "level": "application"
+  },
+  {
+   "id": "M5-150",
+   "domain": 5,
+   "topicId": "5B6",
+   "question": "Why is chain of custody important in digital forensics?",
+   "choices": [
+    "It replaces the need for hashing because every handover of the evidence is already documented",
+    "It reduces storage costs",
+    "It shows the evidence was controlled and unaltered from collection to court",
+    "It speeds up analysis"
+   ],
+   "answer": 2,
+   "explanation": "Chain of custody supports the admissibility and integrity of evidence.",
+   "choiceExplanations": [
+    "Not the best answer. Hashing and custody work together.",
+    "Not the best answer. Storage cost is unrelated.",
+    "Best answer. Chain of custody supports the admissibility and integrity of evidence.",
+    "Not the best answer. It does not speed analysis."
+   ],
+   "level": "application"
+  }
+ ]
+}

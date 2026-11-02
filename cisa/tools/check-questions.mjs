@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const files = [1, 2, 3].map(n => join(here, '..', 'mock-exams', `mock-0${n}.json`));
+const files = [1, 2, 3, 5].map(n => join(here, '..', 'mock-exams', `mock-0${n}.json`));
 const EXPECTED_DOMAINS = { 1: 27, 2: 27, 3: 18, 4: 39, 5: 39 };
 const MAX_SAME_CORRECT = 6;      // one correct-answer text may appear at most this many times across all banks
 const MAX_SAME_CHOICE = 15;      // any single option text may appear at most this many times across all banks

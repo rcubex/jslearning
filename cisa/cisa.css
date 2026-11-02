@@ -220,3 +220,52 @@ html.ap-lock,html.ap-lock body{overflow:hidden!important}
 :root .cisa-hub .mn-bar select,:root .cisa-hub .mn-bar input{height:36px!important;min-height:36px;padding:6px 10px!important;font-size:13px!important;line-height:1.2!important;margin:0!important}
 :root .cisa-hub .mn-off input{width:60px!important}
 :root .cisa-hub .mn-go input{width:88px!important}
+.mn-subs{display:flex;flex-direction:column;gap:8px}
+.mn-sub{border-radius:14px;background:rgba(255,255,255,.65);border:1px solid rgba(60,60,67,.09)}
+.mn-sub summary{display:flex;align-items:baseline;gap:10px;padding:11px 14px;cursor:pointer;list-style:none}
+.mn-sub summary::-webkit-details-marker{display:none}
+.mn-sub summary::after{content:'›';margin-left:auto;color:#A0AABB;font-size:18px;transition:transform .2s}
+.mn-sub[open] summary::after{transform:rotate(90deg)}
+.mn-sub-no{font-size:12px;font-weight:700;color:#0A84FF;min-width:42px;font-variant-numeric:tabular-nums}
+.mn-sub summary b{font-size:14.5px;color:#0A2540;font-weight:600}
+.mn-sub summary small{font-size:11.5px;color:#8A97AA;white-space:nowrap}
+.mn-sub-body{padding:0 16px 14px 66px}
+.mn-sub-body ul{margin:0 0 10px;padding-left:18px}.mn-sub-body li{font-size:14px;line-height:1.65;color:#1C2A3D;margin:4px 0}
+.mn-subacts{margin-top:8px}
+@media (max-width:640px){.mn-sub-body{padding-left:16px}}
+.mn-ref{margin:10px 0 0}.mn-ref button{border:1px solid rgba(10,132,255,.25);background:rgba(10,132,255,.07);color:#0A5BD6;border-radius:999px;padding:7px 14px;font:600 13px/1.2 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;cursor:pointer;text-align:left}.mn-ref button:hover{background:rgba(10,132,255,.14)}
+/* ===== Daily coach ===== */
+:root .cisa-hub section.ed-card.coach{display:block!important;padding:22px 24px!important;margin-bottom:18px;background:linear-gradient(135deg,rgba(10,132,255,.10),rgba(175,82,222,.08)),rgba(255,255,255,.6)!important}
+.coach-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.coach-ring{flex:none;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;align-content:center;background:#fff;box-shadow:0 0 0 6px rgba(10,132,255,.12)}
+.coach-ring b{font-size:20px;color:#0A2540;line-height:1}.coach-ring span{font-size:11px;color:#6B7A90}
+.coach-steps{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.coach-steps li{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9)}
+.coach-steps li>div{flex:1;min-width:0;display:flex;flex-direction:column}.coach-steps b{font-size:14px;color:#0A2540}.coach-steps small{font-size:12px;color:#6B7A90}
+.coach-n{width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:12px;font-weight:700;background:rgba(10,132,255,.12);color:#0A84FF}
+.coach-steps li.done .coach-n{background:#34C759;color:#fff}.coach-steps li.done b{color:#6B7A90;text-decoration:line-through}
+.coach-ok{font-size:12px;font-weight:700;color:#1F7A3A}
+.coach-fin{margin:12px 0 0;font-size:13px;color:#1F7A3A;font-weight:600}
+.pace{margin-top:4px;font-size:12px;font-weight:600}.pace.ok{color:#1F7A3A}.pace.close{color:#8A5300}.pace.behind{color:#B3261E}
+.rv h3{margin:18px 0 8px;font-size:14px}
+.rv-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 6px}
+.rv-stats>div{padding:12px;border-radius:14px;background:rgba(255,255,255,.7);text-align:center}.rv-stats b{display:block;font-size:22px;color:#0A2540}.rv-stats span{font-size:12px;color:#6B7A90}
+.rv-stats .warn{background:rgba(255,159,10,.14)}
+.mn-tools{display:flex;align-items:center;gap:12px;margin:-6px 0 4px}
+.mn-list li{cursor:pointer;border-radius:8px;padding:2px 6px;margin-left:-6px;transition:background .15s}
+.mn-list li:hover{background:rgba(255,204,0,.12)}
+.mn-list li.star{background:rgba(255,204,0,.28);box-shadow:inset 3px 0 0 #FFCC00}
+.mn-list li.star::marker{content:'★ ';color:#E0A800}
+:root .cisa-hub textarea.mn-mynote{width:100%;min-height:84px;border-radius:14px!important;padding:12px 14px!important;font-size:14px!important;line-height:1.55;background:rgba(255,248,214,.7)!important;border:1px solid rgba(224,168,0,.3)!important;resize:vertical}
+/* ===== Admin learners ===== */
+:root .cisa-hub section.ed-card.lr{display:block!important;padding:20px 22px!important;margin-bottom:16px}
+.lr-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.lr-stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:14px 0}
+.lr-stats>div{padding:10px;border-radius:12px;background:rgba(255,255,255,.7);text-align:center}.lr-stats b{display:block;font-size:18px;color:#0A2540}.lr-stats span{font-size:11.5px;color:#6B7A90}
+.lr-doms{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:10px}
+.lr-doms span{font-size:12px;font-weight:700;color:#0A2540}.lr-doms small{font-size:11px;color:#6B7A90}
+@media (max-width:760px){.lr-stats{grid-template-columns:repeat(3,1fr)}.lr-doms{grid-template-columns:1fr 1fr}}
+:root .cisa-hub .cisa-tabs{max-width:100%;overflow-x:auto!important;scrollbar-width:none;flex-wrap:nowrap!important}
+:root .cisa-hub .cisa-tabs::-webkit-scrollbar{display:none}
+:root .cisa-hub .cisa-tabs button{flex:none}
+@media (max-width:640px){.coach-steps li{flex-wrap:wrap}.coach-steps li>div{min-width:calc(100% - 40px)}.coach-steps li .cisa-btn{margin-left:38px}.coach-ring{width:58px;height:58px}.coach-head .ed-title{font-size:19px!important}}

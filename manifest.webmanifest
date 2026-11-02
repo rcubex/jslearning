@@ -1,0 +1,16 @@
+{
+  "name": "JS Learning",
+  "short_name": "JS Learning",
+  "description": "Private study workbook: Technical, GRC, Application and CISA academies.",
+  "start_url": "./index.html#dashboard",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#E3EEFB",
+  "theme_color": "#E3EEFB",
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

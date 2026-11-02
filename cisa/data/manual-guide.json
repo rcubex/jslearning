@@ -1,6 +1,6 @@
 {
  "title": "CISA Manual · Study Guide",
- "edition": "Follows the structure of the CISA Review Manual, 28th edition. Original summaries, not the manual text.",
+ "edition": "Follows the structure of the CISA Review Manual, 28th edition: every section and numbered subsection. Original study notes, not the manual text.",
  "pageOffset": 8,
  "chapters": [
   {
@@ -46,6 +46,61 @@
        "traps": [
         "The auditor never approves or implements controls; doing so impairs independence.",
         "When independence is impaired, disclose it; do not simply continue."
+       ],
+       "subs": [
+        {
+         "id": "1.1.1",
+         "title": "ISACA IS Audit and Assurance Standards",
+         "page": 31,
+         "points": [
+          "Mandatory requirements for anyone performing IS audit and assurance work under ISACA.",
+          "Grouped as general, performance and reporting standards.",
+          "Non-compliance must be justified and disclosed."
+         ],
+         "tip": "Standards = must; guidelines = should."
+        },
+        {
+         "id": "1.1.2",
+         "title": "ISACA IS Audit and Assurance Guidelines",
+         "page": 32,
+         "points": [
+          "Explain how to apply the standards in practice.",
+          "Not mandatory, but departures should be justifiable."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.1.3",
+         "title": "ISACA Code of Professional Ethics",
+         "page": 32,
+         "points": [
+          "Members support standards, act with objectivity and due care, keep information confidential and maintain competence.",
+          "Members inform stakeholders of results and support professional education.",
+          "Failure to comply can lead to investigation and disciplinary measures."
+         ],
+         "tip": "Confidentiality applies unless disclosure is legally required."
+        },
+        {
+         "id": "1.1.4",
+         "title": "ITAF",
+         "page": 33,
+         "points": [
+          "IT Audit Framework: ISACA’s overall framework of standards, guidelines and tools and techniques.",
+          "Defines roles, responsibilities, knowledge and skills expected of IS auditors."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.1.5",
+         "title": "IS Internal Audit Function",
+         "page": 33,
+         "points": [
+          "Established by an approved audit charter; independent of the areas it audits.",
+          "Audit committee oversees the plan, resources and results.",
+          "May include an audit plan based on risk and stakeholder needs."
+         ],
+         "tip": "The charter, not the engagement letter, grants overall authority to internal audit."
+        }
        ]
       },
       {
@@ -78,6 +133,31 @@
        "traps": [
         "A Type 1 report gives no assurance that controls worked over time.",
         "A SOC report outside your audit period needs bridge letters or extra testing."
+       ],
+       "subs": [
+        {
+         "id": "1.2.1",
+         "title": "Control Self-Assessment",
+         "page": 35,
+         "points": [
+          "Management and staff assess controls, often in facilitated workshops.",
+          "Benefits: earlier detection of risk, ownership of controls, improved awareness, reduced audit cost.",
+          "Disadvantages: may be mistaken for an audit replacement; workshop scheduling; reliance on participants’ objectivity.",
+          "The IS auditor acts as facilitator and still provides independent assurance."
+         ],
+         "tip": "CSA objective: shift responsibility for control monitoring to the business."
+        },
+        {
+         "id": "1.2.2",
+         "title": "Integrated Auditing",
+         "page": 36,
+         "points": [
+          "Combines financial, operational and IS audit work to assess the internal control of a business process.",
+          "Key steps: identify risk and key controls, review and understand design, test and assess, report.",
+          "Gives a holistic view and avoids duplicated testing."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -114,6 +194,72 @@
        "traps": [
         "The auditor cannot change inherent or control risk, only detection risk.",
         "The first step in planning is understanding the business, not choosing tests."
+       ],
+       "subs": [
+        {
+         "id": "1.3.1",
+         "title": "Individual Audit Assignments",
+         "page": 38,
+         "points": [
+          "Each engagement is planned considering objectives, prior audit results, risk and resources.",
+          "Understand the business process, systems, interfaces and control environment."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.3.2",
+         "title": "Effect of Laws and Regulations on IS Audit Planning",
+         "page": 39,
+         "points": [
+          "Identify legal and regulatory requirements relevant to the area (e.g. privacy, financial reporting).",
+          "Determine whether management has processes to comply and monitor compliance.",
+          "Regulations can set scope, frequency and evidence requirements."
+         ],
+         "tip": "Step 1: identify external requirements; then check management’s compliance process."
+        },
+        {
+         "id": "1.3.3",
+         "title": "Audit Risk and Materiality",
+         "page": 41,
+         "points": [
+          "Audit risk = inherent × control × detection risk.",
+          "Materiality considers monetary and non-monetary impact (e.g. regulatory, reputational, safety).",
+          "In IS audit, a small control weakness can be material if it affects many transactions or critical systems."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.3.4",
+         "title": "Risk Assessment",
+         "page": 42,
+         "points": [
+          "Identify assets, threats and vulnerabilities; evaluate likelihood and impact.",
+          "Prioritise audit areas by risk.",
+          "Repeat periodically and after major changes."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.3.5",
+         "title": "IS Audit Risk Assessment Techniques",
+         "page": 42,
+         "points": [
+          "Scoring systems, judgement-based ranking, and quantitative models.",
+          "Combines business impact, control environment and prior findings.",
+          "Documented so prioritisation can be explained."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.3.6",
+         "title": "Risk Analysis",
+         "page": 43,
+         "points": [
+          "Analyses events that could prevent objectives being met.",
+          "Supports planning, focusing tests on key risks and controls."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -146,6 +292,69 @@
        "traps": [
         "Preventive controls are generally preferred, but the BEST answer depends on the risk described.",
         "Review of logs is detective, not preventive."
+       ],
+       "subs": [
+        {
+         "id": "1.4.1",
+         "title": "Internal Controls",
+         "page": 43,
+         "points": [
+          "Policies, procedures, practices and structures that give reasonable assurance objectives are met.",
+          "Address both preventing and detecting undesired events."
+         ],
+         "tip": "Controls give reasonable, not absolute, assurance."
+        },
+        {
+         "id": "1.4.2",
+         "title": "Control Objectives and Control Measures",
+         "page": 43,
+         "points": [
+          "A control objective states the result a control must achieve.",
+          "Control measures are the specific activities implementing the objective.",
+          "IS control objectives include safeguarding assets, data integrity, reliability, efficiency and compliance."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.4.3",
+         "title": "Control Classifications",
+         "page": 47,
+         "points": [
+          "Preventive, detective, corrective (also deterrent, compensating, recovery).",
+          "Manual vs automated; general vs application controls."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.4.4",
+         "title": "Control Relationship to Risk",
+         "page": 49,
+         "points": [
+          "Controls are selected to reduce specific risks to an acceptable level.",
+          "Cost of a control should not exceed the benefit of risk reduction."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.4.5",
+         "title": "Prescriptive Controls and Frameworks",
+         "page": 50,
+         "points": [
+          "Frameworks such as COBIT, ISO/IEC 27002 and NIST give control catalogues.",
+          "Prescriptive controls may be required by regulation or contract."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.4.6",
+         "title": "Evaluation of the Control Environment",
+         "page": 50,
+         "points": [
+          "Assess tone at the top, organisation, policies, risk management and monitoring.",
+          "A weak control environment reduces reliance on individual controls."
+         ],
+         "tip": null
+        }
        ]
       }
      ]
@@ -181,6 +390,71 @@
        ],
        "traps": [
         "Scope changes requested by the auditee must be assessed for independence impact and documented."
+       ],
+       "subs": [
+        {
+         "id": "1.5.1",
+         "title": "Audit Objectives",
+         "page": 53,
+         "points": [
+          "Specific goals of the audit, e.g. confirm that access controls prevent unauthorised changes.",
+          "Drive scope, procedures and evidence."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.5.2",
+         "title": "Audit Phases",
+         "page": 53,
+         "points": [
+          "Planning: subject, objective, scope, pre-audit planning, data gathering procedures.",
+          "Fieldwork: acquire data, test controls, issue discovery and validation.",
+          "Reporting/follow-up: report, exit meeting, follow-up on actions."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.5.3",
+         "title": "Audit Programs",
+         "page": 56,
+         "points": [
+          "Step-by-step procedures and instructions to achieve the audit objectives.",
+          "Used for consistency and supervision; adapted to the specific environment."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.5.4",
+         "title": "Audit Work Papers",
+         "page": 57,
+         "points": [
+          "Document planning, procedures performed, evidence and conclusions.",
+          "Must be retained, protected and reviewed."
+         ],
+         "tip": "If it is not documented, it was not done."
+        },
+        {
+         "id": "1.5.5",
+         "title": "Fraud, Irregularities and Illegal Acts",
+         "page": 57,
+         "points": [
+          "Management is primarily responsible for preventing and detecting fraud.",
+          "The auditor considers fraud risk in planning and reports indicators to the appropriate level.",
+          "Auditors do not guarantee fraud detection."
+         ],
+         "tip": "If fraud is suspected, report to appropriate management or the audit committee, not to the suspects."
+        },
+        {
+         "id": "1.5.6",
+         "title": "Agile Auditing",
+         "page": 58,
+         "points": [
+          "Iterative, sprint-based audit work with frequent stakeholder communication.",
+          "Prioritised backlog of audit tasks; quicker delivery of insights.",
+          "Standards and evidence requirements still apply."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -216,6 +490,30 @@
        "traps": [
         "When controls are weak, increase substantive testing rather than relying on compliance tests.",
         "Use statistical sampling when an objective, defensible conclusion is needed."
+       ],
+       "subs": [
+        {
+         "id": "1.6.1",
+         "title": "Compliance Versus Substantive Testing",
+         "page": 60,
+         "points": [
+          "Compliance tests: do controls operate as designed?",
+          "Substantive tests: is the data/transaction accurate and complete?",
+          "Results of compliance testing determine the extent of substantive testing."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.6.2",
+         "title": "Sampling",
+         "page": 61,
+         "points": [
+          "Statistical (attribute, variable, stop-or-go, discovery) vs non-statistical sampling.",
+          "Key terms: confidence coefficient, precision, expected error rate, tolerable error, population standard deviation.",
+          "Stratification and representative selection improve efficiency."
+         ],
+         "tip": "Higher confidence → bigger sample; bigger tolerable error → smaller sample."
+        }
        ]
       },
       {
@@ -246,6 +544,18 @@
        "traps": [
         "Evidence from the auditee is less reliable than evidence the auditor obtains directly.",
         "Observation is reliable only for the moment it occurred."
+       ],
+       "subs": [
+        {
+         "id": "1.7.1",
+         "title": "Interviewing and Observing Personnel in Performance of Their Duties",
+         "page": 65,
+         "points": [
+          "Observation and interviews show how processes really work.",
+          "Corroborate with documents and data; observation only proves what was seen at that moment."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -276,6 +586,50 @@
        "traps": [
         "ITF test data must be reversed so it does not affect real results.",
         "Continuous auditing suits high-volume automated environments."
+       ],
+       "subs": [
+        {
+         "id": "1.8.1",
+         "title": "Computer-Assisted Audit Techniques",
+         "page": 67,
+         "points": [
+          "Generalised audit software, utilities, test data, application tracing and mapping.",
+          "Allow full-population testing and independent recalculation.",
+          "Plan data access, extraction integrity and confidentiality."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.8.2",
+         "title": "Continuous Auditing and Monitoring",
+         "page": 68,
+         "points": [
+          "Continuous monitoring is management’s responsibility; continuous auditing gives independent assurance.",
+          "Suited to paperless, high-volume, automated environments."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.8.3",
+         "title": "Continuous Auditing Techniques",
+         "page": 69,
+         "points": [
+          "SCARF/EAM, integrated test facility, snapshots, audit hooks, continuous and intermittent simulation.",
+          "Choice depends on complexity and timing needs."
+         ],
+         "tip": "Audit hooks: low complexity, flag selected transactions for review."
+        },
+        {
+         "id": "1.8.4",
+         "title": "Artificial Intelligence in IS Audit",
+         "page": 70,
+         "points": [
+          "AI can analyse large data sets, detect anomalies and support risk assessment.",
+          "Auditors must understand model limits, bias, data quality and explainability.",
+          "Professional judgement remains with the auditor."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -305,6 +659,66 @@
        ],
        "traps": [
         "The auditor must not drop a valid finding because management disagrees; report it with management’s view."
+       ],
+       "subs": [
+        {
+         "id": "1.9.1",
+         "title": "Communicating Audit Results",
+         "page": 73,
+         "points": [
+          "Exit interview to confirm facts and agree recommendations and dates.",
+          "Communication is ongoing, not only at the end."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.9.2",
+         "title": "Audit Report Objectives",
+         "page": 74,
+         "points": [
+          "Give an opinion on control adequacy, report findings and recommendations, and enable action."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.9.3",
+         "title": "Audit Report Structure and Contents",
+         "page": 74,
+         "points": [
+          "Introduction (scope, objectives, period), overall conclusion/opinion, detailed findings and recommendations, management responses, limitations.",
+          "Findings rated by risk."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.9.4",
+         "title": "Audit Documentation",
+         "page": 75,
+         "points": [
+          "Supports the report; shows planning, evidence, review and conclusions.",
+          "Retention and access follow policy and law."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.9.5",
+         "title": "Follow-Up Activities",
+         "page": 76,
+         "points": [
+          "Verify agreed actions are implemented and effective.",
+          "Escalate overdue or ineffective actions."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.9.6",
+         "title": "Types of IS Audit Reports",
+         "page": 76,
+         "points": [
+          "Internal audit reports, assurance reports for third parties (e.g. SOC), regulatory and special-purpose reports."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -329,6 +743,44 @@
        ],
        "traps": [
         "CSA supplements internal audit; it does not replace it."
+       ],
+       "subs": [
+        {
+         "id": "1.10.1",
+         "title": "Audit Committee Oversight",
+         "page": 76,
+         "points": [
+          "Approves charter and plan, reviews results and monitors independence and resources."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.10.2",
+         "title": "Audit Quality Assurance",
+         "page": 76,
+         "points": [
+          "Supervision, internal reviews and periodic external assessments of the audit function."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.10.3",
+         "title": "Audit Team Training and Development",
+         "page": 77,
+         "points": [
+          "Continuing education to keep skills current with technology and risk."
+         ],
+         "tip": null
+        },
+        {
+         "id": "1.10.4",
+         "title": "Monitoring",
+         "page": 77,
+         "points": [
+          "Track audit performance metrics and feed improvements into methodology."
+         ],
+         "tip": null
+        }
        ]
       }
      ]
@@ -367,7 +819,8 @@
        ],
        "traps": [
         "The first step is identifying which requirements apply, before testing compliance."
-       ]
+       ],
+       "subs": []
       },
       {
        "id": "2.2",
@@ -399,6 +852,98 @@
        "traps": [
         "Board-level oversight is the strategy committee; project prioritisation is the steering committee.",
         "Strategy alignment is the PRIMARY objective of IT governance."
+       ],
+       "subs": [
+        {
+         "id": "2.2.1",
+         "title": "Enterprise Governance of Information and Technology",
+         "page": 96,
+         "points": [
+          "EGIT ensures I&T supports strategy, delivers value and manages risk and resources.",
+          "Board-level responsibility within corporate governance."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.2.2",
+         "title": "Good Practices for EGIT",
+         "page": 96,
+         "points": [
+          "Use frameworks such as COBIT 2019 and ISO/IEC 38500.",
+          "Clear decision rights, accountability, performance measures."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.2.3",
+         "title": "Audit’s Role in EGIT",
+         "page": 97,
+         "points": [
+          "Evaluate alignment, governance structures, risk management and performance measurement.",
+          "Report to the board/audit committee."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.2.4",
+         "title": "Information Security Governance",
+         "page": 99,
+         "points": [
+          "Board and executives set security direction, risk appetite and accountability.",
+          "Security strategy is aligned with business objectives."
+         ],
+         "tip": "Senior management commitment is the key success factor."
+        },
+        {
+         "id": "2.2.5",
+         "title": "Information Systems Strategy",
+         "page": 100,
+         "points": [
+          "Long-term plan for using IS to support business goals.",
+          "Approved and reviewed by senior management."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.2.6",
+         "title": "Strategic Planning",
+         "page": 100,
+         "points": [
+          "Translates business strategy into IT initiatives, roadmaps and budgets."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.2.7",
+         "title": "Business Intelligence",
+         "page": 101,
+         "points": [
+          "Collecting and analysing data for decisions; requires data governance and quality controls.",
+          "Risks: inconsistent definitions, poor data quality, unauthorised access."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.2.8",
+         "title": "Organizational Structure",
+         "page": 105,
+         "points": [
+          "Roles: board, IT strategy committee, steering committee, CIO/CISO, data owners, custodians.",
+          "Segregation of duties across development, operations, security and users.",
+          "Compensating controls when SoD is not possible."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.2.9",
+         "title": "Auditing IT Governance Structure and Implementation",
+         "page": 117,
+         "points": [
+          "Review documents (strategy, policies, minutes), reporting lines and SoD.",
+          "Indicators of problems: misalignment, lack of sponsorship, excessive costs, frequent failures."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -428,6 +973,45 @@
        ],
        "traps": [
         "An unapproved or outdated policy is a governance weakness even if staff follow it."
+       ],
+       "subs": [
+        {
+         "id": "2.3.1",
+         "title": "Policies",
+         "page": 117,
+         "points": [
+          "High-level statements of management intent; approved by senior management.",
+          "Reviewed periodically and communicated to all staff."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.3.2",
+         "title": "Standards",
+         "page": 120,
+         "points": [
+          "Mandatory rules that support policies."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.3.3",
+         "title": "Procedures",
+         "page": 120,
+         "points": [
+          "Detailed steps to implement policies and standards."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.3.4",
+         "title": "Guidelines",
+         "page": 120,
+         "points": [
+          "Recommended practices; not mandatory."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -452,7 +1036,8 @@
        ],
        "traps": [
         "EA is a planning and governance tool, not a technical diagram only."
-       ]
+       ],
+       "subs": []
       },
       {
        "id": "2.5",
@@ -481,6 +1066,37 @@
        ],
        "traps": [
         "Risk acceptance is a management decision, never the auditor’s."
+       ],
+       "subs": [
+        {
+         "id": "2.5.1",
+         "title": "Developing a Risk Management Program",
+         "page": 123,
+         "points": [
+          "Establish purpose, scope, responsibilities, risk appetite and documentation.",
+          "Gain senior management commitment and resources."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.5.2",
+         "title": "Risk Management Life Cycle",
+         "page": 123,
+         "points": [
+          "Identify assets, evaluate threats and vulnerabilities, assess impact, calculate risk, treat, monitor.",
+          "Risk treatment: mitigate, transfer, avoid, accept."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.5.3",
+         "title": "Risk Analysis Methods",
+         "page": 126,
+         "points": [
+          "Qualitative (high/medium/low), semi-quantitative (scored scales) and quantitative (monetary values, e.g. ALE)."
+         ],
+         "tip": "ALE = single loss expectancy × annual rate of occurrence."
+        }
        ]
       },
       {
@@ -506,6 +1122,26 @@
        ],
        "traps": [
         "Privacy (rights over personal data) is not the same as confidentiality (protection from disclosure)."
+       ],
+       "subs": [
+        {
+         "id": "2.6.1",
+         "title": "Privacy Documentation",
+         "page": 128,
+         "points": [
+          "Privacy notices, records of processing, data inventories, PIAs and policies."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.6.2",
+         "title": "Audit Process",
+         "page": 130,
+         "points": [
+          "Assess compliance with privacy laws and policies across the data lifecycle."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -535,6 +1171,35 @@
        ],
        "traps": [
         "Classification is the owner’s responsibility, not IT’s."
+       ],
+       "subs": [
+        {
+         "id": "2.7.1",
+         "title": "Data Inventory and Classification",
+         "page": 132,
+         "points": [
+          "Know what data you hold, where it is and how sensitive it is."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.7.2",
+         "title": "Legal Purpose, Consent and Legitimate Interest",
+         "page": 132,
+         "points": [
+          "Processing personal data needs a lawful basis such as consent or legitimate interest."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.7.3",
+         "title": "Data Subject Rights",
+         "page": 134,
+         "points": [
+          "Rights to access, correct, delete, restrict and port data; processes must meet legal deadlines."
+         ],
+         "tip": null
+        }
        ]
       }
      ]
@@ -565,6 +1230,71 @@
        ],
        "traps": [
         "Mandatory leave and rotation are detective controls for fraud."
+       ],
+       "subs": [
+        {
+         "id": "2.8.1",
+         "title": "Value of IT",
+         "page": 137,
+         "points": [
+          "IT investments must deliver measurable business value."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.8.2",
+         "title": "Implementing IT Portfolio Management",
+         "page": 137,
+         "points": [
+          "Manage IT investments as a portfolio; prioritise by value and risk."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.8.3",
+         "title": "IT Management Practices",
+         "page": 137,
+         "points": [
+          "Policies, processes and controls for planning, delivering and supporting IT."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.8.4",
+         "title": "Human Resource Management",
+         "page": 138,
+         "points": [
+          "Hiring, background checks, training, performance, rotation, mandatory leave, termination."
+         ],
+         "tip": "Terminated users’ access must be removed immediately."
+        },
+        {
+         "id": "2.8.5",
+         "title": "Enterprise Change Management",
+         "page": 141,
+         "points": [
+          "Managing organisational change so people adopt new processes and systems."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.8.6",
+         "title": "Financial Management Practices",
+         "page": 141,
+         "points": [
+          "Budgeting, cost allocation, chargeback and tracking IT spend."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.8.7",
+         "title": "Information Security Management",
+         "page": 142,
+         "points": [
+          "Ongoing management of security programme, aligned with governance."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -590,6 +1320,62 @@
        ],
        "traps": [
         "Outsourcing transfers the activity, not the accountability."
+       ],
+       "subs": [
+        {
+         "id": "2.9.1",
+         "title": "Sourcing Practices",
+         "page": 143,
+         "points": [
+          "Insourced, outsourced, hybrid; onsite, offsite, offshore."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.9.2",
+         "title": "Outsourcing Practices and Strategies",
+         "page": 144,
+         "points": [
+          "Due diligence, contract terms, SLAs, right to audit, exit plans."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.9.3",
+         "title": "Cloud Governance",
+         "page": 147,
+         "points": [
+          "Policies for selecting, using and monitoring cloud services; shared responsibility."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.9.4",
+         "title": "Governance in Outsourcing",
+         "page": 148,
+         "points": [
+          "Accountability stays with the organisation; monitor the provider."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.9.5",
+         "title": "Capacity and Growth Planning",
+         "page": 149,
+         "points": [
+          "Plan for vendor capacity and scalability as the business grows."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.9.6",
+         "title": "Third-Party Service Delivery Management",
+         "page": 149,
+         "points": [
+          "Monitor performance, review reports, manage changes and incidents with vendors."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -615,6 +1401,53 @@
        ],
        "traps": [
         "Metrics that are not aligned to business objectives have little governance value."
+       ],
+       "subs": [
+        {
+         "id": "2.10.1",
+         "title": "Key Performance Indicators",
+         "page": 150,
+         "points": [
+          "Measure how well processes achieve goals."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.10.2",
+         "title": "Key Risk Indicators",
+         "page": 151,
+         "points": [
+          "Early warning metrics of increasing risk exposure."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.10.3",
+         "title": "Key Control Indicators",
+         "page": 151,
+         "points": [
+          "Measure how well controls are operating."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.10.4",
+         "title": "Performance Optimization",
+         "page": 151,
+         "points": [
+          "Continuous improvement of IT processes and resources."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.10.5",
+         "title": "Approaches and Techniques",
+         "page": 153,
+         "points": [
+          "Balanced scorecard, benchmarking, maturity models, Six Sigma, Lean."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -639,6 +1472,35 @@
        ],
        "traps": [
         "QA is process-focused; QC is product-focused."
+       ],
+       "subs": [
+        {
+         "id": "2.11.1",
+         "title": "Quality Assurance",
+         "page": 155,
+         "points": [
+          "Independent checking that processes follow standards."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.11.2",
+         "title": "Quality Management",
+         "page": 156,
+         "points": [
+          "Systems such as ISO 9001; plan-do-check-act."
+         ],
+         "tip": null
+        },
+        {
+         "id": "2.11.3",
+         "title": "Operational Excellence",
+         "page": 156,
+         "points": [
+          "Consistently efficient, reliable operations through standardisation and improvement."
+         ],
+         "tip": null
+        }
        ]
       }
      ]
@@ -687,6 +1549,134 @@
        "traps": [
         "Project sponsor owns the business case.",
         "Scope creep without change control is a key risk."
+       ],
+       "subs": [
+        {
+         "id": "3.1.1",
+         "title": "Project Management Practices",
+         "page": 169,
+         "points": [
+          "Apply structured methods (e.g. PMBOK, PRINCE2) to deliver on time, budget and quality."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.1.2",
+         "title": "Project Management Structure",
+         "page": 170,
+         "points": [
+          "Functional, project-based (pure) and matrix organisations; authority of the project manager differs."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.1.3",
+         "title": "Project Management Roles and Responsibilities",
+         "page": 171,
+         "points": [
+          "Sponsor, steering committee, project manager, user management, system development management, QA, security officer."
+         ],
+         "tip": "The sponsor owns the business case and funding."
+        },
+        {
+         "id": "3.1.4",
+         "title": "Project Management Techniques",
+         "page": 173,
+         "points": [
+          "WBS, Gantt charts, CPM, PERT, timeboxing, function point analysis, earned value."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.1.5",
+         "title": "Portfolio/Program Management",
+         "page": 174,
+         "points": [
+          "Portfolio optimises the set of projects; programmes coordinate related projects toward a shared outcome."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.1.6",
+         "title": "Project Management Office",
+         "page": 174,
+         "points": [
+          "Supports projects with standards, tools, reporting and governance."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.1.7",
+         "title": "Project Benefits Realization",
+         "page": 175,
+         "points": [
+          "Define, track and measure benefits from approval to after go-live."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.1.8",
+         "title": "Project Initiation",
+         "page": 176,
+         "points": [
+          "Charter, sponsor, objectives and approval to start."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.1.9",
+         "title": "Project Objectives",
+         "page": 176,
+         "points": [
+          "Specific, measurable outcomes; often broken into a WBS and work packages."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.1.10",
+         "title": "Project Planning",
+         "page": 178,
+         "points": [
+          "Estimate effort, schedule, budget and resources; identify risks."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.1.11",
+         "title": "Project Execution",
+         "page": 182,
+         "points": [
+          "Coordinate people and resources to carry out the plan."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.1.12",
+         "title": "Project Controlling and Monitoring",
+         "page": 183,
+         "points": [
+          "Track progress, manage scope changes, resources and risks."
+         ],
+         "tip": "Uncontrolled scope change is a key failure cause."
+        },
+        {
+         "id": "3.1.13",
+         "title": "Project Closing",
+         "page": 183,
+         "points": [
+          "Formal acceptance, lessons learned, handover, release of resources."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.1.14",
+         "title": "IS Auditor’s Role in Project Management",
+         "page": 184,
+         "points": [
+          "Review governance, controls and risks during the project; advise without taking ownership."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -711,6 +1701,17 @@
        ],
        "traps": [
         "A project that no longer meets its business case should be re-evaluated or stopped."
+       ],
+       "subs": [
+        {
+         "id": "3.2.1",
+         "title": "IS Auditor’s Role in Business Case Development",
+         "page": 185,
+         "points": [
+          "Check the business case is complete, realistic and approved, and benefits are measurable."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -740,6 +1741,90 @@
        ],
        "traps": [
         "Lack of user involvement in requirements is a leading cause of failure."
+       ],
+       "subs": [
+        {
+         "id": "3.3.1",
+         "title": "Business Application Development",
+         "page": 186,
+         "points": [
+          "Building or acquiring applications to meet business requirements with controls built in."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.3.2",
+         "title": "SDLC Models",
+         "page": 186,
+         "points": [
+          "Waterfall, V-model, iterative/incremental, spiral and agile."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.3.3",
+         "title": "SDLC Phases",
+         "page": 189,
+         "points": [
+          "Feasibility, requirements, design, development, testing, implementation, post-implementation.",
+          "Each phase ends with deliverables and approval."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.3.4",
+         "title": "IS Auditor’s Role in SDLC Project Management",
+         "page": 198,
+         "points": [
+          "Review controls at each phase: requirements, security, testing, change control, sign-offs."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.3.5",
+         "title": "Software Development Methods",
+         "page": 198,
+         "points": [
+          "Agile, prototyping, RAD, object-oriented, component-based, DevOps, reverse engineering."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.3.6",
+         "title": "System Development Tools and Productivity Aids",
+         "page": 205,
+         "points": [
+          "CASE tools, code generators, low-code platforms; need controls over generated code."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.3.7",
+         "title": "Infrastructure Development/Acquisition Practices",
+         "page": 207,
+         "points": [
+          "Plan infrastructure requirements, capacity and security before acquisition."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.3.8",
+         "title": "Hardware/Software Acquisition",
+         "page": 211,
+         "points": [
+          "Requirements, invitation to tender/RFP, vendor evaluation, contract, acceptance testing."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.3.9",
+         "title": "System Software Acquisition",
+         "page": 213,
+         "points": [
+          "Evaluate compatibility, security, support and licensing of operating systems and utilities."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -769,6 +1854,26 @@
        ],
        "traps": [
         "Hash totals detect missing or altered records; they have no business meaning."
+       ],
+       "subs": [
+        {
+         "id": "3.4.1",
+         "title": "Application Controls",
+         "page": 216,
+         "points": [
+          "Input/origination, processing, and data file controls; batch controls and validation edits."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.4.2",
+         "title": "Output Controls",
+         "page": 222,
+         "points": [
+          "Logging and storage of sensitive forms, distribution, balancing and reconciliation, retention."
+         ],
+         "tip": null
+        }
        ]
       }
      ]
@@ -804,6 +1909,53 @@
        ],
        "traps": [
         "Users, not IT, sign off acceptance testing."
+       ],
+       "subs": [
+        {
+         "id": "3.5.1",
+         "title": "Testing Classifications",
+         "page": 225,
+         "points": [
+          "Unit, interface, system, final acceptance testing."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.5.2",
+         "title": "Software Testing",
+         "page": 227,
+         "points": [
+          "Top-down vs bottom-up; white-box and black-box."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.5.3",
+         "title": "Data Integrity Testing",
+         "page": 228,
+         "points": [
+          "Relational and referential integrity tests; ACID properties."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.5.4",
+         "title": "Application Systems Testing",
+         "page": 228,
+         "points": [
+          "Snapshots, mapping, tracing, test data, ITF, parallel simulation."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.5.5",
+         "title": "System Implementation",
+         "page": 231,
+         "points": [
+          "Plan go-live, train users, prepare support and fallback."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -828,6 +1980,17 @@
        ],
        "traps": [
         "Developers moving their own code to production breaks segregation of duties."
+       ],
+       "subs": [
+        {
+         "id": "3.6.1",
+         "title": "Configuration Management Systems",
+         "page": 232,
+         "points": [
+          "Track versions and baselines of configuration items; prevent unauthorised change."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -852,6 +2015,54 @@
        ],
        "traps": [
         "Data conversion without reconciliation is a major risk to data integrity."
+       ],
+       "subs": [
+        {
+         "id": "3.7.1",
+         "title": "Data Migration",
+         "page": 233,
+         "points": [
+          "Plan, extract, cleanse, convert, load and reconcile data.",
+          "Controls: record counts, control totals, exception reports, sign-off."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.7.2",
+         "title": "Changeover (Go-Live or Cutover) Techniques",
+         "page": 236,
+         "points": [
+          "Parallel, phased, abrupt changeover; each needs a fallback plan."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.7.3",
+         "title": "System Change Procedures and the Program Migration Process",
+         "page": 237,
+         "points": [
+          "Changes follow approval and testing; migration to production done by an independent function."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.7.4",
+         "title": "System Software Implementation",
+         "page": 238,
+         "points": [
+          "Install and configure system software with testing and change control."
+         ],
+         "tip": null
+        },
+        {
+         "id": "3.7.5",
+         "title": "Certification/Accreditation",
+         "page": 238,
+         "points": [
+          "Certification: technical evaluation of controls. Accreditation: management accepts residual risk."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -876,6 +2087,17 @@
        ],
        "traps": [
         "A PIR too soon after go-live gives an incomplete picture."
+       ],
+       "subs": [
+        {
+         "id": "3.8.1",
+         "title": "IS Auditor’s Role in Postimplementation Review",
+         "page": 240,
+         "points": [
+          "Assess benefits, controls and lessons; ideally by someone not involved in the project."
+         ],
+         "tip": null
+        }
        ]
       }
      ]
@@ -914,6 +2136,86 @@
        ],
        "traps": [
         "Fibre optic is the most secure cable type against tapping."
+       ],
+       "subs": [
+        {
+         "id": "4.1.1",
+         "title": "Networking",
+         "page": 254,
+         "points": [
+          "OSI/TCP-IP models, LAN/WAN technologies, devices and topologies.",
+          "LAN topologies: star, bus, ring, mesh; switches segment collision domains, routers separate broadcast domains.",
+          "WAN options: leased lines, MPLS, SD-WAN, VPN over internet; each trades cost, performance and security.",
+          "Auditors check network diagrams are current, devices are hardened and changes are controlled."
+         ],
+         "tip": "Fibre is hardest to tap; wireless is easiest to intercept."
+        },
+        {
+         "id": "4.1.2",
+         "title": "Computer Hardware Components and Architectures",
+         "page": 267,
+         "points": [
+          "Processors, memory, storage, input/output; server and client architectures.",
+          "Components: CPU, memory, storage, input/output, buses; architectures include client-server and multi-tier.",
+          "Risks: hardware failure, obsolescence, insufficient capacity."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.1.3",
+         "title": "Common Enterprise Back-End Devices",
+         "page": 269,
+         "points": [
+          "Print servers, file servers, application, web, database and proxy servers, appliances.",
+          "Back-end devices include file, print, application, web, database and proxy servers and appliances.",
+          "Each needs hardening, patching, access control and monitoring appropriate to its role."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.1.4",
+         "title": "USB Mass Storage Devices",
+         "page": 270,
+         "points": [
+          "Risks: data leakage, malware, theft; controls: encryption, port control, policy.",
+          "USB storage can leak data and introduce malware.",
+          "Controls: device control software, encryption of approved devices, blocking autorun, user policy and awareness."
+         ],
+         "tip": "Best control for USB data leakage: approved encrypted devices plus endpoint port control."
+        },
+        {
+         "id": "4.1.5",
+         "title": "Wireless Communication Technologies",
+         "page": 271,
+         "points": [
+          "Wi-Fi, Bluetooth, RFID, NFC: convenience with interception risks.",
+          "Bluetooth, RFID and NFC enable short-range communication but can be intercepted or cloned.",
+          "Controls: disable when not needed, pair securely, encrypt, monitor rogue devices."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.1.6",
+         "title": "Hardware Maintenance Program",
+         "page": 272,
+         "points": [
+          "Planned preventive maintenance, vendor contracts and logs.",
+          "Preventive maintenance reduces unplanned outages.",
+          "Maintenance logs, vendor contracts and schedules should be reviewed by the auditor."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.1.7",
+         "title": "Hardware Reviews",
+         "page": 273,
+         "points": [
+          "Check capacity, utilisation, maintenance and replacement plans.",
+          "Review acquisition plans, capacity utilisation, maintenance records and replacement planning.",
+          "Check hardware is under support or has a risk-accepted plan."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -938,7 +2240,8 @@
        ],
        "traps": [
         "Unknown assets cannot be secured or patched."
-       ]
+       ],
+       "subs": []
       },
       {
        "id": "4.3",
@@ -962,6 +2265,30 @@
        ],
        "traps": [
         "Unauthorized changes to job schedules can bypass program change controls."
+       ],
+       "subs": [
+        {
+         "id": "4.3.1",
+         "title": "Job Scheduling Software",
+         "page": 274,
+         "points": [
+          "Automates job runs; reduces operator error; needs restricted access to schedules.",
+          "Scheduling software runs jobs automatically with dependencies, priorities and restart points.",
+          "Benefits: fewer manual errors, consistent processing, audit trail of job runs."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.3.2",
+         "title": "Scheduling Reviews",
+         "page": 275,
+         "points": [
+          "Review schedule changes, exceptions and reruns.",
+          "Review who can change schedules, how changes are approved and how abnormal ends are handled.",
+          "Compare job logs to the approved schedule."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -986,6 +2313,29 @@
        ],
        "traps": [
         "Undocumented interfaces are a common source of unmanaged risk."
+       ],
+       "subs": [
+        {
+         "id": "4.4.1",
+         "title": "Risk Associated With System Interfaces",
+         "page": 276,
+         "points": [
+          "Data loss, duplication, corruption, unauthorised access and unclear ownership.",
+          "Risks: data loss or duplication, corruption, unauthorised access in transit, unclear ownership, failures not noticed."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.4.2",
+         "title": "Controls Associated With System Interfaces",
+         "page": 277,
+         "points": [
+          "Inventory, ownership, reconciliation, encryption, error handling, monitoring.",
+          "Maintain an interface inventory with owners and data flows.",
+          "Reconcile counts and totals, encrypt sensitive transfers, alert on failures and test interfaces after changes."
+         ],
+         "tip": "Reconciliation is the key detective control for interfaces."
+        }
        ]
       },
       {
@@ -1015,6 +2365,31 @@
        ],
        "traps": [
         "Banning tools alone rarely works; providing approved alternatives is the better answer."
+       ],
+       "subs": [
+        {
+         "id": "4.5.1",
+         "title": "End-User Computing",
+         "page": 278,
+         "points": [
+          "User-built tools (spreadsheets, databases) used for business decisions.",
+          "Risks: errors, no change control, no backup; controls: inventory, testing, access, versioning.",
+          "EUC is flexible but often lacks testing, version control, backup and access restriction.",
+          "Critical EUCs should be inventoried, risk-rated and brought under proportionate controls."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.5.2",
+         "title": "Shadow IT",
+         "page": 278,
+         "points": [
+          "Technology used without IT approval; controls: policy, procurement review, consolidation, restricted rights, education, monitoring.",
+          "Shadow IT grows when official IT is slow or unaware of business needs.",
+          "Discovery tools (e.g. CASB, network monitoring) help find unapproved services."
+         ],
+         "tip": "Best fix: approved alternatives plus policy, not only prohibition."
+        }
        ]
       },
       {
@@ -1039,6 +2414,93 @@
        ],
        "traps": [
         "Reactive capacity upgrades indicate weak planning."
+       ],
+       "subs": [
+        {
+         "id": "4.6.1",
+         "title": "IS Architecture and Software",
+         "page": 279,
+         "points": [
+          "How systems, software and infrastructure fit together to deliver services.",
+          "IS architecture connects hardware, system software, applications and networks to deliver services."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.6.2",
+         "title": "Operating Systems",
+         "page": 279,
+         "points": [
+          "Manage hardware and resources; secure configuration and patching are key.",
+          "OS manages processes, memory, files and devices; configuration determines security.",
+          "Controls: hardened builds, patching, restricted admin rights, logging of privileged activity."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.6.3",
+         "title": "Access Control Software",
+         "page": 282,
+         "points": [
+          "Controls who can access system resources; logs violations.",
+          "Access control software enforces identification, authentication and authorisation for system resources.",
+          "Violation logs must be reviewed."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.6.4",
+         "title": "Data Communications Software",
+         "page": 282,
+         "points": [
+          "Manages data transfer between systems; needs integrity and security controls.",
+          "Communications software controls data transfer; ensure integrity checks and encryption."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.6.5",
+         "title": "Utility Programs",
+         "page": 283,
+         "points": [
+          "Powerful tools that can bypass controls; restrict and log their use.",
+          "Utilities (e.g. disk editors, database tools) can change data directly and bypass application controls.",
+          "Restrict to authorised staff, log usage, remove from production where possible."
+         ],
+         "tip": "Unrestricted utility programs can alter data without audit trails."
+        },
+        {
+         "id": "4.6.6",
+         "title": "Software Licensing Issues",
+         "page": 283,
+         "points": [
+          "Track licences to avoid legal and financial penalties; use inventory and metering.",
+          "Unlicensed software creates legal and financial exposure.",
+          "Controls: central purchasing, licence inventory, metering software, periodic audits."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.6.7",
+         "title": "Source Code Management",
+         "page": 284,
+         "points": [
+          "Version control, access restrictions, code review, escrow for vendor code.",
+          "Source code repositories need access control, version history and protection from tampering.",
+          "Escrow agreements protect against vendor failure."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.6.8",
+         "title": "Capacity Management",
+         "page": 285,
+         "points": [
+          "Monitor utilisation and plan resources ahead of demand.",
+          "Capacity management monitors CPU, memory, storage and network trends to forecast needs."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1063,6 +2525,71 @@
        ],
        "traps": [
         "Root cause = problem management, not incident management."
+       ],
+       "subs": [
+        {
+         "id": "4.7.1",
+         "title": "Problem Management",
+         "page": 287,
+         "points": [
+          "Find and remove root causes of incidents.",
+          "Problem management performs root cause analysis and records known errors with workarounds.",
+          "Proactive problem management uses trends to prevent incidents."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.7.2",
+         "title": "Process of Incident Handling",
+         "page": 287,
+         "points": [
+          "Detect, log, classify, prioritise, resolve, close; escalate when needed.",
+          "Incidents are detected, logged, classified, prioritised, investigated, resolved and closed.",
+          "Escalation rules ensure major incidents reach the right people quickly."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.7.3",
+         "title": "Detection, Documentation, Control, Resolution and Reporting of Abnormal Conditions",
+         "page": 287,
+         "points": [
+          "Abnormal conditions are logged and investigated; trends reported to management.",
+          "Abnormal conditions (e.g. abends, errors) must be logged, investigated and resolved with management reporting."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.7.4",
+         "title": "Support/Help Desk",
+         "page": 288,
+         "points": [
+          "First point of contact; logs, prioritises and tracks issues.",
+          "The help desk records every request, gives first-line resolution and escalates complex issues.",
+          "Ticket data supports trend analysis and service improvement."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.7.5",
+         "title": "Network Management Tools",
+         "page": 288,
+         "points": [
+          "Response time reports, downtime reports, protocol analysers, SNMP monitoring.",
+          "Tools: response time reports, downtime reports, help desk reports, protocol analysers, SNMP-based monitors."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.7.6",
+         "title": "Problem Management Reporting Reviews",
+         "page": 289,
+         "points": [
+          "Check that problems are logged, analysed and closed on time.",
+          "Review whether problems are recorded, analysed, resolved on time and reported."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1088,6 +2615,41 @@
        ],
        "traps": [
         "Programmers should not have access to production."
+       ],
+       "subs": [
+        {
+         "id": "4.8.1",
+         "title": "Patch Management",
+         "page": 290,
+         "points": [
+          "Inventory, prioritise by risk, test, deploy, verify.",
+          "Patch process: identify, assess risk, test, approve, deploy, verify.",
+          "Emergency patches follow an expedited but documented route."
+         ],
+         "tip": "Unpatched critical vulnerabilities are a high-risk finding."
+        },
+        {
+         "id": "4.8.2",
+         "title": "Release Management",
+         "page": 291,
+         "points": [
+          "Plan and control bundles of changes into production.",
+          "Releases bundle changes; plans include testing, approval, deployment and back-out steps.",
+          "Major, minor and emergency releases have different approval paths."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.8.3",
+         "title": "IS Operations",
+         "page": 292,
+         "points": [
+          "Day-to-day running: monitoring, job control, backups, operator procedures.",
+          "IS operations include job processing, monitoring, console control, media management and operator procedures.",
+          "Operators should not have programming access to production code."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1118,6 +2680,32 @@
        ],
        "traps": [
         "Logs kept on the same server administrators control are not reliable evidence."
+       ],
+       "subs": [
+        {
+         "id": "4.9.1",
+         "title": "Types of Logs",
+         "page": 294,
+         "points": [
+          "Event, server, system, access, change, availability, threat, database, error, firewall logs.",
+          "Event log: logins, failed passwords, application events.",
+          "Server and system logs: restarts, updates, OS errors and warnings.",
+          "Access, change, availability, threat, database, error and firewall logs serve different monitoring needs."
+         ],
+         "tip": "Availability logs evidence SLA uptime; access logs show who used sensitive data."
+        },
+        {
+         "id": "4.9.2",
+         "title": "Log Management",
+         "page": 295,
+         "points": [
+          "Collect, alert, store centrally, analyse, report, act; protect logs from tampering.",
+          "Cycle: collect data, generate alerts, store logs, analyse data, report concerns, implement action plans.",
+          "Infrastructure: log generation (hosts), analysis and storage (log servers), monitoring (e.g. SIEM rules and thresholds).",
+          "Protect logs from alteration; centralise them; define retention."
+         ],
+         "tip": "Logs are only useful if someone reviews and acts on them."
+        }
        ]
       },
       {
@@ -1142,6 +2730,39 @@
        ],
        "traps": [
         "Provider self-reported SLA data needs verification."
+       ],
+       "subs": [
+        {
+         "id": "4.10.1",
+         "title": "Service Level Agreements",
+         "page": 298,
+         "points": [
+          "Define services, targets, measures and responsibilities.",
+          "SLAs define services, measures, targets, responsibilities, reporting and penalties.",
+          "OLAs and underpinning contracts support the SLA."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.10.2",
+         "title": "Monitoring of Service Levels",
+         "page": 300,
+         "points": [
+          "Measure actual performance against SLAs using objective data.",
+          "Service levels are monitored with objective data and reviewed regularly with the business."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.10.3",
+         "title": "Service Levels and Enterprise Architecture",
+         "page": 300,
+         "points": [
+          "Architecture decisions must support required service levels.",
+          "Architecture choices (redundancy, capacity) must support agreed service levels."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1170,6 +2791,51 @@
        ],
        "traps": [
         "The DBA should not review their own activity."
+       ],
+       "subs": [
+        {
+         "id": "4.11.1",
+         "title": "DBMS Architecture",
+         "page": 301,
+         "points": [
+          "Schemas, data dictionary/directory and metadata.",
+          "Three-schema view: external (user views), conceptual (logical model) and internal (physical storage).",
+          "Data dictionary/directory holds metadata about data definitions and usage."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.11.2",
+         "title": "Database Structure",
+         "page": 301,
+         "points": [
+          "Hierarchical, network, relational, object and NoSQL models.",
+          "Hierarchical, network, relational and object-oriented models; NoSQL for flexible or large-scale data.",
+          "Normalisation reduces redundancy and update anomalies."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.11.3",
+         "title": "Database Controls",
+         "page": 305,
+         "points": [
+          "Access restrictions, integrity constraints, logging, backup, DBA monitoring.",
+          "Controls: access through approved interfaces only, integrity constraints, concurrency control, backup and recovery, audit logging.",
+          "DBA activity should be logged and independently reviewed."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.11.4",
+         "title": "Database Reviews",
+         "page": 306,
+         "points": [
+          "Review design, access, interfaces, backup and performance.",
+          "Review design, access controls, interfaces, backup and recovery, performance and DBA procedures."
+         ],
+         "tip": null
+        }
        ]
       }
      ]
@@ -1200,6 +2866,20 @@
        ],
        "traps": [
         "BIA comes before choosing recovery strategies."
+       ],
+       "subs": [
+        {
+         "id": "4.12.1",
+         "title": "Classification of Operations and Criticality Analysis",
+         "page": 311,
+         "points": [
+          "Rank systems as critical, vital, sensitive, non-critical based on impact.",
+          "Critical: cannot be performed manually; very low tolerance to interruption.",
+          "Vital: can be done manually for a short time.",
+          "Sensitive: manual for a tolerable period at extra cost. Non-critical: can be interrupted for long periods."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1228,6 +2908,28 @@
        ],
        "traps": [
         "Low RPO needs frequent backups or mirroring; low RTO needs hot sites or high availability."
+       ],
+       "subs": [
+        {
+         "id": "4.13.1",
+         "title": "Application Resiliency and Disaster Recovery Methods",
+         "page": 312,
+         "points": [
+          "Clustering, load balancing, failover.",
+          "Clustering (active-active or active-passive), load balancing and failover improve application resilience."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.13.2",
+         "title": "Telecommunication Networks Resiliency and Disaster Recovery Methods",
+         "page": 312,
+         "points": [
+          "Redundancy, alternative routing, diverse routing, last-mile protection, voice recovery.",
+          "Redundancy, alternative routing, diverse routing, long-haul diversity, last-mile protection and voice recovery protect communications."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1256,6 +2958,40 @@
        ],
        "traps": [
         "Untested backups give no assurance of recovery."
+       ],
+       "subs": [
+        {
+         "id": "4.14.1",
+         "title": "Data Storage Resiliency and Disaster Recovery Methods",
+         "page": 313,
+         "points": [
+          "RAID levels, replication, mirroring.",
+          "RAID protects against disk failure; replication and mirroring copy data to another location.",
+          "Synchronous replication gives near-zero RPO but needs short distance."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.14.2",
+         "title": "Backup and Restoration",
+         "page": 314,
+         "points": [
+          "Offsite storage, media handling, cloud backup, restore testing.",
+          "Backups need offsite or separate-region copies, media protection, encryption and regular restore tests."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.14.3",
+         "title": "Backup Schemes",
+         "page": 318,
+         "points": [
+          "Full, incremental, differential; rotation (e.g. grandfather-father-son).",
+          "Full: all data. Incremental: changes since last backup of any type. Differential: changes since last full.",
+          "Rotation schemes such as grandfather-father-son balance retention and media use."
+         ],
+         "tip": "Fastest restore: full + differential; smallest daily backup: incremental."
+        }
        ]
       },
       {
@@ -1281,6 +3017,119 @@
        ],
        "traps": [
         "Full interruption tests are the most disruptive and least frequent."
+       ],
+       "subs": [
+        {
+         "id": "4.15.1",
+         "title": "IT Business Continuity Planning",
+         "page": 320,
+         "points": [
+          "IT continuity supports the overall BCP.",
+          "IT continuity ensures systems supporting critical processes can recover within required times."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.15.2",
+         "title": "Disasters and Other Disruptive Events",
+         "page": 322,
+         "points": [
+          "Natural, technical and human-caused events, including pandemics and cyberattacks.",
+          "Events include natural disasters, technical failures, cyberattacks, pandemics and supplier failure."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.15.3",
+         "title": "Business Continuity Planning Process",
+         "page": 323,
+         "points": [
+          "Policy, BIA, strategy, plan, training, testing, maintenance.",
+          "Steps: policy, BIA, strategy, plan development, training/awareness, testing, maintenance."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.15.4",
+         "title": "Business Continuity Policy",
+         "page": 324,
+         "points": [
+          "Management’s statement of intent and scope for continuity.",
+          "The policy, approved by senior management, states scope, objectives and responsibilities."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.15.5",
+         "title": "Business Continuity Planning Incident Management",
+         "page": 324,
+         "points": [
+          "Classify incidents by severity to decide when to invoke the plan.",
+          "Incidents are classified (e.g. negligible, minor, major, crisis) to decide when to invoke plans."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.15.6",
+         "title": "Development of Business Continuity Plans",
+         "page": 326,
+         "points": [
+          "Based on BIA results and chosen strategies.",
+          "Plans are built from the BIA and chosen recovery strategies; owners keep them current."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.15.7",
+         "title": "Other Issues in Plan Development",
+         "page": 326,
+         "points": [
+          "Involve all functions, consider dependencies, staff safety, communications.",
+          "Consider staff safety, dependencies on suppliers, communications and insurance."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.15.8",
+         "title": "Components of a Business Continuity Plan",
+         "page": 326,
+         "points": [
+          "Roles, teams, contacts, procedures, resources, insurance, communications.",
+          "Components: roles and teams, contact lists, recovery procedures, resources, alternative sites, communications, insurance."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.15.9",
+         "title": "Plan Testing",
+         "page": 329,
+         "points": [
+          "Desk-based, walk-through, preparedness, full operational tests.",
+          "Test types: checklist, walk-through, simulation, parallel, full interruption.",
+          "Each test has objectives, measured results and corrective actions."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.15.10",
+         "title": "Business Continuity Management Good Practices",
+         "page": 331,
+         "points": [
+          "Continuous review, training, testing and improvement.",
+          "Good practices: regular review, training, testing, integration with change management."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.15.11",
+         "title": "Auditing Business Continuity",
+         "page": 332,
+         "points": [
+          "Review plan currency, test results, BIA, offsite storage and team readiness.",
+          "Auditor reviews plan currency, BIA, test results, offsite storage, contracts and team readiness."
+         ],
+         "tip": "An untested plan gives little assurance."
+        }
        ]
       },
       {
@@ -1305,6 +3154,71 @@
        ],
        "traps": [
         "Reciprocal agreements are the least reliable recovery option."
+       ],
+       "subs": [
+        {
+         "id": "4.16.1",
+         "title": "RPO, RTO and Mean Time to Repair",
+         "page": 335,
+         "points": [
+          "RPO limits data loss; RTO limits downtime; MTTR measures repair speed.",
+          "RPO: maximum data loss in time; drives backup frequency.",
+          "RTO: maximum downtime; drives recovery strategy.",
+          "MTTR: average time to repair; lower means faster recovery."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.16.2",
+         "title": "Recovery Strategies",
+         "page": 336,
+         "points": [
+          "Choose based on criticality, cost and RTO/RPO.",
+          "Strategy depends on criticality, RTO/RPO, cost and risk; lower targets cost more."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.16.3",
+         "title": "Recovery Alternatives",
+         "page": 337,
+         "points": [
+          "Hot, warm, cold, mobile, mirrored sites; reciprocal agreements; cloud DR.",
+          "Hot site: ready in hours. Warm: partly equipped. Cold: space only. Mirrored: duplicate running site.",
+          "Mobile sites, reciprocal agreements and cloud DR are further options."
+         ],
+         "tip": "Reciprocal agreements are the least reliable alternative."
+        },
+        {
+         "id": "4.16.4",
+         "title": "Development of Disaster Recovery Plans",
+         "page": 339,
+         "points": [
+          "Document procedures, teams and responsibilities.",
+          "DRP documents recovery procedures, teams, responsibilities and resources for IT."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.16.5",
+         "title": "Disaster Recovery Testing Methods",
+         "page": 342,
+         "points": [
+          "Checklist, walk-through, simulation, parallel, full interruption.",
+          "Tests range from checklist reviews to full interruption; results update the plan."
+         ],
+         "tip": null
+        },
+        {
+         "id": "4.16.6",
+         "title": "Invoking Disaster Recovery Plans",
+         "page": 344,
+         "points": [
+          "Clear criteria and authority for declaring a disaster.",
+          "Define who can declare a disaster and the criteria for invoking the DRP."
+         ],
+         "tip": null
+        }
        ]
       }
      ]
@@ -1342,6 +3256,40 @@
        ],
        "traps": [
         "Senior management commitment is the most critical success factor."
+       ],
+       "subs": [
+        {
+         "id": "5.1.1",
+         "title": "Information Asset Security Policies, Procedures and Guidelines",
+         "page": 357,
+         "points": [
+          "Approved security policy supported by standards, procedures and guidelines.",
+          "Policies are approved by senior management, communicated, acknowledged and reviewed regularly.",
+          "Procedures and guidelines translate policy into practice."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.1.2",
+         "title": "Information Security Frameworks and Standards",
+         "page": 359,
+         "points": [
+          "ISO/IEC 27001/27002, NIST CSF, CIS Controls.",
+          "ISO/IEC 27001 (ISMS requirements), 27002 (control guidance), NIST CSF (identify, protect, detect, respond, recover)."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.1.3",
+         "title": "Information Security Baselines",
+         "page": 362,
+         "points": [
+          "Minimum security configurations for systems; deviations approved.",
+          "Baselines are minimum configurations per platform; deviations need approval.",
+          "Compliance is checked with configuration scanning."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1366,6 +3314,41 @@
        ],
        "traps": [
         "Dry-pipe systems reduce accidental water damage; halon is no longer used."
+       ],
+       "subs": [
+        {
+         "id": "5.2.1",
+         "title": "Environmental Exposures and Controls",
+         "page": 365,
+         "points": [
+          "Power issues, fire, water, temperature; UPS, generators, suppression systems, detectors.",
+          "Power: blackout, brownout, sag, spike, surge, EMI; controls include UPS, generators, surge protection.",
+          "Fire: detectors, alarms, suppression (pre-action/dry-pipe, clean agents); water detectors; HVAC."
+         ],
+         "tip": "Halon is banned; dry-pipe systems reduce accidental water damage."
+        },
+        {
+         "id": "5.2.2",
+         "title": "Physical Access Exposures and Controls",
+         "page": 369,
+         "points": [
+          "Badges, biometrics, mantraps, guards, CCTV, visitor logs.",
+          "Controls: badges, biometrics, mantraps, guards, CCTV, visitor logs and escorts, low-profile locations.",
+          "Review access lists and logs regularly."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.2.3",
+         "title": "Industrial Control Systems Security",
+         "page": 372,
+         "points": [
+          "SCADA/OT systems need segmentation, restricted access and careful patching.",
+          "ICS/SCADA controls physical processes; availability and safety come first.",
+          "Segment from IT networks, restrict remote access, patch carefully."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1397,6 +3380,200 @@
        "traps": [
         "Two passwords is not MFA.",
         "Data owners approve access, not IT administrators."
+       ],
+       "subs": [
+        {
+         "id": "5.3.1",
+         "title": "Identity and Access Management",
+         "page": 374,
+         "points": [
+          "Manage identities and access across their lifecycle.",
+          "IAM covers identification, authentication, authorisation, provisioning and deprovisioning."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.2",
+         "title": "Authentication, Authorization and Accounting",
+         "page": 379,
+         "points": [
+          "AAA: verify identity, grant rights, record actions.",
+          "Authentication proves identity; authorisation grants rights; accounting logs actions."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.3",
+         "title": "Zero-Trust Architecture",
+         "page": 382,
+         "points": [
+          "Never trust, always verify; continuous verification and least privilege.",
+          "Zero trust: verify explicitly, use least privilege, assume breach; access decided per request."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.4",
+         "title": "Privileged Access Management",
+         "page": 384,
+         "points": [
+          "Vaulting, just-in-time access, session recording for admins.",
+          "PAM vaults privileged credentials, grants just-in-time access and records sessions."
+         ],
+         "tip": "Privileged accounts are the highest-value targets."
+        },
+        {
+         "id": "5.3.5",
+         "title": "Directory Services",
+         "page": 385,
+         "points": [
+          "Central store of identities (e.g. LDAP, Active Directory).",
+          "Directories (LDAP, Active Directory) centralise identities and groups."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.6",
+         "title": "Identity Governance and Administration",
+         "page": 386,
+         "points": [
+          "Access requests, approvals, certifications and SoD checks.",
+          "IGA automates access requests, approvals, recertification and SoD checks."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.7",
+         "title": "Identity as a Service",
+         "page": 387,
+         "points": [
+          "Cloud-delivered identity and SSO services.",
+          "IDaaS provides cloud-based identity, SSO and MFA."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.8",
+         "title": "System Access Permission",
+         "page": 388,
+         "points": [
+          "Access granted by data owners on need-to-know and least privilege.",
+          "Access is granted by data owners on need-to-know and least privilege."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.9",
+         "title": "Types of Access Controls",
+         "page": 389,
+         "points": [
+          "Mandatory (MAC) vs discretionary (DAC); role-based.",
+          "MAC: system-enforced labels. DAC: owner decides. RBAC: rights through roles."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.10",
+         "title": "Information Security and External Parties",
+         "page": 391,
+         "points": [
+          "Third-party access needs contracts, risk assessment and monitoring.",
+          "Third parties need contracts with security clauses, risk assessment and monitored access."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.11",
+         "title": "Digital Rights Management",
+         "page": 394,
+         "points": [
+          "Controls use and copying of digital content after distribution.",
+          "DRM controls use, copying and printing of digital content after distribution."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.12",
+         "title": "Logical Access",
+         "page": 396,
+         "points": [
+          "Paths of access and exposures; controls over each path.",
+          "Logical access paths: network, remote, console, operator and application access."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.13",
+         "title": "Access Control Software",
+         "page": 397,
+         "points": [
+          "Enforces identification, authentication and authorisation.",
+          "Access control software identifies, authenticates, authorises and logs access to resources."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.14",
+         "title": "Logon IDs and Passwords",
+         "page": 398,
+         "points": [
+          "Unique IDs, strong passwords, lockout, no sharing; MFA preferred.",
+          "Unique IDs, strong passwords, lockout after failed attempts, no sharing, secure storage (hashed).",
+          "MFA for privileged and remote access."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.15",
+         "title": "Remote Access Security",
+         "page": 401,
+         "points": [
+          "VPN, MFA, device checks, logging.",
+          "Remote access via VPN with MFA, device checks and logging."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.16",
+         "title": "Biometrics",
+         "page": 401,
+         "points": [
+          "FAR, FRR, EER; enrolment and template protection.",
+          "Physical: fingerprint, palm, hand geometry, iris, retina, face. Behavioural: signature, voice, keystroke.",
+          "FAR (security), FRR (convenience), EER for comparison."
+         ],
+         "tip": "High-security sites focus on a low FAR."
+        },
+        {
+         "id": "5.3.17",
+         "title": "Naming Conventions for Logical Access Controls",
+         "page": 404,
+         "points": [
+          "Consistent names for resources and IDs support control and auditing.",
+          "Consistent naming of IDs and resources supports clear access rules and audit."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.18",
+         "title": "Federated Identity Management",
+         "page": 405,
+         "points": [
+          "Trust between organisations using SAML/OIDC.",
+          "Federation lets users from one organisation access another’s services using SAML or OIDC trust."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.3.19",
+         "title": "Auditing Logical Access",
+         "page": 408,
+         "points": [
+          "Review access paths, provisioning, reviews, privileged accounts and logs.",
+          "Review access paths, provisioning, reviews, privileged access, password settings and log monitoring."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1421,6 +3598,159 @@
        ],
        "traps": [
         "A screened subnet (DMZ) is more secure than a single firewall."
+       ],
+       "subs": [
+        {
+         "id": "5.4.1",
+         "title": "IS Network Infrastructure",
+         "page": 409,
+         "points": [
+          "Components and architecture of the organisation’s network.",
+          "Network infrastructure includes LAN, WAN, wireless, devices and services."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.2",
+         "title": "Enterprise Network Architectures",
+         "page": 410,
+         "points": [
+          "Client-server, multi-tier, cloud and hybrid designs.",
+          "Architectures: client-server, multi-tier, cloud, hybrid; each changes trust boundaries."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.3",
+         "title": "Types of Networks",
+         "page": 410,
+         "points": [
+          "PAN, LAN, WAN, MAN, SAN.",
+          "PAN, LAN, MAN, WAN, SAN differ by scope and purpose."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.4",
+         "title": "Network Services",
+         "page": 411,
+         "points": [
+          "DNS, DHCP, directory, email, file and print services.",
+          "Services: DNS, DHCP, directory, email, file and print; each needs hardening."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.5",
+         "title": "Network Standards and Protocols",
+         "page": 412,
+         "points": [
+          "TCP/IP, OSI reference, IEEE standards.",
+          "TCP/IP and OSI models; IEEE 802 standards for LAN and wireless."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.6",
+         "title": "Virtual Private Networks",
+         "page": 412,
+         "points": [
+          "Encrypted tunnels for remote access, intranet and extranet connections.",
+          "VPN types: remote access, intranet (site-to-site), extranet; protocols include IPsec and TLS."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.7",
+         "title": "Network Attached Storage",
+         "page": 415,
+         "points": [
+          "Shared storage on the network; needs access control and backup.",
+          "NAS provides shared file storage; protect with access control, encryption and backup."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.8",
+         "title": "Content Delivery Networks",
+         "page": 416,
+         "points": [
+          "Distributed servers improve performance and absorb DDoS.",
+          "CDNs cache content close to users and help absorb DDoS attacks."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.9",
+         "title": "Network Time Protocol",
+         "page": 417,
+         "points": [
+          "Synchronised time is essential for log correlation and forensics.",
+          "NTP keeps clocks synchronised for logs, authentication (e.g. Kerberos) and forensics."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.10",
+         "title": "Applications in a Networked Environment",
+         "page": 419,
+         "points": [
+          "Web, client-server, middleware, APIs and their risks.",
+          "Networked applications (web, APIs, middleware) need secure coding, authentication and encryption."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.11",
+         "title": "Network Infrastructure Security",
+         "page": 421,
+         "points": [
+          "Device hardening, segmentation, monitoring, change control.",
+          "Harden devices, segment networks, control changes, monitor traffic and restrict management access."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.12",
+         "title": "Firewalls",
+         "page": 423,
+         "points": [
+          "Packet filter, stateful, application/proxy, NGFW; screened subnet (DMZ) designs.",
+          "Packet filter: headers only. Stateful: tracks sessions. Application/proxy: inspects content. NGFW: adds application awareness and IPS.",
+          "Designs: screened host, dual-homed, screened subnet (DMZ)."
+         ],
+         "tip": "A DMZ with two firewalls is the most secure common design."
+        },
+        {
+         "id": "5.4.13",
+         "title": "Unified Threat Management (UTM)",
+         "page": 429,
+         "points": [
+          "Single appliance combining firewall, IPS, anti-malware, filtering.",
+          "UTM combines firewall, IPS, anti-malware and filtering; simpler but a single point of failure."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.14",
+         "title": "Network Segmentation",
+         "page": 430,
+         "points": [
+          "Separate zones to limit spread of attacks.",
+          "Segmentation (VLANs, firewalls, micro-segmentation) limits lateral movement."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.4.15",
+         "title": "Endpoint Security",
+         "page": 432,
+         "points": [
+          "Hardening, EDR/anti-malware, patching, encryption, device control.",
+          "Endpoint controls: hardening, EDR/anti-malware, patching, encryption, device control, host firewall."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1445,6 +3775,78 @@
        ],
        "traps": [
         "Classification must exist before DLP can work well."
+       ],
+       "subs": [
+        {
+         "id": "5.5.1",
+         "title": "Types of DLPs",
+         "page": 434,
+         "points": [
+          "Network, endpoint, storage/discovery and cloud DLP.",
+          "Network DLP, endpoint DLP, storage/discovery DLP and cloud DLP (often via CASB)."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.5.2",
+         "title": "Data Loss Risk",
+         "page": 435,
+         "points": [
+          "Accidental and malicious leakage via email, web, USB, cloud.",
+          "Leakage can be accidental (misdirected email) or malicious (insider theft)."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.5.3",
+         "title": "DLP Solutions and Data States",
+         "page": 437,
+         "points": [
+          "Data at rest, in motion and in use.",
+          "Data at rest (stored), in motion (network) and in use (endpoint) need different controls."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.5.4",
+         "title": "DLP Controls",
+         "page": 437,
+         "points": [
+          "Policies to monitor, warn, block or encrypt.",
+          "Actions: monitor, alert, block, quarantine or encrypt."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.5.5",
+         "title": "DLP Content Analysis Methods",
+         "page": 438,
+         "points": [
+          "Rule/regex, fingerprinting, exact data matching, statistical, categories.",
+          "Methods: rules/regex, database fingerprinting, exact data matching, partial document matching, statistical analysis, categories."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.5.6",
+         "title": "DLP Deployment Best Practices",
+         "page": 438,
+         "points": [
+          "Start with classification, pilot, tune, phase in blocking.",
+          "Classify data first, start in monitor mode, tune policies, then enforce gradually."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.5.7",
+         "title": "DLP Risk, Limitations and Considerations",
+         "page": 439,
+         "points": [
+          "False positives, encrypted traffic, privacy concerns, cost.",
+          "Limitations: false positives, encrypted traffic, privacy concerns, cost and staff effort."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1470,6 +3872,149 @@
        ],
        "traps": [
         "Confidentiality: encrypt with the recipient’s public key."
+       ],
+       "subs": [
+        {
+         "id": "5.6.1",
+         "title": "Elements of Encryption Systems",
+         "page": 440,
+         "points": [
+          "Algorithm, key, key length; strength depends on key management.",
+          "Elements: algorithm, key, key length; secrecy of the key, not the algorithm, protects data."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.2",
+         "title": "Link Encryption and End-to-End Encryption",
+         "page": 442,
+         "points": [
+          "Link encrypts per hop; end-to-end protects data from sender to receiver.",
+          "Link encryption protects each hop; end-to-end protects data from sender to recipient."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.3",
+         "title": "Symmetric Key Cryptographic Systems",
+         "page": 443,
+         "points": [
+          "One shared key (e.g. AES); fast; key distribution problem.",
+          "Same key encrypts and decrypts (e.g. AES); fast; key distribution is the challenge."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.4",
+         "title": "Public (Asymmetric) Key Cryptographic Systems",
+         "page": 443,
+         "points": [
+          "Key pairs (RSA); encryption and signatures; slower.",
+          "Public/private key pairs (e.g. RSA); public key for confidentiality to the owner, private key for signatures."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.5",
+         "title": "Elliptic Curve Cryptography",
+         "page": 444,
+         "points": [
+          "Strong security with shorter keys; suits mobile devices.",
+          "ECC gives equal strength with shorter keys, useful for mobile and constrained devices."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.6",
+         "title": "Quantum Cryptography",
+         "page": 445,
+         "points": [
+          "Quantum key distribution; quantum computing threatens current public-key algorithms.",
+          "Quantum computers threaten current public-key algorithms; post-quantum algorithms are being adopted."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.7",
+         "title": "Homomorphic Encryption",
+         "page": 445,
+         "points": [
+          "Compute on encrypted data without decrypting.",
+          "Allows computation on encrypted data, useful for privacy-preserving processing."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.8",
+         "title": "Digital Signatures",
+         "page": 446,
+         "points": [
+          "Hash signed with sender’s private key: integrity, authentication, non-repudiation.",
+          "Hash signed with sender’s private key; verified with sender’s public key.",
+          "Provides integrity, authentication and non-repudiation, not confidentiality."
+         ],
+         "tip": "Non-repudiation = sender’s private key."
+        },
+        {
+         "id": "5.6.9",
+         "title": "Digital Envelope",
+         "page": 447,
+         "points": [
+          "Data encrypted with a symmetric key, which is encrypted with the recipient’s public key.",
+          "Symmetric key encrypts the message; recipient’s public key encrypts the symmetric key."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.10",
+         "title": "Applications of Cryptographic Systems",
+         "page": 447,
+         "points": [
+          "TLS, IPsec, S/MIME, secure email and file encryption.",
+          "TLS, IPsec, S/MIME, PGP, SSH and disk encryption apply cryptography to real systems."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.11",
+         "title": "Kerberos",
+         "page": 449,
+         "points": [
+          "Ticket-based network authentication using a trusted key distribution centre.",
+          "Kerberos uses tickets from a trusted key distribution centre; needs synchronised clocks."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.12",
+         "title": "Secure Shell",
+         "page": 450,
+         "points": [
+          "Encrypted remote login and file transfer.",
+          "SSH replaces insecure Telnet/FTP with encrypted remote access and file transfer."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.13",
+         "title": "Domain Name System Security Extensions",
+         "page": 451,
+         "points": [
+          "DNSSEC signs DNS data to prevent spoofing.",
+          "DNSSEC signs DNS records so resolvers can detect spoofed responses."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.6.14",
+         "title": "Email Security",
+         "page": 451,
+         "points": [
+          "SPF, DKIM, DMARC, encryption and filtering.",
+          "SPF, DKIM and DMARC help prevent spoofing; S/MIME or PGP encrypt and sign email."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1494,6 +4039,68 @@
        ],
        "traps": [
         "Compromise of the CA private key undermines all issued certificates."
+       ],
+       "subs": [
+        {
+         "id": "5.7.1",
+         "title": "Digital Certificates",
+         "page": 454,
+         "points": [
+          "Bind public keys to identities; issued by CAs.",
+          "X.509 certificates bind a public key to an identity, signed by a CA."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.7.2",
+         "title": "Key Management",
+         "page": 455,
+         "points": [
+          "Generate, distribute, store, rotate and destroy keys securely.",
+          "Key lifecycle: generation, distribution, storage (e.g. HSM), rotation, archival and destruction."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.7.3",
+         "title": "Certificate Revocation",
+         "page": 455,
+         "points": [
+          "Revoke compromised or invalid certificates.",
+          "Certificates are revoked when keys are compromised or details change."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.7.4",
+         "title": "Certificate Revocation List",
+         "page": 456,
+         "points": [
+          "Published list of revoked certificates; OCSP gives real-time status.",
+          "CRLs list revoked certificates; OCSP gives real-time status."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.7.5",
+         "title": "PKI Infrastructure Risk",
+         "page": 457,
+         "points": [
+          "CA compromise, weak RA checks, expired certificates.",
+          "Risks: CA key compromise, weak registration checks, expired certificates, poor key storage."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.7.6",
+         "title": "Audit Procedures for PKI",
+         "page": 457,
+         "points": [
+          "Review CA policies, key protection, certificate lifecycle.",
+          "Review certificate policies, CA key protection, registration procedures and lifecycle monitoring."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1519,6 +4126,109 @@
        ],
        "traps": [
         "Accountability for data stays with the customer."
+       ],
+       "subs": [
+        {
+         "id": "5.8.1",
+         "title": "Virtualization",
+         "page": 459,
+         "points": [
+          "Hypervisors host multiple VMs; protect hypervisor and isolate VMs.",
+          "Type 1 (bare-metal) and Type 2 (hosted) hypervisors; protect and patch the hypervisor.",
+          "Risks: VM sprawl, VM escape, insecure templates."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.8.2",
+         "title": "Virtual Circuits",
+         "page": 462,
+         "points": [
+          "Logical connections over shared networks.",
+          "Virtual circuits are logical paths across shared networks."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.8.3",
+         "title": "Virtual Local Area Network",
+         "page": 462,
+         "points": [
+          "Logical segmentation of a LAN at layer 2.",
+          "VLANs segment networks logically; protect against VLAN hopping."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.8.4",
+         "title": "Virtual Storage Area Networks",
+         "page": 463,
+         "points": [
+          "Logical partitions of a SAN.",
+          "VSANs partition storage networks for isolation and management."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.8.5",
+         "title": "Software-Defined Networking",
+         "page": 464,
+         "points": [
+          "Central controller programs the network; protect the controller.",
+          "SDN centralises network control; the controller must be strongly protected."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.8.6",
+         "title": "Containerization",
+         "page": 466,
+         "points": [
+          "Lightweight isolation (e.g. Docker); secure images and orchestration.",
+          "Containers share the host kernel; secure images, registries and orchestration (e.g. Kubernetes)."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.8.7",
+         "title": "Secure Cloud Migration",
+         "page": 469,
+         "points": [
+          "Plan security, data protection and compliance before moving to cloud.",
+          "Plan data classification, legal requirements, IAM and encryption before migrating."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.8.8",
+         "title": "The Shared Responsibility Model",
+         "page": 471,
+         "points": [
+          "Split of duties between provider and customer by service model.",
+          "IaaS: customer manages OS and up. PaaS: customer manages apps and data. SaaS: customer manages data and access."
+         ],
+         "tip": "The customer is always accountable for its data."
+        },
+        {
+         "id": "5.8.9",
+         "title": "Key Risk in Cloud Environments",
+         "page": 473,
+         "points": [
+          "Misconfiguration, weak IAM, data location, vendor lock-in, insecure APIs.",
+          "Misconfiguration, weak IAM, insecure APIs, data residency, lock-in and provider failure."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.8.10",
+         "title": "DevSecOps",
+         "page": 474,
+         "points": [
+          "Security automated within CI/CD pipelines.",
+          "Integrate security testing (SAST, DAST, dependency checks) into CI/CD pipelines."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1543,6 +4253,109 @@
        ],
        "traps": [
         "Remote wipe and encryption are key for lost or stolen devices."
+       ],
+       "subs": [
+        {
+         "id": "5.9.1",
+         "title": "Mobile Computing",
+         "page": 476,
+         "points": [
+          "Smartphones and tablets accessing corporate data.",
+          "Mobile devices extend access but are easily lost and connect to untrusted networks."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.9.2",
+         "title": "Mobile Device Threats",
+         "page": 476,
+         "points": [
+          "Loss/theft, malicious apps, insecure networks, data leakage.",
+          "Threats: loss/theft, malicious apps, insecure Wi-Fi, outdated OS, data leakage."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.9.3",
+         "title": "Mobile Device Controls",
+         "page": 477,
+         "points": [
+          "Encryption, passcodes, remote wipe, app control.",
+          "Controls: device encryption, passcodes, remote wipe, app whitelisting, OS updates."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.9.4",
+         "title": "Mobile Device Management",
+         "page": 478,
+         "points": [
+          "Central enforcement of mobile policies.",
+          "MDM enforces policies centrally and can containerise corporate data."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.9.5",
+         "title": "Bring Your Own Device",
+         "page": 479,
+         "points": [
+          "Policy, containerisation, user agreement, privacy considerations.",
+          "BYOD needs a policy, user agreement, containerisation and respect for privacy."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.9.6",
+         "title": "Internet Access on Mobile Devices",
+         "page": 480,
+         "points": [
+          "Risks of public Wi-Fi; use VPN and secure DNS.",
+          "Public Wi-Fi risks: interception and rogue hotspots; use VPN."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.9.7",
+         "title": "Audit Procedures for Mobile Devices",
+         "page": 481,
+         "points": [
+          "Review MDM coverage, policies and lost-device handling.",
+          "Review MDM coverage, policy enforcement, lost-device process and app controls."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.9.8",
+         "title": "Mobile Payment Systems",
+         "page": 482,
+         "points": [
+          "Tokenisation, secure elements, fraud monitoring.",
+          "Use tokenisation, secure elements and fraud monitoring for mobile payments."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.9.9",
+         "title": "Wireless Networks",
+         "page": 484,
+         "points": [
+          "WPA2/WPA3, enterprise authentication, rogue AP detection.",
+          "Use WPA2/WPA3-Enterprise, strong authentication, rogue AP detection and segmentation of guest Wi-Fi."
+         ],
+         "tip": "WEP is broken; hiding SSIDs is not security."
+        },
+        {
+         "id": "5.9.10",
+         "title": "Internet of Things",
+         "page": 490,
+         "points": [
+          "Default credentials, weak patching; segment and inventory devices.",
+          "IoT risks: default credentials, weak patching, insecure protocols.",
+          "Controls: inventory, segmentation, credential changes, firmware updates."
+         ],
+         "tip": null
+        }
        ]
       }
      ]
@@ -1572,6 +4385,68 @@
        ],
        "traps": [
         "Awareness is the best control against social engineering."
+       ],
+       "subs": [
+        {
+         "id": "5.10.1",
+         "title": "The Information Security Learning Continuum",
+         "page": 493,
+         "points": [
+          "Awareness → training → education → professional development.",
+          "Awareness (all staff) → training (role-based skills) → education (specialists)."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.10.2",
+         "title": "Benefits of a Security Awareness, Training and Education Program",
+         "page": 494,
+         "points": [
+          "Fewer incidents, better reporting, compliance.",
+          "Benefits: fewer incidents, faster reporting, compliance, security culture."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.10.3",
+         "title": "Approach to Security Awareness, Training and Education",
+         "page": 494,
+         "points": [
+          "Role-based, regular, engaging content.",
+          "Use varied methods: e-learning, simulations, briefings, reminders."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.10.4",
+         "title": "Conditions for a Successful Program",
+         "page": 494,
+         "points": [
+          "Management support, measurement, relevance and repetition.",
+          "Needs management support, relevance, regular delivery and measurement."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.10.5",
+         "title": "Conducting a Needs Assessment",
+         "page": 495,
+         "points": [
+          "Identify audiences, gaps and priorities.",
+          "Identify audiences, risks and knowledge gaps before designing content."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.10.6",
+         "title": "Implementing an Awareness and Training Program",
+         "page": 496,
+         "points": [
+          "Plan, deliver, measure and improve.",
+          "Plan, deliver, track completion, test behaviour (e.g. phishing) and improve."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1596,6 +4471,50 @@
        ],
        "traps": [
         "Encryption is the best control against eavesdropping."
+       ],
+       "subs": [
+        {
+         "id": "5.11.1",
+         "title": "Fraud Risk Factors",
+         "page": 498,
+         "points": [
+          "Pressure, opportunity and rationalisation (fraud triangle).",
+          "Fraud triangle: pressure, opportunity, rationalisation; controls reduce opportunity."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.11.2",
+         "title": "Computer Crime Issues and Exposures",
+         "page": 498,
+         "points": [
+          "Financial loss, legal, reputation; perpetrators inside and outside.",
+          "Exposures: financial loss, legal repercussions, reputation damage, loss of competitive advantage.",
+          "Perpetrators: insiders, former employees, hackers, organised crime, nation states."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.11.3",
+         "title": "Internet Threats and Security",
+         "page": 507,
+         "points": [
+          "Phishing, web attacks, network-based attacks.",
+          "Internet threats include phishing, web application attacks, DDoS and man-in-the-middle."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.11.4",
+         "title": "Malware",
+         "page": 508,
+         "points": [
+          "Viruses, worms, trojans, ransomware, spyware; layered defences and backups.",
+          "Viruses, worms, trojans, ransomware, spyware, rootkits.",
+          "Defences: anti-malware/EDR, patching, least privilege, email filtering, backups."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1620,6 +4539,89 @@
        ],
        "traps": [
         "Never test without written management approval."
+       ],
+       "subs": [
+        {
+         "id": "5.12.1",
+         "title": "Objectives of Security Testing",
+         "page": 513,
+         "points": [
+          "Identify weaknesses and confirm controls work.",
+          "Security testing confirms controls work and identifies weaknesses before attackers do."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.12.2",
+         "title": "Security Assessments and Security Audits",
+         "page": 513,
+         "points": [
+          "Assessments find weaknesses; audits compare against criteria.",
+          "Assessments look for weaknesses; audits compare against defined criteria and give assurance."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.12.3",
+         "title": "Vulnerability Assessments",
+         "page": 514,
+         "points": [
+          "Scan for known vulnerabilities and prioritise fixes.",
+          "Scanners identify known vulnerabilities; results must be validated and prioritised."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.12.4",
+         "title": "Penetration Tests",
+         "page": 514,
+         "points": [
+          "Simulate attacks; black/white/grey box; authorised scope and rules of engagement.",
+          "Phases: planning, discovery, attack, reporting.",
+          "Black box (no knowledge), white box (full knowledge), grey box (partial)."
+         ],
+         "tip": "Always get written authorisation first."
+        },
+        {
+         "id": "5.12.5",
+         "title": "Threat Readiness/Information Security Teams",
+         "page": 519,
+         "points": [
+          "Red, blue and purple teams test and improve defences.",
+          "Red teams attack, blue teams defend, purple teams combine both to improve detection."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.12.6",
+         "title": "Security Testing Techniques",
+         "page": 520,
+         "points": [
+          "Code review, fuzzing, configuration review, social engineering tests.",
+          "Techniques include code review, fuzzing, configuration review and social engineering tests."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.12.7",
+         "title": "Security Operations Center",
+         "page": 520,
+         "points": [
+          "Monitors, detects and responds to security events.",
+          "A SOC monitors events 24/7, triages alerts and coordinates response."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.12.8",
+         "title": "Security Testing Audit Procedures",
+         "page": 522,
+         "points": [
+          "Check testing is authorised, scoped and findings are remediated.",
+          "Check testing is authorised, scoped, independent and that findings are tracked to closure."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1644,6 +4646,79 @@
        ],
        "traps": [
         "Collecting logs without reviewing them gives little protection."
+       ],
+       "subs": [
+        {
+         "id": "5.13.1",
+         "title": "Information Security Monitoring",
+         "page": 524,
+         "points": [
+          "Continuous monitoring of events to detect threats.",
+          "Continuous monitoring detects threats and policy violations in time to act."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.13.2",
+         "title": "Intrusion Detection Systems",
+         "page": 524,
+         "points": [
+          "Network/host-based; signature, anomaly or behaviour-based detection.",
+          "NIDS monitors network traffic; HIDS monitors hosts.",
+          "Signature-based detects known attacks; anomaly-based detects deviations but has more false positives."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.13.3",
+         "title": "Intrusion Prevention Systems",
+         "page": 525,
+         "points": [
+          "In-line systems that block detected attacks.",
+          "IPS sits in-line and blocks attacks; risk of blocking legitimate traffic."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.13.4",
+         "title": "Audit Logging in Monitoring System Access",
+         "page": 527,
+         "points": [
+          "Log access events, review regularly, protect logs.",
+          "Log successful and failed access, privilege use and changes; review regularly."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.13.5",
+         "title": "Protecting Log Data",
+         "page": 529,
+         "points": [
+          "Restrict access, integrity checks, central storage, retention.",
+          "Protect logs with restricted access, integrity checks, central storage and retention rules."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.13.6",
+         "title": "Security Information and Event Management",
+         "page": 529,
+         "points": [
+          "Collects and correlates logs, generates alerts.",
+          "SIEM aggregates and correlates logs, generates alerts and supports investigations."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.13.7",
+         "title": "Security Monitoring Tools",
+         "page": 532,
+         "points": [
+          "SIEM, IDS/IPS, EDR, network analytics.",
+          "Tools: SIEM, IDS/IPS, EDR, NDR, vulnerability scanners, file integrity monitoring."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1668,6 +4743,48 @@
        ],
        "traps": [
         "Containment comes before eradication."
+       ],
+       "subs": [
+        {
+         "id": "5.14.1",
+         "title": "Incident Response Process",
+         "page": 532,
+         "points": [
+          "Prepare, detect, contain, eradicate, recover, learn.",
+          "Preparation, detection/analysis, containment, eradication, recovery, post-incident review."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.14.2",
+         "title": "Computer Security Incident Response Team",
+         "page": 534,
+         "points": [
+          "Trained team with defined authority and contacts.",
+          "A CSIRT has defined roles, authority, contacts and trained members."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.14.3",
+         "title": "Incident Response Plan",
+         "page": 535,
+         "points": [
+          "Documented procedures, roles, escalation and communications.",
+          "The IR plan defines procedures, escalation, communication and legal/regulatory notification."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.14.4",
+         "title": "Security Orchestration, Automation and Response",
+         "page": 536,
+         "points": [
+          "SOAR automates routine response actions using playbooks.",
+          "SOAR automates repetitive response steps using playbooks to speed containment."
+         ],
+         "tip": null
+        }
        ]
       },
       {
@@ -1692,6 +4809,87 @@
        ],
        "traps": [
         "Powering off or browsing a suspect machine can destroy evidence."
+       ],
+       "subs": [
+        {
+         "id": "5.15.1",
+         "title": "Types of Investigations",
+         "page": 537,
+         "points": [
+          "Criminal, civil, regulatory and internal investigations.",
+          "Investigations may be criminal, civil, regulatory or internal; each has evidence requirements."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.15.2",
+         "title": "Types of Computer Forensics",
+         "page": 538,
+         "points": [
+          "Disk, memory, network, mobile and cloud forensics."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.15.3",
+         "title": "Phases of Computer Forensics",
+         "page": 539,
+         "points": [
+          "Identify, preserve, analyse, present.",
+          "Identify, preserve, analyse, present; document every step."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.15.4",
+         "title": "Audit Considerations",
+         "page": 539,
+         "points": [
+          "Check readiness procedures and evidence handling.",
+          "Auditors check forensic readiness, policies and evidence-handling procedures."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.15.5",
+         "title": "Computer Forensic Techniques",
+         "page": 540,
+         "points": [
+          "Imaging, hashing, timeline analysis, data carving.",
+          "Imaging with write blockers, hashing, timeline analysis, file carving."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.15.6",
+         "title": "Computer Forensics Tools",
+         "page": 541,
+         "points": [
+          "Specialised tools for imaging and analysis; validated before use.",
+          "Use validated tools; record versions used."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.15.7",
+         "title": "Chain of Custody",
+         "page": 542,
+         "points": [
+          "Record every transfer of evidence to keep it admissible.",
+          "Record who handled evidence, when and why, from collection to court."
+         ],
+         "tip": null
+        },
+        {
+         "id": "5.15.8",
+         "title": "Best Practices to Secure Digital Evidence",
+         "page": 542,
+         "points": [
+          "Work on copies, verify hashes, secure storage, document everything.",
+          "Work on copies, verify hashes, store securely, limit access, document everything."
+         ],
+         "tip": "Never analyse the original evidence."
+        }
        ]
       }
      ]
