@@ -243,3 +243,69 @@
   - It has a Popup switch, edit and delete within 5 minutes, and Read/Delivered receipts.
   - A banner appears when the learner writes while the window is closed, and unread badges show on the button and in the sidebar.
 - Cache `p2c-theory-v41-adminnav`.
+
+## V20 — Full-screen chat, like WhatsApp
+- **Admin Messages:**
+  - On a laptop it opens as a large two-pane window: a learner list on the left (search, last message, time, unread count) and the conversation on the right.
+  - On a phone it fills the whole screen like WhatsApp: a header with the learner's name and online/last seen, then messages, with the message box fixed at the bottom above the keyboard. A back arrow appears when there's more than one learner.
+- **Learner chat** is also full screen on phones.
+- **Message bubbles** now show the time and ticks inside the bubble: ✓ delivered, ✓✓ read. "Edited" shows next to the time.
+- **Screen sizes:** the page no longer scrolls sideways at 360, 600, 768 or 1024 px. Long email addresses are shortened with "…".
+- Cache `p2c-theory-v42-wa`.
+
+## V20.1 — Never mix new and old files
+- Fixes "Messages not ready" on a learner's device that still had an old `cisa/learner-coach.js` in its browser cache.
+- The service worker now re-checks each file with the server (`cache: 'no-cache'`) instead of trusting the browser's 10-minute cache.
+- On-demand modules load with a version tag (`?v=43`).
+- If an outdated chat module is still detected, the app loads a fresh copy automatically.
+- If Messages still can't open, the dialog offers **Reload now** and shows the reason.
+- Cache `p2c-theory-v43-fresh`.
+
+## V21 — AI Compliance Academy (replaces GRC)
+
+- The GRC academy has been replaced by the **AI Compliance Academy**: 25 modules, 150 lessons, 150 checkpoint questions.
+- **How AI works (basics):** AB01 to AB05 cover types of AI, how models learn, how LLMs work, prompts, RAG and agents, and data, metrics and MLOps.
+- **Levels:**
+  - Level 1, Beginner (AI01 to AI04)
+  - Level 2, Practitioner: EU AI Act, NIST AI RMF and data protection (AI05 to AI08)
+  - Level 3, Advanced: ISO/IEC 42001, risk and impact assessment, lifecycle (AI09 to AI12)
+  - Level 4, Expert: fairness, GenAI security, third parties, UAE and Dubai, India (AI13 to AI17)
+  - Level 5, Hero: auditing, leadership, AIGP and 42001 LA exam prep, capstone (AI18 to AI20)
+- **Content:** aligned to the IAPP AIGP BoK v2.1 and the ISO/IEC 42001 Lead Auditor. Includes the 2026 EU Digital Omnibus dates, the UAE (PDPL, DIFC Regulation 10, ADGM, CBUAE 2026) and India (AI Governance Guidelines 2025, DPDP Rules 2025, IT Rules SGI 2026, RBI FREE-AI).
+- **New files:** `content/ai-compliance.js` and `content/aic-0.js` to `content/aic-5.js`.
+- **Progress:** AI Compliance progress keys are `ai##` and `ab##`. Old GRC progress stays in Firestore but is no longer shown.
+- **Versions:** service worker cache `p2c-theory-v44-aic`, APP_V 44.
+
+## V22: AI Compliance study area
+
+These new tabs sit inside AI Compliance. Everything is for study only; there is nothing to fill in or submit.
+
+- **Assessment guides:** 8 read-only guides showing how real AI assessments work:
+  - AI inventory
+  - Risk and impact assessment
+  - Vendor due diligence
+  - Evidence request list
+  - Model documentation review
+  - ISO/IEC 42001 Statement of Applicability (all 38 Annex A controls)
+  - Findings register
+  - AI incident report
+  
+  Three of the guides include a worked example. Each guide can be marked as studied.
+- **Case studies:** 6 fictional situations with evidence:
+  - CV screening in Dubai and Berlin
+  - A UAE bank chatbot
+  - Credit scoring at an Indian NBFC
+  - A DIFC fraud model
+  - A staff GenAI rollout
+  - An ISO 42001 internal audit
+  
+  The learner reads each question, then reveals the explanation and key points.
+- **Knowledge checks:** untimed sets of 10 questions across 8 topic areas, plus a mixed set. Questions are drawn from the module checkpoints and 40 new scenario questions. Feedback is instant, with no pass mark, and the best score per area is kept.
+- **Library:** 46 official sources, each with a note on what to read, plus a "read" tick.
+- **What's changing:** 18 key dates for the EU, UAE and India. Content was verified on 3 Nov 2026 and is due for review in May 2027.
+- **Glossary:** 62 AI terms, also available as an "AI Compliance" flashcard deck and in search.
+- **Academy page:** new tab bar and a "Go deeper" strip.
+- **Admin portal:** new AI Compliance panel showing lessons, knowledge-check scores, case studies and library progress.
+- **Storage:** progress is stored in `users/{uid}/grcProgress` (keys `gd-`, `cs-`, `kc-`, `lib`), so no Firestore rule changes are needed.
+- **New files:** `content/aic-work.js`, `content/aic-toolkit.js`, `content/aic-cases.js`, `content/aic-checks.js`, `content/aic-library.js`.
+- **Versions:** APP_V 45, service worker cache `p2c-theory-v45-aicw`.

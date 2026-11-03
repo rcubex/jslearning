@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JS Learning check</title>
+<style>
+:root{--blue:#0a84ff;--red:#ff3b30;--green:#248a3d;--line:rgba(60,60,67,.16)}
+body{margin:0;background:#eef2f8;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;color:#1d1d1f}
+main{max-width:640px;margin:32px auto;padding:0 16px}
+h1{font-size:24px;margin:0 0 4px;letter-spacing:-.02em}p.sub{margin:0 0 18px;color:#555}
+.card{background:#fff;border-radius:18px;box-shadow:0 1px 2px rgba(0,0,0,.05),0 8px 24px rgba(15,23,42,.06);padding:6px 0;margin-bottom:16px}
+.row{display:flex;gap:12px;align-items:flex-start;padding:11px 16px;border-bottom:.5px solid var(--line)}.row:last-child{border-bottom:0}
+.row b{flex:none;width:22px;text-align:center}.row div{flex:1;min-width:0}.row small{display:block;color:#666;word-break:break-word}
+.ok b{color:var(--green)}.bad b{color:var(--red)}.wait b{color:#999}
+button{border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:600;cursor:pointer}
+.pri{background:var(--blue);color:#fff}.sec{background:rgba(118,118,128,.12);color:#1d1d1f}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+textarea{width:100%;box-sizing:border-box;min-height:120px;border:0;border-radius:12px;background:rgba(118,118,128,.12);padding:10px;font:12px/1.4 ui-monospace,Consolas,monospace}
+</style></head>
+<body><main>
+<h1>App check</h1><p class="sub">Checks that this browser has the latest JS Learning files. Nothing here signs you in or changes your study progress.</p>
+<div class="card" id="list"></div>
+<div class="btns"><button class="pri" id="fix">Reset the app in this browser</button><button class="sec" id="copy">Copy report</button><a href="./"><button class="sec" type="button">Open JS Learning</button></a></div>
+<p class="sub" style="margin-top:14px">The reset removes the app’s saved copy of its files (not your account data) and reloads the latest version. Then sign in again.</p>
+<textarea id="rep" readonly aria-label="Report"></textarea>
+</main>
+<script type="module">
+const list=document.getElementById('list'), rep=document.getElementById('rep'), lines=[];
+function row(state,title,detail){const d=document.createElement('div');d.className='row '+state;d.innerHTML=`<b>${state==='ok'?'✓':state==='bad'?'✕':'…'}</b><div>${title}<small>${detail||''}</small></div>`;list.appendChild(d);lines.push(`${state.toUpperCase()} ${title}${detail?' — '+detail.replace(/<[^>]+>/g,''):''}`);rep.value=lines.join('\n');}
+row('ok','Browser',navigator.userAgent);
+async function text(u){const r=await fetch(u+(u.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);return r.text();}
+try{const t=await text('./index.html');const v=(/const APP_V='(\d+)'/.exec(t)||[])[1];row(v?'ok':'bad','index.html on the server',v?'version '+v:'old version (no version tag) — upload the latest index.html');}catch(e){row('bad','index.html on the server',String(e));}
+try{const t=await text('./cisa/learner-coach.js');const v=(/VERSION = '(\d+)'/.exec(t)||[])[1];row(v&&/__openChat/.test(t)?'ok':'bad','cisa/learner-coach.js on the server',v?'version '+v:'old version — upload the latest cisa folder');}catch(e){row('bad','cisa/learner-coach.js on the server',String(e)+' — upload the cisa folder');}
+try{const t=await text('./cisa/ui-dialog.js');row('ok','cisa/ui-dialog.js on the server',(t.length/1024).toFixed(1)+' KB');}catch(e){row('bad','cisa/ui-dialog.js on the server',String(e));}
+try{const t=await text('./service-worker.js');row('ok','service-worker.js on the server',(/CACHE='([^']+)'/.exec(t)||[])[1]||'?');}catch(e){row('bad','service-worker.js on the server',String(e));}
+try{const m=await import('./cisa/learner-coach.js?v=check-'+Date.now());row(typeof m.startCoach==='function'?'ok':'bad','Chat module loads in this browser','version '+(m.VERSION||'old'));}catch(e){row('bad','Chat module loads in this browser',(e&&e.message||String(e))+' — an extension, antivirus or network filter may be blocking it');}
+try{const regs=navigator.serviceWorker?await navigator.serviceWorker.getRegistrations():[];const keys=window.caches?await caches.keys():[];row('ok','Saved app copy in this browser',`${regs.length} service worker(s) · caches: ${keys.join(', ')||'none'}`);}catch(e){row('bad','Saved app copy in this browser',String(e));}
+document.getElementById('fix').onclick=async()=>{try{if(navigator.serviceWorker)for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister();if(window.caches)for(const k of await caches.keys())await caches.delete(k);}catch(e){}location.href='./?fresh='+Date.now();};
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(rep.value);document.getElementById('copy').textContent='Copied';}catch(e){rep.select();}};
+</script></body></html>
