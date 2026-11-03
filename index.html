@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="JS Learning">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="./cisa/cisa.css">
+<link rel="stylesheet" href="./cisa/cisa.css?v=48">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
 
 /* Theory-first responsive reading experience */
@@ -3113,7 +3113,20 @@ const app=document.getElementById('app');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=s=>esc(s).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
 const TIPK={'Tip':'tip','Watch out':'warn','In the cloud':'cloud','Analogy':'ana'};
-function renderBlocks(bl){return bl.map(b=>b.k==='p'?`<p>${fmt(b.x)}</p>`:b.k==='ul'?`<ul class="pts">${b.x.map(x=>`<li>${fmt(x)}</li>`).join('')}</ul>`:b.k==='ol'?`<ol class="steps">${b.x.map(x=>`<li>${fmt(x)}</li>`).join('')}</ol>`:b.k==='code'?`<figure class="ex">${b.t?`<figcaption>${esc(b.t)}</figcaption>`:''}<pre><code>${esc(b.x)}</code></pre></figure>`:`<aside class="callout ${TIPK[b.kind]||'tip'}"><b>${esc(b.kind)}</b><span>${fmt(b.x)}</span></aside>`).join('');}
+function renderVisual(b){
+ if(b.k==='br')return `<aside class="ib-br"><b>From traditional GRC</b><div>${fmt(b.x)}</div></aside>`;
+ if(b.k==='ap')return `<aside class="ib-ap"><b>${esc(b.t||'Apply it in an assessment')}</b>${b.x?`<div>${fmt(b.x)}</div>`:''}${b.s?`<ol>${b.s.map(x=>`<li>${fmt(x)}</li>`).join('')}</ol>`:''}</aside>`;
+ if(b.k==='vis')return '';
+ if(b.k==='h')return `<h5 class="ib-h">${fmt(b.x)}</h5>`;
+ if(b.k==='gr')return `<aside class="ib-gr"><b>Why this matters for GRC</b><div>${fmt(b.x)}</div></aside>`;
+ if(b.k==='simple')return `<aside class="ib-simple"><b>In simple words</b><p>${fmt(b.x)}</p></aside>`;
+ if(b.k==='ex')return `<aside class="ib-ex"><b>${esc(b.t||'Example')}</b><div>${fmt(b.x)}</div></aside>`;
+ if(b.k==='flow')return `<figure class="ib-flow${b.v?' v':''}">${b.t?`<figcaption>${esc(b.t)}</figcaption>`:''}<ol>${b.s.map((x,i)=>`<li><span class="n">${i+1}</span><b>${esc(x[0])}</b>${x[1]?`<small>${fmt(x[1])}</small>`:''}</li>`).join('')}</ol>${b.loop?`<div class="ib-loop">↻ ${fmt(b.loop)}</div>`:''}</figure>`;
+ if(b.k==='cmp')return `<figure class="ib-cmp">${b.t?`<figcaption>${esc(b.t)}</figcaption>`:''}<div class="ib-scroll"><table><thead><tr>${b.h.map(x=>`<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${b.r.map(r=>`<tr>${r.map((c,i)=>i?`<td>${fmt(c)}</td>`:`<th scope="row">${fmt(c)}</th>`).join('')}</tr>`).join('')}</tbody></table></div></figure>`;
+ if(b.k==='cards')return `<div class="ib-cards">${b.c.map((c,i)=>`<div class="ib-card c${i%6}"><b>${esc(c[0])}</b><span>${fmt(c[1])}</span>${c[2]?`<em>${fmt(c[2])}</em>`:''}</div>`).join('')}</div>`;
+ if(b.k==='fig')return `<figure class="ib-fig"><div class="ib-scroll">${b.svg}</div>${b.cap?`<figcaption>${fmt(b.cap)}</figcaption>`:''}</figure>`;
+ return null;}
+function renderBlocks(bl){return bl.map(b=>{const v=renderVisual(b);if(v!==null)return v;return b.k==='p'?`<p>${fmt(b.x)}</p>`:b.k==='ul'?`<ul class="pts">${b.x.map(x=>`<li>${fmt(x)}</li>`).join('')}</ul>`:b.k==='ol'?`<ol class="steps">${b.x.map(x=>`<li>${fmt(x)}</li>`).join('')}</ol>`:b.k==='code'?`<figure class="ex">${b.t?`<figcaption>${esc(b.t)}</figcaption>`:''}<pre><code>${esc(b.x)}</code></pre></figure>`:`<aside class="callout ${TIPK[b.kind]||'tip'}"><b>${esc(b.kind)}</b><span>${fmt(b.x)}</span></aside>`}).join('');}
 const mins=l=>Math.max(1,Math.ceil(l.b.split(/\s+/).length/150));
 const openLessons=new Set();
 const readPrefs=(()=>{try{return JSON.parse(localStorage.getItem('p2c-reader-prefs'))||{}}catch{return {}}})();
@@ -3733,7 +3746,7 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='45';
+const APP_V='48';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){

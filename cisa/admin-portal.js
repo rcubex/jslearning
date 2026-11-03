@@ -4,11 +4,12 @@
    targets, assigned work, remote sign-out), a live chat with each learner, alerts and an audit
    trail. Reads learner data through the parent app; the admin never studies here. */
 import { learnerSnapshot } from './cisa-app.js';
-import { assignmentStatus, targetProgress, threadHTML } from './learner-coach.js';
+import { assignmentStatus, targetProgress, threadHTML, threadAction, EDIT_WINDOW } from './learner-coach.js';
 import { uiConfirm, uiAlert } from './ui-dialog.js';
 
 let root, api, learners = null, busy = false, err = '', loadedAt = null, refreshTimer = null;
 let sel = 0, view = 'overview', rep = 'week', off = { week: 0, biweek: 0, month: 0 }, logRange = '7', logArea = 'all', logType = 'all', logLimit = 150;
+const tst = { sel: null, editing: null }; let expiryTimer = null;
 let chats = {}, coachDocs = {}, unsubs = {}, bellOpen = false, exSel = null, exWrongOnly = true, manualList = null, assignType = 'topic', flash = '';
 const banks = {};
 const LOOKBACK = 150; // days of activity loaded
@@ -50,7 +51,7 @@ async function load() {
       return out;
     }));
   } catch (e) { err = 'Could not load learners. Check your connection.'; learners = learners || []; }
-  loadedAt = new Date(); busy = false; if (sel >= (learners || []).length) sel = 0; render();
+  loadedAt = new Date(); busy = false; if (sel >= (learners || []).length) sel = 0; render(); renderChatWin(true);
 }
 
 const SKIP_EVENTS = /^(Completed mock exam|Finished quick quiz|Ended quick quiz|Finished \d+-minute focus|Logged a study session)/;
@@ -157,8 +158,19 @@ function overviewUI(L) {
    <div class="adm-kpis six">${kpi('Readiness', s.ready === null ? '–' : s.ready + '%', 'first mock attempts')}${kpi('Topics done', `${s.done}/${s.total}`)}${kpi('Logged study', s.hours + 'h', 'all time')}${kpi('Recent quizzes', s.quiz === null ? '–' : s.quiz + '%')}${kpi('Mistakes due', s.mx)}${kpi('Manual read', `${s.manual}/60`)}</div>
    <div class="adm-doms">${s.scores.map(d => `<div><span>D${d.domain}</span><div class="adm-meter"><i style="width:${d.accuracy ?? 0}%"></i></div><small>${d.accuracy === null ? 'no data' : d.accuracy + '%'} · ${d.coverage}% covered</small></div>`).join('')}</div>
    <p class="cisa-mini">Mock first attempts: ${s.mocks.length ? s.mocks.map(m => `Mock ${m.id} ${m.p}%`).join(' · ') : 'none yet'}</p></section>` : ''}
+  ${aicUI(L)}
   <section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">This week</span><h3 class="ed-title">${dur(wk.app)} in the app · ${wk.active} active day${wk.active === 1 ? '' : 's'}</h3><p class="ed-sub">Last 14 days below</p></div>${btn('go-week', 'Weekly report', 'sm')}</div>${bars(st.days, true)}</section>
   <section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">Recent activity</span><h3 class="ed-title">Latest 10 entries</h3></div>${btn('go-log', 'Full activity log', 'sm')}</div>${logTable(recent, false)}</section>`;
+}
+
+function aicUI(L) {
+  const a = L.data && L.data.aic; if (!a) return '';
+  const ck = Object.values(a.checks || {}), cs = Object.values(a.cases || {}), csDone = cs.filter(c => c.done === c.of).length, csT = a.casesTotal || 6;
+  const avg = ck.length ? Math.round(ck.reduce((x, c) => x + (c.best || 0), 0) / ck.length) : null;
+  return `<section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">AI Compliance</span><h3 class="ed-title">${a.lessons}/${a.total} lessons · ${csDone}/${csT} case studies · ${a.guides || 0}/${a.guidesTotal || 8} guides</h3><p class="ed-sub">Updated ${h(fmtShort((a.at || '').slice(0, 10)))}</p></div></div>
+  <div class="adm-kpis">${kpi('Lessons', a.total ? Math.round(a.lessons / a.total * 100) + '%' : '–', a.lessons + ' read')}${kpi('Knowledge checks', avg === null ? '–' : avg + '%', ck.length + ' area' + (ck.length === 1 ? '' : 's') + ' tried')}${kpi('Case studies', csDone + '/' + csT, 'studied')}${kpi('Library', (a.lib || 0) + '/' + (a.libTotal || 0), 'sources read')}</div>
+  ${ck.length ? `<div class="adm-doms">${ck.map(c => `<div><span>${h(c.name)}</span><div class="adm-meter"><i style="width:${c.best || 0}%"></i></div><small>best ${c.best}% · last ${c.last}% · ${c.n} set${c.n === 1 ? '' : 's'}</small></div>`).join('')}</div>` : ''}
+  ${cs.length ? `<p class="cisa-mini">Case studies: ${cs.map(c => `${h(c.t)} — ${c.done}/${c.of}`).join(' · ')}</p>` : ''}</section>`;
 }
 
 const KIND_LABEL = { time: 'Time', action: 'Action', logged: 'Logged' };
@@ -200,9 +212,11 @@ function subscribe(uid) {
   const fb = api.fb, list = [];
   try {
     list.push(fb.onSnapshot(fb.query(fb.collection(fb.fdb, 'chats', uid, 'messages'), fb.orderBy('at')), snap => {
+      const prevIds = chats[uid] ? new Set(chats[uid].map(m => m.id)) : null;
       chats[uid] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (view === 'chat' && learners && learners[sel] && learners[sel].uid === uid) markLearnerSeen(uid);
-      softRender();
+      if (prevIds) { const fresh = chats[uid].filter(m => !prevIds.has(m.id) && m.from === 'learner' && !m.deleted); const viewing = chatOpen && (convOpen || !isNarrow()) && document.visibilityState === 'visible' && learners && learners[sel] && learners[sel].uid === uid; if (fresh.length && !viewing) chatToast(uid, fresh[fresh.length - 1].text); }
+      if (chatOpen && (convOpen || !isNarrow()) && learners && learners[sel] && learners[sel].uid === uid) markLearnerSeen(uid);
+      renderChatWin(); softRender();
     }, e => { chats[uid] = chats[uid] || []; chats[uid].error = String(e && e.code || e); softRender(); }));
     list.push(fb.onSnapshot(fb.doc(fb.fdb, 'coach', uid), s => { coachDocs[uid] = s.exists() ? s.data() : {}; softRender(); }, e => { coachDocs[uid] = coachDocs[uid] || {}; }));
   } catch (e) { console.warn('admin subscribe failed', e); }
@@ -211,7 +225,7 @@ function subscribe(uid) {
 function unsubscribeAll() { for (const l of Object.values(unsubs)) for (const f of l) { try { f(); } catch (e) { } } unsubs = {}; }
 let softQ = 0; function softRender() { if (softQ) return; softQ = 1; requestAnimationFrame(() => { softQ = 0; render(); }); }
 async function markLearnerSeen(uid) {
-  const fb = api.fb; for (const m of (chats[uid] || []).filter(m => m.from === 'learner' && !m.seenAt)) { try { await fb.updateDoc(fb.doc(fb.fdb, 'chats', uid, 'messages', m.id), { seenAt: Date.now() }); } catch (e) { } }
+  const fb = api.fb; for (const m of (chats[uid] || []).filter(m => m.from === 'learner' && !m.seenAt && !m.deleted)) { try { await fb.updateDoc(fb.doc(fb.fdb, 'chats', uid, 'messages', m.id), { seenAt: Date.now() }); } catch (e) { } }
 }
 async function saveCoach(uid, patch, auditText) {
   const fb = api.fb, cur = coachDocs[uid] || {};
@@ -226,7 +240,7 @@ async function sendMsg(uid, text, kind, title) {
   try { await fb.addDoc(fb.collection(fb.fdb, 'chats', uid, 'messages'), { from: 'admin', text: text.slice(0, 2000), kind, title: (title || '').slice(0, 80), at: Date.now(), seenAt: null }); if (kind === 'popup') saveCoach(uid, {}, `Sent popup message${title ? ' “' + title + '”' : ''}`); return true; }
   catch (e) { uiAlert('Check the connection and that the latest firestore.rules are published in the Firebase Console.', { title: 'Message not sent' }); return false; }
 }
-const unreadOf = uid => (chats[uid] || []).filter(m => m.from === 'learner' && !m.seenAt).length;
+const unreadOf = uid => (chats[uid] || []).filter(m => m.from === 'learner' && !m.seenAt && !m.deleted).length;
 const actRowsRaw = L => (L.act && L.act.rows) || [];
 
 /* ---------- alerts ---------- */
@@ -238,7 +252,7 @@ function alertsOf(L) {
   if (idle !== null && idle >= 3) out.push({ id: 'idle-' + today(), kind: 'warn', text: `${who} hasn’t been active for ${idle} days`, go: 'habits' });
   for (const a of cd.assignments || []) if (assignmentStatus(a, L.data) === 'overdue') out.push({ id: 'over-' + a.id, kind: 'warn', text: `Overdue: ${a.label} (due ${fmtShort(a.due)})`, go: 'coaching' });
   if (cd.targets && cd.targets.hours) { const wd = (new Date().getDay() + 6) % 7; const from = mondayOf(today()); const pr = targetProgress(L.data, actRowsRaw(L), from, addDays(from, 6)); if (wd >= 3 && pr.hours < cd.targets.hours * 0.5) out.push({ id: 'behind-' + from, kind: 'warn', text: `Behind this week’s target: ${pr.hours.toFixed(1)} of ${cd.targets.hours} hours`, go: 'coaching' }); }
-  for (const m of chats[L.uid] || []) if (m.from === 'admin' && m.kind === 'popup' && !m.seenAt && Date.now() - m.at > 2 * 864e5) out.push({ id: 'pop-' + m.id, kind: 'info', text: `Popup “${m.title || m.text.slice(0, 30)}” not seen for ${Math.floor((Date.now() - m.at) / 864e5)} days`, go: 'coaching' });
+  for (const m of chats[L.uid] || []) if (m.from === 'admin' && m.kind === 'popup' && !m.seenAt && !m.deleted && Date.now() - m.at > 2 * 864e5) out.push({ id: 'pop-' + m.id, kind: 'info', text: `Popup “${m.title || m.text.slice(0, 30)}” not seen for ${Math.floor((Date.now() - m.at) / 864e5)} days`, go: 'coaching' });
   for (const r of c.results || []) { const p = pct(r.correct, r.total); if (r.date && Date.now() - new Date(r.date) < 7 * 864e5 && p < 60) out.push({ id: 'mock-' + r.id, kind: 'warn', text: `Mock ${r.mockId} score ${p}% on ${fmtShort(dOf(r.date))}`, go: 'exams' }); }
   if (s && s.days <= 30 && (s.ready === null || s.ready < 65)) out.push({ id: 'ready-' + mondayOf(today()), kind: 'warn', text: `Exam in ${s.days} days, readiness ${s.ready === null ? 'not measured' : s.ready + '%'}`, go: 'exams' });
   const dm = dismissed(); return out.filter(a => !dm[L.uid + ':' + a.id]).map(a => ({ ...a, uid: L.uid }));
@@ -381,7 +395,7 @@ function habitsUI(L) {
 async function loadManual() { if (manualList) return; manualList = []; try { const g = await (await fetch(new URL('./data/manual-guide.json', import.meta.url))).json(); manualList = g.chapters.flatMap(c => c.parts.flatMap(p => p.sections.map(s => ({ id: s.id, title: s.title })))); } catch (e) { manualList = []; } render(); }
 function coachingUI(L) {
   const cd = coachDocs[L.uid] || {}, t = cd.targets || {}, s = L.snap || {}, msgs = chats[L.uid] || [], live = isLive(L);
-  const pops = msgs.filter(m => m.from === 'admin' && m.kind === 'popup').reverse().slice(0, 8);
+  const pops = msgs.filter(m => m.from === 'admin' && m.kind === 'popup' && !m.deleted).reverse().slice(0, 8);
   const from = mondayOf(today()), pr = targetProgress(L.data, actRowsRaw(L), from, addDays(from, 6));
   const tg = (k, label, cur, unit, max) => `<label class="adm-tg"><span>${label}</span><input type="number" min="0" max="${max}" step="${k === 'hours' ? '0.5' : '1'}" name="${k}" value="${t[k] ?? ''}" placeholder="—" data-keep="tg-${k}"><small>${unit}</small><em>This week: ${cur}</em></label>`;
   if (assignType === 'manual') loadManual();
@@ -410,8 +424,111 @@ function isLive(L) { const p = L.act && L.act.profile; return !!(p && p.lastSeen
 /* ---------- chat ---------- */
 function chatUI(L) {
   const msgs = chats[L.uid] || [], live = isLive(L);
-  return `<section class="ed-card adm-sec adm-chat"><header><div class="lc-who"><span class="lc-av learner">${h(nameOf(L).charAt(0).toUpperCase())}${live ? '<i class="lc-live"></i>' : ''}</span><div><b>${h(nameOf(L))}</b><small>${live ? 'Active now' : 'Last active ' + h(ago(lastSeen(L)))}</small></div></div></header>${msgs.error ? `<p class="pl-err">Chat unavailable (${h(msgs.error)}). Publish the latest firestore.rules.</p>` : ''}<div class="lc-msgs adm-msgs">${threadHTML(msgs, 'admin', { live, emptyTitle: 'Start the conversation', empty: 'Messages appear on the learner’s screen with a notification. Tick Popup to show one as an alert.' })}</div>
+  return `<section class="ed-card adm-sec adm-chat"><header><div class="lc-who"><span class="lc-av learner">${h(nameOf(L).charAt(0).toUpperCase())}${live ? '<i class="lc-live"></i>' : ''}</span><div><b>${h(nameOf(L))}</b><small>${live ? 'Active now' : 'Last active ' + h(ago(lastSeen(L)))}</small></div></div></header>${msgs.error ? `<p class="pl-err">Chat unavailable (${h(msgs.error)}). Publish the latest firestore.rules.</p>` : ''}<div class="lc-msgs adm-msgs">${threadHTML(msgs, 'admin', { live, sel: tst.sel, editing: tst.editing, emptyTitle: 'Start the conversation', empty: 'Messages appear on the learner’s screen with a notification. Tick Popup to show one as an alert.' })}</div>
   <form class="lc-input adm-chat-input" data-form="chat"><label class="adm-aspop" title="Show this message as a popup alert"><input type="checkbox" name="popup" data-keep="chat-pop"><span>Popup</span></label><div class="lc-field"><textarea name="text" rows="1" maxlength="2000" placeholder="Message ${h(nameOf(L))}" aria-label="Message" data-keep="chat-text"></textarea><button type="submit" aria-label="Send"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></div></form></section>`;
+}
+
+/* ---------- floating chat window (same look as the learner's) ---------- */
+const CHAT_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg>';
+let chatEl = null, chatOpen = false, chatFor = null, convOpen = false, waQ = '';
+const BACK_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+const X_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+const isNarrow = () => window.matchMedia('(max-width:899px)').matches;
+function ensureChatEl() {
+  if (chatEl && chatEl.isConnected) return chatEl;
+  chatEl = document.createElement('div'); chatEl.id = 'admChat';
+  chatEl.innerHTML = `<button type="button" class="lc-fab" data-c="fab" aria-label="Messages" aria-expanded="false">${CHAT_SVG}<span class="lc-fab-t">Messages</span><b hidden>0</b></button>
+  <section class="wa" hidden role="dialog" aria-modal="true" aria-label="Messages">
+    <aside class="wa-list"><header class="wa-lh"><h2>Messages</h2><button type="button" class="wa-ic" data-c="close" aria-label="Close messages">${X_SVG}</button></header><div class="wa-search"><input type="search" placeholder="Search" aria-label="Search learners" data-c-q></div><div class="wa-items" role="list"></div></aside>
+    <main class="wa-conv"><header class="wa-ch"><button type="button" class="wa-ic wa-back" data-c="back" aria-label="Back to chats">${BACK_SVG}</button><div class="wa-who" data-c-who></div><button type="button" class="wa-ic wa-x" data-c="close" aria-label="Close messages">${X_SVG}</button></header>
+      <div class="lc-msgs adm-msgs wa-msgs"></div>
+      <form class="wa-input" data-c-form><label class="adm-aspop" title="Show this message as a popup alert"><input type="checkbox" name="popup"><span>Popup</span></label><div class="lc-field"><textarea name="text" rows="1" maxlength="2000" placeholder="Message" aria-label="Message"></textarea></div><button type="submit" class="wa-send" aria-label="Send" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></form>
+      <div class="wa-empty" hidden><div class="lc-empty-ic">${CHAT_SVG}</div><b>Select a learner</b><span>Choose a conversation on the left.</span></div>
+    </main>
+  </section>
+  <div class="lc-toast" hidden data-c="toast" role="status"></div>`;
+  document.body.appendChild(chatEl);
+  const ta = chatEl.querySelector('[data-c-form] textarea'), sendB = chatEl.querySelector('[data-c-form] .wa-send');
+  ta.addEventListener('input', () => { ta.style.height = 'auto'; ta.style.height = Math.min(140, ta.scrollHeight) + 'px'; sendB.disabled = !ta.value.trim(); });
+  chatEl.querySelector('[data-c-q]').addEventListener('input', e => { waQ = e.target.value.trim().toLowerCase(); renderChatWin(); });
+  chatEl.addEventListener('click', async e => {
+    if (e.target.closest('.adm-msgs')) { const c = winCtx(); if (c && await threadAction(e, c)) return; }
+    const it = e.target.closest('[data-c-uid]');
+    if (it) { const i = (learners || []).findIndex(x => x.uid === it.dataset.cUid); if (i >= 0) { if (i !== sel) { sel = i; tst.sel = tst.editing = null; render(); } openConv(); } return; }
+    const b = e.target.closest('[data-c]'); if (!b) return;
+    const a = b.dataset.c;
+    if (a === 'fab') openChat();
+    else if (a === 'close') closeChat();
+    else if (a === 'back') { convOpen = false; layoutWa(); }
+    else if (a === 'toast') { const i = (learners || []).findIndex(x => x.uid === b.dataset.uid); if (i >= 0 && i !== sel) { sel = i; render(); } openChat(); }
+  });
+  chatEl.addEventListener('submit', async e => {
+    if (e.target.closest('.adm-msgs')) { const c = winCtx(); if (c) await threadAction(e, c); return; }
+    e.preventDefault(); const L = learners && learners[sel]; if (!L) return;
+    const text = ta.value.trim(), pop = chatEl.querySelector('[name="popup"]'); if (!text) return;
+    ta.value = ''; ta.style.height = ''; sendB.disabled = true; const asPop = pop.checked; pop.checked = false; ta.focus();
+    if (!(await sendMsg(L.uid, text, asPop ? 'popup' : 'chat', ''))) { ta.value = text; sendB.disabled = false; }
+  });
+  chatEl.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey && !isNarrow() && e.target.matches('[data-c-form] textarea')) { e.preventDefault(); e.target.form.requestSubmit(); }
+    else if (e.key === 'Enter' && !e.shiftKey && e.target.matches('.lc-edit textarea')) { e.preventDefault(); e.target.form.requestSubmit(); }
+    else if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.adm-msgs [data-msg="sel"], [data-c-uid]')) { e.preventDefault(); e.target.click(); }
+    else if (e.key === 'Escape') { if (tst.sel || tst.editing) { tst.sel = tst.editing = null; renderChatWin(); } else if (isNarrow() && convOpen && (learners || []).length > 1) { convOpen = false; layoutWa(); } else closeChat(); }
+  });
+  // keep the composer above the on-screen keyboard
+  if (window.visualViewport) { const vv = () => { if (chatEl) chatEl.style.setProperty('--wa-h', window.visualViewport.height + 'px'); }; window.visualViewport.addEventListener('resize', vv); vv(); }
+  window.addEventListener('resize', () => layoutWa());
+  return chatEl;
+}
+function winCtx() { const L = learners && learners[sel]; const fb = api.fb; return L ? { me: 'admin', list: chats[L.uid] || [], ref: id => fb.doc(fb.fdb, 'chats', L.uid, 'messages', id), fb, st: tst, rerender: () => renderChatWin() } : null; }
+function layoutWa() {
+  if (!chatEl) return; const wa = chatEl.querySelector('.wa');
+  const showConv = !isNarrow() || convOpen;
+  wa.classList.toggle('conv', isNarrow() && convOpen);
+  chatEl.querySelector('.wa-back').hidden = !isNarrow() || (learners || []).length <= 1;
+  if (showConv && chatOpen) { const L = learners && learners[sel]; if (L) markLearnerSeen(L.uid); }
+}
+function lastMsg(uid) { const l = (chats[uid] || []); for (let i = l.length - 1; i >= 0; i--) if (!l[i].deleted || i === l.length - 1) return l[i]; return null; }
+function shortTime(ms) { const d = new Date(ms), t = new Date(); return d.toDateString() === t.toDateString() ? d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : (t - d < 6 * 864e5 ? d.toLocaleDateString('en-GB', { weekday: 'short' }) : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })); }
+function renderChatWin(force) {
+  if (!chatEl || !chatEl.isConnected) return;
+  const total = (learners || []).reduce((a, L) => a + unreadOf(L.uid), 0);
+  const badge = chatEl.querySelector('.lc-fab b'), fab = chatEl.querySelector('.lc-fab');
+  if (total > (+badge.textContent || 0) && !chatOpen) { fab.classList.remove('bump'); void fab.offsetWidth; fab.classList.add('bump'); }
+  badge.textContent = total > 9 ? '9+' : total; badge.hidden = !total;
+  const nb = document.getElementById('admNavBadge'); if (nb) { nb.textContent = badge.textContent; nb.hidden = !total; }
+  // conversation list
+  const items = chatEl.querySelector('.wa-items');
+  const ls = (learners || []).map((L, i) => ({ L, i, last: lastMsg(L.uid) })).filter(x => !waQ || nameOf(x.L).toLowerCase().includes(waQ)).sort((a, b) => (b.last ? b.last.at : 0) - (a.last ? a.last.at : 0));
+  items.innerHTML = ls.length ? ls.map(({ L, i, last }) => { const un = unreadOf(L.uid), live = isLive(L); const prev = !last ? 'No messages yet' : last.deleted ? 'Message deleted' : (last.from === 'admin' ? 'You: ' : '') + (last.kind === 'popup' ? '🔔 ' : '') + last.text; return `<div class="wa-item ${i === sel ? 'on' : ''}" role="listitem" tabindex="0" data-c-uid="${h(L.uid)}"><span class="lc-av learner">${h(nameOf(L).charAt(0).toUpperCase())}${live ? '<i class="lc-live"></i>' : ''}</span><div class="wa-it"><div class="wa-r1"><b>${h(nameOf(L))}</b><time class="${un ? 'un' : ''}">${last ? h(shortTime(last.at)) : ''}</time></div><div class="wa-r2"><span>${h(prev)}</span>${un ? `<em>${un}</em>` : ''}</div></div></div>`; }).join('') : `<p class="wa-none">${learners && learners.length ? 'No learner matches your search.' : 'No learners yet.'}</p>`;
+  // conversation
+  const L = learners && learners[sel]; const who = chatEl.querySelector('[data-c-who]'), list = chatEl.querySelector('.wa-msgs');
+  chatEl.querySelector('.wa-empty').hidden = !!L; chatEl.querySelector('[data-c-form]').hidden = !L;
+  if (!L) { who.innerHTML = ''; list.innerHTML = ''; layoutWa(); return; }
+  const live = isLive(L);
+  who.innerHTML = `<span class="lc-av learner">${h(nameOf(L).charAt(0).toUpperCase())}${live ? '<i class="lc-live"></i>' : ''}</span><div><b>${h(nameOf(L))}</b><small class="${live ? 'live' : ''}">${live ? 'online' : 'last seen ' + h(ago(lastSeen(L)))}</small></div>`;
+  chatEl.querySelector('[data-c-form] textarea').placeholder = 'Message';
+  const msgs = chats[L.uid] || [];
+  if (tst.editing && !msgs.some(m => m.id === tst.editing)) tst.editing = null;
+  const ed = list.querySelector('.lc-edit textarea'), edVal = ed ? ed.value : null, edFocus = ed && ed === document.activeElement;
+  const atBottom = force || chatFor !== L.uid || list.scrollHeight - list.scrollTop - list.clientHeight < 80; chatFor = L.uid;
+  list.innerHTML = msgs.error ? `<p class="pl-err">Chat unavailable (${h(msgs.error)}). Publish the latest firestore.rules.</p>` : threadHTML(msgs, 'admin', { live, sel: tst.sel, editing: tst.editing, emptyTitle: 'Start the conversation', empty: 'Your message appears on the learner’s screen with a notification. Turn on Popup to show it as an alert.' });
+  const ed2 = list.querySelector('.lc-edit textarea'); if (ed2 && edVal !== null) { ed2.value = edVal; if (edFocus) ed2.focus(); }
+  if (atBottom) list.scrollTop = list.scrollHeight;
+  layoutWa();
+}
+function openConv() { convOpen = true; layoutWa(); renderChatWin(true); setTimeout(() => { if (!isNarrow() || convOpen) chatEl && chatEl.querySelector('[data-c-form] textarea').focus({ preventScroll: true }); }, 120); }
+export function openChat() {
+  ensureChatEl(); chatOpen = true; const wa = chatEl.querySelector('.wa'); wa.hidden = false; requestAnimationFrame(() => wa.classList.add('on'));
+  document.documentElement.classList.add('wa-lock');
+  chatEl.querySelector('.lc-fab').setAttribute('aria-expanded', 'true'); chatEl.querySelector('.lc-toast').classList.remove('on');
+  convOpen = (learners || []).length <= 1 || convOpen; renderChatWin(true); if (convOpen || !isNarrow()) openConv();
+}
+function closeChat() { if (!chatEl) return; chatOpen = false; tst.sel = tst.editing = null; const wa = chatEl.querySelector('.wa'); wa.classList.remove('on'); document.documentElement.classList.remove('wa-lock'); chatEl.querySelector('.lc-fab').setAttribute('aria-expanded', 'false'); setTimeout(() => { if (!chatOpen) wa.hidden = true; }, 260); }
+function chatToast(uid, text) {
+  if (!chatEl) return; const L = (learners || []).find(x => x.uid === uid); const t = chatEl.querySelector('.lc-toast'); t.dataset.uid = uid;
+  t.innerHTML = `<div class="lc-toast-ic" aria-hidden="true">${CHAT_SVG}</div><div class="lc-toast-body"><div class="lc-toast-row"><span>JS Learning</span><time>now</time></div><b>${h(L ? nameOf(L) : 'Learner')}</b><p>${h(String(text).slice(0, 160))}</p></div>`;
+  t.hidden = false; requestAnimationFrame(() => t.classList.add('on')); clearTimeout(t._h); t._h = setTimeout(() => { t.classList.remove('on'); setTimeout(() => { if (!t.classList.contains('on')) t.hidden = true; }, 350); }, 6000);
 }
 
 /* ---------- audit ---------- */
@@ -422,13 +539,14 @@ function auditUI(L) {
 }
 
 /* ---------- render ---------- */
+const VIEW_TITLES = { overview: 'Overview', log: 'Activity log', reports: 'Reports', exams: 'Exams', habits: 'Study habits', coaching: 'Coaching', audit: 'Audit trail' };
 function render() {
-  if (!root) return;
+  if (!root || !root.isConnected || !document.documentElement.classList.contains('admin-mode')) return;
   // keep what the admin is typing across live re-renders
   const keep = {}; let focusKey = null, selStart = null;
   root.querySelectorAll('[data-keep]').forEach(el => { keep[el.dataset.keep] = el.type === 'checkbox' ? el.checked : el.value; if (el === document.activeElement) { focusKey = el.dataset.keep; try { selStart = el.selectionStart; } catch (e) { } } });
   const msgBox = root.querySelector('.adm-msgs'); const atBottom = !msgBox || msgBox.scrollHeight - msgBox.scrollTop - msgBox.clientHeight < 40;
-  const tabs = [['overview', 'Overview'], ['log', 'Activity log'], ['reports', 'Reports'], ['exams', 'Exams'], ['habits', 'Habits'], ['coaching', 'Coaching'], ['chat', 'Chat'], ['audit', 'Audit trail']];
+  if (view === 'chat') view = 'overview';
   let body;
   if (!learners) body = `<section class="ed-card adm-sec"><p class="cisa-mini">${busy ? 'Loading learners…' : ''}</p></section>`;
   else if (!learners.length) body = `<section class="ed-card adm-sec"><p>No learner accounts yet. ${err ? h(err) : ''}</p></section>`;
@@ -436,12 +554,12 @@ function render() {
     const L = learners[sel], un = unreadOf(L.uid);
     const warn = !L.ok ? `<p class="pl-err">Cannot read this learner (${h(L.error)}). Publish the latest <code>firestore.rules</code> in the Firebase Console.</p>` : !L.act.ok && L.act.error && L.act.error !== 'not-admin' ? `<p class="pl-err">Activity log unavailable (${h(L.act.error)}). Publish the latest <code>firestore.rules</code> in the Firebase Console; activity is recorded once the rules allow it.</p>` : '';
     const head = `<section class="ed-card adm-learner"><div class="adm-avatar">${h(nameOf(L).charAt(0).toUpperCase())}${isLive(L) ? '<i class="lc-live"></i>' : ''}</div><div class="adm-who"><b>${h(nameOf(L))}</b><span>${status(L)}</span></div>${btn('quick-chat', `Message${un ? ` <span class="cisa-count">${un}</span>` : ''}`, 'sm primary')}${learners.length > 1 ? `<select data-f="learner">${learners.map((x, i) => `<option value="${i}" ${i === sel ? 'selected' : ''}>${h(nameOf(x))}</option>`).join('')}</select>` : ''}</section>${warn}`;
-    const nav = `<div class="cisa-tabs adm-tabs" role="tablist">${tabs.map(([k, v]) => `<button type="button" data-a="view" data-v="${k}" aria-current="${view === k}">${v}${k === 'chat' && un ? ` <span class="cisa-count">${un}</span>` : ''}</button>`).join('')}</div>`;
-    const empty = !L.data && !L.act.rows.length && !['chat', 'coaching', 'audit'].includes(view);
-    const main = empty ? `<section class="ed-card adm-sec"><p class="cisa-mini">This learner hasn’t used the app yet.</p></section>` : view === 'log' ? logUI(L) : view === 'reports' ? reportUI(L) : view === 'exams' ? examsUI(L) : view === 'habits' ? habitsUI(L) : view === 'coaching' ? coachingUI(L) : view === 'chat' ? chatUI(L) : view === 'audit' ? auditUI(L) : overviewUI(L);
+    const nav = '';
+    const empty = !L.data && !L.act.rows.length && !['coaching', 'audit'].includes(view);
+    const main = empty ? `<section class="ed-card adm-sec"><p class="cisa-mini">This learner hasn’t used the app yet.</p></section>` : view === 'log' ? logUI(L) : view === 'reports' ? reportUI(L) : view === 'exams' ? examsUI(L) : view === 'habits' ? habitsUI(L) : view === 'coaching' ? coachingUI(L) : view === 'audit' ? auditUI(L) : overviewUI(L);
     body = head + nav + main;
   }
-  root.innerHTML = `<div class="cisa-hub adm-portal"><header class="cisa-head adm-head"><div><span class="ed-kicker">Admin portal</span><h1>Learner monitoring</h1><p class="ed-sub">${loadedAt ? `Updated ${h(loadedAt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }))} · chat and messages are live` : 'Loading…'}</p></div><div class="adm-head-act">${learners ? bellUI() : ''}${btn('refresh', busy ? 'Refreshing…' : '↻ Refresh', 'sm', busy ? 'disabled' : '')}</div></header>${body}</div>`;
+  root.innerHTML = `<div class="cisa-hub adm-portal"><header class="cisa-head adm-head"><div><span class="ed-kicker">Admin portal</span><h1>${h(VIEW_TITLES[view] || 'Overview')}</h1><p class="ed-sub">${loadedAt ? `Updated ${h(loadedAt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }))} · chat and messages are live` : 'Loading…'}</p></div><div class="adm-head-act">${learners ? bellUI() : ''}${btn('refresh', busy ? 'Refreshing…' : '↻ Refresh', 'sm', busy ? 'disabled' : '')}</div></header>${body}</div>`;
   root.querySelectorAll('[data-keep]').forEach(el => { const k = el.dataset.keep; if (k in keep) { if (el.type === 'checkbox') el.checked = keep[k]; else if (el.tagName !== 'SELECT' || [...el.options].some(o => o.value === keep[k])) el.value = keep[k]; } if (k === focusKey) { el.focus(); try { if (selStart !== null) el.setSelectionRange(selStart, selStart); } catch (e) { } } });
   const mb = root.querySelector('.adm-msgs'); if (mb && atBottom) mb.scrollTop = mb.scrollHeight;
 }
@@ -460,8 +578,12 @@ function printReport(L, kind) {
 }
 
 /* ---------- events ---------- */
-function setView(v) { view = v; logLimit = 150; bellOpen = false; flash = ''; render(); if (v === 'chat') { const L = learners && learners[sel]; if (L) markLearnerSeen(L.uid); setTimeout(() => root.querySelector('.adm-chat-input textarea')?.focus(), 30); } }
+function syncNav() { const hv = view === 'overview' ? 'admin' : 'admin-' + view; if (location.hash !== '#' + hv) history.replaceState(null, '', '#' + hv); document.querySelectorAll('#tabs .tab').forEach(t => t.setAttribute('aria-current', String(t.dataset.v === hv))); }
+function setView(v) { if (v === 'chat') { openChat(); return; } tst.sel = tst.editing = null; view = VIEW_TITLES[v] ? v : 'overview'; logLimit = 150; bellOpen = false; flash = ''; syncNav(); render(); window.scrollTo(0, 0); }
+export function showView(v) { setView(v); }
+function threadCtx() { const L = learners && learners[sel]; const fb = api.fb; return L ? { me: 'admin', list: chats[L.uid] || [], ref: id => fb.doc(fb.fdb, 'chats', L.uid, 'messages', id), fb, st: tst, rerender: render } : null; }
 async function onClick(e) {
+  if (e.target.closest('.adm-msgs')) { const c = threadCtx(); if (c && await threadAction(e, c)) return; }
   const b = e.target.closest('[data-a]');
   if (bellOpen && !e.target.closest('.adm-bell-wrap')) { bellOpen = false; render(); if (!b) return; }
   if (!b || !root.contains(b) || b.disabled) return;
@@ -470,10 +592,10 @@ async function onClick(e) {
   if (a === 'view') { setView(b.dataset.v); return; }
   if (a === 'bell') { bellOpen = !bellOpen; render(); return; }
   if (a === 'dismiss' || a === 'dismiss-all') { const dm = dismissed(); if (a === 'dismiss') dm[b.dataset.id] = Date.now(); else for (const x of (learners || []).flatMap(alertsOf)) dm[x.uid + ':' + x.id] = Date.now(); try { localStorage.setItem('adm-dismiss', JSON.stringify(dm)); } catch (err) { } render(); return; }
-  if (a === 'alert-go') { const i = (learners || []).findIndex(x => x.uid === b.dataset.uid); if (i >= 0) sel = i; setView(b.dataset.go); return; }
-  if (a === 'go-week') { view = 'reports'; rep = 'week'; off.week = 0; render(); return; }
+  if (a === 'alert-go') { const i = (learners || []).findIndex(x => x.uid === b.dataset.uid); if (i >= 0) sel = i; bellOpen = false; renderChatWin(true); setView(b.dataset.go); return; }
+  if (a === 'go-week') { rep = 'week'; off.week = 0; setView('reports'); return; }
   if (a === 'go-log') { setView('log'); return; }
-  if (a === 'quick-chat') { setView('chat'); return; }
+  if (a === 'quick-chat') { openChat(); return; }
   if (a === 'more') { logLimit += 300; render(); return; }
   if (a === 'rep') { rep = b.dataset.v; render(); return; }
   if (a === 'prev' || a === 'next' || a === 'now') { off[rep] = a === 'now' ? 0 : Math.max(0, off[rep] + (a === 'prev' ? 1 : -1)); render(); return; }
@@ -489,13 +611,14 @@ async function onClick(e) {
 }
 function onChange(e) {
   const f = e.target.dataset && e.target.dataset.f; if (!f) return;
-  if (f === 'learner') { sel = +e.target.value; exSel = null; }
+  if (f === 'learner') { sel = +e.target.value; exSel = null; tst.sel = tst.editing = null; renderChatWin(true); }
   else if (f === 'range') logRange = e.target.value; else if (f === 'area') logArea = e.target.value; else if (f === 'type') logType = e.target.value;
   else if (f === 'wrong') exWrongOnly = e.target.checked;
   else if (f === 'atype') { assignType = e.target.value; }
   logLimit = 150; render();
 }
 async function onSubmit(e) {
+  if (e.target.closest('.adm-msgs')) { const c = threadCtx(); if (c) await threadAction(e, c); return; }
   const form = e.target.closest('[data-form]'); if (!form) return; e.preventDefault();
   const L = learners && learners[sel]; if (!L) return; const v = Object.fromEntries(new FormData(form)); const kind = form.dataset.form;
   const clear = keys => keys.forEach(k => { const el = form.querySelector(`[name="${k}"]`); if (el) { if (el.type === 'checkbox') el.checked = false; else el.value = ''; } });
@@ -511,13 +634,22 @@ async function onSubmit(e) {
     return;
   }
 }
-function onKey(e) { if (e.key === 'Enter' && !e.shiftKey && e.target.matches('.adm-chat-input textarea')) { e.preventDefault(); e.target.form.requestSubmit(); } }
+function onKey(e) { if (e.key === 'Enter' && !e.shiftKey && e.target.matches('.adm-chat-input textarea, .adm-msgs .lc-edit textarea')) { e.preventDefault(); e.target.form.requestSubmit(); } if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.adm-msgs [data-msg="sel"]')) { e.preventDefault(); e.target.click(); } if (e.key === 'Escape' && (tst.sel || tst.editing)) { tst.sel = tst.editing = null; render(); } }
 
-export async function mountAdmin({ root: target, readLearners, readActivity, unlockLearner, fb }) {
+export function unmountAdmin() {
+  unsubscribeAll(); clearInterval(refreshTimer); refreshTimer = null; clearInterval(expiryTimer); tst.sel = tst.editing = null;
+  if (root) { root.onclick = root.onchange = root.onsubmit = root.onkeydown = null; }
+  root = null; learners = null; chats = {}; coachDocs = {}; bellOpen = false;
+  if (chatEl) { chatEl.remove(); chatEl = null; } chatOpen = false; convOpen = false; document.documentElement.classList.remove('wa-lock');
+}
+export async function mountAdmin({ root: target, readLearners, readActivity, unlockLearner, fb, view: startView }) {
+  view = VIEW_TITLES[startView] ? startView : 'overview'; syncNav();
   root = target; api = { readLearners, readActivity, unlockLearner, fb };
   root.onclick = onClick; root.onchange = onChange; root.onsubmit = onSubmit; root.onkeydown = onKey;
   unsubscribeAll(); chats = {}; coachDocs = {};
   clearInterval(refreshTimer);
   refreshTimer = setInterval(() => { if (!root.isConnected || !root.querySelector('.adm-portal')) { clearInterval(refreshTimer); unsubscribeAll(); return; } if (document.visibilityState === 'visible' && !busy && !root.contains(document.activeElement)) load(); }, 120e3);
+  clearInterval(expiryTimer); expiryTimer = setInterval(() => { if (chatOpen && Object.values(chats).some(l => l.some && l.some(m => m.from === 'admin' && !m.deleted && Date.now() - m.at < EDIT_WINDOW + 30e3))) renderChatWin(); }, 30e3);
+  ensureChatEl(); renderChatWin();
   render(); await load();
 }

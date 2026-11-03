@@ -5,9 +5,10 @@
    - Remote sign-out requested by the admin.
    Firestore: chats/{uid}/messages/{id}, coach/{uid}. */
 
+export const VERSION = '43';
 let fb, uid, getS, saveS, onRemoteSignOut, startedAt = 0, unsubs = [], timers = [], observer = null;
 let msgs = [], coach = null, chatOpen = false, firstMsgs = true, shownPopups = new Set(), popupOpen = null, week = { app: 0, days: new Set(), loaded: false };
-let rootEl = null;
+let rootEl = null; const tst = { sel: null, editing: null }; let expiryTimer = null;
 
 const h = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const p2 = n => String(n).padStart(2, '0');
@@ -60,9 +61,16 @@ async function markSeen(list) { for (const m of list) { try { await fb.updateDoc
 
 /* ---------- shared message thread (also used by the admin portal) ---------- */
 const SEND_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>';
+export const EDIT_WINDOW = 5 * 60e3;
+export const canChange = (m, me) => !!m && m.from === me && !m.deleted && Date.now() - m.at < EDIT_WINDOW;
+const minsLeft = m => Math.max(1, Math.ceil((EDIT_WINDOW - (Date.now() - m.at)) / 60e3));
 export function threadHTML(list, me, opts = {}) {
   if (!list.length) return `<div class="lc-empty"><div class="lc-empty-ic" aria-hidden="true">${CHAT_ICON}</div><b>${h(opts.emptyTitle || 'No messages yet')}</b><span>${h(opts.empty || '')}</span></div>`;
-  const lastMine = [...list].reverse().find(m => m.from === me && m.kind !== 'popup');
+  const sel = opts.sel || null, editing = opts.editing || null;
+  const lastMine = [...list].reverse().find(m => m.from === me && m.kind !== 'popup' && !m.deleted);
+  const actions = m => canChange(m, me) && (sel === m.id) && editing !== m.id ? `<div class="lc-acts ${m.kind === 'popup' ? 'center' : ''}"><button type="button" data-msg="edit" data-id="${h(m.id)}">Edit</button><button type="button" data-msg="del" data-id="${h(m.id)}" class="del">${m.kind === 'popup' && !m.seenAt ? 'Cancel popup' : 'Delete'}</button><span>${minsLeft(m)} min left</span></div>` : '';
+  const editor = m => `<form class="lc-edit" data-msg-form="${h(m.id)}"><textarea rows="2" maxlength="2000" data-keep="edit-${h(m.id)}" aria-label="Edit message">${h(m.text)}</textarea><div><button type="button" data-msg="cancel">Cancel</button><button type="submit" class="pri">Save</button></div></form>`;
+  const edited = m => m.editedAt ? '<i class="lc-edited">Edited</i>' : '';
   let out = '', prev = null;
   list.forEach((m, i) => {
     const next = list[i + 1];
@@ -70,24 +78,56 @@ export function threadHTML(list, me, opts = {}) {
       const d = new Date(m.at), td = ds(d) === today(), yd = ds(d) === addDays(today(), -1);
       out += `<div class="lc-stamp"><b>${td ? 'Today' : yd ? 'Yesterday' : h(d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }))}</b> ${h(timeOf(m.at))}</div>`;
     }
-    if (m.kind === 'popup') {
-      out += `<div class="lc-notice ${m.from === me ? 'mine' : ''}"><div class="lc-notice-ic" aria-hidden="true">${BELL_ICON}</div><div class="lc-notice-body"><small>${m.from === me ? 'You sent a popup' : 'Popup from your admin'} · ${h(timeOf(m.at))}</small>${m.title ? `<b>${h(m.title)}</b>` : ''}<span>${linkify(m.text)}</span>${m.from === me ? `<em class="${m.seenAt ? 'seen' : ''}">${m.seenAt ? 'Seen ' + h(whenOf(m.seenAt)) : opts.live ? 'Showing now' : 'Pops up at next sign-in'}</em>` : ''}</div></div>`;
+    const mine = m.from === me, mayChange = canChange(m, me);
+    if (m.deleted) {
+      out += `<div class="lc-b ${mine ? 'me' : 'them'} tail gone"><span>${m.kind === 'popup' ? 'Popup cancelled' : mine ? 'You deleted a message' : 'Message deleted'}</span></div>`;
+    } else if (m.kind === 'popup') {
+      out += editing === m.id ? `<div class="lc-notice mine editing">${editor(m)}</div>` : `<div class="lc-notice ${mine ? 'mine' : ''} ${mayChange ? 'can' : ''} ${sel === m.id ? 'sel' : ''}" ${mayChange ? `data-msg="sel" data-id="${h(m.id)}" tabindex="0" role="button" aria-label="Message options"` : ''}><div class="lc-notice-ic" aria-hidden="true">${BELL_ICON}</div><div class="lc-notice-body"><small>${mine ? 'You sent a popup' : 'Popup from your admin'} · ${h(timeOf(m.at))}</small>${m.title ? `<b>${h(m.title)}</b>` : ''}<span>${linkify(m.text)}</span>${edited(m)}${mine ? `<em class="${m.seenAt ? 'seen' : ''}">${m.seenAt ? 'Seen ' + h(whenOf(m.seenAt)) : opts.live ? 'Showing now' : 'Pops up at next sign-in'}</em>` : ''}</div></div>${actions(m)}`;
     } else {
-      const side = m.from === me ? 'me' : 'them';
-      const sameNext = next && next.from === m.from && next.kind !== 'popup' && next.at - m.at < 3 * 60e3;
-      const samePrev = prev && prev.from === m.from && prev.kind !== 'popup' && m.at - prev.at < 3 * 60e3;
-      out += `<div class="lc-b ${side} ${sameNext ? '' : 'tail'} ${samePrev ? 'cont' : ''}" title="${h(timeOf(m.at))}"><span>${linkify(m.text)}</span></div>`;
-      if (m === lastMine) out += `<div class="lc-receipt">${m.seenAt ? `<b>Read</b> ${h(timeOf(m.seenAt))}` : 'Delivered'}</div>`;
+      const side = mine ? 'me' : 'them';
+      const sameNext = next && next.from === m.from && next.kind !== 'popup' && !next.deleted && next.at - m.at < 3 * 60e3;
+      const samePrev = prev && prev.from === m.from && prev.kind !== 'popup' && !prev.deleted && m.at - prev.at < 3 * 60e3;
+      if (editing === m.id) out += `<div class="lc-b me tail editing">${editor(m)}</div>`;
+      else { const tick = mine ? `<i class="lc-tick ${m.seenAt ? 'read' : ''}" title="${m.seenAt ? 'Read ' + h(timeOf(m.seenAt)) : 'Delivered'}" aria-label="${m.seenAt ? 'Read' : 'Delivered'}">${m.seenAt ? '✓✓' : '✓'}</i>` : '';
+        out += `<div class="lc-b ${side} ${sameNext ? '' : 'tail'} ${samePrev ? 'cont' : ''} ${mayChange ? 'can' : ''} ${sel === m.id ? 'sel' : ''}" ${mayChange ? `title="Tap to edit or delete" data-msg="sel" data-id="${h(m.id)}" tabindex="0" role="button" aria-label="Message options"` : ''}><span><em class="lc-tx">${linkify(m.text)}</em><small class="lc-meta">${m.editedAt ? 'Edited ' : ''}${h(timeOf(m.at))}${tick}</small></span></div>${actions(m)}`; }
+      if (m === lastMine && editing !== m.id && m.seenAt) out += `<div class="lc-receipt"><b>Read</b> ${h(timeOf(m.seenAt))}</div>`;
     }
     prev = m;
   });
   return out;
 }
+/* Shared click/submit handling for edit and delete. st = { sel, editing }; returns true if handled. */
+export async function threadAction(e, { me, list, ref, fb, st, rerender, confirmFn }) {
+  const form = e.type === 'submit' ? e.target.closest('[data-msg-form]') : null;
+  if (form) {
+    e.preventDefault(); const id = form.dataset.msgForm, m = list.find(x => x.id === id), text = form.querySelector('textarea').value.trim();
+    if (!m) return true;
+    if (!canChange(m, me)) { st.editing = null; rerender(); if (window.uiAlert) uiAlert('Messages can only be edited for 5 minutes after sending.', { title: 'Too late to edit' }); return true; }
+    if (!text) return true;
+    st.editing = null; st.sel = null; rerender();
+    if (text !== m.text) { try { await fb.updateDoc(ref(id), { text: text.slice(0, 2000), editedAt: Date.now() }); } catch (err) { if (window.uiAlert) uiAlert('Check the connection and that the latest firestore.rules are published.', { title: 'Couldn’t save the edit' }); } }
+    return true;
+  }
+  const b = e.target.closest('[data-msg]'); if (!b) return false;
+  const a = b.dataset.msg, id = b.dataset.id, m = id && list.find(x => x.id === id);
+  if (a === 'sel') { if (e.target.closest('a')) return true; st.sel = st.sel === id ? null : id; st.editing = null; rerender(); return true; }
+  if (a === 'cancel') { st.editing = null; rerender(); return true; }
+  if (!m || !canChange(m, me)) { st.sel = null; rerender(); return true; }
+  if (a === 'edit') { st.editing = id; rerender(); setTimeout(() => { const t = document.querySelector(`[data-msg-form="${CSS.escape(id)}"] textarea`); if (t) { t.focus(); t.setSelectionRange(t.value.length, t.value.length); } }, 30); return true; }
+  if (a === 'del') {
+    const ok = await (confirmFn || window.uiConfirm)(m.kind === 'popup' && !m.seenAt ? 'It won’t pop up for the learner.' : 'It’s removed for both of you. The chat shows that a message was deleted.', { title: m.kind === 'popup' && !m.seenAt ? 'Cancel this popup?' : 'Delete this message?', ok: m.kind === 'popup' && !m.seenAt ? 'Cancel popup' : 'Delete', cancel: 'Keep', danger: true });
+    if (!ok) return true;
+    st.sel = null; rerender();
+    try { await fb.updateDoc(ref(id), { deleted: true, text: '', title: '', editedAt: Date.now() }); } catch (err) { if (window.uiAlert) uiAlert('Check the connection and that the latest firestore.rules are published.', { title: 'Couldn’t delete' }); }
+    return true;
+  }
+  return false;
+}
 const CHAT_ICON = '<svg viewBox="0 0 24 24"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg>';
 const BELL_ICON = '<svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15zM10 20.5a2.2 2.2 0 0 0 4 0"/></svg>';
 
 /* ---------- popup (iOS-style alert) ---------- */
-function pendingPopups() { return msgs.filter(x => x.from === 'admin' && x.kind === 'popup' && !x.seenAt && !shownPopups.has(x.id)); }
+function pendingPopups() { return msgs.filter(x => x.from === 'admin' && x.kind === 'popup' && !x.seenAt && !x.deleted && !shownPopups.has(x.id)); }
 function nextPopup() {
   if (popupOpen || document.visibilityState !== 'visible') return;
   const list = pendingPopups(), m = list[0];
@@ -109,24 +149,28 @@ function closePopup(reply) {
 }
 
 /* ---------- chat ---------- */
-function unread() { return msgs.filter(m => m.from === 'admin' && !m.seenAt && !(m.kind === 'popup' && !shownPopups.has(m.id))).length; }
+function unread() { return msgs.filter(m => m.from === 'admin' && !m.seenAt && !m.deleted && !(m.kind === 'popup' && !shownPopups.has(m.id))).length; }
 function renderChat() {
   if (!rootEl) return;
   const n = unread(), fab = rootEl.querySelector('.lc-fab'), badge = fab.querySelector('b');
   if (n > (+badge.textContent || 0) && !chatOpen) { fab.classList.remove('bump'); void fab.offsetWidth; fab.classList.add('bump'); }
   badge.textContent = n > 9 ? '9+' : n; badge.hidden = !n;
+  const nb = document.getElementById('lcNavBadge'); if (nb) { nb.textContent = badge.textContent; nb.hidden = !n; }
   const list = rootEl.querySelector('.lc-msgs'); if (!list) return;
   const atBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 60;
-  list.innerHTML = threadHTML(msgs, 'learner', { emptyTitle: 'Message your admin', empty: 'Ask a question or share an update. Your admin sees it in the admin portal.' });
+  const ed = list.querySelector('.lc-edit textarea'), edVal = ed ? ed.value : null, edFocus = ed && ed === document.activeElement;
+  if (tst.editing && !msgs.some(m => m.id === tst.editing && canChange(m, 'learner'))) tst.editing = null;
+  list.innerHTML = threadHTML(msgs, 'learner', { sel: tst.sel, editing: tst.editing, emptyTitle: 'Message your admin', empty: 'Ask a question or share an update. Your admin sees it in the admin portal.' });
+  const ed2 = list.querySelector('.lc-edit textarea'); if (ed2 && edVal !== null) { ed2.value = edVal; if (edFocus) ed2.focus(); }
   if (atBottom || chatOpen) list.scrollTop = list.scrollHeight;
-  if (chatOpen && document.visibilityState === 'visible') { const toSee = msgs.filter(m => m.from === 'admin' && !m.seenAt && (m.kind !== 'popup' || shownPopups.has(m.id))); if (toSee.length) markSeen(toSee); }
+  if (chatOpen && document.visibilityState === 'visible') { const toSee = msgs.filter(m => m.from === 'admin' && !m.seenAt && !m.deleted && (m.kind !== 'popup' || shownPopups.has(m.id))); if (toSee.length) markSeen(toSee); }
 }
 function openChat(focus) {
-  chatOpen = true; const p = rootEl.querySelector('.lc-panel'); p.hidden = false; requestAnimationFrame(() => p.classList.add('on'));
+  chatOpen = true; const p = rootEl.querySelector('.lc-panel'); p.hidden = false; requestAnimationFrame(() => p.classList.add('on')); document.documentElement.classList.add('lc-lock');
   rootEl.querySelector('.lc-fab').setAttribute('aria-expanded', 'true'); rootEl.querySelector('.lc-toast').classList.remove('on'); renderChat();
   if (focus) setTimeout(() => rootEl.querySelector('.lc-input textarea')?.focus(), 80);
 }
-function closeChat() { chatOpen = false; const p = rootEl.querySelector('.lc-panel'); p.classList.remove('on'); rootEl.querySelector('.lc-fab').setAttribute('aria-expanded', 'false'); setTimeout(() => { if (!chatOpen) p.hidden = true; }, 220); }
+function closeChat() { chatOpen = false; document.documentElement.classList.remove('lc-lock'); const p = rootEl.querySelector('.lc-panel'); p.classList.remove('on'); rootEl.querySelector('.lc-fab').setAttribute('aria-expanded', 'false'); setTimeout(() => { if (!chatOpen) p.hidden = true; }, 220); }
 function syncSend() { const ta = rootEl.querySelector('.lc-input textarea'), b = rootEl.querySelector('.lc-input button'); b.disabled = !ta.value.trim(); }
 async function send() {
   const ta = rootEl.querySelector('.lc-input textarea'); const text = ta.value.trim(); if (!text) return;
@@ -171,7 +215,9 @@ function renderCard() {
 }
 
 /* ---------- events ---------- */
-function onClick(e) {
+function threadCtx() { return { me: 'learner', list: msgs, ref: id => msgRef(id), fb, st: tst, rerender: renderChat }; }
+async function onClick(e) {
+  if (e.target.closest('.lc-msgs') && await threadAction(e, threadCtx())) return;
   const b = e.target.closest('[data-lc]'); if (!b) return;
   const a = b.dataset.lc;
   if (a === 'fab') { chatOpen ? closeChat() : openChat(true); return; }
@@ -189,11 +235,17 @@ export function startCoach(opts) {
   ({ fb, uid, getS, save: saveS, onRemoteSignOut } = opts);
   startedAt = Date.now(); msgs = []; coach = null; firstMsgs = true; shownPopups = new Set(); popupOpen = null; chatOpen = false; week = { rows: [], loaded: false };
   rootEl = document.createElement('div'); rootEl.id = 'lcRoot';
-  rootEl.innerHTML = `<button type="button" class="lc-fab" data-lc="fab" aria-label="Chat with your admin" aria-expanded="false">${CHAT_ICON}<b hidden>0</b></button>
+  rootEl.innerHTML = `<button type="button" class="lc-fab" data-lc="fab" aria-label="Messages: chat with your admin" aria-expanded="false">${CHAT_ICON}<span class="lc-fab-t">Messages</span><b hidden>0</b></button>
   <section class="lc-panel" hidden aria-label="Chat with your admin"><header><button type="button" class="lc-done" data-lc="close">Done</button><div class="lc-who"><span class="lc-av">A</span><b>Admin</b></div><span class="lc-hd-sp"></span></header><div class="lc-msgs" aria-live="polite"></div><form class="lc-input" onsubmit="return false"><div class="lc-field"><textarea rows="1" maxlength="2000" placeholder="Message" aria-label="Message"></textarea><button type="button" data-lc="send" aria-label="Send" disabled>${SEND_ICON}</button></div></form></section>
   <div class="lc-pop" hidden></div><div class="lc-toast" hidden data-lc="toast" role="status"></div>`;
   document.body.appendChild(rootEl);
+  window.__openChat = () => openChat(true);
+  if (window.visualViewport) { const vv = () => { if (rootEl) rootEl.style.setProperty('--lc-h', window.visualViewport.height + 'px'); }; window.visualViewport.addEventListener('resize', vv); vv(); }
+  document.documentElement.classList.add('lc-ready');
   rootEl.addEventListener('click', onClick);
+  rootEl.addEventListener('submit', e => { if (e.target.closest('.lc-msgs')) threadAction(e, threadCtx()); });
+  rootEl.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.lc-msgs [data-msg="sel"]')) { e.preventDefault(); e.target.click(); } if (e.key === 'Escape' && (tst.sel || tst.editing)) { tst.sel = tst.editing = null; renderChat(); e.stopPropagation(); } if (e.key === 'Enter' && !e.shiftKey && e.target.matches('.lc-edit textarea')) { e.preventDefault(); e.target.form.requestSubmit(); } });
+  expiryTimer = setInterval(() => { if (chatOpen && msgs.some(m => m.from === 'learner' && !m.deleted && Date.now() - m.at < EDIT_WINDOW + 30e3)) renderChat(); }, 30e3);
   const ta = rootEl.querySelector('textarea');
   ta.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } if (e.key === 'Escape') closeChat(); });
   ta.addEventListener('input', () => { ta.style.height = 'auto'; ta.style.height = Math.min(120, ta.scrollHeight) + 'px'; syncSend(); });
@@ -202,7 +254,8 @@ export function startCoach(opts) {
     unsubs.push(fb.onSnapshot(fb.query(fb.collection(fb.fdb, 'chats', uid, 'messages'), fb.orderBy('at')), snap => {
       const prev = new Set(msgs.map(m => m.id));
       msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (!firstMsgs && !chatOpen) { const fresh = msgs.filter(m => !prev.has(m.id) && m.from === 'admin' && m.kind !== 'popup'); if (fresh.length) toast('Admin', fresh[fresh.length - 1].text.slice(0, 160)); }
+      if (!firstMsgs && !chatOpen) { const fresh = msgs.filter(m => !prev.has(m.id) && m.from === 'admin' && m.kind !== 'popup' && !m.deleted); if (fresh.length) toast('Admin', fresh[fresh.length - 1].text.slice(0, 160)); }
+      if (popupOpen) { const cur = msgs.find(m => m.id === popupOpen.id); if (cur && cur.deleted) { popupOpen = null; const l = rootEl.querySelector('.lc-pop'); l.classList.remove('on'); l.hidden = true; l.innerHTML = ''; } }
       firstMsgs = false; renderChat(); nextPopup();
     }, () => { }));
     unsubs.push(fb.onSnapshot(fb.doc(fb.fdb, 'coach', uid), s => {
@@ -220,9 +273,10 @@ function escPop(e) { if (e.key === 'Escape' && popupOpen) closePopup(false); }
 function visib() { if (document.visibilityState === 'visible') { renderChat(); nextPopup(); } }
 export function stopCoach() {
   unsubs.forEach(f => { try { f(); } catch (e) { } }); unsubs = [];
-  timers.forEach(clearInterval); timers = [];
+  timers.forEach(clearInterval); timers = []; clearInterval(expiryTimer); tst.sel = tst.editing = null;
   if (observer) { observer.disconnect(); observer = null; }
   document.removeEventListener('keydown', escPop); document.removeEventListener('visibilitychange', visib);
   if (rootEl) { rootEl.remove(); rootEl = null; }
+  window.__openChat = null; document.documentElement.classList.remove('lc-ready', 'lc-lock'); const nb = document.getElementById('lcNavBadge'); if (nb) nb.hidden = true;
   document.querySelectorAll('.lc-cisa-slot').forEach(x => x.remove()); const s = document.getElementById('coachSlot'); if (s) { s.innerHTML = ''; s.dataset.html = ''; }
 }

@@ -309,3 +309,26 @@ These new tabs sit inside AI Compliance. Everything is for study only; there is 
 - **Storage:** progress is stored in `users/{uid}/grcProgress` (keys `gd-`, `cs-`, `kc-`, `lib`), so no Firestore rule changes are needed.
 - **New files:** `content/aic-work.js`, `content/aic-toolkit.js`, `content/aic-cases.js`, `content/aic-checks.js`, `content/aic-library.js`.
 - **Versions:** APP_V 45, service worker cache `p2c-theory-v45-aicw`.
+
+## V23: Visual lessons and full theory for How AI works
+
+- **Theory rewrite:** "How AI works" (AB01–AB05) is rewritten as full theory, about 11,000 words across 30 lessons, up from roughly 3,000.
+  - Each lesson has sub-headings, explanatory paragraphs, a worked example and a "Why this matters for GRC" section.
+  - 13 diagrams support the text. Files: `aic-0-t1/t2/t3.js` (lessons), `aic-0-fig.js` (diagrams), `aic-0-meta.js` (quizzes and takeaways, unchanged).
+- **Levels 1–5 (AI01–AI20):** every lesson now starts with an "In simple words" box and ends with a diagram, flowchart, comparison table or cards (`content/aic-visual.js`). The original text and quizzes are unchanged.
+- **New lesson building blocks:** headings, a "Why this matters for GRC" box, "In simple words", examples, flowcharts (vertical on phones), comparison tables, cards and SVG diagrams. Diagrams use theme colours, so they work in dark mode.
+- **Stylesheet fix:** the stylesheet is now loaded as `cisa/cisa.css?v=47`, so browsers cannot keep using an old copy. An old copy is what caused the unstyled AI Compliance page.
+- **Versions:** APP_V 47, service worker cache `p2c-theory-v47-aict`.
+
+## V24: Full theory for the whole AI Compliance course
+
+- **Rewrite of Levels 1–5 (AI01–AI20):** all 120 lessons are rewritten for GRC professionals who are new to AI. The full course is now about 50,000 words, with the original text replaced. Each lesson has:
+  - an "In simple words" summary
+  - sub-headed explanations
+  - a "From traditional GRC" box linking the topic to ISO 27001, DPIA, TPRM, change management and audit practice
+  - an "Apply it in an assessment" box with concrete steps
+  - a worked example, with the diagram placed inside the text
+- **Exam lessons reframed:** the Level 5 exam-preparation lessons are now learning maps for self-development.
+- **Files:** `content/aic-th1.js` to `content/aic-th5.js`, merged in `content/ai-compliance.js`. Quizzes, lesson titles and progress keys are unchanged.
+- **Fixes:** bold text inside callout boxes no longer renders as a label; the heat-map caption no longer overlaps the grid.
+- **Versions:** APP_V 48, stylesheet `cisa.css?v=48`, service worker cache `p2c-theory-v48-aith`.

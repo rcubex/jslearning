@@ -1,0 +1,318 @@
+// Level 3 — full theory for GRC professionals new to AI governance (ai09–ai12).
+const P = x => ({ k: 'p', x }), H = x => ({ k: 'h', x }), U = x => ({ k: 'ul', x }), O = x => ({ k: 'ol', x });
+const BR = x => ({ k: 'br', x }), AP = (s, x, t) => ({ k: 'ap', s, x, t }), V = { k: 'vis' };
+
+export const TH3 = {
+  ai09: [
+    { blocks: [
+      H('What a management system is'),
+      P('A **management system** is the set of policies, processes, roles, objectives and records an organisation uses to achieve something consistently and improve over time. ISO 9001 does this for quality, ISO/IEC 27001 for information security. **ISO/IEC 42001:2023** does it for AI: it specifies requirements for establishing, implementing, maintaining and continually improving an **AI management system (AIMS)**. It applies to any organisation that provides, develops or uses AI, whatever its size or sector.'),
+      P('The key point is that 42001 does not tell you whether a particular model is “good”. It requires you to have a **reliable system** for deciding which AI to use, assessing its risks and impacts, controlling it through its lifecycle, monitoring it and fixing problems — and to prove that system works.'),
+      V,
+      H('Structure of the standard'),
+      P('42001 uses the ISO **Harmonized Structure** shared by other management system standards. **Clauses 4 to 10** are the mandatory requirements, organised around **Plan-Do-Check-Act**: context and leadership (Plan), planning risk and impact (Plan), support and operation (Do), performance evaluation (Check), improvement (Act). Four annexes support them: **Annex A** lists 38 reference controls; **Annex B** gives implementation guidance for those controls; **Annex C** lists potential AI-related organisational objectives and risk sources; **Annex D** discusses use of the AIMS across domains and sectors.'),
+      BR('If your organisation is certified to ISO/IEC 27001, you already have most of the machinery: document control, internal audit, management review, corrective action, competence management. 42001 can be built as an **integrated management system**, adding AI-specific risk and impact assessment and Annex A controls.'),
+      AP(['Check whether the organisation has an AIMS, and if so its scope and maturity.', 'Identify which existing management-system processes (ISO 27001, 27701, 9001) can be reused.', 'Ask for the AIMS manual or equivalent overview document mapping clauses to processes.'])],
+      ex: 'An organisation already certified to ISO 27001 can reuse its document control, internal audit, management review and corrective action processes for the AIMS, and focus new effort on AI risk and impact assessment.' },
+
+    { blocks: [
+      H('Clause 4: understanding the organisation and its context'),
+      P('Before you can manage AI risk, you need to understand the setting. **Clause 4.1** requires the organisation to determine internal and external issues relevant to its purpose and its AIMS — legal and regulatory requirements, competitive pressures, culture, technical capability — and specifically its **role** in relation to AI systems: for example provider, producer, customer, partner or subject. Role matters because it determines which risks and obligations apply (a model developer faces different issues from an organisation that only uses vendor AI). The standard also asks organisations to consider whether climate change is a relevant issue.'),
+      P('**Clause 4.2** requires identifying **interested parties** and their requirements: regulators, customers, affected individuals, employees, partners, investors. **Clause 4.3** defines the **scope** of the AIMS — which AI systems, organisational units, sites and processes are covered, with any exclusions justified. **Clause 4.4** requires the AIMS to be established, implemented, maintained and continually improved.'),
+      V,
+      H('Clause 5: leadership'),
+      P('**Clause 5.1** requires **top management** to demonstrate leadership and commitment: ensure the AI policy and objectives align with strategy, integrate the AIMS into business processes, provide resources, communicate its importance and support others in their roles. **Clause 5.2** requires an **AI policy** appropriate to the organisation’s purpose, providing a framework for objectives and including commitments to meet applicable requirements and to continual improvement. **Clause 5.3** requires **roles, responsibilities and authorities** for the AIMS to be assigned and communicated.'),
+      H('Writing a good scope statement'),
+      P('The scope statement appears on the certificate and defines what the auditor will examine. It should be specific about **which AI systems or activities**, **which locations and entities**, and **which roles** are covered, and should justify exclusions. A scope that is too narrow can look like cherry-picking; one that is too broad may be impossible to evidence in the first cycle.'),
+      BR('These clauses are almost identical in intent to ISO 27001 clauses 4 and 5. The AI-specific additions are determining your **AI role** and including **affected individuals and society** among interested parties.'),
+      AP(['Review the context analysis for AI-specific issues and the organisation’s stated AI role(s).', 'Check that interested parties include regulators and affected people, with their requirements recorded.', 'Assess whether the scope statement is specific and exclusions are justified.', 'Check the AI policy is approved by top management and contains the required commitments.'])],
+      ex: 'Scope statement: “The AIMS covers the design, development, deployment and monitoring of customer-facing AI systems of XYZ Bank in the UAE and India, excluding R&D prototypes not used in production.”' },
+
+    { blocks: [
+      H('Clause 6: the heart of the standard'),
+      P('Clause 6 is where the organisation decides **what could go wrong and what to do about it**. It is the part of 42001 that most resembles a GRC professional’s daily work, and the part auditors examine most closely.'),
+      V,
+      U(['**6.1.1 General** — determine risks and opportunities that need to be addressed to ensure the AIMS achieves its intended outcomes.', '**6.1.2 AI risk assessment** — define and apply a process that establishes **risk criteria** (including risk acceptance), identifies AI risks, analyses their potential consequences for the organisation, individuals and societies, assesses likelihood, determines risk levels, and evaluates them against the criteria. Results must be consistent, valid and comparable.', '**6.1.3 AI risk treatment** — select treatment options, determine the controls needed, **compare them with Annex A** to verify no necessary controls are omitted, produce a **Statement of Applicability (SoA)** listing necessary controls and justifying inclusions and exclusions, formulate a treatment plan, and obtain **risk owners’ approval** of the plan and acceptance of residual risks.', '**6.1.4 AI system impact assessment** — define a process to assess the potential **consequences for individuals, groups of individuals and societies** of the development, provision or use of AI systems, considering intended use and foreseeable misuse, and the technical and societal context. Results are documented and inform the risk assessment.', '**6.2 AI objectives** — set measurable objectives, plan how to achieve them, monitor and communicate them.', '**6.3 Planning of changes** — make changes to the AIMS in a planned way.']),
+      H('Risk assessment versus impact assessment'),
+      P('The distinction is important. The **risk assessment** (6.1.2) looks at AI risks to the organisation’s objectives — including consequences for people, which may become legal, financial or reputational risks. The **impact assessment** (6.1.4) looks **outward**: what effects could the system have on individuals and society, independent of whether the organisation would suffer? It is closer to a DPIA or human-rights assessment. **ISO/IEC 42005** (May 2025) gives detailed guidance on running AI system impact assessments.'),
+      BR('6.1.2 and 6.1.3 mirror ISO 27001’s risk assessment, treatment and SoA almost exactly — if you have written an ISMS SoA, you can write an AIMS SoA. 6.1.4 is new: it adds an assessment centred on **people and society**, not assets.'),
+      AP(['Review the documented risk criteria and method for consistency and comparability.', 'Sample risk assessments and check they cover consequences to individuals and society.', 'Check that the SoA exists, covers all 38 Annex A controls and justifies exclusions.', 'Check impact assessments exist for in-scope systems and consider foreseeable misuse.', 'Verify risk owners approved treatment plans and accepted residual risk.'])],
+      ex: 'The SoA lists all 38 Annex A controls with “applicable / not applicable”, the reason, implementation status and where the evidence lives — and it is consistent with the risk assessment.' },
+
+    { blocks: [
+      H('Clause 7: support'),
+      P('Clause 7 ensures the AIMS has what it needs to work: **7.1 Resources**; **7.2 Competence** — people doing AI work have the necessary skills, with evidence; **7.3 Awareness** — staff know the AI policy, their contribution and the implications of not conforming; **7.4 Communication** — what is communicated, when, to whom and how; **7.5 Documented information** — creating, updating and controlling the documents and records the AIMS requires.'),
+      P('Competence deserves attention in AI. Organisations need not only data scientists, but also people who can assess fairness, privacy, security and legal implications, reviewers who understand model limitations, and leaders who can make informed risk decisions. AI literacy obligations under the EU AI Act reinforce this.'),
+      V,
+      H('Clause 8: operation'),
+      P('Clause 8 turns plans into routine operation. **8.1 Operational planning and control** requires the organisation to plan, implement and control the processes needed — including **externally provided processes, products or services** relevant to the AIMS. **8.2 AI risk assessment**, **8.3 AI risk treatment** and **8.4 AI system impact assessment** require these activities to be **performed at planned intervals and when significant changes occur or are proposed**, with results retained as documented information.'),
+      P('In practice, clause 8 means every new AI system and every significant change passes through intake, tiering, risk and impact assessment and approval **before** release — and that this is evidenced, not just written in a procedure.'),
+      BR('Clause 8 is where you test **operating effectiveness**: sample AI systems and changes from the period and check that the required assessments were performed on time and approved. It is the AI equivalent of testing change management or access review controls.'),
+      AP(['Check competence requirements and evidence for key AI roles.', 'Check awareness of the AI policy among a sample of staff.', 'Sample new AI systems and significant changes in the period and verify assessments and approvals preceded release.', 'Check how externally provided AI services are controlled.'])],
+      ex: 'Operational control in practice: a release gate in the delivery pipeline blocks deployment until the risk assessment ID and approval are recorded — and the auditor samples ten releases to confirm it worked.' },
+
+    { blocks: [
+      H('Clause 9: performance evaluation'),
+      P('A management system must check whether it is working. **9.1 Monitoring, measurement, analysis and evaluation** requires the organisation to decide what to monitor and measure, the methods, when it is done, and who analyses and evaluates results — for the AIMS and for AI systems. **9.2 Internal audit** requires a planned audit programme, objective and impartial auditors, defined criteria and scope, and reporting of results to management. **9.3 Management review** requires top management to review the AIMS at planned intervals, considering the status of previous actions, changes in context, performance trends, audit results, nonconformities, risks and opportunities — and to decide on improvements and changes.'),
+      V,
+      H('Clause 10: improvement'),
+      P('**10.1 Continual improvement** requires ongoing improvement of the suitability, adequacy and effectiveness of the AIMS. **10.2 Nonconformity and corrective action** requires the organisation, when a nonconformity occurs, to react (control and correct it, deal with consequences), evaluate the need to eliminate its cause (review, determine root cause, check for similar cases), implement actions, review their effectiveness and update the AIMS if needed — keeping records throughout.'),
+      H('The closed loop'),
+      P('Auditors look for a **closed loop** linking these clauses: monitoring detects an issue; it is logged as a nonconformity or incident; root cause is analysed; corrective action is taken; effectiveness is verified; lessons feed back into risk assessments and controls; management review sees the trend. A system that detects problems but never closes them — or never detects them at all — will not be certified.'),
+      BR('This is identical in spirit to ISO 27001 clauses 9 and 10. For AI, the **monitoring metrics** are new (drift, fairness, override rates, harmful-output rates), and AI incidents should flow into the same corrective-action process as other nonconformities.'),
+      AP(['Check what is monitored for AI systems and how results are reviewed.', 'Check the internal audit programme covers the AIMS and has been executed.', 'Review management review minutes for required inputs and decisions.', 'Trace at least one issue from detection to verified corrective action.'])],
+      ex: 'Drift monitoring flags a 9% accuracy drop → nonconformity raised → root cause: new customer segment → retraining plus updated data checks → effectiveness verified after one month → reported at management review.' },
+
+    { blocks: [
+      H('The situation'),
+      P('A UAE insurer with a development centre in Mumbai decides to pursue ISO/IEC 42001 certification within 12 months. It already holds ISO/IEC 27001. The newly appointed AI governance lead — a former ISMS manager — must make the first design decisions.'),
+      H('Decision 1 — Scope'),
+      P('The lead proposes starting with **production, customer-facing AI**: the in-house claims-triage model, pricing-support model and a vendor chatbot. Internal productivity tools are excluded from phase one but remain covered by the AI acceptable-use policy. The scope covers the Dubai head office and the Mumbai development centre.'),
+      V,
+      H('Decision 2 — Roles and interested parties'),
+      P('The insurer is a **provider/developer** for its own claims and pricing models and a **customer/deployer** for the vendor chatbot. Interested parties include policyholders, the insurance and banking regulators relevant to its licences, data protection regulators (onshore or free zone, as applicable), reinsurers, the chatbot vendor and Indian staff.'),
+      H('Decision 3 — Policy, objectives and roles'),
+      P('An AI policy signed by the CEO; an AI governance committee reporting to the board risk committee; named owners for each in-scope system; and measurable objectives such as “100% of in-scope AI systems have an approved impact assessment by Q2” and “all AI incidents closed within 30 days”.'),
+      H('Decision 4 — Integration'),
+      P('The AIMS reuses ISMS document control, internal audit, management review and corrective action. New processes are added for AI intake, risk and impact assessment, model validation, monitoring and the SoA. One integrated risk register records both security and AI risks, tagged by framework.'),
+      BR('The lead treats this exactly like an ISMS implementation project: gap assessment, scope, policy, risk methodology, SoA, controls, internal audit, management review, Stage 1, Stage 2. The AI-specific work is concentrated in clauses 6 and 8 and Annex A.'),
+      AP(['Start with a narrow, defensible scope covering the highest-impact systems.', 'Document roles and interested parties per system.', 'Set measurable AI objectives.', 'Reuse existing management-system processes wherever possible.'], '', 'First steps for an AIMS')],
+      ex: 'A narrow, clearly justified scope plus integration with existing systems is the fastest credible route to certification — scope can be widened in later cycles.' }
+  ],
+
+  ai10: [
+    { blocks: [
+      H('What Annex A is'),
+      P('Annex A of ISO/IEC 42001 is a set of **38 reference controls** grouped under **9 control objectives**. Like Annex A of ISO 27001, it is a checklist the organisation compares against its risk treatment to make sure no necessary control has been overlooked. Controls are not automatically mandatory: the organisation includes those needed to treat its risks and justifies any exclusions in the Statement of Applicability. **Annex B** provides implementation guidance for each control.'),
+      V,
+      H('The nine objectives'),
+      U(['**A.2 Policies related to AI** (3 controls) — an AI policy, its alignment with other organisational policies, and its review.', '**A.3 Internal organisation** (2) — AI roles and responsibilities; a process for reporting concerns.', '**A.4 Resources for AI systems** (5) — documenting the resources AI systems need: data, tooling, system and computing resources, and human resources (competence).', '**A.5 Assessing impacts of AI systems** (4) — an impact assessment process; documentation of assessments; assessing impacts on individuals or groups; assessing societal impacts.', '**A.6 AI system life cycle** (9) — objectives and processes for responsible development; requirements and specification; design and development documentation; verification and validation; deployment; operation and monitoring; technical documentation; event logs.', '**A.7 Data for AI systems** (5) — data for development and enhancement; acquisition; quality; provenance; preparation.', '**A.8 Information for interested parties** (4) — system documentation and information for users; external reporting; communication of incidents; information to be shared with interested parties.', '**A.9 Use of AI systems** (3) — processes for responsible use; objectives for responsible use; intended use.', '**A.10 Third-party and customer relationships** (3) — allocating responsibilities; suppliers; customers.']),
+      BR('Read Annex A as an **AI control library**. Many controls have equivalents in your ISMS (policy review, roles, supplier management, logging); the genuinely new areas are **A.5 impact assessment, A.6 lifecycle and A.7 data**.'),
+      AP(['Use the nine objectives as a structure for a gap assessment.', 'For each control, record whether a comparable control already exists in another management system.', 'Focus testing effort on A.5, A.6 and A.7, where AI-specific evidence lives.'])],
+      ex: 'Memory hook for the nine objectives: Policy → Organisation → Resources → Impact → Lifecycle → Data → Information → Use → Third parties.' },
+
+    { blocks: [
+      H('Where most evidence lives'),
+      P('**A.6 (AI system life cycle)** and **A.7 (Data for AI systems)** together contain **14 of the 38 controls**, and they hold most of the evidence auditors sample, because they cover how AI systems are actually built, tested, released and run.'),
+      V,
+      H('Lifecycle controls (A.6)'),
+      P('A good lifecycle process begins with **documented requirements**: the intended purpose, performance metrics, fairness criteria, explainability needs, human-oversight design and acceptance thresholds, agreed before building. **Design and development** decisions are documented. **Verification and validation** apply a test plan against those acceptance criteria, with results and sign-off before release. **Deployment** requires release approval, a rollback plan and user information. **Operation and monitoring** track performance, drift and incidents against thresholds. **Technical documentation** is kept current, and **event logs** enable traceability of what the system did and when.'),
+      H('Data controls (A.7)'),
+      P('Data controls require the organisation to define and document data used for development and enhancement; how data is **acquired** (sources, rights, licences, consent); **quality** requirements and checks; **provenance** — where data came from and how it changed over time; and **preparation** steps such as cleaning, labelling, transformation and splitting. Representativeness of data for the intended population is a recurring theme.'),
+      H('What good evidence looks like'),
+      P('Good evidence is **specific and dated**. A generic “model testing procedure” shows design; a validation report for *model v3.2*, dated, signed, with subgroup results, shows operation. Auditors typically sample one or more AI systems and trace them through every lifecycle and data control.'),
+      BR('This is like testing SDLC controls: you would not accept the SDLC policy as evidence that a specific change was tested. Ask for **system-specific artefacts** for a sample of systems and versions.'),
+      AP(['Pick one AI system and request: requirements, data sheet, validation report, deployment approval, monitoring dashboard extract and log samples.', 'Check acceptance criteria were set before testing, not after.', 'Check data provenance and rights documentation.'])],
+      ex: 'An auditor samples the claims-triage model and asks for: the datasheet, validation report, deployment approval, last month’s drift dashboard and two log extracts — and checks that they all refer to the same model version.' },
+
+    { blocks: [
+      H('Looking outward: impact, information and use'),
+      P('Three control objectives focus on people affected by AI and on how AI is used in practice. They are where ISO/IEC 42001 meets EU AI Act transparency, deployer duties and fundamental-rights expectations.'),
+      V,
+      H('A.5 Assessing impacts'),
+      P('The organisation must have a **defined process** for AI system impact assessments, **document** the assessments, and explicitly consider impacts on **individuals or groups** (for example, fairness, privacy, safety, access to services) and on **society** (for example, environment, democratic processes, employment). These controls implement clause 6.1.4 and connect to DPIAs and FRIAs.'),
+      H('A.8 Information for interested parties'),
+      P('Users need adequate **documentation and information** about the system: purpose, limitations, how to use outputs. The organisation must provide a way for interested parties to **report adverse impacts** (external reporting), have a plan to **communicate incidents** to users and others, and determine **what information to share** with whom, such as regulators or customers.'),
+      H('A.9 Use of AI systems'),
+      P('The organisation must define **processes for responsible use**, set **objectives for responsible use**, and ensure AI systems are **used according to their intended use** and documentation. This is especially relevant for deployers of vendor AI and for general-purpose tools that staff could use beyond approved purposes.'),
+      BR('A.8 resembles customer communication and incident notification controls you already know; A.9 resembles acceptable-use policy and monitoring. A.5 is the new piece, best run jointly with the DPIA.'),
+      AP(['Check that impact assessments consider both individuals/groups and society.', 'Look for a working external channel for reporting AI concerns, and evidence it is monitored.', 'Check incident communication templates and their use.', 'Check how intended use is enforced for general-purpose tools.'])],
+      ex: 'A.8 evidence: a public “report an AI concern” form on the website, the log of reports received and handled, and the incident communication template used last quarter.' },
+
+    { blocks: [
+      H('Most AI is bought, not built'),
+      P('In most organisations the majority of AI comes from third parties: SaaS platforms with AI features, foundation-model APIs, data providers, consultants and outsourcers using AI on the organisation’s behalf. **A.10** recognises this with three controls.'),
+      V,
+      H('The three controls'),
+      U(['**A.10.2 Allocating responsibilities** — responsibilities across the AI value chain (organisation, suppliers, partners, customers) are clearly allocated and documented.', '**A.10.3 Suppliers** — the organisation establishes a process to ensure that services, products and materials provided by suppliers align with its approach to responsible AI development and use.', '**A.10.4 Customers** — where the organisation supplies AI to others, it ensures its approach considers customers’ needs and expectations, and provides appropriate information.']),
+      H('Putting A.10 into practice'),
+      P('Effective A.10 implementation includes AI-specific **due diligence questions** in procurement; **contract clauses** on data use (no training on customer data), model change notification, audit and information rights, incident reporting, liability and exit; and a **responsibility matrix** showing which party performs which control. Responsibilities can be shared but must be explicit — gaps typically appear where each party assumes the other is testing or monitoring.'),
+      BR('A.10 extends your **supplier management** controls (ISO 27001 A.5.19–A.5.23). The AI-specific additions are model change notification, data-use restrictions, bias and performance evidence, and clarity about who tests what.'),
+      AP(['Review the responsibility matrix for key AI suppliers.', 'Check that contracts contain AI-specific clauses.', 'Check that supplier evidence (test results, certifications) is reviewed, not just collected.', 'If the organisation supplies AI, check information provided to customers.'])],
+      ex: 'Responsibility matrix row: “Bias testing of vendor HR model — Vendor: pre-release on global data; Customer: annual test on our applicant data; results reviewed by HR and Compliance.”' },
+
+    { blocks: [
+      H('A family of standards'),
+      P('ISO/IEC 42001 sits at the centre of a growing family of AI standards developed by ISO/IEC JTC 1/SC 42. Knowing what each provides helps you use the right one for each task.'),
+      U(['**ISO/IEC 22989** — AI concepts and terminology; the shared vocabulary.', '**ISO/IEC 23053** — framework for AI systems using machine learning.', '**ISO/IEC 23894** — guidance on AI risk management, building on ISO 31000.', '**ISO/IEC 42005** (May 2025) — guidance on AI system impact assessment.', '**ISO/IEC 42006** (July 2025) — requirements for bodies auditing and certifying AIMS; raises expectations for auditor competence.', '**ISO/IEC 5338** — AI system lifecycle processes.', '**ISO/IEC TR 24027** — bias in AI systems; **ISO/IEC TR 24028** — trustworthiness overview.', '**ISO/IEC 27001 / 27701** — security and privacy management systems to integrate with.']),
+      V,
+      H('Crosswalks and a single control library'),
+      P('Organisations usually face several frameworks at once: ISO/IEC 42001, the EU AI Act, the NIST AI RMF, regulator guidance (CBUAE, RBI), data protection laws. Implementing each separately creates duplicated effort and inconsistent evidence. The better approach is a **single control library**, where each control is written once and **tagged** with every requirement it satisfies. Evidence collected for one control then supports compliance with multiple sources.'),
+      P('Crosswalks published by standards bodies and regulators (for example NIST’s mappings to ISO/IEC standards) help build such a library, but they need tailoring to the organisation’s context.'),
+      BR('You may already run an integrated control framework (for example, one control set mapped to ISO 27001, PCI DSS and local regulator rules). Extend it with AI controls rather than starting a separate AI framework.'),
+      AP(['Check whether AI controls are integrated into the organisation’s control library with framework tags.', 'Sample a control and confirm its evidence satisfies each tagged requirement.'])],
+      ex: 'Control “AI-07 Pre-release validation” is tagged: ISO/IEC 42001 A.6.2.4; EU AI Act Art. 15; NIST MEASURE 2.x; CBUAE guidance on testing — one test report, four requirements evidenced.' },
+
+    { blocks: [
+      H('What the SoA is'),
+      P('The **Statement of Applicability (SoA)** required by clause 6.1.3 lists the controls the organisation has determined are necessary to treat its AI risks, compares them with all 38 Annex A controls, and **justifies** the inclusion of each control and the exclusion of any Annex A control. It is one of the first documents a certification auditor reviews, because it shows how risk assessment has been translated into controls.'),
+      H('The situation'),
+      P('The insurer from the previous module now writes its SoA. In the first draft it marks all 38 controls applicable except **A.10.3 Suppliers** for one business line that “buys no AI”. During review, the AI governance lead discovers the line’s claims software has an embedded AI document-classification feature — so the exclusion is reversed.'),
+      V,
+      H('What each SoA entry records'),
+      U(['Control reference and title.', '**Applicability** — included or excluded.', '**Justification** — linked to risks, legal requirements or contractual obligations; or, for exclusions, why the control is not needed within the scope.', '**Implementation status** — implemented, in progress or planned.', '**Owner**.', '**Evidence location** — where an auditor can see that the control operates.']),
+      H('Common SoA findings'),
+      P('Certification auditors frequently find SoAs that are inconsistent with the risk assessment (controls excluded although related risks were identified), exclusions justified by convenience (“not yet implemented”), controls marked implemented without evidence, and SoAs not updated after scope or risk changes.'),
+      BR('Writing an AIMS SoA is the same skill as writing an ISMS SoA. The golden rule is identical: **exclusions must follow from the risk assessment and scope — never from “we haven’t done it yet”.**'),
+      AP(['Check all 38 controls are listed.', 'Test that exclusions are justified by scope or risk, not by implementation status.', 'Cross-check a few included controls against the risk assessment and evidence.', 'Confirm the SoA is version-controlled and approved.'])],
+      ex: 'Rule of thumb: exclusions must follow from the risk assessment and scope — never from “we haven’t done it yet”. The insurer’s reversed exclusion is exactly what a good review should catch.' }
+  ],
+
+  ai11: [
+    { blocks: [
+      H('Why an intake process matters'),
+      P('You cannot assess AI you do not know about. The **intake** process is the front door through which every new AI use case — built, bought, embedded or public — must pass **before** money is spent or data is shared. A short intake questionnaire collects the facts needed to decide how much further assessment is required.'),
+      V,
+      H('What to ask'),
+      U(['What problem does it solve, and **what decision or action** does its output influence?', '**Who uses it** and **who is affected** by its outputs (customers, employees, applicants, the public, children)?', 'Is it **built** in-house, **bought** as a product, **embedded** in existing software, or a **public tool**?', '**What data** does it use — including personal, sensitive, confidential or third-party data — and where is it processed?', 'Is the process **automated end-to-end**, or does a person make the final decision?', 'Which **jurisdictions and sectors** are involved (UAE onshore, DIFC, ADGM, India, EU; banking, health, government)?', 'Could it fall into a **prohibited or high-risk** category, or involve biometrics, emotion recognition or profiling?', 'Will it **take actions** in other systems (agents)?']),
+      H('Making intake work in practice'),
+      P('Intake should be quick for low-risk uses (minutes, not weeks), or people will bypass it. It works best when connected to procurement, IT change and project approval, so AI cannot be bought or deployed without passing through it. Each intake record becomes an entry in the AI inventory.'),
+      BR('Intake is the AI equivalent of a **new-supplier** or **new-system onboarding** questionnaire, or a privacy screening questionnaire that decides whether a full DPIA is needed. The answers drive the **risk tier**.'),
+      AP(['Check that an intake process exists and is linked to procurement and change management.', 'Sample recent AI projects and confirm they passed through intake.', 'Review intake questions for coverage of affected people, data, autonomy, jurisdictions and high-risk indicators.'])],
+      ex: 'A team asking to use a public chatbot to draft social media posts goes through a 10-minute low-tier route; a team building a credit model triggers the full assessment — both start at the same front door.' },
+
+    { blocks: [
+      H('Proportionality'),
+      P('Not every AI system deserves the same scrutiny. A spell-checker and a credit-scoring model should not go through the same process. **Risk tiering** assigns each system a tier based on intake answers, and the tier determines the depth of assessment, the approval level and the monitoring frequency. Good tiering keeps effort proportionate and lets scarce governance resources focus where harm is most likely.'),
+      V,
+      H('A common internal model'),
+      U(['**Tier 0 — Prohibited.** Matches legally banned practices (e.g. EU Article 5) or the organisation’s own red lines. Stop.', '**Tier 1 — High.** Significant decisions about people (credit, hiring, health, insurance, benefits, education), safety-critical uses, biometrics, regulated high-risk categories, or agents with consequential actions. Full risk and impact assessment, committee approval, independent validation, ongoing monitoring.', '**Tier 2 — Medium.** Customer-facing or influential but reversible uses (chatbots, marketing personalisation, internal analytics about people). Standard assessment, business-owner approval, transparency measures, periodic review.', '**Tier 3 — Low.** Internal productivity with no impact on individuals and no sensitive data. Registration and compliance with the AI use policy.']),
+      H('Mapping to external categories and tier-up triggers'),
+      P('Internal tiers should map to external classifications — EU AI Act risk levels, CBUAE materiality expectations, RBI FREE-AI risk-based approach — so one decision satisfies several frameworks. **Tier-up triggers** move a system to a higher tier when circumstances change: new personal or sensitive data, a new jurisdiction, autonomous actions, a new group of affected people, or scale above a threshold.'),
+      BR('This is the same logic as **supplier criticality tiers** or **data classification levels**: classification drives the control set. Document the criteria so different assessors reach the same tier.'),
+      AP(['Review tiering criteria for clarity and mapping to external categories.', 'Re-perform tiering on a sample of systems to check consistency.', 'Check that tier-up triggers are monitored and applied.'])],
+      ex: 'Tier-up triggers: new personal data, new jurisdiction, autonomous actions, or scale above a set threshold of affected people — a chatbot that starts processing refunds moves from Tier 2 to Tier 1.' },
+
+    { blocks: [
+      H('The method'),
+      P('AI risk assessment follows the same core method as any risk assessment under **ISO 31000**, with AI-specific guidance from **ISO/IEC 23894**: **identify** risks, **analyse** their likelihood and consequences, **evaluate** them against criteria, and decide on treatment. What changes is the catalogue of risk sources and the range of consequences considered.'),
+      H('Identifying risks: AI risk sources'),
+      P('ISO/IEC 42001 Annex C and ISO/IEC 23894 list typical AI risk sources. Use them as prompts:'),
+      U(['**Data** — quality, representativeness, provenance, labelling, drift.', '**Model limitations** — accuracy, robustness, inability to explain, uncertainty.', '**Level of automation** — how much human judgement sits between output and effect.', '**Misuse** — intentional or unintentional use beyond intended purpose.', '**Adversarial attack** — poisoning, evasion, prompt injection, model theft.', '**Third-party changes** — vendor model updates, dependency failures.', '**Lack of transparency** — users or affected people cannot understand or contest.', '**Environment changes** — new populations, regulations, market conditions.']),
+      V,
+      H('Analysing and evaluating'),
+      P('For each risk, consider **consequences** to individuals, groups, society and the organisation; rate **likelihood** and **severity** on the organisation’s agreed scales; and adjust for **reversibility** and **scale** — AI harms often repeat across thousands of cases. Assess the effectiveness of **existing controls**, determine the risk level, and compare it with **risk appetite** to decide whether treatment is needed.'),
+      H('Writing good risk statements'),
+      P('A good risk statement links **cause → event → consequence**, so it can be treated and tested. “AI might be biased” is not actionable. “Because training data under-represents applicants over 55, the model may under-score them, leading to unfair credit denials and discrimination complaints” tells you exactly what to test and control.'),
+      BR('Your existing enterprise risk methodology remains valid. Extend the **impact scales** to include harm to individuals and groups, add AI risk sources to your risk catalogue, and record AI risks in the same register so they reach the same governance forums.'),
+      AP(['Check AI risks are identified against a structured list of risk sources.', 'Check risk statements follow cause–event–consequence.', 'Check likelihood and impact scales include harm to people.', 'Check existing controls are assessed for effectiveness, not just listed.'])],
+      ex: 'Risk statement: “Because the training data under-represents applicants over 55, the model may under-score them, leading to unfair credit denials and discrimination complaints.” Control: subgroup testing with an approval-rate ratio threshold.' },
+
+    { blocks: [
+      H('Several assessments, one subject'),
+      P('An impactful AI system can trigger several assessments: an **AI system impact assessment** (ISO/IEC 42001 6.1.4, guided by ISO/IEC 42005); a **data protection impact assessment** (GDPR Article 35; DIFC and ADGM equivalents; risk assessments expected under the UAE PDPL; DPIAs for Significant Data Fiduciaries under India’s DPDP Act); a **fundamental rights impact assessment** (EU AI Act Article 27, for specified deployers); and sometimes **algorithmic or equality impact assessments** required in public sectors. Run separately, they duplicate effort, confuse business owners and produce inconsistent conclusions.'),
+      V,
+      H('An integrated workflow'),
+      P('The better practice is one **integrated assessment** with a shared core and modules. The core covers what all assessments need: system description and intended purpose, context and affected groups, data used, risks and potential harms, safeguards and human oversight, consultation with stakeholders, residual risk and the decision. Modules add jurisdiction- or law-specific questions: GDPR lawful basis, DPDP consent details, FRIA notification, sector regulator expectations.'),
+      H('What a good impact assessment contains'),
+      U(['A clear description of the system, its purpose and its deployment context.', 'Identification of affected individuals and groups, including vulnerable groups.', 'Analysis of potential impacts — positive and negative — on rights, opportunities, safety, privacy and society, including foreseeable misuse.', 'Measures to prevent or mitigate harm, including human oversight, transparency and redress.', 'Consultation with relevant experts or affected people where appropriate.', 'Residual impacts, the decision, approvals and the review date.']),
+      BR('You already know DPIAs. Think of the integrated assessment as a **DPIA extended** to cover fairness, safety, transparency and broader rights — one document, one owner, one approval, with annexes for specific laws.'),
+      AP(['Check whether assessments are integrated or duplicated.', 'Check affected groups and foreseeable misuse are covered.', 'Check that required legal modules (DPIA, FRIA) are included where applicable.', 'Check approvals and review dates.'])],
+      ex: 'An Indian bank’s integrated template has a core section plus annexes for DPDP, RBI FREE-AI expectations and, for EU customers, a FRIA section — one assessment instead of four.' },
+
+    { blocks: [
+      H('Treatment options'),
+      P('Once risks are evaluated, each must be treated. The options are the familiar ones from risk management, applied to AI:'),
+      U(['**Avoid** — do not proceed, or remove the risky feature.', '**Mitigate** — reduce likelihood or impact through controls: human review, thresholds, data improvements, fairness constraints, guardrails, transparency, monitoring, staged rollout.', '**Transfer or share** — contracts with suppliers, insurance. Note that **regulatory accountability cannot be transferred**; insurance shares financial loss, not responsibility.', '**Accept** — residual risk within appetite, explicitly approved by someone with the right authority.']),
+      V,
+      H('Residual risk and approval'),
+      P('Document the **residual risk** after treatment, the **approver**, any **conditions of approval** (for example, “re-test fairness quarterly”, “pilot limited to 5,000 customers”), and the **review date**. For high-tier systems, approval should involve the business owner plus compliance, legal, privacy and security, and often the AI governance committee. Approvals must be traceable to specific system versions.'),
+      H('Conditions make approvals real'),
+      P('Conditional approval is powerful: it allows valuable systems to proceed while controlling uncertainty. But conditions must be **tracked** — an approval condition that nobody monitors is as weak as no condition at all.'),
+      BR('This is standard risk acceptance governance: delegated authority levels, documented acceptance, expiry or review dates. For AI, add **conditions tied to monitoring metrics** and **re-approval on significant change**.'),
+      AP(['Check treatment decisions are documented for each significant risk.', 'Verify the approver had appropriate authority for the tier.', 'Check conditions of approval are tracked and met.', 'Confirm residual risk is linked to the system version approved.'])],
+      ex: 'Approval condition: “Pilot limited to 5,000 customers for 3 months with weekly complaint review; full launch requires new sign-off.” Three months later, the auditor checks the complaint reviews happened.' },
+
+    { blocks: [
+      H('The situation'),
+      P('A Dubai property manager wants to buy an AI tool that scores rental applicants using income, employment, references and **social media activity**. The vendor promises “30% fewer bad tenants”. The compliance analyst — strong in privacy and vendor risk, new to AI — runs the full assessment.'),
+      H('Intake and tier'),
+      P('The tool influences access to **housing**, uses personal data, makes ranking decisions about individuals and is a vendor product. It is **Tier 1 (high)**. Although EU law does not apply, the same type of decision (access to essential services) is high-risk in the EU AI Act — a useful benchmark.'),
+      V,
+      H('Risks identified'),
+      U(['Social media analysis may infer **nationality, religion or other sensitive traits** and introduce bias.', 'Applicants with **thin files** — new arrivals, young workers — may be scored unfairly due to lack of data.', '**Opaque reasons** — applicants cannot understand or challenge results.', '**Data accuracy** — references and social media content may be wrong or about someone else.', '**Privacy** — PDPL lawful basis, notice and minimisation; is social media data necessary at all?']),
+      H('Treatment and decision'),
+      U(['**Remove the social media feature** entirely (avoid).', 'Require a **human decision on all rejections** (mitigate).', 'Give applicants the **main reasons** and a way to provide corrections (mitigate).', 'Obtain the vendor’s **bias test results** and contractual rights to audit and to receive change notifications (share).', 'Monitor **approval rates by nationality group** quarterly (mitigate).', 'Update privacy notices; confirm lawful basis and retention (comply).']),
+      P('The system is approved with conditions and a six-month review. The vendor confirms accuracy changes little without social media data.'),
+      BR('The analyst used familiar tools — vendor due diligence, DPIA, risk register, conditional approval — adding AI-specific checks: proxies, thin-file fairness, explanation and monitoring by group.'),
+      AP(['Look for features that add risk without much value — removing them is often the best treatment.', 'Insist on human decision-making for adverse outcomes in high-tier uses.', 'Make monitoring by group an approval condition.'])],
+      ex: 'Removing one feature (social media scraping) eliminated the highest risks at almost no cost to accuracy — the most effective control was a design decision, not a monitoring report.' }
+  ],
+
+  ai12: [
+    { blocks: [
+      H('Why data governance comes first'),
+      P('Most AI failures trace back to data: it was not representative, not lawfully obtained, poorly labelled, or changed without anyone noticing. Data governance for AI applies familiar data-management disciplines with extra attention to how data shapes model behaviour.'),
+      V,
+      H('The key controls'),
+      U(['**Provenance and rights** — record the source of each dataset, its licence or lawful basis, consent where relevant, copyright position and any scraping terms. Without this, the organisation cannot show it was allowed to use the data.', '**Quality** — completeness, accuracy, timeliness and consistency; for labelled data, **labelling quality** measured by checks such as inter-annotator agreement.', '**Representativeness** — does the data reflect the population the system will serve (regions, languages, age groups, customer types, time periods)?', '**Lineage** — which data version trained which model version, so results can be reproduced and issues traced.', '**Sensitive data handling** — minimisation, de-identification, access control and retention.', '**Datasheets** — standard documentation describing a dataset’s motivation, composition, collection process, preprocessing, recommended uses and maintenance.']),
+      H('How assessors use this'),
+      P('Data controls are best tested by picking one model and tracing its training data back to source: Is there a datasheet? Does lineage show the exact dataset version? Do rights and lawful-basis records exist? Was representativeness analysed against the target population?'),
+      BR('These controls extend your **data governance and data classification** practices. The AI-specific additions are representativeness analysis and lineage between data and model versions.'),
+      AP(['Request the datasheet and lineage for a sampled model.', 'Check provenance and rights for each source.', 'Check representativeness analysis against the intended population.', 'Check access controls on training data and feature stores.'])],
+      ex: 'A datasheet reveals the “national” dataset was collected only from three cities — a representativeness gap for rural customers that explains poorer model performance there.' },
+
+    { blocks: [
+      H('Controls before the model is built'),
+      P('Good development starts with **requirements agreed before building**: the intended purpose; performance metrics that fit the use (not only accuracy); fairness criteria and the groups to test; explainability needs; human-oversight design; security requirements; and acceptance thresholds. Setting criteria in advance prevents the common problem of choosing metrics after seeing the results.'),
+      V,
+      H('Controls during development'),
+      P('Teams should keep **separate training, validation and held-out test sets**, with checks for leakage; version code, data and configuration; and document key design decisions and alternatives considered.'),
+      H('Validation'),
+      P('Validation tests the model against the requirements: performance overall and **by subgroup**; robustness to noise, missing data and edge cases; security testing (adversarial inputs, prompt injection for GenAI); and explainability checks. In regulated sectors such as banking, **independent model validation** by a second-line model risk function challenges assumptions, data and methodology before approval.'),
+      H('Model cards'),
+      P('A **model card** summarises a model for decision-makers and users: intended use and out-of-scope uses, training data overview, evaluation metrics including by group, limitations, ethical considerations and versioning. It is one of the most useful single documents an assessor can request.'),
+      BR('Model validation is familiar from banking model risk management. For AI, extend validation to **fairness, robustness, security and explainability**, and apply it proportionately to all tiers, not only to capital and credit models.'),
+      AP(['Check requirements and acceptance criteria were documented before testing.', 'Review the validation report for subgroup results and robustness tests.', 'Check independence of validation for high-tier systems.', 'Request the model card and check it matches the deployed version.'])],
+      ex: 'Acceptance criterion: “Approval-rate ratio between any two nationality groups ≥ 0.8 on the test set, or documented justification approved by the AI risk committee.” Set before testing, checked after.' },
+
+    { blocks: [
+      H('Releasing safely'),
+      P('Deployment is the moment risk becomes real. Several controls make it safer:'),
+      U(['**Release gate** — no deployment without approved assessments, validation sign-off and documentation. Ideally automated in the delivery pipeline.', '**Staged rollout** — run the model in **shadow mode** (scoring silently alongside the existing process), then a limited pilot, then full scale, comparing results at each step.', '**Human oversight design** — define who reviews outputs, when, with what information and authority, and log overrides.', '**User information** — instructions for use, known limitations, and disclosures to affected people.', '**Rollback and kill switch** — a tested ability to revert to the previous version or stop the system and fall back to a manual process.', '**Access control and secrets management** — protect API keys, model weights, prompts and configuration.']),
+      V,
+      H('Human oversight that works'),
+      P('Oversight is only meaningful if reviewers have **time, information, competence and authority**. Designs that ask a person to approve hundreds of outputs per hour, or that hide the model’s reasons, create the appearance of oversight without the substance. Measuring **override rates** and **time per review** gives evidence of whether oversight works.'),
+      BR('These controls mirror **change and release management** and **business continuity** (rollback). Shadow mode is the AI version of parallel running when replacing a legacy system.'),
+      AP(['Check the release gate exists and sample releases for compliance.', 'Ask for shadow-mode or pilot results before full rollout.', 'Review oversight design, override logs and reviewer workload.', 'Ask when the rollback or kill switch was last tested.'])],
+      ex: 'Shadow mode: the new fraud model scores transactions silently for four weeks while the old model decides; results are compared before switching, revealing a 15% higher false-positive rate for new customers that is fixed before go-live.' },
+
+    { blocks: [
+      H('Why monitoring is essential'),
+      P('An AI system can degrade without any change to its code. The world changes — customers, products, fraud patterns, language — and the model’s learned patterns become outdated. Monitoring is therefore not optional; it is how you know a system that was safe at launch is still safe today.'),
+      V,
+      H('What to monitor'),
+      U(['**Performance and drift** — **data drift** (inputs change), **concept drift** (the relationship between inputs and outcome changes), **prediction drift** (outputs shift).', '**Fairness** — outcome and error rates by group over time.', '**Operational signals** — complaints, human overrides, appeals, error reports, unusual volumes.', '**GenAI signals** — rates of harmful or off-policy outputs, jailbreak and injection attempts, sampled hallucinations, groundedness scores, cost spikes.', '**Thresholds and owners** — each metric has a threshold and a named owner who must act when it is crossed.']),
+      H('Incident management for AI'),
+      P('An **AI incident process** covers triage, containment (for example switching off a feature or adding human review), root-cause analysis, notification and lessons learned. Notification duties may arise from several laws at once: under the EU AI Act, providers must report **serious incidents** involving high-risk systems to market surveillance authorities; personal-data breaches can trigger notification under the PDPL, DIFC or ADGM law, India’s DPDP Rules or GDPR; sector regulators may expect to be told.'),
+      BR('Integrate AI incidents into the existing **incident management** process rather than creating a parallel one — but add AI-specific categories (harmful output, discriminatory outcome, model failure, prompt injection) and AI-specific notification checks.'),
+      AP(['Request monitoring dashboards and threshold definitions for a sampled system.', 'Check evidence of action when thresholds were breached.', 'Check AI incident categories and notification decision records.', 'Check that complaints and overrides are fed into monitoring.'])],
+      ex: 'The override rate on a claims model jumps from 4% to 19% in a week — an early warning that the model has drifted or a process changed. The owner investigates within the agreed 48 hours.' },
+
+    { blocks: [
+      H('AI systems keep changing'),
+      P('AI systems change through **retraining**, **vendor model updates**, **prompt or configuration changes**, **new data sources**, **new users or uses**, and integration with new tools. Some changes are routine; others alter the system’s risk profile fundamentally. The organisation must define what counts as a **material (significant) change** that triggers reassessment — for example, a new purpose, a new group of affected people, new data categories, a new model architecture or provider, or autonomy to take new actions.'),
+      V,
+      H('Change controls'),
+      U(['**Version everything** — data, code, model, prompts and configuration — so any output can be traced to a specific version.', 'Require **vendor change notifications** in contracts; foundation models can change silently behind an API.', '**Re-validate** after material change, and re-run risk and impact assessments where needed.', 'Under the EU AI Act, a **substantial modification** to a high-risk system triggers a **new conformity assessment**.']),
+      H('Retirement'),
+      P('Retiring an AI system also needs control: notify users and affected people where relevant; migrate or stop dependent processes; archive documentation and logs according to retention rules (which may be long for regulated decisions); and deliberately decide whether to delete or retain training data and model artefacts, considering data protection obligations.'),
+      BR('This is change management and asset disposal, extended to models and prompts. The trap is that AI changes often happen **outside** formal change processes — a prompt edit in a vendor console, a silent model upgrade.'),
+      AP(['Check the definition of material change and examples of its application.', 'Check versioning covers prompts and configuration, not only code.', 'Check vendor notification terms and recent notifications received.', 'For retired systems, check archival and data disposal decisions.'])],
+      ex: 'A prompt change that lets a customer bot discuss refunds is a material change — it expands the intended purpose — and must go through reassessment before release.' },
+
+    { blocks: [
+      H('The situation'),
+      P('An internal auditor at a UAE bank — experienced in IT and operational audits — is reviewing the bank’s **AI-assisted AML alert prioritisation model**, which ranks transaction-monitoring alerts so investigators handle the riskiest first. She requests the full documentation pack.'),
+      H('What a complete pack contains'),
+      U(['Inventory entry and risk tier.', 'Integrated impact assessment with approvals.', 'Datasheet and data lineage.', 'Model card and validation report with subgroup results.', 'Independent model review (second line) findings and responses.', 'Deployment approval, rollback plan and user instructions for investigators.', 'Monitoring dashboard extracts, threshold breaches and actions taken.', 'Change log and re-validation evidence.', 'Incident log and lessons learned.']),
+      V,
+      H('What the audit found'),
+      P('Most documents existed. Two gaps emerged. First, the validation report showed overall performance but **no results by customer nationality**, although the model could affect which customers are investigated — a fairness and regulatory risk. Second, monitoring thresholds were defined, but **two threshold breaches** in the past six months had **no evidence of action**. Both became findings with owners and due dates. A third observation recommended linking investigator overrides to monitoring.'),
+      H('Writing the findings'),
+      P('Each finding stated the **condition** (what was found), **criteria** (the bank’s AI standard and ISO/IEC 42001 controls), **cause** (validation template lacked subgroup section; no owner assigned to alerts), **effect** (undetected unfair targeting; ineffective monitoring) and **recommendation**.'),
+      BR('The auditor applied standard audit technique — request, inspect, trace, test, report — to AI-specific artefacts. You do not need to build models to audit them; you need to know **which evidence should exist** and **what good looks like**.'),
+      AP(['Request the full pack for one high-tier system per audit.', 'Check consistency of versions across documents.', 'Test monitoring by tracing threshold breaches to actions.', 'Write findings using condition–criteria–cause–effect–recommendation.'], '', 'Auditing an AI system’s documentation')],
+      ex: 'Documentation is not bureaucracy — it is the only way to prove the controls happened. Where evidence was missing, the finding wrote itself.' }
+  ]
+};
