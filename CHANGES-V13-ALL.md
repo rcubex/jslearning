@@ -332,3 +332,36 @@ These new tabs sit inside AI Compliance. Everything is for study only; there is 
 - **Files:** `content/aic-th1.js` to `content/aic-th5.js`, merged in `content/ai-compliance.js`. Quizzes, lesson titles and progress keys are unchanged.
 - **Fixes:** bold text inside callout boxes no longer renders as a label; the heat-map caption no longer overlaps the grid.
 - **Versions:** APP_V 48, stylesheet `cisa.css?v=48`, service worker cache `p2c-theory-v48-aith`.
+
+## V25: 10 new AI Compliance modules
+
+The course now has 35 modules, 210 lessons, 210 checkpoint questions and about 66,000 words.
+
+- **How AI works (assessor level):**
+  - AB06 Reading model evidence: validation reports, sample sizes and confidence, baselines, ROC/AUC/Gini, calibration, challenging vendor claims.
+  - AB07 Monitoring numbers: model decay, data drift and PSI, concept drift, fairness monitoring, alert design, a scenario of a silent decline.
+  - AB08 Testing generative AI and agents: evaluation sets, groundedness, using a model as a judge, red-team coverage, agent/MCP testing, a release gate.
+  - AB09 Explainability and privacy in depth: SHAP, LIME, counterfactuals, LLM transparency, why anonymisation fails, differential privacy, synthetic data, federated learning.
+  - AB10 Where AI lives: lineage, feature stores, experiment tracking, model registry, pipelines, serving, logs, vector databases, an end-to-end evidence walkthrough.
+- **Governance:**
+  - AI21 (Level 3) Your first AI assessment, start to finish: a health-insurer claims model taken through all seven stages.
+  - AI22 (Level 4) Questions to ask by system type, with good and weak answers.
+  - AI23 (Level 4) Governing agentic AI: autonomy levels, permissions, identity, approvals, limits, kill switch, vendor and multi-agent accountability.
+  - AI24 (Level 4) AI in key sectors: banking, insurance, health, employment, public sector, and multi-sector groups.
+  - AI25 (Level 5) AI incident response: taxonomy, triage, containment, an EU/UAE/India notification matrix, root cause, a tabletop exercise.
+- **Diagrams:** ROC, calibration, PSI, confidence intervals, evidence trail, agent permissions, assessment journey, incident lifecycle (`content/aic-x-fig.js`).
+- **Knowledge checks:** the new modules' questions are added to the relevant topic areas. Quiz options are length-balanced and correct answers spread across A–D.
+- **New files:** `content/aic-x-fig.js`, `aic-x-ab.js`, `aic-x-ab2.js`, `aic-x-ai.js`, `aic-x-ai2.js`.
+- **Versions:** APP_V 49, stylesheet `cisa.css?v=49`, service worker cache `p2c-theory-v49-aimore`.
+
+## V26: Four more technical AI modules
+
+The course now has 39 modules, 234 lessons and about 72,000 words.
+
+- **AB11 Inside large language models:** training data and its mix, tokenisers (cost and language effects), fine-tuning methods (SFT, LoRA, RLHF, DPO), reasoning models, multimodal and long-context models, a model-selection scenario.
+- **AB12 Computer vision, biometrics and speech:** how vision models work, verification versus identification, false match / non-match rates and demographic effects, spoofing and liveness checks, speech recognition and voice cloning, a face-verification onboarding assessment.
+- **AB13 AI security deep dive:** threat modelling AI assets, poisoning and backdoors, evasion and gaming, model theft and privacy attacks, model supply chain and an AI bill of materials, AI-enabled attacks, a coordinated red-team scenario.
+- **AB14 AI cost, performance and sustainability:** cost drivers, tokens, pricing and latency, optimisation techniques (and why they need re-testing), energy, water and carbon, FinOps for AI, a portfolio right-sizing scenario.
+- **Quizzes:** options are length-balanced and correct answers spread evenly across A–D. The new questions are added to the "How AI works" knowledge check.
+- **New files:** `content/aic-x-ab3.js`, `content/aic-x-ab4.js`.
+- **Versions:** APP_V 50, stylesheet `cisa.css?v=50`, service worker cache `p2c-theory-v50-aitech`.
