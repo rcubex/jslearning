@@ -365,3 +365,25 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 - **Quizzes:** options are length-balanced and correct answers spread evenly across A–D. The new questions are added to the "How AI works" knowledge check.
 - **New files:** `content/aic-x-ab3.js`, `content/aic-x-ab4.js`.
 - **Versions:** APP_V 50, stylesheet `cisa.css?v=50`, service worker cache `p2c-theory-v50-aitech`.
+
+## V27: Progress sync fix (progress reappearing as not done)
+
+**Cause.** All progress for the CISA, technical and application courses was saved as one Firestore document, `progress/{uid}`, replaced in full on every save. Three things could make it go backwards:
+
+1. **Start-up race.** The app showed the device's local copy and saved any action within about 1.2 seconds, before the server copy had loaded. A device with an older copy (for example a PC not used for a few days, or a slow connection) overwrote newer progress made on another device.
+2. **Device clocks decided the winner.** When the app opened, the copy with the later device timestamp won. A device whose clock was ahead could keep an old copy.
+3. **Two tabs or devices open at once.** Each saved its own full copy, so the last one to save erased the other's changes. The CISA module also kept its own in-memory copy, which could write stale data back.
+
+**Fix:**
+- The app no longer writes to the server until the server copy has loaded. Changes made before then are kept on the device and merged afterwards.
+- Every save is a three-way merge (last synced copy, this device, server) inside a Firestore transaction. Changes from other devices and tabs are kept, and deletions such as un-ticking a lesson or retrying a quiz are respected. Device clocks no longer matter.
+- A live listener merges changes from other devices and tabs while the app is open, and refreshes the view (except while typing or in a mock exam).
+- CISA saves merge with the latest progress instead of replacing it.
+- AI Compliance items now carry their own save time. The newer copy of each item wins, and items saved only on the device are uploaded at the next start.
+- Saves made while offline are retried when the connection returns.
+
+**Testing:** with a shared test database, a slow device holding a day-ahead stale copy no longer wipes another device's lessons. Live updates, un-ticking, two tabs, AI lesson merges and CISA manual sections from two devices all pass.
+
+**Versions:** APP_V 51, stylesheet `cisa.css?v=51`, service worker cache `p2c-theory-v51-sync`.
+
+**Not changed:** no Firestore rule changes are needed.

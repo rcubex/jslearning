@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="JS Learning">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="./cisa/cisa.css?v=50">
+<link rel="stylesheet" href="./cisa/cisa.css?v=51">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
 
 /* Theory-first responsive reading experience */
@@ -3052,7 +3052,7 @@ import { renderAIC, isAICRoute, aicSubnav, aicWorkSummary, AIC_FLASH } from './c
 import { SEC_ACADEMY, SEC_TEXTBOOK } from './content/security.js';
 import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, getDocs, collection, deleteDoc, query, where, orderBy, onSnapshot, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, getDocs, collection, deleteDoc, query, where, orderBy, onSnapshot, addDoc, updateDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 window.__p2cLoaded=true;
 if('serviceWorker' in navigator && location.protocol==='https:')navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
 
@@ -3511,16 +3511,20 @@ async function loadV3(uid){
  try{const x=JSON.parse(localStorage.getItem('p2c-v3-'+uid)||'{}');grcState=x.grcState||{};bookEntries=x.bookEntries||[];}catch{}
  try{
   const [a,b]=await Promise.all([getDocs(collection(fdb,'users',uid,'grcProgress')),getDocs(collection(fdb,'users',uid,'studyEntries'))]);
-  a.forEach(d=>{grcState[d.id]=d.data()});const remote={};b.forEach(d=>{remote[d.id]={...d.data(),id:d.id}});
+  const localG=grcState, seenG=new Set(), upG=[]; grcState={...localG};
+  a.forEach(d=>{const rv=d.data(), lv=localG[d.id]; seenG.add(d.id); if(lv&&(lv._t||0)>(rv._t||0)){grcState[d.id]=lv; upG.push(d.id);} else grcState[d.id]=rv;});
+  for(const k of Object.keys(localG)) if(!seenG.has(k)&&localG[k]&&localG[k]._t) upG.push(k);
+  for(const k of upG){try{await setDoc(doc(fdb,'users',uid,'grcProgress',k),grcState[k])}catch(e){}}
+  const remote={};b.forEach(d=>{remote[d.id]={...d.data(),id:d.id}});
   bookEntries=[...Object.values(remote),...bookEntries.filter(e=>!remote[e.id])].sort((a,b)=>String(b.date).localeCompare(String(a.date)));
   v3store();const h=location.hash.slice(1);if(!h||h==='dashboard'||h==='grc'||h==='workbook'||h==='insights'||/^a[ib]\d\d$/.test(h)||/^aic-/.test(h))route();
  }catch(e){console.warn('V3 offline local data',e)}
 }
-async function saveGRC(id,body){grcState[id]=body;v3store();aicPushSummary();if(v3uid&&fdb)try{await setDoc(doc(fdb,'users',v3uid,'grcProgress',id),body)}catch(e){console.warn('GRC sync failed',e)}}
+async function saveGRC(id,body){body={...body,_t:Date.now()};grcState[id]=body;v3store();aicPushSummary();if(v3uid&&fdb)try{await setDoc(doc(fdb,'users',v3uid,'grcProgress',id),body)}catch(e){console.warn('GRC sync failed',e)}}
 function aicToolsStrip(){const W=aicWorkSummary(grcState),ck=Object.values(W.checks),best=ck.length?Math.round(ck.reduce((a,c)=>a+c.best,0)/ck.length):null,cs=Object.values(W.cases).filter(c=>c.done===c.of).length;
  const T=[['aic-guides','Assessment guides','How inventories, risk and impact assessments, vendor reviews, audits and the SoA work, with worked examples.',W.guides+' of '+W.guidesTotal+' studied'],['aic-cases','Case studies','6 realistic situations with full explanations.',cs+' of '+W.casesTotal+' studied'],['aic-checks','Knowledge checks','Short untimed question sets by topic.',best!=null?'Average best '+best+'%':'Check your understanding'],['aic-library','Library','Official sources with what to read in each.',W.lib+' of '+W.libTotal+' read'],['aic-watch','What’s changing','Key dates for EU, UAE and India rules.','Verified Nov 2026'],['aic-glossary','Glossary','Plain-language AI terms.',AIC_FLASH.length+' terms']];
  return `<section class="aw-tools"><div class="aw-tools-h"><h3>Go deeper</h3><p>Guides, case studies and references to build on the course.</p></div><div class="aw-tools-g">${T.map(([h,t,d,m])=>`<a href="#${h}" class="aw-tool"><b>${t}</b><span>${d}</span><em>${m}</em></a>`).join('')}</div></section>`;}
-let aicSumT=null;function aicPushSummary(){clearTimeout(aicSumT);aicSumT=setTimeout(()=>{if(!dbRef||IS_ADMIN)return;try{const W=aicWorkSummary(grcState);const tot=GRC.reduce((a,c)=>a+c.lessons.length,0),dn=Object.entries(grcState).filter(([k,v])=>AIC_KEY.test(k)&&v&&v.done).length;S.aic={lessons:dn,total:tot,guides:W.guides,guidesTotal:W.guidesTotal,cases:W.cases,casesTotal:W.casesTotal,checks:W.checks,lib:W.lib,libTotal:W.libTotal,at:new Date().toISOString()};save();}catch(e){console.warn(e)}},2500);}
+let aicSumT=null;function aicPushSummary(){clearTimeout(aicSumT);aicSumT=setTimeout(()=>{if(!dbRef||IS_ADMIN)return;if(!remoteReady){aicPushSummary();return};try{const W=aicWorkSummary(grcState);const tot=GRC.reduce((a,c)=>a+c.lessons.length,0),dn=Object.entries(grcState).filter(([k,v])=>AIC_KEY.test(k)&&v&&v.done).length;S.aic={lessons:dn,total:tot,guides:W.guides,guidesTotal:W.guidesTotal,cases:W.cases,casesTotal:W.casesTotal,checks:W.checks,lib:W.lib,libTotal:W.libTotal,at:new Date().toISOString()};save();}catch(e){console.warn(e)}},2500);}
 function vGRC(){
  const total=GRC.reduce((a,c)=>a+c.lessons.length,0), completed=Object.entries(grcState).filter(([k,v])=>AIC_KEY.test(k)&&v&&v.done).length, p=total?Math.round(completed/total*100):0;
  const modPct=m=>{const n=m.lessons.length,d=m.lessons.filter((l,j)=>grcState[m.id+'-l'+String(j+1).padStart(2,'0')]?.done).length;return n?Math.round(d/n*100):0;};
@@ -3746,7 +3750,7 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='50';
+const APP_V='51';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){
@@ -3761,7 +3765,7 @@ async function vCisa(){
   try{
     if(!CisaModule) CisaModule=await import('./cisa/cisa-app.js?v='+APP_V);
     if(location.hash.replace('#','')!=='cisa'||!dbRef)return;
-    await CisaModule.mount({root:app,read:()=>S.cisa||{},write:(next)=>{S.cisa=next;save()},isAdmin:!!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID),verifyAdmin,readLearners,unlockLearner,track:(w,a)=>actEvent(w,a),tab:window.__cisaTab||null,topic:window.__cisaTopic||null,section:window.__cisaSection||null}); window.__cisaTab=null; window.__cisaTopic=null; window.__cisaSection=null; window.__cisaWhere=CisaModule.where||null;
+    await CisaModule.mount({root:app,read:()=>{const v=S.cisa||{};window.__cisaBase=jclone(v);return v;},write:(next)=>{const b=window.__cisaBase;S.cisa=b?merge3(b,next,S.cisa||{}):next;window.__cisaBase=jclone(next);save()},isAdmin:!!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID),verifyAdmin,readLearners,unlockLearner,track:(w,a)=>actEvent(w,a),tab:window.__cisaTab||null,topic:window.__cisaTopic||null,section:window.__cisaSection||null}); window.__cisaTab=null; window.__cisaTopic=null; window.__cisaSection=null; window.__cisaWhere=CisaModule.where||null;
   }catch(e){console.error('CISA load failed',e);app.innerHTML='<div class="cisa-hub"><section class="cisa-error">Unable to load CISA Hub. Verify the whole <code>cisa/</code> directory was uploaded alongside <code>index.html</code>.</section></div>'}
 }
 const VIEWS={dashboard:vDashboard,courses:vCourses,grc:vGRC,appsec:vApplication,cisa:vCisa,workbook:vWorkbook,insights:vInsights,explore:vExplore,flash:vFlash,rosetta:vRosetta,subnets:vSubnets,certs:vCerts,log:vLog};
@@ -4003,40 +4007,104 @@ async function readActivity(uid,from){
 }
 
 let KEY='p2c-guest', dbRef=null, writing=Promise.resolve(), dbTimer=null;
+/* ---- Progress sync (V27) ----
+   Progress lives in one Firestore document (progress/{uid}) plus a copy on the device.
+   Earlier versions replaced the whole document on every save and picked a winner by device clock,
+   so an older copy on another device or tab could overwrite newer progress. Now:
+   • nothing is written to the server until the server copy has loaded (remoteReady);
+   • every write is a three-way merge (last synced copy = base, this device = local, server = remote)
+     inside a transaction, so changes from other devices and tabs are kept, and deletions
+     (un-ticking a lesson, retrying a quiz) are respected;
+   • a live listener merges changes made on other devices or tabs while this one is open. */
+let syncBase=null, remoteReady=false, unsubProg=null, syncPending=false;
+const jclone=o=>o===undefined?undefined:JSON.parse(JSON.stringify(o));
+const jeq=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+const isObj=v=>!!v&&typeof v==='object'&&!Array.isArray(v);
+function merge3(b,l,r){
+  if(jeq(l,b)) return jclone(r);
+  if(jeq(r,b)) return jclone(l);
+  if(jeq(l,r)) return jclone(l);
+  if(isObj(l)&&isObj(r)){const bb=isObj(b)?b:{},out={};for(const k of new Set([...Object.keys(r),...Object.keys(l)])){const v=merge3(bb[k],l[k],r[k]);if(v!==undefined)out[k]=v;}return out;}
+  if(Array.isArray(l)&&Array.isArray(r)){
+    const key=x=>isObj(x)&&x.id!=null?'id:'+x.id:'j:'+JSON.stringify(x), bb=Array.isArray(b)?b:[];
+    const bm=new Map(bb.map(x=>[key(x),x])), lm=new Map(l.map(x=>[key(x),x])), rm=new Map(r.map(x=>[key(x),x])), out=[], seen=new Set();
+    for(const x of r){const k=key(x);seen.add(k);if(bm.has(k)&&!lm.has(k))continue;out.push(lm.has(k)?merge3(bm.get(k),lm.get(k),x):jclone(x));}
+    for(const x of l){const k=key(x);if(seen.has(k))continue;if(bm.has(k)&&!rm.has(k))continue;out.push(jclone(x));}
+    return out;}
+  return jclone(l); // both sides changed the same value differently: this device wins
+}
+window.__merge3=merge3;
+const baseKey=()=>KEY+'-syncbase';
+function saveBase(){try{localStorage.setItem(baseKey(),JSON.stringify(syncBase))}catch(e){}}
+function loadBase(){try{const r=localStorage.getItem(baseKey());return r?JSON.parse(r):null}catch(e){return null}}
+function storeLocal(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function softRefresh(){
+  const a=document.activeElement; if(a&&(a.tagName==='TEXTAREA'||a.tagName==='INPUT'||a.isContentEditable)) return;
+  const h=(location.hash||'').slice(1); if(h==='cisa'&&S.cisa&&S.cisa.activeMock) return;
+  if(/^admin/.test(h)) return;
+  const y=window.scrollY; try{route();}catch(e){} window.scrollTo(0,y); try{updateTop();}catch(e){}
+}
 function setSync(txt,ok){const el=document.getElementById('sync'); el.textContent=txt; el.classList.toggle('ok',!!ok);}
 function loadLocal(){try{const raw=localStorage.getItem(KEY); return raw?Object.assign(blank(),JSON.parse(raw)):null;}catch(e){return null;}}
 function save(){
   S.t=Date.now();
-  try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
-  if(dbRef){clearTimeout(dbTimer); setSync('Saving…',false); dbTimer=setTimeout(flush,1200);}
+  storeLocal();
+  if(dbRef){syncPending=true; clearTimeout(dbTimer); setSync(remoteReady?'Saving…':'Saved on this device',false); if(remoteReady) dbTimer=setTimeout(flush,1200);}
   updateTop();
 }
 function flush(){
-  if(!dbRef) return writing;
+  if(!dbRef||!remoteReady) return writing;
   clearTimeout(dbTimer); dbTimer=null;
-  const ref=dbRef, body=JSON.parse(JSON.stringify(S));
-  writing=writing.then(()=>setDoc(ref,body)).then(()=>setSync('Synced',true)).catch(()=>setSync('Offline: saved on this device',false));
+  const ref=dbRef;
+  writing=writing.then(async()=>{
+    const mine=jclone(S); let body=null;
+    await runTransaction(fdb,async tx=>{
+      const snap=await tx.get(ref), remote=snap.exists()?snap.data():null;
+      body=remote&&!jeq(remote,syncBase)?Object.assign(blank(),merge3(syncBase||{},mine,remote)):jclone(mine);
+      body.t=Date.now(); tx.set(ref,body);
+    });
+    syncBase=jclone(body); saveBase();
+    const before=jclone(S); S=Object.assign(blank(),merge3(mine,S,body)); storeLocal(); syncPending=false;
+    if(!jeq(before,S)) softRefresh();
+  }).then(()=>setSync('Synced',true)).catch(e=>{console.warn('Progress sync failed',e);setSync('Offline: saved on this device',false);});
   return writing;
 }
+async function initRemote(){
+  if(!dbRef) return;
+  try{
+    const snap=await getDoc(dbRef), remote=snap.exists()?snap.data():null;
+    if(remote){
+      const merged=Object.assign(blank(),merge3(syncBase||{},S,remote));
+      const changed=!jeq(merged,S); S=merged; storeLocal(); syncBase=jclone(remote); saveBase(); remoteReady=true;
+      if(!jeq(S,remote)) await flush(); else syncPending=false;
+      if(changed) softRefresh();
+    } else { remoteReady=true; syncBase={}; if(S.t>0) await flush(); }
+    if(!syncPending) setSync('Synced',true);
+    if(unsubProg) unsubProg();
+    unsubProg=onSnapshot(dbRef,sn=>{
+      if(sn.metadata.hasPendingWrites||!sn.exists()) return;
+      const remote=sn.data(); if(jeq(remote,syncBase)) return;
+      const before=jclone(S); S=Object.assign(blank(),merge3(syncBase||{},S,remote)); syncBase=jclone(remote); saveBase(); storeLocal();
+      if(!jeq(S,remote)){syncPending=true; clearTimeout(dbTimer); dbTimer=setTimeout(flush,800);}
+      if(!jeq(before,S)) softRefresh();
+    },e=>console.warn('Progress listener',e));
+  }catch(e){console.warn('Progress load failed',e); setSync('Offline: saved on this device',false);}
+}
+window.addEventListener('online',()=>{if(!dbRef) return; if(!remoteReady) initRemote(); else if(syncPending) flush();});
 window.addEventListener('pagehide',()=>{if(dbTimer) flush();});
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&dbTimer) flush();});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&dbTimer) flush(); if(document.visibilityState==='visible'&&dbRef&&!remoteReady) initRemote();});
 async function startSession(user){
   KEY='p2c-'+user.uid;
-  dbRef=doc(fdb,'progress',user.uid);
+  dbRef=doc(fdb,'progress',user.uid); remoteReady=false; syncPending=false; if(unsubProg){unsubProg();unsubProg=null;}
   IS_ADMIN=user.uid===ADMIN_UID; document.documentElement.classList.toggle('admin-mode',IS_ADMIN); navForRole();
   if(IS_ADMIN&&location.hash!=='#admin') history.replaceState(null,'','#admin');
   actStart(user); coachStart(user);
-  S=loadLocal()||blank();
+  S=loadLocal()||blank(); syncBase=loadBase();
   document.getElementById('who').textContent=user.email||''; setAvatar(user.email);
   setSync('Loading…',false);
   route();
+  await initRemote();
   await loadV3(user.uid);
-  try{
-    const snap=await getDoc(dbRef);
-    if(snap.exists()){const d=snap.data(); if((d.t||0)>=(S.t||0)){S=Object.assign(blank(),d); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} route();} else {await flush();}}
-    else if(S.t>0){await flush();}
-    setSync('Synced',true);
-  }catch(e){setSync('Offline: saved on this device',false);}
 }
 window.addEventListener('hashchange',()=>{if(dbRef){route(); afterRoute();}});
 
