@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="JS Learning">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="./cisa/cisa.css?v=51">
+<link rel="stylesheet" href="./cisa/cisa.css?v=52">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
 
 /* Theory-first responsive reading experience */
@@ -3750,7 +3750,7 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='51';
+const APP_V='52';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){
@@ -4016,17 +4016,29 @@ let KEY='p2c-guest', dbRef=null, writing=Promise.resolve(), dbTimer=null;
      inside a transaction, so changes from other devices and tabs are kept, and deletions
      (un-ticking a lesson, retrying a quiz) are respected;
    • a live listener merges changes made on other devices or tabs while this one is open. */
-let syncBase=null, remoteReady=false, unsubProg=null, syncPending=false;
+let syncBase=null, remoteReady=false, unsubProg=null, syncPending=false, syncFails=0;
 const jclone=o=>o===undefined?undefined:JSON.parse(JSON.stringify(o));
-const jeq=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const isObj=v=>!!v&&typeof v==='object'&&!Array.isArray(v);
+/* V28: compare by content, never by key order. Firestore returns map keys sorted alphabetically, so
+   comparing JSON text treated identical progress as "changed" and caused a save/refresh loop. */
+function jeq(a,b){
+  if(a===b) return true;
+  if(a===undefined||b===undefined||a===null||b===null) return a===b;
+  if(Array.isArray(a)){ if(!Array.isArray(b)||a.length!==b.length) return false; for(let i=0;i<a.length;i++) if(!jeq(a[i],b[i])) return false; return true; }
+  if(typeof a==='object'){ if(typeof b!=='object'||Array.isArray(b)) return false; const ka=Object.keys(a).filter(k=>a[k]!==undefined), kb=Object.keys(b).filter(k=>b[k]!==undefined); if(ka.length!==kb.length) return false; for(const k of ka) if(!jeq(a[k],b[k])) return false; return true; }
+  return false;
+}
+const canon=o=>Array.isArray(o)?o.map(canon):isObj(o)?Object.fromEntries(Object.keys(o).sort().map(k=>[k,canon(o[k])])):o;
+const canonStr=o=>JSON.stringify(canon(o));
 function merge3(b,l,r){
   if(jeq(l,b)) return jclone(r);
   if(jeq(r,b)) return jclone(l);
   if(jeq(l,r)) return jclone(l);
   if(isObj(l)&&isObj(r)){const bb=isObj(b)?b:{},out={};for(const k of new Set([...Object.keys(r),...Object.keys(l)])){const v=merge3(bb[k],l[k],r[k]);if(v!==undefined)out[k]=v;}return out;}
   if(Array.isArray(l)&&Array.isArray(r)){
-    const key=x=>isObj(x)&&x.id!=null?'id:'+x.id:'j:'+JSON.stringify(x), bb=Array.isArray(b)?b:[];
+    const key=x=>isObj(x)&&x.id!=null?'id:'+x.id:'j:'+canonStr(x), bb=Array.isArray(b)?b:[];
+    const uniq=a=>new Set(a.map(key)).size===a.length;
+    if(!uniq(l)||!uniq(r)||l.every(x=>!isObj(x))&&r.every(x=>!isObj(x))&&(l.length===r.length)) return jclone(l); // lists like weeklyMinutes / topic order: keep this device's whole list
     const bm=new Map(bb.map(x=>[key(x),x])), lm=new Map(l.map(x=>[key(x),x])), rm=new Map(r.map(x=>[key(x),x])), out=[], seen=new Set();
     for(const x of r){const k=key(x);seen.add(k);if(bm.has(k)&&!lm.has(k))continue;out.push(lm.has(k)?merge3(bm.get(k),lm.get(k),x):jclone(x));}
     for(const x of l){const k=key(x);if(seen.has(k))continue;if(bm.has(k)&&!rm.has(k))continue;out.push(jclone(x));}
@@ -4052,6 +4064,15 @@ function save(){
   if(dbRef){syncPending=true; clearTimeout(dbTimer); setSync(remoteReady?'Saving…':'Saved on this device',false); if(remoteReady) dbTimer=setTimeout(flush,1200);}
   updateTop();
 }
+/* Server rule planIntact(): while the plan is locked on the server, a learner write must carry the
+   server's plan fields unchanged, or the WHOLE progress write is refused (and ticks/reads are lost with it). */
+const PLAN_FIELDS=['planLock','plans','planMode','topicEdits','customTasks','order','hidden'];
+function keepLockedPlan(body,remote){
+  const rc=remote&&remote.cisa; if(!rc||!rc.planLock||rc.planLock.locked!==true) return;
+  if(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID) return;
+  body.cisa=Object.assign({},body.cisa||{});
+  for(const f of PLAN_FIELDS){ if(f in rc) body.cisa[f]=jclone(rc[f]); else delete body.cisa[f]; }
+}
 function flush(){
   if(!dbRef||!remoteReady) return writing;
   clearTimeout(dbTimer); dbTimer=null;
@@ -4061,12 +4082,19 @@ function flush(){
     await runTransaction(fdb,async tx=>{
       const snap=await tx.get(ref), remote=snap.exists()?snap.data():null;
       body=remote&&!jeq(remote,syncBase)?Object.assign(blank(),merge3(syncBase||{},mine,remote)):jclone(mine);
+      keepLockedPlan(body,remote);
       body.t=Date.now(); tx.set(ref,body);
     });
     syncBase=jclone(body); saveBase();
     const before=jclone(S); S=Object.assign(blank(),merge3(mine,S,body)); storeLocal(); syncPending=false;
     if(!jeq(before,S)) softRefresh();
-  }).then(()=>setSync('Synced',true)).catch(e=>{console.warn('Progress sync failed',e);setSync('Offline: saved on this device',false);});
+  }).then(()=>{syncFails=0;setSync('Synced',true);}).catch(e=>{
+    console.warn('Progress sync failed',e); syncFails++;
+    const code=String(e&&e.code||e&&e.message||'error');
+    setSync(navigator.onLine===false?'Offline: saved on this device':'Not synced yet ('+code.replace(/^firestore\//,'')+') — saved on this device',false);
+    window.__lastSyncError={code,at:new Date().toISOString(),size:(()=>{try{return JSON.stringify(S).length}catch(x){return 0}})()};
+    if(!/permission-denied|invalid-argument/.test(code)){clearTimeout(dbTimer);dbTimer=setTimeout(flush,Math.min(60000,3000*Math.pow(2,syncFails-1)));}
+  });
   return writing;
 }
 async function initRemote(){

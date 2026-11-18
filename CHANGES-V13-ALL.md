@@ -387,3 +387,11 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 **Versions:** APP_V 51, stylesheet `cisa.css?v=51`, service worker cache `p2c-theory-v51-sync`.
 
 **Not changed:** no Firestore rule changes are needed.
+
+## V28: Sync fix — chapter ticks, "Mark as read" and plan set-up not saving
+
+- **Save loop fixed.** The v51 sync compared progress by its JSON text. Firestore returns fields in alphabetical order, so every server copy looked "different", which started an endless save → refresh → save cycle. Clicks and the plan form were lost to re-renders and competing writes. The comparison now ignores field order (0 writes while idle).
+- **Locked-plan rule no longer blocks progress.** The Firestore rule refuses any learner write that changes a locked plan. If a device still had an older copy of the plan, every save (ticks, manual reads) was refused. Learner saves now always send the server's locked plan fields unchanged, so other progress always gets through.
+- **Lists merge safely.** Number lists such as weekly study minutes are no longer merged item by item (which could drop repeated values).
+- **Clear status.** If a save is ever refused, the status chip shows the reason code. Network failures retry automatically.
+- Verified on a test store that mimics Firestore: topic complete, manual read and plan Save & lock reach the server, survive a reload and show in the admin overview.
