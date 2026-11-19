@@ -4,7 +4,7 @@
    targets, assigned work, remote sign-out), a live chat with each learner, alerts and an audit
    trail. Reads learner data through the parent app; the admin never studies here. */
 import { learnerSnapshot } from './cisa-app.js';
-import { assignmentStatus, targetProgress, threadHTML, threadAction, EDIT_WINDOW } from './learner-coach.js';
+import { assignmentStatus, targetProgress, threadHTML, threadAction, EDIT_WINDOW, enablePaste, previewText } from './learner-coach.js';
 import { uiConfirm, uiAlert } from './ui-dialog.js';
 
 let root, api, learners = null, busy = false, err = '', loadedAt = null, refreshTimer = null;
@@ -260,7 +260,7 @@ function subscribe(uid) {
     list.push(fb.onSnapshot(fb.query(fb.collection(fb.fdb, 'chats', uid, 'messages'), fb.orderBy('at')), snap => {
       const prevIds = chats[uid] ? new Set(chats[uid].map(m => m.id)) : null;
       chats[uid] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (prevIds) { const fresh = chats[uid].filter(m => !prevIds.has(m.id) && m.from === 'learner' && !m.deleted); const viewing = chatOpen && (convOpen || !isNarrow()) && document.visibilityState === 'visible' && learners && learners[sel] && learners[sel].uid === uid; if (fresh.length && !viewing) chatToast(uid, fresh[fresh.length - 1].text); }
+      if (prevIds) { const fresh = chats[uid].filter(m => !prevIds.has(m.id) && m.from === 'learner' && !m.deleted); const viewing = chatOpen && (convOpen || !isNarrow()) && document.visibilityState === 'visible' && learners && learners[sel] && learners[sel].uid === uid; if (fresh.length && !viewing) chatToast(uid, previewText(fresh[fresh.length - 1])); }
       if (chatOpen && (convOpen || !isNarrow()) && learners && learners[sel] && learners[sel].uid === uid) markLearnerSeen(uid);
       renderChatWin(); softRender();
     }, e => { chats[uid] = chats[uid] || []; chats[uid].error = String(e && e.code || e); softRender(); }));
@@ -281,6 +281,7 @@ async function saveCoach(uid, patch, auditText) {
   try { await fb.setDoc(fb.doc(fb.fdb, 'coach', uid), body, { merge: true }); return true; }
   catch (e) { uiAlert('Publish the latest firestore.rules in the Firebase Console, then try again.', { title: 'Couldn’t save' }); return false; }
 }
+async function sendImg(img, cap) { const L = learners && learners[sel], fb = api.fb; if (!L || !fb) return false; try { await fb.addDoc(fb.collection(fb.fdb, 'chats', L.uid, 'messages'), { from: 'admin', text: cap, img, kind: 'chat', title: '', at: Date.now(), seenAt: null }); return true; } catch (e) { uiAlert('Check the connection and try again.', { title: 'Photo not sent' }); return false; } }
 async function sendMsg(uid, text, kind, title) {
   const fb = api.fb;
   try { await fb.addDoc(fb.collection(fb.fdb, 'chats', uid, 'messages'), { from: 'admin', text: text.slice(0, 2000), kind, title: (title || '').slice(0, 80), at: Date.now(), seenAt: null }); if (kind === 'popup') saveCoach(uid, {}, `Sent popup message${title ? ' “' + title + '”' : ''}`); return true; }
@@ -495,6 +496,7 @@ function ensureChatEl() {
   <div class="lc-toast" hidden data-c="toast" role="status"></div>`;
   document.body.appendChild(chatEl);
   const ta = chatEl.querySelector('[data-c-form] textarea'), sendB = chatEl.querySelector('[data-c-form] .wa-send');
+  enablePaste(chatEl, t => !!t.closest('[data-c-form]'), sendImg);
   ta.addEventListener('input', () => { ta.style.height = 'auto'; ta.style.height = Math.min(140, ta.scrollHeight) + 'px'; sendB.disabled = !ta.value.trim(); });
   chatEl.querySelector('[data-c-q]').addEventListener('input', e => { waQ = e.target.value.trim().toLowerCase(); renderChatWin(); });
   chatEl.addEventListener('click', async e => {
@@ -546,14 +548,14 @@ function renderChatWin(force) {
   // conversation list
   const items = chatEl.querySelector('.wa-items');
   const ls = (learners || []).map((L, i) => ({ L, i, last: lastMsg(L.uid) })).filter(x => !waQ || nameOf(x.L).toLowerCase().includes(waQ)).sort((a, b) => (b.last ? b.last.at : 0) - (a.last ? a.last.at : 0));
-  items.innerHTML = ls.length ? ls.map(({ L, i, last }) => { const un = unreadOf(L.uid), live = isLive(L); const prev = !last ? 'No messages yet' : last.deleted ? 'Message deleted' : (last.from === 'admin' ? 'You: ' : '') + (last.kind === 'popup' ? '🔔 ' : '') + last.text; return `<div class="wa-item ${i === sel ? 'on' : ''}" role="listitem" tabindex="0" data-c-uid="${h(L.uid)}"><span class="lc-av learner">${h(nameOf(L).charAt(0).toUpperCase())}${live ? '<i class="lc-live"></i>' : ''}</span><div class="wa-it"><div class="wa-r1"><b>${h(nameOf(L))}</b><time class="${un ? 'un' : ''}">${last ? h(shortTime(last.at)) : ''}</time></div><div class="wa-r2"><span>${h(prev)}</span>${un ? `<em>${un}</em>` : ''}</div></div></div>`; }).join('') : `<p class="wa-none">${learners && learners.length ? 'No learner matches your search.' : 'No learners yet.'}</p>`;
+  items.innerHTML = ls.length ? ls.map(({ L, i, last }) => { const un = unreadOf(L.uid), live = isLive(L); const prev = !last ? 'No messages yet' : last.deleted ? 'Message deleted' : (last.from === 'admin' ? 'You: ' : '') + (last.kind === 'popup' ? '🔔 ' : '') + previewText(last); return `<div class="wa-item ${i === sel ? 'on' : ''}" role="listitem" tabindex="0" data-c-uid="${h(L.uid)}"><span class="lc-av learner">${h(nameOf(L).charAt(0).toUpperCase())}${live ? '<i class="lc-live"></i>' : ''}</span><div class="wa-it"><div class="wa-r1"><b>${h(nameOf(L))}</b><time class="${un ? 'un' : ''}">${last ? h(shortTime(last.at)) : ''}</time></div><div class="wa-r2"><span>${h(prev)}</span>${un ? `<em>${un}</em>` : ''}</div></div></div>`; }).join('') : `<p class="wa-none">${learners && learners.length ? 'No learner matches your search.' : 'No learners yet.'}</p>`;
   // conversation
   const L = learners && learners[sel]; const who = chatEl.querySelector('[data-c-who]'), list = chatEl.querySelector('.wa-msgs');
   chatEl.querySelector('.wa-empty').hidden = !!L; chatEl.querySelector('[data-c-form]').hidden = !L;
   if (!L) { who.innerHTML = ''; list.innerHTML = ''; layoutWa(); return; }
   const live = isLive(L);
   who.innerHTML = `<span class="lc-av learner">${h(nameOf(L).charAt(0).toUpperCase())}${live ? '<i class="lc-live"></i>' : ''}</span><div><b>${h(nameOf(L))}</b><small class="${live ? 'live' : ''}">${live ? 'online' : 'last seen ' + h(ago(lastSeen(L)))}</small></div>`;
-  chatEl.querySelector('[data-c-form] textarea').placeholder = 'Message';
+  chatEl.querySelector('[data-c-form] textarea').placeholder = 'Message · paste a photo with Ctrl/⌘+V';
   const msgs = chats[L.uid] || [];
   if (tst.editing && !msgs.some(m => m.id === tst.editing)) tst.editing = null;
   const ed = list.querySelector('.lc-edit textarea'), edVal = ed ? ed.value : null, edFocus = ed && ed === document.activeElement;
@@ -697,6 +699,7 @@ export async function mountAdmin({ root: target, readLearners, readActivity, unl
   view = VIEW_TITLES[startView] ? startView : 'overview'; syncNav();
   root = target; api = { readLearners, readActivity, unlockLearner, fb, listBackups, readBackup, restoreBackup, selfTest, appVersion, relockLearner };
   root.onclick = onClick; root.onchange = onChange; root.onsubmit = onSubmit; root.onkeydown = onKey;
+  enablePaste(root, t => !!t.closest('.adm-chat-input'), sendImg);
   unsubscribeAll(); chats = {}; coachDocs = {};
   clearInterval(refreshTimer);
   refreshTimer = setInterval(() => { if (!root.isConnected || !root.querySelector('.adm-portal')) { clearInterval(refreshTimer); unsubscribeAll(); return; } if (document.visibilityState === 'visible' && !busy && !root.contains(document.activeElement)) load(); }, 120e3);

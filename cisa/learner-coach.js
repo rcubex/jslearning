@@ -89,8 +89,13 @@ export function enablePaste(scope, accept, send) {
   if (!scope || scope.__lcPaste) return; scope.__lcPaste = true;
   scope.addEventListener('paste', async e => {
     const ta = e.target && e.target.closest ? e.target.closest('textarea') : null; if (!ta || !accept(ta)) return;
-    const items = [...((e.clipboardData && e.clipboardData.items) || [])].filter(i => i.kind === 'file' && /^image\//.test(i.type)); if (!items.length) return;
-    e.preventDefault(); const f = items[0].getAsFile(); if (!f) return;
+    const cd = e.clipboardData; if (!cd) return;
+    // Screenshots arrive as clipboard items; images copied from Finder/Explorer or some apps arrive as files.
+    let f = null;
+    for (const i of [...(cd.items || [])]) if (i.kind === 'file' && /^image\//.test(i.type)) { f = i.getAsFile(); if (f) break; }
+    if (!f) f = [...(cd.files || [])].find(x => /^image\//.test(x.type) || /\.(png|jpe?g|gif|webp|heic|bmp)$/i.test(x.name || '')) || null;
+    if (!f) return;
+    e.preventDefault();
     const data = await compressImage(f);
     if (!data) { if (window.uiAlert) uiAlert('That image could not be read or is too large. Try a smaller screenshot.', { title: 'Photo not added' }); return; }
     showPastePreview(ta, data, send);

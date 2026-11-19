@@ -1112,3 +1112,14 @@ i.app{background:var(--adm,#2563eb)}i.log{background:#f59e0b}
 b.inh,b.res{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;font-size:11px;color:#fff}b.inh{background:#0A2540}b.res{background:#0A84FF}
 .adm-warn{margin:8px 0 0;padding:9px 12px;border-radius:10px;background:rgba(255,159,10,.14);border:1px solid rgba(255,159,10,.35);font-size:13px;line-height:1.5}
 .adm-sec-head .cisa-btn{white-space:nowrap}
+/* V31: pasted photos in chat */
+.lc-paste{display:flex;align-items:center;gap:10px;margin:6px 10px 4px;padding:8px;border-radius:14px;background:rgba(255,255,255,.92);border:1px solid rgba(10,37,64,.12);box-shadow:0 4px 18px rgba(10,37,64,.08)}
+.lc-paste img{width:64px;height:64px;object-fit:cover;border-radius:10px;flex:none;background:#eef2f7}
+.lc-paste-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;font-size:13px}.lc-paste-t small{font-size:11.5px;color:#6B7A90}
+.lc-paste-b{display:flex;gap:6px;flex:none}.lc-paste-b button{border:1px solid rgba(10,37,64,.14);background:#fff;border-radius:9px;padding:7px 11px;font:inherit;font-size:13px;cursor:pointer}.lc-paste-b button.pri{background:#0A84FF;border-color:#0A84FF;color:#fff;font-weight:600}
+.lc-paste-b button:disabled{opacity:.6}
+img.lc-img{display:block;max-width:min(240px,62vw);max-height:280px;width:auto;height:auto;border-radius:12px;margin:2px 0 4px;cursor:zoom-in;background:rgba(0,0,0,.05)}
+.lc-lightbox{position:fixed;inset:0;z-index:10050;background:rgba(10,14,24,.86);display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.lc-lightbox img{max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lc-lightbox button{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.18);color:#fff;font-size:24px;cursor:pointer}
+@media(max-width:480px){.lc-paste{flex-wrap:wrap}.lc-paste-b{width:100%;justify-content:flex-end}}
