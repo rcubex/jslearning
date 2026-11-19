@@ -1,14 +1,15 @@
 /* Knowledge checks: short untimed self-checks by topic area.
    Each area draws from the module checkpoint questions (by module id) plus extra scenario questions here. */
 export const CHECK_AREAS = [
-  { id: 'basics', name: 'How AI works', mods: ['ab01', 'ab02', 'ab03', 'ab04', 'ab05'], blurb: 'Types of AI, training, LLMs, RAG, agents and metrics.' },
+  { id: 'basics', name: 'How AI works', mods: ['ab01', 'ab02', 'ab03', 'ab04', 'ab05', 'ab06', 'ab07', 'ab08', 'ab09', 'ab10', 'ab11', 'ab12', 'ab13', 'ab14'], blurb: 'Types of AI, training, LLMs, RAG, agents and metrics.' },
   { id: 'found', name: 'Governance foundations', mods: ['ai01', 'ai02', 'ai03'], blurb: 'What AI governance is, risks and principles.' },
   { id: 'laws', name: 'Laws and frameworks', mods: ['ai04', 'ai05', 'ai06', 'ai07', 'ai08'], blurb: 'EU AI Act, NIST AI RMF and data protection.' },
   { id: 'iso', name: 'ISO/IEC 42001 and auditing', mods: ['ai09', 'ai10', 'ai18'], blurb: 'Management system clauses, Annex A and audit practice.' },
-  { id: 'build', name: 'Building AI responsibly', mods: ['ai11', 'ai12', 'ai13'], blurb: 'Risk and impact assessment, lifecycle, fairness and testing.' },
-  { id: 'use', name: 'Using and buying AI safely', mods: ['ai14', 'ai15'], blurb: 'GenAI security, vendors and shadow AI.' },
+  { id: 'build', name: 'Building AI responsibly', mods: ['ai11', 'ai12', 'ai13', 'ai24'], blurb: 'Risk and impact assessment, lifecycle, fairness and testing.' },
+  { id: 'use', name: 'Using and buying AI safely', mods: ['ai14', 'ai15', 'ai22', 'ai23'], blurb: 'GenAI security, vendors and shadow AI.' },
   { id: 'region', name: 'UAE and India', mods: ['ai16', 'ai17'], blurb: 'PDPL, DIFC, ADGM, CBUAE, DPDP, IT Rules, RBI.' },
-  { id: 'lead', name: 'Leading a programme', mods: ['ai19', 'ai20'], blurb: 'Operating model, metrics, board reporting and the capstone.' }
+  { id: 'cases', name: 'Case files: full assessments', mods: ['ai21', 'ai26', 'ai27'], blurb: 'Complete worked assessments: in-house ML, generative AI assistant, third-party vendor.' },
+  { id: 'lead', name: 'Leading a programme', mods: ['ai19', 'ai20', 'ai25'], blurb: 'Operating model, metrics, board reporting and the capstone.' }
 ];
 
 export const CHECK_EXTRA = {

@@ -154,13 +154,58 @@ function summaryLine(L, st, days) {
 function overviewUI(L) {
   const s = L.snap, st = stats(L, addDays(today(), -13), today()), wk = stats(L, mondayOf(today()), addDays(mondayOf(today()), 6));
   const recent = rowsOf(L).slice(0, 10);
-  return `${s ? `<section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">Study progress</span><h3 class="ed-title">${s.mode === 'relaxed' ? 'Relaxed' : 'Normal'} plan ${s.locked ? '· 🔒 locked' : '· not locked'}</h3><p class="ed-sub">Exam ${h(s.exam ? fmtDayLong(s.exam) : '—')} · ${s.days} days left</p></div>${s.locked ? btn('unlock', 'Unlock plan', 'sm', `data-uid="${h(L.uid)}"`) : ''}</div>
+  return `${s ? `<section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">Study progress</span><h3 class="ed-title">${s.mode === 'relaxed' ? 'Relaxed' : 'Normal'} plan ${s.locked ? '· 🔒 locked' : '· not locked'}</h3><p class="ed-sub">Exam ${h(s.exam ? fmtDayLong(s.exam) : '—')} · ${s.days} days left</p>${planHistUI(L)}</div>${s.locked ? btn('unlock', 'Unlock plan', 'sm', `data-uid="${h(L.uid)}"`) : (planHist(L).mismatch ? btn('relock', 'Re-lock plan', 'sm primary', `data-uid="${h(L.uid)}"`) : '')}</div>
    <div class="adm-kpis six">${kpi('Readiness', s.ready === null ? '–' : s.ready + '%', 'first mock attempts')}${kpi('Topics done', `${s.done}/${s.total}`)}${kpi('Logged study', s.hours + 'h', 'all time')}${kpi('Recent quizzes', s.quiz === null ? '–' : s.quiz + '%')}${kpi('Mistakes due', s.mx)}${kpi('Manual read', `${s.manual}/60`)}</div>
    <div class="adm-doms">${s.scores.map(d => `<div><span>D${d.domain}</span><div class="adm-meter"><i style="width:${d.accuracy ?? 0}%"></i></div><small>${d.accuracy === null ? 'no data' : d.accuracy + '%'} · ${d.coverage}% covered</small></div>`).join('')}</div>
    <p class="cisa-mini">Mock first attempts: ${s.mocks.length ? s.mocks.map(m => `Mock ${m.id} ${m.p}%`).join(' · ') : 'none yet'}</p></section>` : ''}
+  ${healthUI(L)}
   ${aicUI(L)}
   <section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">This week</span><h3 class="ed-title">${dur(wk.app)} in the app · ${wk.active} active day${wk.active === 1 ? '' : 's'}</h3><p class="ed-sub">Last 14 days below</p></div>${btn('go-week', 'Weekly report', 'sm')}</div>${bars(st.days, true)}</section>
   <section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">Recent activity</span><h3 class="ed-title">Latest 10 entries</h3></div>${btn('go-log', 'Full activity log', 'sm')}</div>${logTable(recent, false)}</section>`;
+}
+
+/* V29: sync health, self-test and daily backups */
+let bkLists = {}, selfRes = null, selfBusy = false;
+function healthUI(L) {
+  const h = L.act && L.act.profile && L.act.profile.health, cur = String(api.appVersion || ''), items = [];
+  const ago = t => { if (!t) return 'never'; const m = Math.round((Date.now() - t) / 60e3); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 2880 ? Math.round(m / 60) + ' h ago' : Math.round(m / 1440) + ' days ago'; };
+  let head = 'No report yet', kind = 'warn';
+  if (h) {
+    const old = cur && String(h.v) !== cur;
+    if (h.err) { head = 'Saves failing'; kind = 'bad'; items.push(['bad', `Last error: ${h.err} (${ago(h.errAt)}). Their progress is kept on their device and retried. If it says permission-denied, check the Firestore rules are published.`]); }
+    else { head = old ? 'Old app version' : 'Healthy'; kind = old ? 'warn' : 'ok'; }
+    items.push([h.err ? 'warn' : 'ok', `Last good save: ${ago(h.lastOk)} · ${h.device || 'device'}${h.online === false ? ' · offline' : ''}`]);
+    items.push([old ? 'warn' : 'ok', old ? `Running v${h.v}; current is v${cur}. They should close every tab and reopen (an “Update ready” bar also appears).` : `Running the current version (v${h.v}).`]);
+  } else items.push(['warn', `No sync report yet. It appears once the learner opens v${cur || '53'} or later.`]);
+  if (L.data && L.data.t) items.push(['ok', `Server copy last changed ${ago(L.data.t)}.`]);
+  const bk = bkLists[L.uid];
+  const bkHtml = !bk ? `<p class="cisa-mini">A full copy of the progress is saved once a day (last 14 days kept).</p>${btn('bk-list', 'Show backups', 'sm', `data-uid="${h_(L.uid)}"`)}`
+    : bk.loading ? '<p class="cisa-mini">Loading backups…</p>'
+    : bk.length ? `<table class="adm-bk"><tbody>${bk.map(b => `<tr><td><b>${h_(b.day || '')}</b></td><td>${h_(new Date(b.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))} · v${h_(b.v || '?')} · ${Math.round((b.size || 0) / 1024)} KB</td><td>${btn('bk-dl', 'Download', 'sm', `data-uid="${h_(L.uid)}" data-id="${h_(b.id)}"`)} ${btn('bk-restore', 'Restore', 'sm', `data-uid="${h_(L.uid)}" data-id="${h_(b.id)}" data-day="${h_(b.day || '')}"`)}</td></tr>`).join('')}</tbody></table>`
+    : '<p class="cisa-mini">No backups yet. The first one is made shortly after the learner opens this version.</p>';
+  const st = selfRes ? `<ul class="adm-health">${selfRes.map(r => `<li class="${r.st}">${h_(r.t)}</li>`).join('')}</ul>` : '';
+  return `<section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">Sync health</span><h3 class="ed-title">${kind === 'ok' ? '✓ ' : kind === 'bad' ? '⚠ ' : ''}${head}</h3><p class="ed-sub">Whether the learner’s ticks, reads and plan are reaching the server</p></div>${btn('self-test', selfBusy ? 'Checking…' : 'Run sync check', 'sm')}</div>
+  <ul class="adm-health">${items.map(([k, t]) => `<li class="${k}">${h_(t)}</li>`).join('')}</ul>${st ? `<h4 style="margin:14px 0 0">Sync check results</h4>${st}` : ''}
+  <h4 style="margin:16px 0 4px">Daily backups</h4>${bkHtml}</section>`;
+}
+const h_ = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* V30: plan lock history — compares the server lock with the learner's own "locked the plan" activity and admin unlocks. */
+function planHist(L) {
+  const c = (L.data && L.data.cisa) || {}, pl = c.planLock || {}, rows = (L.act && L.act.rows) || [];
+  const ts = r => r.u || Date.parse((r.d || '') + 'T' + (r.s || '00:00') + ':00') || 0;
+  const lockEv = rows.filter(r => r.k === 'e' && /locked the (Normal|Relaxed) study plan/i.test(r.x || '')).sort((a, b) => ts(b) - ts(a))[0];
+  const au = ((coachDocs[L.uid] || {}).audit || []).filter(x => /Unlocked the study plan/i.test(x.what || '')).map(x => x.at);
+  const unlockAt = Math.max(Date.parse(pl.unlockedAt || '') || 0, ...au.map(Number).filter(Boolean), 0);
+  const lockAt = lockEv ? ts(lockEv) : 0, mode = lockEv && /Normal/i.test(lockEv.x) ? 'normal' : lockEv ? 'relaxed' : (c.planMode || 'relaxed');
+  return { locked: pl.locked === true, lockAt, unlockAt, mode, mismatch: pl.locked !== true && lockAt > 0 && lockAt > unlockAt, at: pl.at };
+}
+function planHistUI(L) {
+  const x = planHist(L), d = t => t ? new Date(t).toLocaleString([], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+  if (x.locked) return `<p class="cisa-mini">Locked ${x.at ? 'on ' + h(d(Date.parse(x.at))) : ''}${x.unlockAt ? ' · last admin unlock ' + h(d(x.unlockAt)) : ''}</p>`;
+  if (x.mismatch) return `<p class="adm-warn">⚠ The learner locked the ${x.mode === 'normal' ? 'Normal' : 'Relaxed'} plan on ${h(d(x.lockAt))} (activity log), but the server shows it as not locked, and no admin unlock was recorded after that. The lock was most likely lost in the old sync problem (v51). Use <b>Re-lock plan</b> to restore it.</p>`;
+  if (x.unlockAt) return `<p class="cisa-mini">Unlocked by the admin on ${h(d(x.unlockAt))}. The learner has not locked a new plan since.</p>`;
+  return `<p class="cisa-mini">No plan lock recorded in the last ${LOOKBACK} days of activity.</p>`;
 }
 
 function aicUI(L) {
@@ -607,6 +652,11 @@ async function onClick(e) {
   if (a === 'ex-open') { exSel = exSel === b.dataset.id ? null : b.dataset.id; render(); return; }
   if (a === 'as-remove') { const cd = coachDocs[L.uid] || {}, x = (cd.assignments || []).find(z => z.id === b.dataset.id); if (!x || !(await uiConfirm('It disappears from the learner’s list.', { title: `Remove “${x.label}”?`, ok: 'Remove', danger: true }))) return; await saveCoach(L.uid, { assignments: (cd.assignments || []).filter(z => z.id !== x.id) }, `Removed assigned work: ${x.label}`); render(); return; }
   if (a === 'signout-remote') { if (!(await uiConfirm('Any open session closes within a few seconds. They can sign in again straight away.', { title: `Sign ${nameOf(L)} out now?`, ok: 'Sign out', danger: true }))) return; if (await saveCoach(L.uid, { signOutAt: Date.now() }, 'Signed the learner out remotely')) { uiAlert('Any open session will close within a few seconds.', { title: 'Sign-out sent' }); } render(); return; }
+  if (a === 'self-test') { if (selfBusy || !api.selfTest) return; selfBusy = true; render(); try { selfRes = await api.selfTest(); } catch (e) { selfRes = [{ st: 'bad', t: 'Sync check failed: ' + (e && e.message || e) }]; } selfBusy = false; await load(); return; }
+  if (a === 'bk-list') { const uid = b.dataset.uid; bkLists[uid] = { loading: true }; render(); try { bkLists[uid] = await api.listBackups(uid); } catch (e) { bkLists[uid] = []; } render(); return; }
+  if (a === 'bk-dl') { const d = await api.readBackup(b.dataset.uid, b.dataset.id); if (!d) { uiAlert('That backup could not be read.', { title: 'Download failed' }); return; } dlFile(`progress-backup-${b.dataset.id}-${today()}.json`, JSON.stringify(d, null, 1), 'application/json'); return; }
+  if (a === 'bk-restore') { if (!(await uiConfirm(`The learner’s progress goes back to how it was on ${b.dataset.day}. Anything done after that is replaced. A copy of the current progress downloads first, so this can be undone.`, { title: 'Restore this backup?', ok: 'Restore', danger: true }))) return; const r = await api.restoreBackup(b.dataset.uid, b.dataset.id); if (r.ok && r.previous) dlFile(`progress-before-restore-${today()}.json`, JSON.stringify(r.previous, null, 1), 'application/json'); uiAlert(r.ok ? 'Done. Open learner devices update within a few seconds.' : 'Could not restore: ' + r.err, { title: r.ok ? 'Backup restored' : 'Restore failed' }); if (r.ok) saveCoach(b.dataset.uid, {}, `Restored progress backup from ${b.dataset.day}`); await load(); return; }
+  if (a === 'relock') { const x = planHist(L), s = L.snap || {}; if (!(await uiConfirm(`This restores the lock on the ${x.mode === 'normal' ? 'Normal' : 'Relaxed'} plan with the dates currently saved (exam ${s.exam || 'not set'}). The learner cannot change the plan afterwards unless you unlock it.`, { title: 'Re-lock the study plan?', ok: 'Re-lock' }))) return; const ok = api.relockLearner && await api.relockLearner(b.dataset.uid, x.mode, x.lockAt ? new Date(x.lockAt).toISOString() : new Date().toISOString()); if (ok) saveCoach(b.dataset.uid, {}, `Re-locked the ${x.mode} study plan`); uiAlert(ok ? 'The plan is locked again. Open learner devices update within a few seconds.' : 'Could not re-lock. Check the connection and that the Firestore rules are published.', { title: ok ? 'Plan re-locked' : 'Re-lock failed' }); await load(); return; }
   if (a === 'unlock') { if (!(await uiConfirm('They can set up and lock a new plan afterwards.', { title: 'Unlock the study plan?', ok: 'Unlock' }))) return; api.unlockLearner(b.dataset.uid).then(ok => { if (ok) saveCoach(b.dataset.uid, {}, 'Unlocked the study plan'); uiAlert(ok ? 'The learner can now set up a new plan.' : 'Check the Firestore rules are published, then try again.', { title: ok ? 'Plan unlocked' : 'Couldn’t unlock' }); load(); }); return; }
 }
 function onChange(e) {
@@ -642,9 +692,9 @@ export function unmountAdmin() {
   root = null; learners = null; chats = {}; coachDocs = {}; bellOpen = false;
   if (chatEl) { chatEl.remove(); chatEl = null; } chatOpen = false; convOpen = false; document.documentElement.classList.remove('wa-lock');
 }
-export async function mountAdmin({ root: target, readLearners, readActivity, unlockLearner, fb, view: startView }) {
+export async function mountAdmin({ root: target, readLearners, readActivity, unlockLearner, fb, view: startView, listBackups, readBackup, restoreBackup, selfTest, appVersion, relockLearner }) {
   view = VIEW_TITLES[startView] ? startView : 'overview'; syncNav();
-  root = target; api = { readLearners, readActivity, unlockLearner, fb };
+  root = target; api = { readLearners, readActivity, unlockLearner, fb, listBackups, readBackup, restoreBackup, selfTest, appVersion, relockLearner };
   root.onclick = onClick; root.onchange = onChange; root.onsubmit = onSubmit; root.onkeydown = onKey;
   unsubscribeAll(); chats = {}; coachDocs = {};
   clearInterval(refreshTimer);

@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="JS Learning">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="./cisa/cisa.css?v=52">
+<link rel="stylesheet" href="./cisa/cisa.css?v=54">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
 
 /* Theory-first responsive reading experience */
@@ -2930,7 +2930,7 @@ a.td-row:hover{background:rgba(255,255,255,.6)}
     </nav>
     <div class="side-foot">
       <div class="side-prog"><div class="row"><span>Technical Academy</span><b id="topPct">0%</b></div><span class="mini-bar" aria-hidden="true"><i id="topBar" style="width:0%"></i></span></div>
-      <span class="sync" id="sync">Signed out</span>
+      <span class="sync" id="sync" role="button" tabindex="0" title="Check that your progress is saved on the server">Signed out</span>
       <div class="acct"><span class="avatar" id="avatar" aria-hidden="true"></span><span id="who"></span></div>
       <div class="side-actions"><button class="side-btn" id="themeBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg><span>Theme</span></button><button class="side-btn" id="signout" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H4"/></svg><span>Sign out</span></button></div>
     </div>
@@ -3047,8 +3047,9 @@ const ADMIN_UID='Yk0WCbGfCOfiy7fnXqMgcfxjvze2';
 import { GRC_V31 } from "./grc-v31.js"
 import { uiConfirm, uiAlert } from './cisa/ui-dialog.js';
 import { M, GLOSS, DIAG, GRC_PLUS } from './content/core.js';
+import { TECH_PLUS } from './content/tech-plus.js';
 import { AIC, AIC_LEVELS } from './content/ai-compliance.js';
-import { renderAIC, isAICRoute, aicSubnav, aicWorkSummary, AIC_FLASH } from './content/aic-work.js';
+import { renderAIC, isAICRoute, aicSubnav, aicWorkSummary, AIC_FLASH, aicReviewState } from './content/aic-work.js';
 import { SEC_ACADEMY, SEC_TEXTBOOK } from './content/security.js';
 import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -3254,6 +3255,7 @@ function vDashboard(){
   <h3 class="ed-sect">Today <span>${esc(new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'}))}</span></h3>
   <div id="coachSlot"></div>
   ${todayCardHTML()}
+  ${weekCardHTML()}
   <h3 class="ed-sect">Your academies</h3>
   <div class="ed-acads">${[['#courses','--ok','<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.6 17M12 11.5l5.4 5.5"/></svg>','Technical Academy',p,`${lessonsDone()} of ${M.reduce((n,m)=>n+m.lessons.length,0)} lessons`],
            ['#grc','--signal','<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>','AI Compliance Academy',grcP,`${grcDone} of ${grcTotal} lessons`],
@@ -3338,7 +3340,7 @@ function vModule(id,keepY){
         <div class="timeline">${m.lessons.map((l,j)=>{const on=!!S.ls[l.id]; return `<article class="lesson ${on?'on':''}" id="L-${l.id}">
           <span class="lnode">${on?CHECK:j+1}</span>
           <div class="lcard"><div class="ln">Lesson ${m.n}.${j+1} · ${mins(l)} min read ${l.tag&&l.tag!=='all'&&!m.p?chip(l.tag):''}</div><h4>${esc(l.t)}</h4>
-            ${on&&!openLessons.has(l.id)?`<div class="lfoot"><button class="learn" data-ls="${l.id}" aria-pressed="true">${CHECK} Learned</button><button class="linkbtn" data-open="${l.id}">Review lesson</button></div>`:`<div class="lbody">${renderBlocks(l.blocks.filter(b=>!b.th))}${l.blocks.some(b=>b.th)?`<details class="deeper think"><summary>Think it through: mental model, scenario and design reasoning</summary><div class="inner">${renderBlocks(l.blocks.filter(b=>b.th))}</div></details>`:''}${lessonExtras(m,l,j)}</div>
+            ${on&&!openLessons.has(l.id)?`<div class="lfoot"><button class="learn" data-ls="${l.id}" aria-pressed="true">${CHECK} Learned</button><button class="linkbtn" data-open="${l.id}">Review lesson</button></div>`:`<div class="lbody">${renderBlocks([...((TECH_PLUS[m.id]||[])[j]?.pre||[]),...l.blocks.filter(b=>!b.th)])}${renderBlocks((TECH_PLUS[m.id]||[])[j]?.post||[])}${l.blocks.some(b=>b.th)?`<details class="deeper think"><summary>Think it through: mental model, scenario and design reasoning</summary><div class="inner">${renderBlocks(l.blocks.filter(b=>b.th))}</div></details>`:''}${lessonExtras(m,l,j)}</div>
             <div class="lfoot"><button class="learn" data-ls="${l.id}" aria-pressed="${on}">${on?CHECK+' Learned':CHECK+' Mark as learned'}</button><button class="bm" data-bookmark="${l.id}" aria-pressed="${bookmarks.has(l.id)}">${bookmarks.has(l.id)?'★ Bookmarked':'☆ Bookmark'}</button>${on?`<button class="linkbtn" data-close="${l.id}">Collapse</button>`:''}</div>`}</div></article>`;}).join('')}</div>
       </section>
       <section class="msect" id="s-sum"><div class="h"><h3>Key takeaways</h3><span class="eyebrow">module ${pad(m.n)}</span></div><ul class="takeaways">${m.sum.map(x=>`<li>${fmt(x)}</li>`).join('')}</ul></section>
@@ -3501,7 +3503,7 @@ const GRC = [
 /* The GRC academy is replaced by the AI Compliance Academy (content/ai-compliance.js).
    Old GRC progress stays in Firestore under its own keys (g01-l01…) and is simply not shown. */
 void GRC_V31; GRC.length=0; for(const k of Object.keys(GRC_PLUS)) delete GRC_PLUS[k];
-for(const m of AIC){ GRC.push({id:m.id,name:m.name,lv:m.lv,lessons:m.ls.map(l=>[l.t,'',l.ex||''])}); GRC_PLUS[m.id]={goal:m.goal,res:m.res,ls:m.ls.map(l=>({t:l.t,blocks:l.blocks})),sum:m.sum,q:m.q,map:m.map||[],lv:m.lv}; }
+for(const m of AIC){ GRC.push({id:m.id,name:m.name,lv:m.lv,lessons:m.ls.map(l=>[l.t,'',l.ex||''])}); GRC_PLUS[m.id]={name:m.name,goal:m.goal,res:m.res,ls:m.ls.map(l=>({t:l.t,blocks:l.blocks})),sum:m.sum,q:m.q,map:m.map||[],lv:m.lv}; }
 const AIC_KEY=/^a[ib]\d\d-l\d\d$/;
 let v3uid=null, grcState={}, bookEntries=[];
 const v3safe=esc;
@@ -3524,6 +3526,8 @@ async function saveGRC(id,body){body={...body,_t:Date.now()};grcState[id]=body;v
 function aicToolsStrip(){const W=aicWorkSummary(grcState),ck=Object.values(W.checks),best=ck.length?Math.round(ck.reduce((a,c)=>a+c.best,0)/ck.length):null,cs=Object.values(W.cases).filter(c=>c.done===c.of).length;
  const T=[['aic-guides','Assessment guides','How inventories, risk and impact assessments, vendor reviews, audits and the SoA work, with worked examples.',W.guides+' of '+W.guidesTotal+' studied'],['aic-cases','Case studies','6 realistic situations with full explanations.',cs+' of '+W.casesTotal+' studied'],['aic-checks','Knowledge checks','Short untimed question sets by topic.',best!=null?'Average best '+best+'%':'Check your understanding'],['aic-library','Library','Official sources with what to read in each.',W.lib+' of '+W.libTotal+' read'],['aic-watch','What’s changing','Key dates for EU, UAE and India rules.','Verified Nov 2026'],['aic-glossary','Glossary','Plain-language AI terms.',AIC_FLASH.length+' terms']];
  return `<section class="aw-tools"><div class="aw-tools-h"><h3>Go deeper</h3><p>Guides, case studies and references to build on the course.</p></div><div class="aw-tools-g">${T.map(([h,t,d,m])=>`<a href="#${h}" class="aw-tool"><b>${t}</b><span>${d}</span><em>${m}</em></a>`).join('')}</div></section>`;}
+function aicReviewDue(){try{return aicReviewState(grcState,GRC_PLUS).filter(x=>x.isDue).length;}catch(e){return 0;}}
+function aicReviewStrip(){const n=aicReviewDue();return n?`<a class="aw-review" href="#aic-review"><b>${n} module${n===1?'':'s'} ready for review</b><span>A 3-minute refresh of what you finished — it helps you remember.</span><em>Start review →</em></a>`:'';}
 let aicSumT=null;function aicPushSummary(){clearTimeout(aicSumT);aicSumT=setTimeout(()=>{if(!dbRef||IS_ADMIN)return;if(!remoteReady){aicPushSummary();return};try{const W=aicWorkSummary(grcState);const tot=GRC.reduce((a,c)=>a+c.lessons.length,0),dn=Object.entries(grcState).filter(([k,v])=>AIC_KEY.test(k)&&v&&v.done).length;S.aic={lessons:dn,total:tot,guides:W.guides,guidesTotal:W.guidesTotal,cases:W.cases,casesTotal:W.casesTotal,checks:W.checks,lib:W.lib,libTotal:W.libTotal,at:new Date().toISOString()};save();}catch(e){console.warn(e)}},2500);}
 function vGRC(){
  const total=GRC.reduce((a,c)=>a+c.lessons.length,0), completed=Object.entries(grcState).filter(([k,v])=>AIC_KEY.test(k)&&v&&v.done).length, p=total?Math.round(completed/total*100):0;
@@ -3533,7 +3537,7 @@ function vGRC(){
    return `<section class="aic-level lv${L.lv}" id="aic-lv${L.lv}"><header class="aic-lh"><span class="aic-badge lv${L.lv}">${v3safe(L.tag)}</span><div><h3>${v3safe(L.name)}</h3><p>${v3safe(L.blurb)}</p></div><div class="aic-lp"><b>${lp}%</b><span>${d}/${n} lessons</span></div></header><div class="cards">${ms.map(card).join('')}</div></section>`;}).join('');
  const nextM=GRC.find(m=>modPct(m)<100);
  app.innerHTML=`<div class="view">${aicSubnav('grc')}<section class="cockpit grc-hero aic-hero"><div class="hero-top"><div><div class="eyebrow">Independent academy · Beginner to Hero</div><h1>AI Compliance Academy</h1><p class="lede2">How AI works, the laws and standards that govern it (EU AI Act, NIST AI RMF, ISO/IEC 42001, GDPR, UAE and India), and how to assess, audit and lead an AI governance programme. Built for GRC professionals; mapped to the IAPP AIGP body of knowledge and ISO/IEC 42001.</p><div class="next">${nextM?`<a class="btn" href="#${nextM.id}">${completed?'Continue':'Start'}: ${v3safe(nextM.name)} →</a>`:''}<button class="btn ghost" id="grcReset" type="button">Start a new attempt</button></div><nav class="aic-jump" aria-label="Levels">${AIC_LEVELS.map(L=>`<button type="button" data-lvjump="${L.lv}">${v3safe(L.tag==='Basics'?'How AI works':L.tag+' · '+L.name)}</button>`).join('')}</nav></div><div class="ring-big">${ringSVG(148,62,12,p,'rgba(255,255,255,.22)','#fff')}<div class="ring-lbl"><b>${p}%</b><span>${completed}/${total} read</span></div></div></div></section>
- ${aicToolsStrip()}
+ ${aicReviewStrip()}${aicToolsStrip()}
  ${levels}</div>`;
  app.querySelectorAll('[data-lvjump]').forEach(b=>b.onclick=()=>document.getElementById('aic-lv'+b.dataset.lvjump)?.scrollIntoView({behavior:'smooth',block:'start'}));
  document.getElementById('grcReset').onclick=async()=>{if(!(await uiConfirm('Your earlier completion dates are kept in your history; lesson ticks and quiz answers start again.',{title:'Start a new AI Compliance attempt?',ok:'Start again'})))return;const stamp=new Date().toISOString();for(const [id,v] of Object.entries(grcState)){if(!/^a[ib]\d\d-/.test(id))continue;if(v&&v.done)await saveGRC(id,{done:false,attempt:(v.attempt||1)+1,prior:[...(v.prior||[]),{completedAt:v.completedAt||null,resetAt:stamp}].slice(-30)});else if(v&&v.ans!==undefined&&v.ans!==null)await saveGRC(id,{ans:null,retriedAt:stamp});}vGRC();};afterRoute();
@@ -3750,14 +3754,14 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='52';
+const APP_V='54';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){
   const sub=(ah||'admin').replace(/^admin-?/,'')||'overview';
   if(app.querySelector(':scope > .adm-portal')&&AdminMod&&AdminMod.showView){ AdminMod.showView(sub); return; }
   app.innerHTML='<div class="cisa-hub adm-portal"><section class="cisa-card">Loading admin portal…</section></div>';
-  try{ const M=await import('./cisa/admin-portal.js?v='+APP_V); AdminMod=M; if(!IS_ADMIN||!dbRef) return; await M.mountAdmin({root:app,readLearners,readActivity,unlockLearner,fb:FB,view:sub}); }
+  try{ const M=await import('./cisa/admin-portal.js?v='+APP_V); AdminMod=M; if(!IS_ADMIN||!dbRef) return; await M.mountAdmin({root:app,readLearners,readActivity,unlockLearner,fb:FB,view:sub,listBackups,readBackup,restoreBackup,selfTest,appVersion:APP_V,relockLearner}); }
   catch(e){ console.error('Admin portal failed',e); app.innerHTML='<div class="cisa-hub adm-portal"><section class="cisa-error">Unable to load the admin portal. Upload the whole <code>cisa/</code> folder alongside <code>index.html</code>.</section></div>'; }
 }
 async function vCisa(){
@@ -3777,6 +3781,21 @@ function flashDeck(){const g=Object.keys(GLOSS).map(t=>({k:'g:'+t,front:t,back:G
 async function loadCisaTopics(){if(window.__cisaTopics)return window.__cisaTopics;try{const g=await (await fetch('cisa/data/manual-guide.json')).json();window.__manualSecs=g.chapters.flatMap(c=>c.parts.flatMap(p=>p.sections.flatMap(x=>[{id:x.id,title:x.title,page:x.page,ch:c.n},...(x.subs||[]).map(y=>({id:y.id,title:y.title,page:y.page,ch:c.n}))])));}catch(e){window.__manualSecs=[];}try{const r=await fetch('cisa/data/syllabus.json');const d=await r.json();window.__cisaTopics=d.domains.flatMap(x=>x.topics.map(t=>({id:t.id,title:t.title,intro:t.intro,domain:t.domain})));}catch(e){window.__cisaTopics=[];}return window.__cisaTopics;}
 function flashState(){S.flash=S.flash||{};return S.flash;}
 function flashStats(deckName){const F=flashState(),t=today(),deck=flashDeck().filter(c=>!deckName||deckName==='All'||c.deck===deckName);let due=0,learned=0,mastered=0;for(const c of deck){const r=F[c.k];if(!r)continue;learned++;if(r.x)mastered++;else if(r.d<=t)due++;}const newToday=(S.flashNew&&S.flashNew.d===t)?S.flashNew.n:0;const fresh=deck.filter(c=>!F[c.k]).length;return {total:deck.length,due,learned,mastered,fresh,newLeft:Math.max(0,Math.min(fresh,10-newToday))};}
+function weekCardHTML(){try{
+ const byA=minutesByDay(),byW={};bookEntries.forEach(e=>{const k=String(e.date||'').slice(0,10);byW[k]=(byW[k]||0)+(Number(e.minutes)||0);});
+ const span=off=>{const ks=[];for(let i=6+off;i>=off;i--){const d=new Date();d.setDate(d.getDate()-i);ks.push(dayKey(d));}return ks;};
+ const calc=off=>{const ks=span(off),set=new Set(ks),from=new Date(ks[0]+'T00:00:00').getTime(),to=new Date(ks[6]+'T23:59:59').getTime();
+  const mins=ks.reduce((a,k)=>a+(byA[k]||0)+(byW[k]||0),0),active=ks.filter(k=>(byA[k]||0)+(byW[k]||0)>0).length;
+  const ai=Object.entries(grcState).filter(([k,v])=>AIC_KEY.test(k)&&v&&v.done&&v._t>=from&&v._t<=to).length;
+  const man=Object.values((S.cisa&&S.cisa.manRead)||{}).filter(d=>set.has(String(d).slice(0,10))).length;
+  const rv=Object.entries(grcState).filter(([k])=>/^rv-/.test(k)).reduce((a,[,v])=>a+((v&&v.log)||[]).filter(x=>{const t=Date.parse(x.at);return t>=from&&t<=to;}).length,0);
+  return {mins,active,ai,man,rv};};
+ const a=calc(0),b=calc(7),tr=(x,y)=>x>y?`<em class="wk-up">▲ ${x-y}</em>`:x<y?`<em class="wk-dn">▼ ${y-x}</em>`:'<em class="wk-eq">=</em>';
+ const cell=(v,lab,pv,fmt=n=>n)=>`<div><b>${fmt(v)}</b><span>${lab}</span>${tr(Math.round(v),Math.round(pv))}</div>`;
+ const sa=a.mins+a.ai*15+a.man*20+a.rv*5,sb=b.mins+b.ai*15+b.man*20+b.rv*5;const msg=sa===0?'A fresh week — even 20 minutes a day adds up.':sa>=sb?'Ahead of last week. Keep the rhythm going.':'A little behind last week — a short session today closes the gap.';
+ return `<section class="ed-card wk-card"><div class="wk-h"><div><span class="ed-kicker">Your last 7 days</span><h3 class="ed-title">${(a.mins/60).toFixed(1)} hours · ${a.active} active day${a.active===1?'':'s'}</h3><p class="ed-sub">${msg} Arrows compare with the 7 days before.</p></div></div>
+ <div class="wk-grid">${cell(a.mins,'minutes studied',b.mins)}${cell(a.active,'active days',b.active)}${cell(a.ai,'AI lessons completed',b.ai)}${cell(a.man,'CISA manual sections read',b.man)}${cell(a.rv,'module reviews done',b.rv)}</div></section>`;
+}catch(e){console.warn(e);return '';}}
 function todayCardHTML(){const t=today(),fs=flashStats('All');const studied=S.log.filter(x=>x.d===t).reduce((a,x)=>a+(+x.m||0),0)+bookEntries.filter(e=>String(e.date||'').slice(0,10)===t).reduce((a,e)=>a+(Number(e.minutes)||0),0);
  const lb=S.lastBackup||0, days=lb?Math.floor((Date.now()-lb)/864e5):null, due=days===null||days>=7;
  return `<section class="ed-card ed-today"><div class="td-main"><div class="td-head"><b>CISA study</b><span id="tdMeta"></span></div><div class="td-list" id="tdCisa"><div class="td-empty">Loading today’s plan…</div></div></div>
@@ -3784,6 +3803,7 @@ function todayCardHTML(){const t=today(),fs=flashStats('All');const studied=S.lo
   <a class="td-row" href="#cisa" data-cisa-tab="overview" id="tdCoach"><span class="td-ic" style="--c:#0A84FF"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></span><span class="td-txt"><b>Today’s coach</b><small>Loading…</small></span><span class="td-go">›</span></a>
   <a class="td-row" href="#cisa" data-cisa-tab="mistakes"><span class="td-ic" style="--c:#FF3B30"><svg viewBox="0 0 24 24"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg></span><span class="td-txt"><b id="tdMx">–</b><small>mistakes due</small></span><span class="td-go">›</span></a>
   <a class="td-row" href="#flash"><span class="td-ic" style="--c:#AF52DE"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="14" height="13" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v11"/></svg></span><span class="td-txt"><b>${fs.due+fs.newLeft}</b><small>flashcards ready${fs.due?` · ${fs.due} due`:''}</small></span><span class="td-go">›</span></a>
+  ${(()=>{const n=aicReviewDue();return n?`<a class="td-row" href="#aic-review"><span class="td-ic" style="--c:#5856D6"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg></span><span class="td-txt"><b>${n}</b><small>AI modules ready for review</small></span><span class="td-go">›</span></a>`:'';})()}
   <a class="td-row" href="#cisa" data-cisa-tab="recorder"><span class="td-ic" style="--c:#34C759"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></span><span class="td-txt"><b id="tdMin" data-base="${studied}">${studied}</b><small>minutes studied today · focus timer</small></span><span class="td-go">›</span></a>
   <div class="td-row td-backup ${due?'is-due':''}"><span class="td-ic" style="--c:${due?'#FF9F0A':'#0A84FF'}"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg></span><span class="td-txt"><b>${days===null?'No backup yet':days===0?'Backed up today':days+' day'+(days===1?'':'s')+' ago'}</b><small>${due?'Weekly backup recommended':'Backup of all progress'}</small></span><span class="td-btns"><button type="button" class="td-btn" id="bkDl">Download</button><button type="button" class="td-btn ghost" id="bkRs">Restore</button><input type="file" id="bkFile" accept="application/json,.json" hidden></span></div>
  </div></section>`;}
@@ -3849,15 +3869,19 @@ let cmdkItems=null, cmdkSel=0, cmdkRes=[];
 function cmdkIndex(){if(cmdkItems)return cmdkItems;const it=[];
  document.querySelectorAll('#tabs .tab').forEach(b=>it.push({k:'Go to',t:b.textContent.trim(),s:'',run:()=>go(b.dataset.v)}));
  M.forEach(m=>{it.push({k:'Technical',t:m.t,s:'Module '+pad(m.n),run:()=>go(m.id)});m.lessons.forEach(l=>it.push({k:'Lesson',t:l.t,s:m.t,run:()=>{openLessons.add(l.id);go(m.id);setTimeout(()=>document.getElementById('L-'+l.id)?.scrollIntoView({behavior:'smooth',block:'start'}),250);}}));});
- GRC.forEach(m=>{it.push({k:'AI Compliance',t:m.name,s:m.id.toUpperCase(),run:()=>go(m.id)});m.lessons.forEach(l=>{const t=Array.isArray(l)?l[0]:l.t;if(t)it.push({k:'AI Compliance lesson',t,s:m.name,run:()=>go(m.id)});});});
+ const txt=bs=>(bs||[]).map(b=>[b.x,b.t,b.cap,Array.isArray(b.s)?b.s.map(z=>Array.isArray(z)?z.join(' '):z).join(' '):'',Array.isArray(b.r)?b.r.map(r=>r.join(' ')).join(' '):'',Array.isArray(b.c)?b.c.map(c=>Array.isArray(c)?c.join(' '):'').join(' '):''].map(v=>Array.isArray(v)?v.join(' '):(typeof v==='string'?v:'')).join(' ')).join(' ').replace(/\*\*/g,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ');
+ GRC.forEach(m=>{it.push({k:'AI Compliance',t:m.name,s:m.id.toUpperCase(),run:()=>go(m.id)});const P=GRC_PLUS[m.id];m.lessons.forEach((l,i)=>{const t=Array.isArray(l)?l[0]:l.t,key=m.id+'-l'+String(i+1).padStart(2,'0');if(t)it.push({k:'AI Compliance lesson',t,s:m.id.toUpperCase()+' · '+m.name,body:P&&P.ls[i]?txt(P.ls[i].blocks):'',run:()=>{go(m.id);setTimeout(()=>document.getElementById('G-'+key)?.scrollIntoView({behavior:'smooth',block:'start'}),300);}});});});
  SEC_ACADEMY.forEach(m=>{it.push({k:'Application',t:m.name,s:m.id.toUpperCase(),run:()=>go(m.id)});(m.lessons||[]).forEach(l=>it.push({k:'App lesson',t:l.t,s:m.name,run:()=>go(m.id)}));});
  [['aic-guides','AI assessment guides'],['aic-cases','AI case studies'],['aic-checks','AI knowledge checks'],['aic-library','AI Compliance library'],['aic-watch','AI rules: what\u2019s changing'],['aic-glossary','AI glossary']].forEach(([h,t])=>it.push({k:'AI Compliance',t,s:'AI Compliance',run:()=>go(h)}));
  AIC_FLASH.forEach(([t,d])=>it.push({k:'AI glossary',t,s:d,run:()=>go('aic-glossary')}));
  Object.keys(GLOSS).forEach(t=>it.push({k:'Glossary',t,s:GLOSS[t],run:()=>{exploreQ=t;glossLetter='';go('explore');}}));
  (window.__cisaTopics||[]).forEach(t=>it.push({k:'CISA',t:t.id+' · '+t.title,s:'Domain '+t.domain,run:()=>{window.__cisaTab='syllabus';window.__cisaTopic=t.id;if((location.hash||'')==='#cisa')route();else go('cisa');}}));
  (window.__manualSecs||[]).forEach(x=>it.push({k:'Manual',t:x.id+' '+x.title,s:'CISA Manual · Chapter '+x.ch+(x.page?' · p. '+x.page:''),run:()=>{window.__cisaTab='manual';window.__cisaSection=x.id;if((location.hash||'')==='#cisa')route();else go('cisa');}}));
- cmdkItems=it.map(x=>({...x,h:(x.t+' '+x.s+' '+x.k).toLowerCase()}));return cmdkItems;}
-function cmdkSearch(q){q=q.trim().toLowerCase();const all=cmdkIndex();if(!q)return all.filter(x=>x.k==='Go to').slice(0,14);const words=q.split(/\s+/);const sc=x=>{const tl=x.t.toLowerCase();let s=0;if(tl===q)s+=100;if(tl.startsWith(q))s+=50;if(tl.includes(q))s+=25;if(x.k==='Go to'||x.k==='Technical'||x.k==='AI Compliance'||x.k==='Application')s+=6;if(x.k==='Glossary'&&tl.startsWith(q))s+=10;return s;};return all.filter(x=>words.every(w=>x.h.includes(w))).map(x=>({x,s:sc(x)})).sort((a,b)=>b.s-a.s).slice(0,40).map(o=>o.x);}
+ cmdkItems=it.map(x=>({...x,h:(x.t+' '+x.s+' '+x.k).toLowerCase(),b:(x.body||'').toLowerCase()}));return cmdkItems;}
+function cmdkSearch(q){q=q.trim().toLowerCase();const all=cmdkIndex();if(!q)return all.filter(x=>x.k==='Go to').slice(0,14);const words=q.split(/\s+/);const sc=x=>{const tl=x.t.toLowerCase();let s=0;if(tl===q)s+=100;if(tl.startsWith(q))s+=50;if(tl.includes(q))s+=25;if(x.k==='Go to'||x.k==='Technical'||x.k==='AI Compliance'||x.k==='Application')s+=6;if(x.k==='Glossary'&&tl.startsWith(q))s+=10;return s;};const head=all.filter(x=>words.every(w=>x.h.includes(w))).map(x=>({x,s:sc(x)}));
+ const inHead=new Set(head.map(o=>o.x));
+ const body=q.length<3?[]:all.filter(x=>x.b&&!inHead.has(x)&&words.every(w=>x.b.includes(w)||x.h.includes(w))).map(x=>{const i=x.b.indexOf(words[0]),raw=x.body,st=Math.max(0,i-50),snip=(st?'…':'')+raw.slice(st,st+120).trim()+'…';return {x:{...x,k:'In lesson',t:x.s.split(' · ')[0]+' · '+x.t,s:snip},s:5};});
+ return [...head.sort((a,b)=>b.s-a.s),...body].slice(0,40).map(o=>o.x);}
 function cmdkDraw(){const list=document.getElementById('cmdkList');cmdkRes=cmdkSearch(document.getElementById('cmdkInput').value);cmdkSel=Math.min(cmdkSel,Math.max(0,cmdkRes.length-1));
  list.innerHTML=cmdkRes.length?cmdkRes.map((x,i)=>`<button type="button" class="cmdk-item ${i===cmdkSel?'on':''}" role="option" aria-selected="${i===cmdkSel}" data-i="${i}"><span class="cmdk-k">${esc(x.k)}</span><span class="cmdk-t"><b>${esc(x.t)}</b>${x.s?`<small>${esc(String(x.s).slice(0,110))}</small>`:''}</span></button>`).join(''):'<div class="cmdk-empty">No matches</div>';
  list.querySelector('.cmdk-item.on')?.scrollIntoView({block:'nearest'});}
@@ -3991,6 +4015,10 @@ async function readLearners(){
   }
   return out;
 }
+async function relockLearner(uid,mode,at){
+  if(!isAdminUser()) return false;
+  try{ await setDoc(doc(fdb,'progress',uid),{cisa:{planMode:mode,planLock:{locked:true,mode,at,relockedAt:new Date().toISOString(),by:'admin'}}},{merge:true}); return true; }catch(e){ return false; }
+}
 async function unlockLearner(uid){
   if(!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID)) return false;
   try{ await setDoc(doc(fdb,'progress',uid),{cisa:{planLock:{locked:false,unlockedAt:new Date().toISOString(),by:'admin'}}},{merge:true}); return true; }catch(e){ return false; }
@@ -4088,15 +4116,134 @@ function flush(){
     syncBase=jclone(body); saveBase();
     const before=jclone(S); S=Object.assign(blank(),merge3(mine,S,body)); storeLocal(); syncPending=false;
     if(!jeq(before,S)) softRefresh();
-  }).then(()=>{syncFails=0;setSync('Synced',true);}).catch(e=>{
+  }).then(()=>{syncFails=0;setSync('Synced',true);reportHealth(true);}).catch(e=>{
     console.warn('Progress sync failed',e); syncFails++;
-    const code=String(e&&e.code||e&&e.message||'error');
+    const code=String(e&&e.code||e&&e.message||'error'); reportHealth(false,code.replace(/^firestore\//,'').slice(0,80));
     setSync(navigator.onLine===false?'Offline: saved on this device':'Not synced yet ('+code.replace(/^firestore\//,'')+') — saved on this device',false);
     window.__lastSyncError={code,at:new Date().toISOString(),size:(()=>{try{return JSON.stringify(S).length}catch(x){return 0}})()};
     if(!/permission-denied|invalid-argument/.test(code)){clearTimeout(dbTimer);dbTimer=setTimeout(flush,Math.min(60000,3000*Math.pow(2,syncFails-1)));}
   });
   return writing;
 }
+
+/* ---- V29: sync health, daily backups, sync check, update banner ----
+   • Each learner device reports app version, last good save and the last error to activity/{uid}.health
+     (a document the learner may already write), so the admin portal can show save problems at once.
+   • Once a day the device stores a full copy of the progress in activity/{uid}/days/bk-0 … bk-13
+     (14 rotating slots, no "d" field so the activity queries skip them). The admin can restore one.
+   • Clicking the sync chip compares this device with the server and reports any difference.
+   • version.json is checked every 10 minutes; a newer version shows a "Reload to update" bar. */
+let healthT=0, healthErr=null;
+function reportHealth(ok,code){
+  if(!actUid||!fdb) return;
+  const now=Date.now(), key=ok?'':String(code||'error');
+  if(key===healthErr&&now-healthT<5*60e3) return;
+  healthT=now; healthErr=key;
+  const h={v:APP_V,at:now,device:actDev(),online:navigator.onLine!==false,ua:navigator.userAgent.replace(/^Mozilla\/5.0 /,'').slice(0,110)};
+  if(ok){h.lastOk=now;h.err=null;h.errAt=null;}else{h.err=key;h.errAt=now;}
+  setDoc(doc(fdb,'activity',actUid),{health:h},{merge:true}).catch(()=>{});
+}
+const BK_SLOTS=14;
+async function dailyBackup(){
+  if(!actUid||!fdb||!remoteReady||!syncBase) return;
+  const day=actDate(new Date()), k='p2c-bk-'+actUid;
+  try{ if(localStorage.getItem(k)===day) return; }catch(e){}
+  const body=JSON.stringify(syncBase); if(body.length<50||body.length>900000) return;
+  const slot='bk-'+(Math.floor(Date.now()/864e5)%BK_SLOTS);
+  try{ await setDoc(doc(fdb,'activity',actUid,'days',slot),{bk:body,bkDay:day,at:Date.now(),v:APP_V,size:body.length}); try{localStorage.setItem(k,day);}catch(e){} }catch(e){ console.warn('Daily backup failed',e); }
+}
+function isAdminUser(){return !!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID);}
+async function listBackups(uid){
+  if(!isAdminUser()) return [];
+  const snaps=await Promise.all([...Array(BK_SLOTS)].map((_,i)=>getDoc(doc(fdb,'activity',uid,'days','bk-'+i)).catch(()=>null)));
+  return snaps.filter(s=>s&&s.exists()&&s.data().bk).map(s=>{const x=s.data();return {id:s.id,day:x.bkDay,at:x.at,v:x.v,size:x.size};}).sort((a,b)=>b.at-a.at);
+}
+async function readBackup(uid,id){
+  if(!isAdminUser()) return null;
+  const s=await getDoc(doc(fdb,'activity',uid,'days',id)); if(!s.exists()) return null;
+  try{ return JSON.parse(s.data().bk); }catch(e){ return null; }
+}
+async function restoreBackup(uid,id){
+  if(!isAdminUser()) return {ok:false,err:'not-admin'};
+  try{
+    const data=await readBackup(uid,id); if(!data) return {ok:false,err:'Backup not found or unreadable.'};
+    const cur=await getDoc(doc(fdb,'progress',uid));
+    data.t=Date.now(); await setDoc(doc(fdb,'progress',uid),data);
+    return {ok:true,previous:cur.exists()?cur.data():null};
+  }catch(e){ return {ok:false,err:String(e&&e.code||e&&e.message||e)}; }
+}
+/* Admin "Run sync check": proves the admin can write and read back, then checks each learner. */
+async function selfTest(){
+  const out=[]; const add=(st,t)=>out.push({st,t});
+  if(!isAdminUser()){add('bad','Not signed in as the admin.');return out;}
+  try{ const n=Date.now(); await setDoc(doc(fdb,'progress',ADMIN_UID),{selftest:{at:n}},{merge:true}); const s=await getDoc(doc(fdb,'progress',ADMIN_UID)); const v=s.exists()&&s.data().selftest&&s.data().selftest.at;
+    add(v===n?'ok':'bad',v===n?'Server write and read-back work (admin account).':'Wrote a test value but read back something else.'); }
+  catch(e){ add('bad','Admin test write failed: '+String(e&&e.code||e)); }
+  for(const uid of ALLOWED_USER_UIDS.filter(u=>u!==ADMIN_UID)){
+    let p=null,a=null;
+    try{ const s=await getDoc(doc(fdb,'progress',uid)); p=s.exists()?s.data():null; add(p?'ok':'warn',p?'Learner progress readable.':'Learner has no progress saved yet.'); }catch(e){ add('bad','Cannot read learner progress: '+String(e&&e.code||e)); }
+    try{ const s=await getDoc(doc(fdb,'activity',uid)); a=s.exists()?s.data():null; }catch(e){ add('bad','Cannot read learner activity: '+String(e&&e.code||e)); }
+    const h=a&&a.health;
+    if(!h) add('warn','No sync report from the learner yet (it appears after they open v'+APP_V+' or later).');
+    else{
+      add(String(h.v)===APP_V?'ok':'warn',String(h.v)===APP_V?'Learner is on the current version (v'+h.v+').':'Learner is on v'+h.v+', current is v'+APP_V+'. They need to close all tabs and reopen.');
+      if(h.err) add('bad','Learner saves are failing: '+h.err+' since '+new Date(h.errAt).toLocaleString()+'.');
+      else add('ok','Last successful save '+agoText(h.lastOk)+' on '+(h.device||'a device')+'.');
+    }
+    if(p&&p.cisa){ const pl=p.cisa.planLock||{}; let lockEv=0; try{ const from=new Date(Date.now()-150*864e5).toISOString().slice(0,10); const r=await readActivity(uid,from); for(const x of (r.rows||[])) if(x.k==='e'&&/locked the (Normal|Relaxed) study plan/i.test(x.x||'')) lockEv=Math.max(lockEv,x.u||0); }catch(e){}
+      const un=Date.parse(pl.unlockedAt||'')||0;
+      if(pl.locked===true) add('ok','CISA plan locked ('+(p.cisa.planMode||'')+').');
+      else if(lockEv&&lockEv>un) add('bad','CISA plan shows NOT locked, but the learner locked it on '+new Date(lockEv).toLocaleString()+' and no admin unlock is recorded after that. Use “Re-lock plan” on the overview.');
+      else add('ok','CISA plan not locked'+(un?' (unlocked by admin on '+new Date(un).toLocaleDateString()+')':'')+'.'); }
+    try{ const b=await listBackups(uid); add(b.length?'ok':'warn',b.length?b.length+' daily backup'+(b.length===1?'':'s')+', latest '+b[0].day+'.':'No daily backups yet (the first is made a few seconds after the learner opens the app).'); }catch(e){ add('warn','Could not list backups.'); }
+  }
+  return out;
+}
+function agoText(t){ if(!t) return 'never'; const m=Math.round((Date.now()-t)/60e3); return m<1?'just now':m<60?m+' min ago':m<2880?Math.round(m/60)+' h ago':Math.round(m/1440)+' days ago'; }
+/* Learner/admin: click the sync chip to compare this device with the server. */
+function countsOf(x){
+  x=x||{}; const c=x.cisa||{};
+  return {
+    'Lessons done':Object.values(x.ls||{}).filter(Boolean).length,
+    'CISA topics complete':Object.values(c.complete||{}).filter(Boolean).length,
+    'Manual sections read':Object.keys(c.manRead||{}).length,
+    'CISA plan':c.planLock&&c.planLock.locked?'locked ('+(c.planMode||'')+(c.plans&&c.plans[c.planMode]&&c.plans[c.planMode].examDate?', exam '+c.plans[c.planMode].examDate:'')+')':'not locked',
+    'Notes':Object.keys(x.notes||{}).length
+  };
+}
+async function syncCheck(){
+  if(!dbRef){ uiAlert('Sign in to sync your progress.',{title:'Not signed in'}); return; }
+  setSync('Checking…',false);
+  try{
+    if(!remoteReady) await initRemote();
+    if(syncPending||dbTimer) await flush();
+    const s=await getDoc(dbRef), remote=s.exists()?s.data():{};
+    const a=countsOf(S), b=countsOf(remote), lines=[]; let same=true;
+    for(const k of Object.keys(a)){ const eq=String(a[k])===String(b[k]); if(!eq) same=false; lines.push((eq?'✓ ':'✗ ')+k+': '+a[k]+(eq?'':'  (server: '+b[k]+')')); }
+    const err=window.__lastSyncError;
+    setSync(same?'Synced':'Not synced yet',same);
+    uiAlert((same?'Everything on this device is saved on the server.':'This device and the server differ. Your progress is kept on this device and the app keeps retrying.'+(err?'\nLast error: '+err.code:''))+'\n\n'+lines.join('\n')+'\n\nApp version v'+APP_V,{title:same?'All synced':'Not fully synced'});
+  }catch(e){
+    setSync('Not synced yet ('+String(e&&e.code||'error').replace(/^firestore\//,'')+')',false);
+    uiAlert('Could not reach the server: '+String(e&&e.code||e&&e.message||e)+'\n\nYour progress is kept on this device. Check the connection and try again.',{title:'Server not reachable'});
+  }
+}
+document.getElementById('sync').addEventListener('click',syncCheck);
+document.getElementById('sync').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();syncCheck();}});
+let verTimer=null, verShown=false;
+async function verCheck(){
+  clearTimeout(verTimer); verTimer=setTimeout(verCheck,10*60e3);
+  if(verShown||document.visibilityState==='hidden') return;
+  try{
+    const r=await fetch('./version.json?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return;
+    const j=await r.json(); if(!(Number(j.v)>Number(APP_V))) return;
+    verShown=true; const bar=document.createElement('div'); bar.className='upd-bar'; bar.setAttribute('role','status');
+    bar.innerHTML='<span><b>Update ready.</b> A new version of JS Learning (v'+String(j.v).replace(/\D/g,'')+') is available.</span><button type="button">Reload</button>';
+    bar.querySelector('button').onclick=async()=>{ bar.querySelector('button').textContent='Updating…'; try{ if(dbRef&&(syncPending||dbTimer)) await flush(); }catch(e){} try{ const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration(); if(reg) await reg.update(); }catch(e){} location.reload(); };
+    document.body.appendChild(bar);
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') verCheck(); });
 async function initRemote(){
   if(!dbRef) return;
   try{
@@ -4107,7 +4254,7 @@ async function initRemote(){
       if(!jeq(S,remote)) await flush(); else syncPending=false;
       if(changed) softRefresh();
     } else { remoteReady=true; syncBase={}; if(S.t>0) await flush(); }
-    if(!syncPending) setSync('Synced',true);
+    if(!syncPending){ setSync('Synced',true); reportHealth(true); }
     if(unsubProg) unsubProg();
     unsubProg=onSnapshot(dbRef,sn=>{
       if(sn.metadata.hasPendingWrites||!sn.exists()) return;
@@ -4116,7 +4263,7 @@ async function initRemote(){
       if(!jeq(S,remote)){syncPending=true; clearTimeout(dbTimer); dbTimer=setTimeout(flush,800);}
       if(!jeq(before,S)) softRefresh();
     },e=>console.warn('Progress listener',e));
-  }catch(e){console.warn('Progress load failed',e); setSync('Offline: saved on this device',false);}
+  }catch(e){console.warn('Progress load failed',e); setSync('Offline: saved on this device',false); reportHealth(false,'load: '+String(e&&e.code||e&&e.message||e).replace(/^firestore\//,'').slice(0,70));}
 }
 window.addEventListener('online',()=>{if(!dbRef) return; if(!remoteReady) initRemote(); else if(syncPending) flush();});
 window.addEventListener('pagehide',()=>{if(dbTimer) flush();});
@@ -4133,6 +4280,7 @@ async function startSession(user){
   route();
   await initRemote();
   await loadV3(user.uid);
+  setTimeout(dailyBackup,15000); verCheck();
 }
 window.addEventListener('hashchange',()=>{if(dbRef){route(); afterRoute();}});
 
