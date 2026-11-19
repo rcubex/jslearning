@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="JS Learning">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="./cisa/cisa.css?v=54">
+<link rel="stylesheet" href="./cisa/cisa.css?v=55">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
 
 /* Theory-first responsive reading experience */
@@ -3047,7 +3047,12 @@ const ADMIN_UID='Yk0WCbGfCOfiy7fnXqMgcfxjvze2';
 import { GRC_V31 } from "./grc-v31.js"
 import { uiConfirm, uiAlert } from './cisa/ui-dialog.js';
 import { M, GLOSS, DIAG, GRC_PLUS } from './content/core.js';
-import { TECH_PLUS } from './content/tech-plus.js';
+import { TECH_PLUS as TP1 } from './content/tech-plus.js';
+import { TECH_PLUS2 } from './content/tech-plus2.js';
+import { TECH_PLUS3 } from './content/tech-plus3.js';
+import { TECH_PLUS4 } from './content/tech-plus4.js';
+import { TECH_PLUS5 } from './content/tech-plus5.js';
+const TECH_PLUS={...TP1,...TECH_PLUS2,...TECH_PLUS3,...TECH_PLUS4,...TECH_PLUS5};
 import { AIC, AIC_LEVELS } from './content/ai-compliance.js';
 import { renderAIC, isAICRoute, aicSubnav, aicWorkSummary, AIC_FLASH, aicReviewState } from './content/aic-work.js';
 import { SEC_ACADEMY, SEC_TEXTBOOK } from './content/security.js';
@@ -3112,7 +3117,7 @@ const blank=()=>({v:2,ls:{},qz:{},notes:{},cert:{},log:[],last:null,t:0,appAcade
 let S=blank();
 const app=document.getElementById('app');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt=s=>esc(s).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
+const fmt=s=>esc(s).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/(^|[\s(“"'])\*([^*\s<][^*<\n]*?[^*\s<])\*(?=[\s.,;:!?)”"']|$)/g,'$1<em>$2</em>');
 const TIPK={'Tip':'tip','Watch out':'warn','In the cloud':'cloud','Analogy':'ana'};
 function renderVisual(b){
  if(b.k==='br')return `<aside class="ib-br"><b>From traditional GRC</b><div>${fmt(b.x)}</div></aside>`;
@@ -3754,7 +3759,7 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='54';
+const APP_V='55';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){
@@ -4095,6 +4100,19 @@ function save(){
 /* Server rule planIntact(): while the plan is locked on the server, a learner write must carry the
    server's plan fields unchanged, or the WHOLE progress write is refused (and ticks/reads are lost with it). */
 const PLAN_FIELDS=['planLock','plans','planMode','topicEdits','customTasks','order','hidden'];
+/* V30: a plan the learner locked on this device is never silently dropped by the merge. If the server copy is not
+   locked and no admin unlock was recorded after the learner's lock, this device's locked plan (dates, mode, topics)
+   is kept and uploaded — this reconnects locks lost in the v51 sync problem. An admin unlock is always respected. */
+function lockRecover(out,local,remote){
+  const lc=local&&local.cisa, rc=(remote&&remote.cisa)||{};
+  if(!lc||!lc.planLock||lc.planLock.locked!==true) return out;
+  if(rc.planLock&&rc.planLock.locked===true) return out;
+  if(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID) return out;
+  const lockAt=Date.parse(lc.planLock.at||'')||0, unAt=Date.parse((rc.planLock&&rc.planLock.unlockedAt)||'')||0;
+  if(unAt&&unAt>=lockAt) return out;
+  out.cisa=Object.assign({},out.cisa||{}); for(const f of PLAN_FIELDS){ if(f in lc) out.cisa[f]=jclone(lc[f]); }
+  return out;
+}
 function keepLockedPlan(body,remote){
   const rc=remote&&remote.cisa; if(!rc||!rc.planLock||rc.planLock.locked!==true) return;
   if(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID) return;
@@ -4109,7 +4127,7 @@ function flush(){
     const mine=jclone(S); let body=null;
     await runTransaction(fdb,async tx=>{
       const snap=await tx.get(ref), remote=snap.exists()?snap.data():null;
-      body=remote&&!jeq(remote,syncBase)?Object.assign(blank(),merge3(syncBase||{},mine,remote)):jclone(mine);
+      body=remote&&!jeq(remote,syncBase)?lockRecover(Object.assign(blank(),merge3(syncBase||{},mine,remote)),mine,remote):jclone(mine);
       keepLockedPlan(body,remote);
       body.t=Date.now(); tx.set(ref,body);
     });
@@ -4139,7 +4157,8 @@ function reportHealth(ok,code){
   const now=Date.now(), key=ok?'':String(code||'error');
   if(key===healthErr&&now-healthT<5*60e3) return;
   healthT=now; healthErr=key;
-  const h={v:APP_V,at:now,device:actDev(),online:navigator.onLine!==false,ua:navigator.userAgent.replace(/^Mozilla\/5.0 /,'').slice(0,110)};
+  const pc=(S&&S.cisa)||{},pp=pc.plans&&pc.plans[pc.planMode];
+  const h={v:APP_V,at:now,device:actDev(),online:navigator.onLine!==false,plan:{locked:!!(pc.planLock&&pc.planLock.locked),at:(pc.planLock&&pc.planLock.at)||null,mode:pc.planMode||null,exam:(pp&&pp.examDate)||null},ua:navigator.userAgent.replace(/^Mozilla\/5.0 /,'').slice(0,110)};
   if(ok){h.lastOk=now;h.err=null;h.errAt=null;}else{h.err=key;h.errAt=now;}
   setDoc(doc(fdb,'activity',actUid),{health:h},{merge:true}).catch(()=>{});
 }
@@ -4193,7 +4212,7 @@ async function selfTest(){
     if(p&&p.cisa){ const pl=p.cisa.planLock||{}; let lockEv=0; try{ const from=new Date(Date.now()-150*864e5).toISOString().slice(0,10); const r=await readActivity(uid,from); for(const x of (r.rows||[])) if(x.k==='e'&&/locked the (Normal|Relaxed) study plan/i.test(x.x||'')) lockEv=Math.max(lockEv,x.u||0); }catch(e){}
       const un=Date.parse(pl.unlockedAt||'')||0;
       if(pl.locked===true) add('ok','CISA plan locked ('+(p.cisa.planMode||'')+').');
-      else if(lockEv&&lockEv>un) add('bad','CISA plan shows NOT locked, but the learner locked it on '+new Date(lockEv).toLocaleString()+' and no admin unlock is recorded after that. Use “Re-lock plan” on the overview.');
+      else if(lockEv&&lockEv>un) add('bad','CISA plan shows NOT locked, but the learner locked it on '+new Date(lockEv).toLocaleString()+' and no admin unlock is recorded after that. Use “Lock plan” on the overview.');
       else add('ok','CISA plan not locked'+(un?' (unlocked by admin on '+new Date(un).toLocaleDateString()+')':'')+'.'); }
     try{ const b=await listBackups(uid); add(b.length?'ok':'warn',b.length?b.length+' daily backup'+(b.length===1?'':'s')+', latest '+b[0].day+'.':'No daily backups yet (the first is made a few seconds after the learner opens the app).'); }catch(e){ add('warn','Could not list backups.'); }
   }
@@ -4249,7 +4268,7 @@ async function initRemote(){
   try{
     const snap=await getDoc(dbRef), remote=snap.exists()?snap.data():null;
     if(remote){
-      const merged=Object.assign(blank(),merge3(syncBase||{},S,remote));
+      const merged=lockRecover(Object.assign(blank(),merge3(syncBase||{},S,remote)),S,remote);
       const changed=!jeq(merged,S); S=merged; storeLocal(); syncBase=jclone(remote); saveBase(); remoteReady=true;
       if(!jeq(S,remote)) await flush(); else syncPending=false;
       if(changed) softRefresh();
@@ -4259,7 +4278,7 @@ async function initRemote(){
     unsubProg=onSnapshot(dbRef,sn=>{
       if(sn.metadata.hasPendingWrites||!sn.exists()) return;
       const remote=sn.data(); if(jeq(remote,syncBase)) return;
-      const before=jclone(S); S=Object.assign(blank(),merge3(syncBase||{},S,remote)); syncBase=jclone(remote); saveBase(); storeLocal();
+      const before=jclone(S); S=lockRecover(Object.assign(blank(),merge3(syncBase||{},S,remote)),S,remote); syncBase=jclone(remote); saveBase(); storeLocal();
       if(!jeq(S,remote)){syncPending=true; clearTimeout(dbTimer); dbTimer=setTimeout(flush,800);}
       if(!jeq(before,S)) softRefresh();
     },e=>console.warn('Progress listener',e));

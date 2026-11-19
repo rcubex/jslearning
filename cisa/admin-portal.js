@@ -175,6 +175,7 @@ function healthUI(L) {
     if (h.err) { head = 'Saves failing'; kind = 'bad'; items.push(['bad', `Last error: ${h.err} (${ago(h.errAt)}). Their progress is kept on their device and retried. If it says permission-denied, check the Firestore rules are published.`]); }
     else { head = old ? 'Old app version' : 'Healthy'; kind = old ? 'warn' : 'ok'; }
     items.push([h.err ? 'warn' : 'ok', `Last good save: ${ago(h.lastOk)} · ${h.device || 'device'}${h.online === false ? ' · offline' : ''}`]);
+    if (h.plan) { const srv = !!(L.data && L.data.cisa && L.data.cisa.planLock && L.data.cisa.planLock.locked); items.push([h.plan.locked && !srv ? 'warn' : 'ok', `Learner’s device: plan ${h.plan.locked ? 'locked' + (h.plan.at ? ' on ' + new Date(h.plan.at).toLocaleDateString() : '') : 'not locked'}${h.plan.mode ? ' · ' + h.plan.mode : ''}${h.plan.exam ? ' · exam ' + h.plan.exam : ''}${h.plan.locked && !srv ? ' — not yet on the server; it uploads automatically while the learner has the app open.' : ''}`]); }
     items.push([old ? 'warn' : 'ok', old ? `Running v${h.v}; current is v${cur}. They should close every tab and reopen (an “Update ready” bar also appears).` : `Running the current version (v${h.v}).`]);
   } else items.push(['warn', `No sync report yet. It appears once the learner opens v${cur || '53'} or later.`]);
   if (L.data && L.data.t) items.push(['ok', `Server copy last changed ${ago(L.data.t)}.`]);
