@@ -5,7 +5,7 @@
    - Remote sign-out requested by the admin.
    Firestore: chats/{uid}/messages/{id}, coach/{uid}. */
 
-export const VERSION = '43';
+export const VERSION = '44';
 let fb, uid, getS, saveS, onRemoteSignOut, startedAt = 0, unsubs = [], timers = [], observer = null;
 let msgs = [], coach = null, chatOpen = false, firstMsgs = true, shownPopups = new Set(), popupOpen = null, week = { app: 0, days: new Set(), loaded: false };
 let rootEl = null; const tst = { sel: null, editing: null }; let expiryTimer = null;
@@ -59,6 +59,66 @@ async function loadWeek() {
 const msgRef = id => fb.doc(fb.fdb, 'chats', uid, 'messages', id);
 async function markSeen(list) { for (const m of list) { try { await fb.updateDoc(msgRef(m.id), { seenAt: Date.now() }); } catch (e) { } } }
 
+/* ---------- V31: paste a photo into the chat ----------
+   Paste (Ctrl/Cmd+V) an image into the message box: it is resized and compressed in the browser to a JPEG
+   under ~850 KB (up to 2560 px) and stored inside the chat message (field "img"), so no file storage or rule change is needed.
+   There is deliberately no file-upload button: only pasting. */
+const IMG_OK = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/;
+export const imgOf = m => (m && typeof m.img === 'string' && m.img.length < 1000000 && IMG_OK.test(m.img)) ? m.img : '';
+export const previewText = m => (imgOf(m) ? '📷 Photo' + (m.text ? ' · ' : '') : '') + (m.text || '');
+export async function compressImage(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    // Keep screenshots sharp: up to 2560 px on the long side, WebP where the browser can encode it (sharper text
+    // than JPEG at the same size), JPEG otherwise; step down only if needed to stay under ~850 KB.
+    const probe = document.createElement('canvas'); probe.width = probe.height = 2;
+    const type = probe.toDataURL('image/webp').startsWith('data:image/webp') ? 'image/webp' : 'image/jpeg';
+    let max = 2560, q = 0.92, out = '';
+    for (let k = 0; k < 10; k++) {
+      const sc = Math.min(1, max / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height));
+      const c = document.createElement('canvas'); c.width = Math.max(1, Math.round((img.naturalWidth || img.width) * sc)); c.height = Math.max(1, Math.round((img.naturalHeight || img.height) * sc));
+      const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+      out = c.toDataURL(type, q); if (out.length <= 850000) return out;
+      if (q > 0.8) q -= 0.06; else { max = Math.round(max * 0.85); q = Math.max(0.6, q - 0.04); }
+    }
+    return out.length <= 950000 ? out : null;
+  } catch (e) { return null; } finally { URL.revokeObjectURL(url); }
+}
+export function enablePaste(scope, accept, send) {
+  if (!scope || scope.__lcPaste) return; scope.__lcPaste = true;
+  scope.addEventListener('paste', async e => {
+    const ta = e.target && e.target.closest ? e.target.closest('textarea') : null; if (!ta || !accept(ta)) return;
+    const items = [...((e.clipboardData && e.clipboardData.items) || [])].filter(i => i.kind === 'file' && /^image\//.test(i.type)); if (!items.length) return;
+    e.preventDefault(); const f = items[0].getAsFile(); if (!f) return;
+    const data = await compressImage(f);
+    if (!data) { if (window.uiAlert) uiAlert('That image could not be read or is too large. Try a smaller screenshot.', { title: 'Photo not added' }); return; }
+    showPastePreview(ta, data, send);
+  });
+}
+function showPastePreview(ta, data, send) {
+  const form = ta.closest('form'); if (!form || !form.parentElement) return;
+  const old = form.parentElement.querySelector(':scope > .lc-paste'); if (old) old.remove();
+  const box = document.createElement('div'); box.className = 'lc-paste';
+  box.innerHTML = `<img alt="Pasted photo"><div class="lc-paste-t"><b>Send this photo?</b><small>Any text in the message box is sent as a caption.</small></div><div class="lc-paste-b"><button type="button" data-p="cancel">Cancel</button><button type="button" class="pri" data-p="send">Send</button></div>`;
+  box.querySelector('img').src = data; form.parentElement.insertBefore(box, form);
+  box.addEventListener('click', async ev => {
+    const b = ev.target.closest('[data-p]'); if (!b) return; ev.stopPropagation();
+    if (b.dataset.p === 'cancel') { box.remove(); ta.focus(); return; }
+    b.disabled = true; b.textContent = 'Sending…'; const cap = ta.value.trim().slice(0, 2000);
+    const ok = await send(data, cap);
+    if (ok !== false) { ta.value = ''; ta.dispatchEvent(new Event('input', { bubbles: true })); box.remove(); ta.focus(); } else { b.disabled = false; b.textContent = 'Send'; }
+  });
+  box.querySelector('[data-p="send"]').focus();
+}
+function openImage(src) {
+  const ov = document.createElement('div'); ov.className = 'lc-lightbox'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Photo');
+  ov.innerHTML = '<img alt="Photo"><button type="button" aria-label="Close">×</button>'; ov.querySelector('img').src = src;
+  const close = () => { ov.remove(); document.removeEventListener('keydown', key, true); }; const key = e => { if (e.key === 'Escape') { e.preventDefault(); close(); } };
+  ov.addEventListener('click', close); document.addEventListener('keydown', key, true); document.body.appendChild(ov);
+}
+if (typeof document !== 'undefined' && !window.__lcImgClick) { window.__lcImgClick = true; document.addEventListener('click', e => { const im = e.target.closest && e.target.closest('img.lc-img'); if (!im) return; e.preventDefault(); e.stopPropagation(); openImage(im.src); }, true); }
+
 /* ---------- shared message thread (also used by the admin portal) ---------- */
 const SEND_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>';
 export const EDIT_WINDOW = 5 * 60e3;
@@ -89,7 +149,7 @@ export function threadHTML(list, me, opts = {}) {
       const samePrev = prev && prev.from === m.from && prev.kind !== 'popup' && !prev.deleted && m.at - prev.at < 3 * 60e3;
       if (editing === m.id) out += `<div class="lc-b me tail editing">${editor(m)}</div>`;
       else { const tick = mine ? `<i class="lc-tick ${m.seenAt ? 'read' : ''}" title="${m.seenAt ? 'Read ' + h(timeOf(m.seenAt)) : 'Delivered'}" aria-label="${m.seenAt ? 'Read' : 'Delivered'}">${m.seenAt ? '✓✓' : '✓'}</i>` : '';
-        out += `<div class="lc-b ${side} ${sameNext ? '' : 'tail'} ${samePrev ? 'cont' : ''} ${mayChange ? 'can' : ''} ${sel === m.id ? 'sel' : ''}" ${mayChange ? `title="Tap to edit or delete" data-msg="sel" data-id="${h(m.id)}" tabindex="0" role="button" aria-label="Message options"` : ''}><span><em class="lc-tx">${linkify(m.text)}</em><small class="lc-meta">${m.editedAt ? 'Edited ' : ''}${h(timeOf(m.at))}${tick}</small></span></div>${actions(m)}`; }
+        out += `<div class="lc-b ${side} ${sameNext ? '' : 'tail'} ${samePrev ? 'cont' : ''} ${mayChange ? 'can' : ''} ${sel === m.id ? 'sel' : ''}" ${mayChange ? `title="Tap to edit or delete" data-msg="sel" data-id="${h(m.id)}" tabindex="0" role="button" aria-label="Message options"` : ''}><span>${imgOf(m) ? `<img class="lc-img" src="${imgOf(m)}" alt="Photo" loading="lazy">` : ''}${m.text ? `<em class="lc-tx">${linkify(m.text)}</em>` : ''}<small class="lc-meta">${m.editedAt ? 'Edited ' : ''}${h(timeOf(m.at))}${tick}</small></span></div>${actions(m)}`; }
       if (m === lastMine && editing !== m.id && m.seenAt) out += `<div class="lc-receipt"><b>Read</b> ${h(timeOf(m.seenAt))}</div>`;
     }
     prev = m;
@@ -236,7 +296,7 @@ export function startCoach(opts) {
   startedAt = Date.now(); msgs = []; coach = null; firstMsgs = true; shownPopups = new Set(); popupOpen = null; chatOpen = false; week = { rows: [], loaded: false };
   rootEl = document.createElement('div'); rootEl.id = 'lcRoot';
   rootEl.innerHTML = `<button type="button" class="lc-fab" data-lc="fab" aria-label="Messages: chat with your admin" aria-expanded="false">${CHAT_ICON}<span class="lc-fab-t">Messages</span><b hidden>0</b></button>
-  <section class="lc-panel" hidden aria-label="Chat with your admin"><header><button type="button" class="lc-done" data-lc="close">Done</button><div class="lc-who"><span class="lc-av">A</span><b>Admin</b></div><span class="lc-hd-sp"></span></header><div class="lc-msgs" aria-live="polite"></div><form class="lc-input" onsubmit="return false"><div class="lc-field"><textarea rows="1" maxlength="2000" placeholder="Message" aria-label="Message"></textarea><button type="button" data-lc="send" aria-label="Send" disabled>${SEND_ICON}</button></div></form></section>
+  <section class="lc-panel" hidden aria-label="Chat with your admin"><header><button type="button" class="lc-done" data-lc="close">Done</button><div class="lc-who"><span class="lc-av">A</span><b>Admin</b></div><span class="lc-hd-sp"></span></header><div class="lc-msgs" aria-live="polite"></div><form class="lc-input" onsubmit="return false"><div class="lc-field"><textarea rows="1" maxlength="2000" placeholder="Message · paste a photo with Ctrl/⌘+V" aria-label="Message"></textarea><button type="button" data-lc="send" aria-label="Send" disabled>${SEND_ICON}</button></div></form></section>
   <div class="lc-pop" hidden></div><div class="lc-toast" hidden data-lc="toast" role="status"></div>`;
   document.body.appendChild(rootEl);
   window.__openChat = () => openChat(true);
@@ -247,6 +307,7 @@ export function startCoach(opts) {
   rootEl.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.lc-msgs [data-msg="sel"]')) { e.preventDefault(); e.target.click(); } if (e.key === 'Escape' && (tst.sel || tst.editing)) { tst.sel = tst.editing = null; renderChat(); e.stopPropagation(); } if (e.key === 'Enter' && !e.shiftKey && e.target.matches('.lc-edit textarea')) { e.preventDefault(); e.target.form.requestSubmit(); } });
   expiryTimer = setInterval(() => { if (chatOpen && msgs.some(m => m.from === 'learner' && !m.deleted && Date.now() - m.at < EDIT_WINDOW + 30e3)) renderChat(); }, 30e3);
   const ta = rootEl.querySelector('textarea');
+  enablePaste(rootEl, t => !!t.closest('.lc-input'), async (img, cap) => { try { await fb.addDoc(fb.collection(fb.fdb, 'chats', uid, 'messages'), { from: 'learner', text: cap, img, kind: 'chat', at: Date.now(), seenAt: null }); return true; } catch (e) { toast('Photo not sent', 'Check your connection and try again.'); return false; } });
   ta.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } if (e.key === 'Escape') closeChat(); });
   ta.addEventListener('input', () => { ta.style.height = 'auto'; ta.style.height = Math.min(120, ta.scrollHeight) + 'px'; syncSend(); });
   document.addEventListener('keydown', escPop);
@@ -254,7 +315,7 @@ export function startCoach(opts) {
     unsubs.push(fb.onSnapshot(fb.query(fb.collection(fb.fdb, 'chats', uid, 'messages'), fb.orderBy('at')), snap => {
       const prev = new Set(msgs.map(m => m.id));
       msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (!firstMsgs && !chatOpen) { const fresh = msgs.filter(m => !prev.has(m.id) && m.from === 'admin' && m.kind !== 'popup' && !m.deleted); if (fresh.length) toast('Admin', fresh[fresh.length - 1].text.slice(0, 160)); }
+      if (!firstMsgs && !chatOpen) { const fresh = msgs.filter(m => !prev.has(m.id) && m.from === 'admin' && m.kind !== 'popup' && !m.deleted); if (fresh.length) toast('Admin', previewText(fresh[fresh.length - 1]).slice(0, 160)); }
       if (popupOpen) { const cur = msgs.find(m => m.id === popupOpen.id); if (cur && cur.deleted) { popupOpen = null; const l = rootEl.querySelector('.lc-pop'); l.classList.remove('on'); l.hidden = true; l.innerHTML = ''; } }
       firstMsgs = false; renderChat(); nextPopup();
     }, () => { }));
