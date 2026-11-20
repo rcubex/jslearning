@@ -1282,3 +1282,25 @@ html.is-blocked,html.is-blocked body{overflow:hidden!important}
 .adm-req footer{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
 .adm-pill{font-style:normal;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(10,37,64,.07)}
 .adm-pill.warn{background:rgba(245,158,11,.16);color:#92400e}.adm-pill.ok{background:rgba(22,163,74,.13);color:#166534}.adm-pill.bad{background:rgba(220,38,38,.12);color:#991b1b}
+/* v64: learner card layout — avatar | name/picker + status + badges | buttons */
+.adm-portal .ed-card.adm-learner{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;align-items:center!important;gap:16px!important}
+.adm-learner .adm-who{display:flex;flex-direction:column;gap:4px;min-width:0}
+.adm-learner .adm-stat{display:flex;align-items:center;gap:6px;font-size:13px;color:#5b6577;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adm-learner .adm-badges{display:flex;flex-wrap:wrap;gap:6px}.adm-learner .adm-badges .adm-badge{margin-left:0}
+.adm-learner .adm-access{display:flex;flex-wrap:nowrap;gap:8px;justify-content:flex-end}
+.adm-learner .adm-access .cisa-btn{order:0!important;white-space:nowrap}
+.adm-pick{position:relative;display:inline-flex;align-items:baseline;gap:10px;max-width:100%}
+.adm-portal .adm-learner .adm-pick select{-webkit-appearance:none;appearance:none;border:0;background:transparent;padding:0 22px 0 0;margin:0;font:600 18px/1.25 -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Inter,Arial,sans-serif;letter-spacing:-.015em;color:#0A2540;cursor:pointer;max-width:100%;text-overflow:ellipsis;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' fill='none' stroke='%230A84FF' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 2px center;background-size:14px}
+.adm-pick select:focus-visible{outline:2px solid rgba(10,132,255,.4);outline-offset:3px;border-radius:6px}
+.adm-pick small{font-size:11.5px;color:#0A84FF;font-weight:600;white-space:nowrap}
+@media (max-width:820px){.adm-portal .ed-card.adm-learner{grid-template-columns:auto minmax(0,1fr)}.adm-learner .adm-access{grid-column:1 / -1;justify-content:flex-start;flex-wrap:wrap}}
+.adm-portal .adm-learner .adm-pick{flex-wrap:nowrap}
+.adm-portal .adm-learner .adm-pick select{width:auto!important;min-width:0!important;flex:0 1 auto;height:auto!important;border:0!important;border-radius:6px!important;box-shadow:none!important;padding:0 22px 0 0!important;background-color:transparent!important;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' fill='none' stroke='%230A84FF' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 2px center!important;background-size:14px!important;font:600 18px/1.25 -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Inter,Arial,sans-serif!important;color:#0A2540!important}
+.adm-portal .adm-learner .adm-pick select:hover{background-color:rgba(10,132,255,.06)!important}
+.adm-portal .adm-learner .adm-pick small{padding:2px 8px;border-radius:999px;background:rgba(10,132,255,.1)}
+:root[data-palette] #app .adm-portal .adm-learner .adm-pick select{background-color:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border:0!important;border-radius:6px!important;padding:0 22px 0 0!important;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' fill='none' stroke='%230A84FF' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 2px center!important;background-size:14px!important;font:600 18px/1.25 -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Inter,Arial,sans-serif!important;color:#0A2540!important;-webkit-appearance:none!important;appearance:none!important}
+:root[data-palette] #app .adm-portal .adm-learner .adm-pick select:hover{background-color:rgba(10,132,255,.07)!important}
+:root:root #app .adm-portal .adm-learner .adm-pick select.adm-sel.adm-sel{box-shadow:none!important;border-radius:6px!important}
