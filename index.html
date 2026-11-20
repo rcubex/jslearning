@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="JS Learning">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="./cisa/cisa.css?v=56">
+<link rel="stylesheet" href="./cisa/cisa.css?v=63">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
 
 /* Theory-first responsive reading experience */
@@ -2924,7 +2924,7 @@ a.td-row:hover{background:rgba(255,255,255,.6)}
   <div class="side-nav" id="sideNav">
     <button class="side-search" id="cmdkBtn" type="button" aria-label="Search everything"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span>Search</span><kbd>⌘K</kbd></button>
     <nav class="tabs" id="tabs" aria-label="Workbook sections">
-      <div class="nav-group nav-main"><span class="nav-label">Learn</span><span class="nav-label adm-only" hidden>Admin</span><button class="tab adm-only" data-v="admin" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Overview</span></button><button class="tab adm-only" data-v="admin-log" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Activity log</span></button><button class="tab adm-only" data-v="admin-reports" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 17v-3M12 17v-6M15 17v-4"/></svg><span>Reports</span></button><button class="tab adm-only" data-v="admin-exams" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><path d="M6 16l4-5 3 3 5-7"/></svg><span>Exams</span></button><button class="tab adm-only" data-v="admin-habits" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M12 14h2M16 14h2M8 17h2"/></svg><span>Habits</span></button><button class="tab adm-only" data-v="admin-coaching" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg><span>Coaching</span></button><button class="tab adm-only" data-v="admin-chat" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg><span>Messages</span><b class="lc-navbadge" id="admNavBadge" hidden>0</b></button><button class="tab adm-only" data-v="admin-audit" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span>Audit trail</span></button><button class="tab" data-v="dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button><button class="tab" data-v="courses"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.6 17M12 11.5l5.4 5.5"/></svg><span>Technical</span></button><button class="tab" data-v="grc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M12 7.5l1.2 2.8 2.8 1.2-2.8 1.2L12 15.5l-1.2-2.8L8 11.5l2.8-1.2z"/></svg><span>AI Compliance</span></button><button class="tab" data-v="appsec"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14l-2 2 2 2M16 14l2 2-2 2M13 12l-2 8"/></svg><span>Application</span></button><button class="tab" data-v="cisa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4zM6 10v6c4 3 8 3 12 0v-6M21 8v7"/></svg><span>CISA Hub</span></button><button class="tab lc-navbtn" data-v="messages" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg><span>Messages</span><b class="lc-navbadge" id="lcNavBadge" hidden>0</b></button></div>
+      <div class="nav-group nav-main"><span class="nav-label">Learn</span><span class="nav-label adm-only" hidden>Admin</span><button class="tab adm-only" data-v="admin" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Overview</span></button><button class="tab adm-only" data-v="admin-log" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Activity log</span></button><button class="tab adm-only" data-v="admin-reports" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 17v-3M12 17v-6M15 17v-4"/></svg><span>Reports</span></button><button class="tab adm-only" data-v="admin-exams" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><path d="M6 16l4-5 3 3 5-7"/></svg><span>Exams</span></button><button class="tab adm-only" data-v="admin-habits" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M12 14h2M16 14h2M8 17h2"/></svg><span>Habits</span></button><button class="tab adm-only" data-v="admin-coaching" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg><span>Coaching</span></button><button class="tab adm-only" data-v="admin-chat" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg><span>Messages</span><b class="lc-navbadge" id="admNavBadge" hidden>0</b></button><button class="tab adm-only" data-v="admin-requests" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2"/></svg><span>Unblock requests</span></button><button class="tab adm-only" data-v="admin-audit" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span>Audit trail</span></button><button class="tab" data-v="dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button><button class="tab" data-v="courses"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.6 17M12 11.5l5.4 5.5"/></svg><span>Technical</span></button><button class="tab" data-v="grc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M12 7.5l1.2 2.8 2.8 1.2-2.8 1.2L12 15.5l-1.2-2.8L8 11.5l2.8-1.2z"/></svg><span>AI Compliance</span></button><button class="tab" data-v="appsec"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14l-2 2 2 2M16 14l2 2-2 2M13 12l-2 8"/></svg><span>Application</span></button><button class="tab" data-v="cisa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4zM6 10v6c4 3 8 3 12 0v-6M21 8v7"/></svg><span>CISA Hub</span></button><button class="tab lc-navbtn" data-v="messages" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg><span>Messages</span><b class="lc-navbadge" id="lcNavBadge" hidden>0</b></button></div>
       <div class="nav-group nav-drop"><button class="nav-label" type="button" aria-expanded="false">Track<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="drop-panel"><button class="tab" data-v="workbook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 7h6M9 10.5h6"/></svg><span>My Workbook</span></button><button class="tab" data-v="log"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M7.5 14h3M7.5 17h6"/></svg><span>Study Log</span></button><button class="tab" data-v="insights"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><rect x="5.5" y="11" width="3" height="6" rx="1"/><rect x="10.5" y="6" width="3" height="11" rx="1"/><rect x="15.5" y="9" width="3" height="8" rx="1"/></svg><span>Study Insights</span></button></div></div>
       <div class="nav-group nav-drop"><button class="nav-label" type="button" aria-expanded="false">Tools<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="drop-panel"><button class="tab" data-v="explore"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span>Explore & Glossary</span></button><button class="tab" data-v="flash"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="14" height="13" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v11"/><path d="M7 12.5h6"/></svg><span>Flashcards</span></button><button class="tab" data-v="rosetta"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h9M8.5 4v2M6 6c0 4 3 7 6 8M11 6c-.5 3-3 6-6 8"/><path d="M13 20l4-9 4 9M14.5 17h5"/></svg><span>Cloud Rosetta</span></button><button class="tab" data-v="subnets"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18M12 7.5h9"/></svg><span>Subnet Calculator</span></button><button class="tab" data-v="certs"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.5 7 21l5-3 5 3-1.5-7.5"/></svg><span>Cert Paths</span></button></div></div>
     </nav>
@@ -3040,7 +3040,7 @@ const firebaseConfig = {
 };
 /* Only these approved Firebase Authentication UIDs may sign in.
    Access to saved data is also enforced by deployed Firestore rules. */
-const ALLOWED_USER_UIDS=['Yk0WCbGfCOfiy7fnXqMgcfxjvze2','m6ybLppag7e9ky7UMVqnc80gwxA3'];
+const ALLOWED_USER_UIDS=['Yk0WCbGfCOfiy7fnXqMgcfxjvze2','m6ybLppag7e9ky7UMVqnc80gwxA3','pt8WaB9gHuMU5U8qhtKTJCEHC0r1'];
 /* Admin account: can unlock a learner's locked CISA study plan. */
 const ADMIN_UID='Yk0WCbGfCOfiy7fnXqMgcfxjvze2';
 /* ============================================================================================ */
@@ -3759,7 +3759,7 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='56';
+const APP_V='63';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){
@@ -3995,7 +3995,7 @@ let CoachMod=null, coachErr='';
 async function coachStart(user){
   if(!fdb||!user||user.uid===ADMIN_UID) return;
   try{ CoachMod=CoachMod||await import('./cisa/learner-coach.js?v='+APP_V); if(!dbRef) return;
-    const opts={fb:FB,uid:user.uid,getS:()=>S,save:()=>save(),onRemoteSignOut:()=>doSignOut('Signed out by the admin','The admin signed you out. Sign in again to continue.')};
+    const opts={fb:FB,uid:user.uid,getS:()=>S,save:()=>save(),onRemoteSignOut:()=>doSignOut('Signed out by the admin','The admin signed you out. Sign in again to continue.'),signOut:()=>doSignOut()};
     try{ CoachMod.startCoach(opts); }catch(e){ coachErr='start: '+(e&&e.message||e); console.warn(e); }
     if(!window.__openChat){ /* an outdated cached copy was loaded: fetch a fresh one */
       try{ CoachMod.stopCoach&&CoachMod.stopCoach(); }catch(e){}
@@ -4329,7 +4329,20 @@ function actWhere(){
   return {area,detail,busy:false};
 }
 function actQueue(r){actPending[r.id]=r;}
+/* V38: automatic block after 10 or more days without signing in. Checked once at sign-in, before this session
+   updates lastSeen; the block is recorded in activity/{uid}.autoBlock and lifted when the admin unblocks. */
+const AUTO_BLOCK_DAYS=10; let actInactP=null;
+async function inactivityCheck(uid){
+  try{
+    const s=await getDoc(doc(fdb,'activity',uid)); if(!s.exists()) return;
+    const d=s.data(), last=d.lastSeen||0, ab=d.autoBlock;
+    if(!last||Date.now()-last<AUTO_BLOCK_DAYS*864e5) return;
+    if(ab&&ab.lastSeen===last) return; // already recorded for this gap
+    await setDoc(doc(fdb,'activity',uid),{autoBlock:{at:Date.now(),lastSeen:last,days:Math.floor((Date.now()-last)/864e5)}},{merge:true});
+  }catch(e){ console.warn('inactivity check failed',e); }
+}
 async function actFlush(){
+  if(actInactP){ try{await actInactP;}catch(e){} }
   if(!actUid||!fdb) return; const uid=actUid, rows=Object.values(actPending); actPending={}; actSaveT=Date.now();
   const byDay={}; for(const r of rows){(byDay[r.d]=byDay[r.d]||{})[r.id]=Object.assign({},r);}
   try{
@@ -4358,6 +4371,7 @@ function actStart(user){
   clearInterval(actTimer); actTimer=null; actCur=null; actPending={};
   if(!user||user.uid===ADMIN_UID||!fdb){actUid=null;return;}
   actUid=user.uid; actEmail=user.email||''; actLastInput=Date.now(); actSaveT=Date.now();
+  actInactP=inactivityCheck(user.uid);
   actTimer=setInterval(actTick,ACT_TICK*1000);
   actEvent('Signed in on '+actDev().toLowerCase(),'Account');
 }

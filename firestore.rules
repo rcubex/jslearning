@@ -4,7 +4,7 @@ service cloud.firestore {
     // Approved Firebase Authentication UIDs for access to private user data.
     function approved() {
       return request.auth != null && request.auth.uid in [
-        'Yk0WCbGfCOfiy7fnXqMgcfxjvze2', 'm6ybLppag7e9ky7UMVqnc80gwxA3'
+        'Yk0WCbGfCOfiy7fnXqMgcfxjvze2', 'm6ybLppag7e9ky7UMVqnc80gwxA3', 'pt8WaB9gHuMU5U8qhtKTJCEHC0r1'
       ];
     }
     // The admin can read every learner's progress and unlock a locked CISA study plan.
@@ -25,6 +25,14 @@ service cloud.firestore {
         after.get('order', null) == before.get('order', null) &&
         after.get('hidden', null) == before.get('hidden', null)
       );
+    }
+    // Set by the admin in coach/{uid}.access: when chat is disabled or the learner is blocked,
+    // the learner cannot send chat messages (existing messages are kept) — except an
+    // "unblock request" (kind 'appeal') from the blocked screen.
+    function learnerMuted(uid) {
+      let c = /databases/$(database)/documents/coach/$(uid);
+      return exists(c) && (get(c).data.get('access', {}).get('chatOff', false) == true
+        || get(c).data.get('access', {}).get('blocked', false) == true);
     }
     match /progress/{uid} {
       allow read: if approved() && (request.auth.uid == uid || isAdmin());
@@ -54,7 +62,8 @@ service cloud.firestore {
     match /chats/{uid}/messages/{msgId} {
       allow read: if approved() && (request.auth.uid == uid || isAdmin());
       allow create: if approved() && (
-        (request.auth.uid == uid && !isAdmin() && request.resource.data.from == 'learner') ||
+        (request.auth.uid == uid && !isAdmin() && request.resource.data.from == 'learner'
+          && (!learnerMuted(uid) || (request.resource.data.get('kind', '') == 'appeal' && request.resource.data.text is string && request.resource.data.text.size() <= 1000))) ||
         (isAdmin() && request.resource.data.from == 'admin'));
       allow update: if approved() && (
         // the recipient marks a message as seen

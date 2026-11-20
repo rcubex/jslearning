@@ -5,8 +5,8 @@
    - Remote sign-out requested by the admin.
    Firestore: chats/{uid}/messages/{id}, coach/{uid}. */
 
-export const VERSION = '44';
-let fb, uid, getS, saveS, onRemoteSignOut, startedAt = 0, unsubs = [], timers = [], observer = null;
+export const VERSION = '47';
+let fb, uid, getS, saveS, onRemoteSignOut, onSignOut = null, access = { chatOff: false, blocked: false }, coachAccess = null, autoBlock = null, startedAt = 0, unsubs = [], timers = [], observer = null;
 let msgs = [], coach = null, chatOpen = false, firstMsgs = true, shownPopups = new Set(), popupOpen = null, week = { app: 0, days: new Set(), loaded: false };
 let rootEl = null; const tst = { sel: null, editing: null }; let expiryTimer = null;
 
@@ -65,7 +65,7 @@ async function markSeen(list) { for (const m of list) { try { await fb.updateDoc
    There is deliberately no file-upload button: only pasting. */
 const IMG_OK = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/;
 export const imgOf = m => (m && typeof m.img === 'string' && m.img.length < 1000000 && IMG_OK.test(m.img)) ? m.img : '';
-export const previewText = m => (imgOf(m) ? '📷 Photo' + (m.text ? ' · ' : '') : '') + (m.text || '');
+export const previewText = m => (m && m.kind === 'appeal' ? '🔓 Unblock request: ' : '') + (imgOf(m) ? '📷 Photo' + (m.text ? ' · ' : '') : '') + (m.text || '');
 export async function compressImage(file) {
   const url = URL.createObjectURL(file);
   try {
@@ -130,6 +130,7 @@ export const EDIT_WINDOW = 5 * 60e3;
 export const canChange = (m, me) => !!m && m.from === me && !m.deleted && Date.now() - m.at < EDIT_WINDOW;
 const minsLeft = m => Math.max(1, Math.ceil((EDIT_WINDOW - (Date.now() - m.at)) / 60e3));
 export function threadHTML(list, me, opts = {}) {
+  list = list.filter(m => m.kind !== 'appeal'); // unblock requests live in their own section
   if (!list.length) return `<div class="lc-empty"><div class="lc-empty-ic" aria-hidden="true">${CHAT_ICON}</div><b>${h(opts.emptyTitle || 'No messages yet')}</b><span>${h(opts.empty || '')}</span></div>`;
   const sel = opts.sel || null, editing = opts.editing || null;
   const lastMine = [...list].reverse().find(m => m.from === me && m.kind !== 'popup' && !m.deleted);
@@ -154,7 +155,7 @@ export function threadHTML(list, me, opts = {}) {
       const samePrev = prev && prev.from === m.from && prev.kind !== 'popup' && !prev.deleted && m.at - prev.at < 3 * 60e3;
       if (editing === m.id) out += `<div class="lc-b me tail editing">${editor(m)}</div>`;
       else { const tick = mine ? `<i class="lc-tick ${m.seenAt ? 'read' : ''}" title="${m.seenAt ? 'Read ' + h(timeOf(m.seenAt)) : 'Delivered'}" aria-label="${m.seenAt ? 'Read' : 'Delivered'}">${m.seenAt ? '✓✓' : '✓'}</i>` : '';
-        out += `<div class="lc-b ${side} ${sameNext ? '' : 'tail'} ${samePrev ? 'cont' : ''} ${mayChange ? 'can' : ''} ${sel === m.id ? 'sel' : ''}" ${mayChange ? `title="Tap to edit or delete" data-msg="sel" data-id="${h(m.id)}" tabindex="0" role="button" aria-label="Message options"` : ''}><span>${imgOf(m) ? `<img class="lc-img" src="${imgOf(m)}" alt="Photo" loading="lazy">` : ''}${m.text ? `<em class="lc-tx">${linkify(m.text)}</em>` : ''}<small class="lc-meta">${m.editedAt ? 'Edited ' : ''}${h(timeOf(m.at))}${tick}</small></span></div>${actions(m)}`; }
+        out += `<div class="lc-b ${side} ${sameNext ? '' : 'tail'} ${samePrev ? 'cont' : ''} ${mayChange ? 'can' : ''} ${sel === m.id ? 'sel' : ''}" ${mayChange ? `title="Tap to edit or delete" data-msg="sel" data-id="${h(m.id)}" tabindex="0" role="button" aria-label="Message options"` : ''}><span>${m.kind === 'appeal' ? '<small class="lc-appeal">🔓 Unblock request</small>' : ''}${imgOf(m) ? `<img class="lc-img" src="${imgOf(m)}" alt="Photo" loading="lazy">` : ''}${m.text ? `<em class="lc-tx">${linkify(m.text)}</em>` : ''}<small class="lc-meta">${m.editedAt ? 'Edited ' : ''}${h(timeOf(m.at))}${tick}</small></span></div>${actions(m)}`; }
       if (m === lastMine && editing !== m.id && m.seenAt) out += `<div class="lc-receipt"><b>Read</b> ${h(timeOf(m.seenAt))}</div>`;
     }
     prev = m;
@@ -194,7 +195,7 @@ const BELL_ICON = '<svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 1 1 12 0v5l1
 /* ---------- popup (iOS-style alert) ---------- */
 function pendingPopups() { return msgs.filter(x => x.from === 'admin' && x.kind === 'popup' && !x.seenAt && !x.deleted && !shownPopups.has(x.id)); }
 function nextPopup() {
-  if (popupOpen || document.visibilityState !== 'visible') return;
+  if (popupOpen || document.visibilityState !== 'visible' || access.chatOff || access.blocked) return;
   const list = pendingPopups(), m = list[0];
   if (!m) return;
   popupOpen = m; shownPopups.add(m.id);
@@ -231,6 +232,7 @@ function renderChat() {
   if (chatOpen && document.visibilityState === 'visible') { const toSee = msgs.filter(m => m.from === 'admin' && !m.seenAt && !m.deleted && (m.kind !== 'popup' || shownPopups.has(m.id))); if (toSee.length) markSeen(toSee); }
 }
 function openChat(focus) {
+  if (access.chatOff || access.blocked) return;
   chatOpen = true; const p = rootEl.querySelector('.lc-panel'); p.hidden = false; requestAnimationFrame(() => p.classList.add('on')); document.documentElement.classList.add('lc-lock');
   rootEl.querySelector('.lc-fab').setAttribute('aria-expanded', 'true'); rootEl.querySelector('.lc-toast').classList.remove('on'); renderChat();
   if (focus) setTimeout(() => rootEl.querySelector('.lc-input textarea')?.focus(), 80);
@@ -295,9 +297,109 @@ async function onClick(e) {
   if (a === 'task-done') { const S = getS(); S.coachDone = S.coachDone || {}; S.coachDone[b.dataset.id] = today(); saveS(); renderCard(); return; }
 }
 
+/* ---------- V33: access set by the admin (chat disabled / user blocked), applied live ---------- */
+function applyAccess(a) {
+  const next = { chatOff: !!(a && a.chatOff), blocked: !!(a && a.blocked), at: (a && a.at) || 0, auto: !!(a && a.auto) };
+  access = next; try { localStorage.setItem('lc-access-' + uid, JSON.stringify(next)); } catch (e) { }
+  const off = next.chatOff || next.blocked, html = document.documentElement;
+  html.classList.toggle('chat-off', off);
+  if (off && rootEl) {
+    if (chatOpen) closeChat();
+    if (popupOpen) { popupOpen = null; const l = rootEl.querySelector('.lc-pop'); if (l) { l.classList.remove('on'); l.hidden = true; l.innerHTML = ''; } }
+    const t = rootEl.querySelector('.lc-toast'); if (t) t.classList.remove('on');
+  }
+  if (!off && rootEl) { renderChat(); nextPopup(); }
+  showBlocked(next.blocked);
+}
+/* Effective block = admin block, or the automatic block after 10+ days without signing in
+   (activity/{uid}.autoBlock), unless the admin unblocked after it (coach access.unblockedAt). */
+function recomputeAccess() {
+  const a = coachAccess || {}, un = a.unblockedAt || 0;
+  const auto = !!(autoBlock && autoBlock.at && autoBlock.at > un);
+  const blocked = !!a.blocked || auto;
+  const at = a.blocked ? (a.at || 0) : auto ? autoBlock.at : 0;
+  applyAccess({ chatOff: !!a.chatOff, blocked, at, auto: auto && !a.blocked });
+}
+let blkSending = false;
+const LOCK_SVG = '<svg viewBox="0 0 62 62"><rect x="13" y="27" width="36" height="26" rx="7"/><path class="lb-shk" d="M20 27v-6a11 11 0 0 1 22 0v6"/><path d="M31 37v6"/></svg>';
+const HOUR_SVG = '<svg viewBox="0 0 62 62" class="lb-hg"><path d="M19 12h24M19 50h24"/><path d="M22 12c0 10 9 13 9 19s-9 9-9 19M40 12c0 10-9 13-9 19s9 9 9 19"/><path class="lb-sand" d="M26 44c2-3 3-4 5-4s3 1 5 4z"/></svg>';
+const MSG_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6c5.08 0 9.2 3.47 9.2 7.75S17.08 19.1 12 19.1c-1 0-1.97-.13-2.88-.39L4.6 20.4l1.38-3.67C3.97 15.3 2.8 13.4 2.8 11.35 2.8 7.07 6.92 3.6 12 3.6z"/></svg>';
+function pendingAppeal() { const since = access.at || 0; return msgs.filter(m => m.kind === 'appeal' && m.from === 'learner' && !m.deleted && m.at >= since).sort((a, b) => b.at - a.at)[0] || null; }
+function showBlocked(on) {
+  const html = document.documentElement; let el = document.getElementById('lcBlocked');
+  if (!on) {
+    if (el) { el.classList.add('bye'); setTimeout(() => el && el.remove(), 450); }
+    html.classList.remove('is-blocked'); document.querySelectorAll('body > [data-lc-inert]').forEach(n => { n.inert = false; n.removeAttribute('data-lc-inert'); });
+    return;
+  }
+  if (!el) {
+    el = document.createElement('div'); el.id = 'lcBlocked'; el.setAttribute('role', 'alertdialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-labelledby', 'lcBlockedT');
+    el.innerHTML = `<i class="lb-blob" aria-hidden="true"></i><div class="lb-win"><div class="lb-bar" aria-hidden="true"><i></i><i></i><i></i><span>JS Learning</span></div><div class="lb-body"></div>
+      <div class="lb-sheetwrap" hidden><div class="lb-sheet" role="dialog" aria-modal="true" aria-labelledby="lbSheetT">
+        <div class="lb-sbar"><button type="button" class="lb-dot r" data-b="cancel" aria-label="Close"></button><i class="lb-dot"></i><i class="lb-dot"></i><span id="lbSheetT">New Message</span></div>
+        <div class="lb-to"><span>To:</span><em class="lb-chip"><i aria-hidden="true">?</i><b class="lb-stranger">stranger</b></em></div>
+        <div class="lb-subj"><span>Subject:</span><b>Unblock request</b></div>
+        <textarea maxlength="1000" rows="6" placeholder="Write your message to the stranger…" aria-label="Message to the stranger"></textarea>
+        <div class="lb-sfoot"><small class="lb-note"></small><button type="button" class="nsb" data-b="cancel">Cancel</button><button type="button" class="nsb def" data-b="send" disabled>Send</button></div>
+      </div></div></div>`;
+    document.querySelectorAll('body > *').forEach(n => { if (n !== el && !n.inert) { n.inert = true; n.setAttribute('data-lc-inert', ''); } });
+    document.body.appendChild(el); html.classList.add('is-blocked');
+    el.addEventListener('click', async e => {
+      const b = e.target.closest('[data-b]'); if (!b) return; const k = b.dataset.b;
+      if (k === 'out') { const f = onSignOut; if (f) f(); return; }
+      if (k === 'msg') return openSheet(true);
+      if (k === 'cancel') return openSheet(false);
+      if (k === 'send') return sendAppeal();
+    });
+    const ta = el.querySelector('.lb-sheet textarea');
+    ta.addEventListener('input', () => { el.querySelector('[data-b="send"]').disabled = !ta.value.trim(); el.querySelector('.lb-note').textContent = ''; });
+    ta.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); sendAppeal(); } if (e.key === 'Escape') { e.preventDefault(); openSheet(false); } });
+  }
+  renderBlockedState();
+}
+function openSheet(on) {
+  const el = document.getElementById('lcBlocked'); if (!el) return; const w = el.querySelector('.lb-sheetwrap');
+  if (on) { w.hidden = false; requestAnimationFrame(() => w.classList.add('on')); setTimeout(() => el.querySelector('.lb-sheet textarea').focus(), 250); }
+  else { w.classList.remove('on'); setTimeout(() => { w.hidden = true; }, 220); }
+}
+async function sendAppeal() {
+  const el = document.getElementById('lcBlocked'); if (!el || blkSending) return;
+  const ta = el.querySelector('.lb-sheet textarea'), note = el.querySelector('.lb-note'), text = ta.value.trim(), sb = el.querySelector('[data-b="send"]');
+  if (!text) { ta.focus(); return; }
+  blkSending = true; sb.disabled = true; sb.textContent = 'Sending…';
+  try {
+    const m = { from: 'learner', text: text.slice(0, 1000), kind: 'appeal', at: Date.now(), seenAt: null };
+    const ref = await fb.addDoc(fb.collection(fb.fdb, 'chats', uid, 'messages'), m);
+    if (!msgs.some(x => x.id === ref.id)) msgs = [...msgs, { id: ref.id, ...m }];
+    ta.value = ''; openSheet(false); renderBlockedState();
+  } catch (e) { note.textContent = 'Not sent — check your connection and try again.'; }
+  blkSending = false; sb.textContent = 'Send'; sb.disabled = !ta.value.trim();
+}
+/* Two states: "blocked" (message the stranger) and "request in progress" after an unblock request was sent. */
+function renderBlockedState() {
+  const el = document.getElementById('lcBlocked'); if (!el) return; const body = el.querySelector('.lb-body');
+  const p0 = pendingAppeal(), dec = coachAccess && coachAccess.decision, declined = !!(p0 && dec && dec.id === p0.id && dec.result === 'declined'), p = p0;
+  const key = p ? 'p' + p.id + (p.seenAt ? 's' : '') + (declined ? 'd' : '') : 'b' + (access.auto ? 'a' : '');
+  if (body.dataset.key === key) return; body.dataset.key = key;
+  const when = t => new Date(t).toLocaleString([], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  if (p) {
+    body.innerHTML = `<div class="lb-lock lb-amber" aria-hidden="true">${HOUR_SVG}</div>
+      <h1 id="lcBlockedT" class="lb-title lb-t2 lb-f1">Unblock request in progress</h1>
+      <p class="lb-sub lb-f2">Your request was sent to the <b class="lb-stranger">stranger</b> on ${h(when(p.at))}. You’ll get access back automatically as soon as it’s approved.</p>
+      <div class="lb-status lb-f2 ${declined ? 'no' : ''}"><i></i>${declined ? 'Reviewed · the stranger kept your access blocked for now' : p.seenAt ? 'Seen by the stranger · waiting for a decision' : 'Sent · waiting for review'}</div>
+      <div class="lb-actions ${declined ? '' : 'one'} lb-f3">${onSignOut ? '<button type="button" class="nsb" data-b="out">Sign Out</button>' : ''}${declined ? `<button type="button" class="nsb def" data-b="msg" aria-label="Send a new request to the stranger">${MSG_SVG}<span>New request</span></button>` : ''}</div>`;
+  } else {
+    body.innerHTML = `<div class="lb-lock" aria-hidden="true">${LOCK_SVG}</div>
+      <h1 id="lcBlockedT" class="lb-title lb-f1">You are blocked</h1>
+      <p class="lb-sub lb-f2">${access.auto ? 'Your account was blocked automatically because you haven’t signed in for 10 days.' : 'Your access to JS Learning has been paused.'} Send a message to the <b class="lb-stranger">stranger</b> to ask to be unblocked.</p>
+      <div class="lb-actions lb-f3">${onSignOut ? '<button type="button" class="nsb" data-b="out">Sign Out</button>' : ''}<button type="button" class="nsb def" data-b="msg" aria-label="Message the stranger" title="Message the stranger">${MSG_SVG}<span><b class="lb-stranger">stranger</b></span></button></div>`;
+  }
+}
+function clearAccessUI() { document.documentElement.classList.remove('chat-off'); const el = document.getElementById('lcBlocked'); if (el) el.remove(); document.documentElement.classList.remove('is-blocked'); document.querySelectorAll('body > [data-lc-inert]').forEach(n => { n.inert = false; n.removeAttribute('data-lc-inert'); }); access = { chatOff: false, blocked: false }; }
+
 export function startCoach(opts) {
   stopCoach();
-  ({ fb, uid, getS, save: saveS, onRemoteSignOut } = opts);
+  ({ fb, uid, getS, save: saveS, onRemoteSignOut } = opts); onSignOut = opts.signOut || null;
   startedAt = Date.now(); msgs = []; coach = null; firstMsgs = true; shownPopups = new Set(); popupOpen = null; chatOpen = false; week = { rows: [], loaded: false };
   rootEl = document.createElement('div'); rootEl.id = 'lcRoot';
   rootEl.innerHTML = `<button type="button" class="lc-fab" data-lc="fab" aria-label="Messages: chat with your admin" aria-expanded="false">${CHAT_ICON}<span class="lc-fab-t">Messages</span><b hidden>0</b></button>
@@ -316,19 +418,22 @@ export function startCoach(opts) {
   ta.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } if (e.key === 'Escape') closeChat(); });
   ta.addEventListener('input', () => { ta.style.height = 'auto'; ta.style.height = Math.min(120, ta.scrollHeight) + 'px'; syncSend(); });
   document.addEventListener('keydown', escPop);
+  try { applyAccess(JSON.parse(localStorage.getItem('lc-access-' + uid) || 'null')); } catch (e) { }
   try {
     unsubs.push(fb.onSnapshot(fb.query(fb.collection(fb.fdb, 'chats', uid, 'messages'), fb.orderBy('at')), snap => {
       const prev = new Set(msgs.map(m => m.id));
       msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (!firstMsgs && !chatOpen) { const fresh = msgs.filter(m => !prev.has(m.id) && m.from === 'admin' && m.kind !== 'popup' && !m.deleted); if (fresh.length) toast('Admin', previewText(fresh[fresh.length - 1]).slice(0, 160)); }
+      if (!firstMsgs && !chatOpen && !access.chatOff && !access.blocked) { const fresh = msgs.filter(m => !prev.has(m.id) && m.from === 'admin' && m.kind !== 'popup' && !m.deleted); if (fresh.length) toast('Admin', previewText(fresh[fresh.length - 1]).slice(0, 160)); }
       if (popupOpen) { const cur = msgs.find(m => m.id === popupOpen.id); if (cur && cur.deleted) { popupOpen = null; const l = rootEl.querySelector('.lc-pop'); l.classList.remove('on'); l.hidden = true; l.innerHTML = ''; } }
-      firstMsgs = false; renderChat(); nextPopup();
+      firstMsgs = false; renderChat(); nextPopup(); if (access.blocked) renderBlockedState();
     }, () => { }));
     unsubs.push(fb.onSnapshot(fb.doc(fb.fdb, 'coach', uid), s => {
       coach = s.exists() ? s.data() : null;
+      coachAccess = (coach && coach.access) || null; recomputeAccess();
       if (coach && coach.signOutAt && coach.signOutAt > startedAt && onRemoteSignOut) { const f = onRemoteSignOut; stopCoach(); f(); return; }
       renderCard();
     }, () => { }));
+    unsubs.push(fb.onSnapshot(fb.doc(fb.fdb, 'activity', uid), s => { autoBlock = (s.exists() && s.data().autoBlock) || null; recomputeAccess(); }, () => { }));
   } catch (e) { console.warn('coach listeners failed', e); }
   loadWeek(); timers.push(setInterval(loadWeek, 5 * 60e3));
   let q = 0; observer = new MutationObserver(() => { if (q) return; q = 1; requestAnimationFrame(() => { q = 0; renderCard(); }); });
@@ -342,6 +447,7 @@ export function stopCoach() {
   timers.forEach(clearInterval); timers = []; clearInterval(expiryTimer); tst.sel = tst.editing = null;
   if (observer) { observer.disconnect(); observer = null; }
   document.removeEventListener('keydown', escPop); document.removeEventListener('visibilitychange', visib);
+  clearAccessUI();
   if (rootEl) { rootEl.remove(); rootEl = null; }
   window.__openChat = null; document.documentElement.classList.remove('lc-ready', 'lc-lock'); const nb = document.getElementById('lcNavBadge'); if (nb) nb.hidden = true;
   document.querySelectorAll('.lc-cisa-slot').forEach(x => x.remove()); const s = document.getElementById('coachSlot'); if (s) { s.innerHTML = ''; s.dataset.html = ''; }

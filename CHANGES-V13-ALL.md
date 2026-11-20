@@ -395,3 +395,80 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 - **Lists merge safely.** Number lists such as weekly study minutes are no longer merged item by item (which could drop repeated values).
 - **Clear status.** If a save is ever refused, the status chip shows the reason code. Network failures retry automatically.
 - Verified on a test store that mimics Firestore: topic complete, manual read and plan Save & lock reach the server, survive a reload and show in the admin overview.
+
+## V29 (v53): Reliability tools, case files, spaced review, full-text search
+
+**Reliability**
+- Each learner device reports its app version, last good save and any save error. The admin overview has a new **Sync health** card showing Healthy, Old app version or Saves failing (with the error code).
+- **Run sync check** (admin): a test write and read-back on the server, then checks each learner's progress, version, last save, plan lock and backups.
+- **Daily backups**: once a day each learner device stores a full copy of the progress (14 rotating slots in `activity/{uid}/days/bk-0…13`, which the existing rules already allow). The admin can download any backup or restore it. A copy of the current progress downloads first, so a restore can be undone.
+- **Sync chip check**: clicking "Synced" (or the status text) compares this device with the server and lists lessons, CISA topics, manual sections, the plan and notes.
+- **Update bar**: `version.json` is checked every 10 minutes. When a newer version is uploaded, open tabs show "Update ready · Reload".
+
+**Content**
+- **AI26 Case File 1: Assessing a Generative AI Assistant.** A RAG customer chatbot at a UAE bank, with the full working papers: scoping memo, risk and control matrix, test scripts and results, findings, report, action plan and follow-up.
+- **AI27 Case File 2: Assessing a Third-Party AI Vendor.** A CV-screening SaaS tool for the UAE and India: due diligence questionnaire, review of vendor evidence, your own pilot with impact ratios, contract gaps, the risk decision and ongoing oversight.
+- New knowledge-check area, "Case files: full assessments" (AI21, AI26, AI27).
+- Assessment guides now offer **Download Word template** and **Download Excel (CSV) template** for use at work.
+
+**Learning tools**
+- **Spaced review** (AI Compliance → Review): finished modules come back after 3, 7, 21 and 60 days with key takeaways and a few questions. It is shown on the dashboard and the AI home when due.
+- **Full-text search**: ⌘K now searches inside AI lesson text and shows a snippet.
+- **Your last 7 days** card on the dashboard, with comparison arrows against the week before.
+
+**Deploy note:** upload `version.json` along with the other files, and raise its number together with `APP_V` on every future release.
+
+## V30 (v54): CISA Today home, AI labs, deeper case studies, Technical academy upgrade (batch 1)
+
+- **CISA hub:** the tabs now show six main sections plus "More" (Daily recorder, Revision, Analytics, Notes & backup). The overview, now called "Today", adds a **Pace** card (on track, slightly behind or behind, with a marker showing where today's plan is) and a quick-actions row.
+- **AI hands-on labs** (AI Compliance → Labs): threshold and fairness (confusion matrix, impact ratio, equal-opportunity gap), drift and PSI (with the calculation), prompt-injection defences (6 attacks, 5 layered controls) and risk scoring (inherent vs residual heat map). Everything runs in the browser and nothing is saved.
+- **Case studies:** each of the six original cases gains an extra exhibit, two "Go further" questions with explanations, and a debrief covering what happened next and the lessons. The "Go further" questions do not count toward case progress, so earlier completion is unchanged.
+- **Technical academy, batch 1 (M01–M05, 34 lessons):** each lesson gains an "In simple words" box, a flow, table or cards visual, and a "Why this matters for GRC" box linking it to controls and assessments.
+- **Data safety:** an upgrade test confirmed that existing progress is unchanged after opening v54, on both the server and the device: lessons, quiz answers, notes, flashcards, CISA ticks, manual reads, the locked plan and all AI course keys. New features only add new fields.
+- **Plan lock history (admin):** the overview shows when the learner locked the plan (from their activity log) and when an admin last unlocked it. If the learner locked it but the server shows it as not locked (a lock lost in the v51 sync problem), a warning appears with a **Re-lock plan** button that restores the lock with the saved plan settings. **Run sync check** flags the same mismatch.
+- **Lock reconnect:** if the learner locked the plan on a device but the server copy is not locked (and no admin unlock was recorded after that lock), the device now keeps its locked plan, with the learner's own dates and mode, and uploads it the next time the app is opened. A later admin unlock is always respected. The admin's Sync health card shows the plan state on the learner's device.
+
+## V31 (v55): Technical academy fully upgraded
+
+- **All 34 Technical modules (243 lessons)** now have an "In simple words" box and a "Why this matters for GRC" box linking the topic to controls, audit evidence and common findings. 67 new flow, table and card visuals were added where they help.
+- Lesson text now shows *italics* properly, where it used to show raw asterisks.
+- Version bumped to v55, so open tabs show the "Update ready" bar.
+
+## V32 (v56): Paste photos into chat
+
+- In the learner chat and both admin chat views, paste an image (Ctrl/⌘ + V) into the message box. A preview appears with Send and Cancel, and any typed text goes as the caption. There is no upload button: pasting only.
+- Images keep screenshot quality: up to 2560 px on the long side, saved as WebP (or JPEG where the browser can't encode WebP), under about 850 KB. They are stored inside the chat message, so no Firebase Storage or rule change is needed.
+- Photos appear in the conversation, and tapping one opens it full size. Message lists and notifications show "📷 Photo".
+- Note: deleting an image message hides it in the chat, but the image data stays in that message record (the existing chat rules only allow the text to change).
+
+## V33 (v57): Admin can disable chat and block a learner
+
+- Two new buttons on the learner card in the admin portal: **Disable chat / Enable chat** and **Block user / Unblock user**, with badges ("💬 Chat off", "⛔ Blocked") and entries in the audit trail.
+- **Disable chat:** the learner's Messages button, chat window, popups and message notifications disappear straight away. Nothing is deleted, and when chat is enabled again the full history is back. The admin chat shows a notice that the learner can't see messages.
+- **Block:** the learner can still sign in, but sees only a full-screen animated "You are blocked" page with "Please contact the **stranger** for unblock" (with "stranger" in bold orange), plus a Sign out button. The rest of the app is disabled underneath. Progress and messages are kept.
+- Both apply live in the learner's current session (the app listens to `coach/{uid}`), with no sign-out needed. The state is also remembered on the device, so the blocked page appears immediately on the next sign-in.
+- `firestore.rules` (optional but recommended): learners cannot send chat messages while chat is disabled or they are blocked.
+
+## V34 (v58): Mac-style blocked screen with "Message the stranger"
+
+- The blocked screen is now a Mac alert window in the app's light glass theme: red, grey and grey window dots titled "JS Learning", a red lock icon (the lock pulses and its shackle shakes), and "You are blocked" in large letters. It animates in with a pop and a fade.
+- The sentence is replaced by a **✉️ Message the stranger** button. It opens a message box inside the window, and the message is sent as an **unblock request** (chat kind `appeal`; at most one every 30 seconds, up to 1000 characters).
+- Replies from the admin appear in the same window, along with the learner's own requests. When a request has been read it shows "Read". The full chat stays hidden while blocked.
+- Admin: the learner card shows a "🔓 N unblock request(s)" badge, and requests are tagged "🔓 Unblock request" in the chat and in notifications.
+- `firestore.rules`: blocked or chat-disabled learners can still send unblock requests, but nothing else.
+- **v59:** the blocked screen's message button is now a macOS-style glossy blue button with a green Messages-style bubble icon, "Message the **stranger**" with an "Ask to be unblocked" subtitle, and a slow light sheen. The writing area looks like Messages: a "To: stranger" chip, a rounded field that grows as you type, and a round send arrow that turns blue once there is text (⌘ + Enter also sends). Sign out is a quiet text button underneath.
+- **v60:** the buttons on the blocked screen now look like real macOS push buttons: a system-blue default button ("💬 Message the stranger…") and a white "Sign Out" button, both with a fine border, a soft top highlight and a small shadow, a darker pressed state and a Mac focus ring. They sit bottom-right as in a Mac dialog, and stack full width on phones.
+- **v60 (update):** the blue button now shows only the chat icon and **stranger** (the screen-reader label still says "Message the stranger").
+- **v61:** the blocked screen uses macOS alert proportions: a compact 400 px centered window, the title truly centered in the title bar, a smaller icon, a centered title and text, and two equal-width buttons side by side (Sign Out on the left, the blue 💬 stranger button on the right).
+
+## V38 (v62): Unblock request popup, "request in progress" screen, admin Unblock requests section, 10-day auto-block
+
+- **Learner, blocked screen:** the 💬 stranger button opens a Mac-style **New Message** sheet that drops down from the window's title bar: window dots (the red one closes it), a "To: stranger" chip, Subject "Unblock request", a message field, and Cancel / Send (Send stays disabled until there is text; ⌘ + Enter sends, Esc cancels).
+- **After sending,** the window switches to **"Unblock request in progress"**, with an amber hourglass that flips, the time it was sent, and a status pill ("Sent · waiting for review", then "Seen by the stranger · waiting for a decision"). Sign Out is the only button. If the admin keeps the learner blocked, the pill says so and a **New request** button appears.
+- **Admin:** a new **Unblock requests** section in the sidebar, where each request is shown as a card with Pending / Approved / Kept blocked status and **Approve & unblock** / **Keep blocked** buttons. Requests no longer appear in the chat. When the admin signs in, or a new request arrives, a **popup** shows the request with "Review request" / "Later" (once per request per session).
+- **Auto-block:** if a learner signs in after **10 or more days** without using the app, they are blocked automatically (recorded in `activity/{uid}.autoBlock`). Their screen explains why, and the admin sees "⛔ Blocked · inactive 10+ days". Unblocking (or approving a request) lifts it immediately, in the same session.
+- Fix: deciding on a request no longer resets the block start time.
+
+## v63: Second learner account
+
+- Added learner UID `pt8WaB9gHuMU5U8qhtKTJCEHC0r1` to the allowed users in `index.html` and `firestore.rules`. It gets the same access as the existing learner: its own progress, activity, chat, CISA plan and AI course records. The admin can switch between learners with the picker on the learner card, and blocking, chat and unblock requests work per learner.

@@ -262,17 +262,66 @@ function subscribe(uid) {
       chats[uid] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       if (prevIds) { const fresh = chats[uid].filter(m => !prevIds.has(m.id) && m.from === 'learner' && !m.deleted); const viewing = chatOpen && (convOpen || !isNarrow()) && document.visibilityState === 'visible' && learners && learners[sel] && learners[sel].uid === uid; if (fresh.length && !viewing) chatToast(uid, previewText(fresh[fresh.length - 1])); }
       if (chatOpen && (convOpen || !isNarrow()) && learners && learners[sel] && learners[sel].uid === uid) markLearnerSeen(uid);
-      renderChatWin(); softRender();
+      renderChatWin(); softRender(); setTimeout(maybeRequestPopup, 400);
     }, e => { chats[uid] = chats[uid] || []; chats[uid].error = String(e && e.code || e); softRender(); }));
-    list.push(fb.onSnapshot(fb.doc(fb.fdb, 'coach', uid), s => { coachDocs[uid] = s.exists() ? s.data() : {}; softRender(); }, e => { coachDocs[uid] = coachDocs[uid] || {}; }));
+    list.push(fb.onSnapshot(fb.doc(fb.fdb, 'coach', uid), s => { coachDocs[uid] = s.exists() ? s.data() : {}; softRender(); setTimeout(maybeRequestPopup, 400); }, e => { coachDocs[uid] = coachDocs[uid] || {}; }));
   } catch (e) { console.warn('admin subscribe failed', e); }
   unsubs[uid] = list;
 }
 function unsubscribeAll() { for (const l of Object.values(unsubs)) for (const f of l) { try { f(); } catch (e) { } } unsubs = {}; }
 let softQ = 0; function softRender() { if (softQ) return; softQ = 1; requestAnimationFrame(() => { softQ = 0; render(); }); }
 async function markLearnerSeen(uid) {
-  const fb = api.fb; for (const m of (chats[uid] || []).filter(m => m.from === 'learner' && !m.seenAt && !m.deleted)) { try { await fb.updateDoc(fb.doc(fb.fdb, 'chats', uid, 'messages', m.id), { seenAt: Date.now() }); } catch (e) { } }
+  const fb = api.fb; for (const m of (chats[uid] || []).filter(m => m.from === 'learner' && m.kind !== 'appeal' && !m.seenAt && !m.deleted)) { try { await fb.updateDoc(fb.doc(fb.fdb, 'chats', uid, 'messages', m.id), { seenAt: Date.now() }); } catch (e) { } }
 }
+/* V33: admin access controls — disable chat and block the learner. Stored in coach/{uid}.access (only the admin
+   can write it; the learner's app listens live, so changes apply in the same session without signing out).
+   Chat messages are never deleted: disabling only hides the chat from the learner. */
+const autoOf = L => { const ab = L.act && L.act.profile && L.act.profile.autoBlock, a = ((coachDocs[L.uid] || {}).access) || {}; return ab && ab.at > (a.unblockedAt || 0) ? ab : null; };
+const accessOf = L => { const a = ((coachDocs[L.uid] || {}).access) || {}, au = L.act ? autoOf(L) : null; return { chatOff: !!a.chatOff, blocked: !!a.blocked || !!au, auto: !a.blocked && !!au }; };
+function accessBadges(L) { const a = accessOf(L), ap = pendingRequests(L).length; return (ap ? `<em class="adm-badge info">🔓 ${ap} unblock request${ap > 1 ? 's' : ''}</em>` : '') + (a.blocked ? `<em class="adm-badge bad">⛔ Blocked${a.auto ? ' · inactive 10+ days' : ''}</em>` : '') + (a.chatOff ? '<em class="adm-badge warn">💬 Chat off</em>' : ''); }
+function accessButtons(L) { const a = accessOf(L), u = `data-uid="${h(L.uid)}"`; return btn('acc-chat', a.chatOff ? 'Enable chat' : 'Disable chat', 'sm ' + (a.chatOff ? 'primary' : ''), u) + btn('acc-block', a.blocked ? 'Unblock user' : 'Block user', 'sm ' + (a.blocked ? 'primary' : 'danger'), u); }
+async function setAccess(uid, patch, what) {
+  const cur = ((coachDocs[uid] || {}).access) || {}, changed = ('blocked' in patch && !!patch.blocked !== !!cur.blocked) || ('chatOff' in patch && !!patch.chatOff !== !!cur.chatOff);
+  const next = { chatOff: !!cur.chatOff, blocked: !!cur.blocked, unblockedAt: cur.unblockedAt || 0, ...patch, at: changed || !cur.at ? Date.now() : cur.at };
+  if (patch.blocked === false) next.unblockedAt = Date.now();
+  const ok = await saveCoach(uid, { access: next }, what); render(); return ok;
+}
+
+/* V38: unblock requests — their own section, plus a popup when the admin signs in or a new request arrives. */
+function requestsOf(L) { return (chats[L.uid] || []).filter(m => m.kind === 'appeal' && m.from === 'learner' && !m.deleted).sort((a, b) => b.at - a.at); }
+function reqStatus(L, m) {
+  const a = ((coachDocs[L.uid] || {}).access) || {}, dec = a.decision, blockedNow = accessOf(L).blocked, since = a.blocked ? (a.at || 0) : (autoOf(L) || {}).at || 0;
+  if (dec && dec.id === m.id) return dec.result === 'approved' ? 'approved' : 'declined';
+  if (!blockedNow) return (a.unblockedAt || 0) > m.at ? 'approved' : 'closed';
+  return m.at >= since ? 'pending' : 'closed';
+}
+function pendingRequests(L) { return requestsOf(L).filter(m => reqStatus(L, m) === 'pending'); }
+function requestsUI(L) {
+  const list = requestsOf(L), a = accessOf(L), ab = autoOf(L);
+  const lab = { pending: ['Pending', 'warn'], approved: ['Approved · unblocked', 'ok'], declined: ['Kept blocked', 'bad'], closed: ['Closed', ''] };
+  const fmt = t => new Date(t).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  return `<section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">Unblock requests</span><h3 class="ed-title">${a.blocked ? `⛔ ${h(nameOf(L))} is blocked${a.auto && ab ? ` automatically · ${ab.days || 10}+ days without signing in` : ''}` : `${h(nameOf(L))} is not blocked`}</h3><p class="ed-sub">Requests the learner sent from the blocked screen. They don’t appear in the chat.</p></div>${a.blocked ? btn('acc-block', 'Unblock user', 'sm primary', `data-uid="${h(L.uid)}"`) : ''}</div>
+  ${list.length ? `<div class="adm-reqs">${list.map(m => { const st = reqStatus(L, m), [t, k] = lab[st]; return `<article class="adm-req ${st}"><header><span class="adm-req-ic">🔓</span><div><b>Unblock request</b><small>${h(fmt(m.at))}${m.seenAt ? ' · seen' : ''}</small></div><em class="adm-pill ${k}">${t}</em></header><p>${h(m.text || '')}</p>${st === 'pending' ? `<footer>${btn('req-decline', 'Keep blocked', 'sm', `data-uid="${h(L.uid)}" data-id="${h(m.id)}"`)}${btn('req-approve', 'Approve & unblock', 'sm primary', `data-uid="${h(L.uid)}" data-id="${h(m.id)}"`)}</footer>` : ''}</article>`; }).join('')}</div>` : '<p class="cisa-mini">No unblock requests yet.</p>'}</section>`;
+}
+async function decideRequest(uid, id, approve) {
+  const fb = api.fb; try { await fb.updateDoc(fb.doc(fb.fdb, 'chats', uid, 'messages', id), { seenAt: Date.now() }); } catch (e) { }
+  const decision = { id, result: approve ? 'approved' : 'declined', at: Date.now() };
+  return setAccess(uid, approve ? { blocked: false, decision } : { decision }, approve ? 'Approved an unblock request and unblocked the learner' : 'Reviewed an unblock request and kept the learner blocked');
+}
+let reqPopupBusy = false;
+async function maybeRequestPopup() {
+  if (reqPopupBusy || !learners || !root) return;
+  for (const L of learners) {
+    const p = pendingRequests(L).filter(m => { try { return !sessionStorage.getItem('adm-req-pop-' + m.id); } catch (e) { return true; } });
+    if (!p.length) continue; const m = p[0];
+    reqPopupBusy = true; try { p.forEach(x => sessionStorage.setItem('adm-req-pop-' + x.id, '1')); } catch (e) { }
+    const go = await uiConfirm(`${nameOf(L)} is blocked and asked to be unblocked:\n\n“${(m.text || '').slice(0, 400)}”${p.length > 1 ? `\n\n(+${p.length - 1} more request${p.length > 2 ? 's' : ''})` : ''}`, { title: '🔓 Unblock request', ok: 'Review request', cancel: 'Later' });
+    reqPopupBusy = false;
+    if (go) { sel = learners.indexOf(L); location.hash = 'admin-requests'; }
+    return;
+  }
+}
+
 async function saveCoach(uid, patch, auditText) {
   const fb = api.fb, cur = coachDocs[uid] || {};
   const body = { ...patch, updatedAt: Date.now() };
@@ -287,7 +336,7 @@ async function sendMsg(uid, text, kind, title) {
   try { await fb.addDoc(fb.collection(fb.fdb, 'chats', uid, 'messages'), { from: 'admin', text: text.slice(0, 2000), kind, title: (title || '').slice(0, 80), at: Date.now(), seenAt: null }); if (kind === 'popup') saveCoach(uid, {}, `Sent popup message${title ? ' “' + title + '”' : ''}`); return true; }
   catch (e) { uiAlert('Check the connection and that the latest firestore.rules are published in the Firebase Console.', { title: 'Message not sent' }); return false; }
 }
-const unreadOf = uid => (chats[uid] || []).filter(m => m.from === 'learner' && !m.seenAt && !m.deleted).length;
+const unreadOf = uid => (chats[uid] || []).filter(m => m.from === 'learner' && m.kind !== 'appeal' && !m.seenAt && !m.deleted).length;
 const actRowsRaw = L => (L.act && L.act.rows) || [];
 
 /* ---------- alerts ---------- */
@@ -471,7 +520,7 @@ function isLive(L) { const p = L.act && L.act.profile; return !!(p && p.lastSeen
 /* ---------- chat ---------- */
 function chatUI(L) {
   const msgs = chats[L.uid] || [], live = isLive(L);
-  return `<section class="ed-card adm-sec adm-chat"><header><div class="lc-who"><span class="lc-av learner">${h(nameOf(L).charAt(0).toUpperCase())}${live ? '<i class="lc-live"></i>' : ''}</span><div><b>${h(nameOf(L))}</b><small>${live ? 'Active now' : 'Last active ' + h(ago(lastSeen(L)))}</small></div></div></header>${msgs.error ? `<p class="pl-err">Chat unavailable (${h(msgs.error)}). Publish the latest firestore.rules.</p>` : ''}<div class="lc-msgs adm-msgs">${threadHTML(msgs, 'admin', { live, sel: tst.sel, editing: tst.editing, emptyTitle: 'Start the conversation', empty: 'Messages appear on the learner’s screen with a notification. Tick Popup to show one as an alert.' })}</div>
+  return `<section class="ed-card adm-sec adm-chat"><header><div class="lc-who"><span class="lc-av learner">${h(nameOf(L).charAt(0).toUpperCase())}${live ? '<i class="lc-live"></i>' : ''}</span><div><b>${h(nameOf(L))}</b><small>${live ? 'Active now' : 'Last active ' + h(ago(lastSeen(L)))}</small></div></div></header>${accessOf(L).chatOff || accessOf(L).blocked ? `<p class="adm-warn" style="margin:8px 12px">${accessOf(L).blocked ? 'This learner is blocked' : 'Chat is disabled for this learner'} — they can’t see these messages until you ${accessOf(L).blocked ? 'unblock them' : 'enable chat'}. History is kept.</p>` : ''}${msgs.error ? `<p class="pl-err">Chat unavailable (${h(msgs.error)}). Publish the latest firestore.rules.</p>` : ''}<div class="lc-msgs adm-msgs">${threadHTML(msgs, 'admin', { live, sel: tst.sel, editing: tst.editing, emptyTitle: 'Start the conversation', empty: 'Messages appear on the learner’s screen with a notification. Tick Popup to show one as an alert.' })}</div>
   <form class="lc-input adm-chat-input" data-form="chat"><label class="adm-aspop" title="Show this message as a popup alert"><input type="checkbox" name="popup" data-keep="chat-pop"><span>Popup</span></label><div class="lc-field"><textarea name="text" rows="1" maxlength="2000" placeholder="Message ${h(nameOf(L))}" aria-label="Message" data-keep="chat-text"></textarea><button type="submit" aria-label="Send"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></div></form></section>`;
 }
 
@@ -587,7 +636,7 @@ function auditUI(L) {
 }
 
 /* ---------- render ---------- */
-const VIEW_TITLES = { overview: 'Overview', log: 'Activity log', reports: 'Reports', exams: 'Exams', habits: 'Study habits', coaching: 'Coaching', audit: 'Audit trail' };
+const VIEW_TITLES = { overview: 'Overview', log: 'Activity log', reports: 'Reports', exams: 'Exams', habits: 'Study habits', coaching: 'Coaching', requests: 'Unblock requests', audit: 'Audit trail' };
 function render() {
   if (!root || !root.isConnected || !document.documentElement.classList.contains('admin-mode')) return;
   // keep what the admin is typing across live re-renders
@@ -601,10 +650,10 @@ function render() {
   else {
     const L = learners[sel], un = unreadOf(L.uid);
     const warn = !L.ok ? `<p class="pl-err">Cannot read this learner (${h(L.error)}). Publish the latest <code>firestore.rules</code> in the Firebase Console.</p>` : !L.act.ok && L.act.error && L.act.error !== 'not-admin' ? `<p class="pl-err">Activity log unavailable (${h(L.act.error)}). Publish the latest <code>firestore.rules</code> in the Firebase Console; activity is recorded once the rules allow it.</p>` : '';
-    const head = `<section class="ed-card adm-learner"><div class="adm-avatar">${h(nameOf(L).charAt(0).toUpperCase())}${isLive(L) ? '<i class="lc-live"></i>' : ''}</div><div class="adm-who"><b>${h(nameOf(L))}</b><span>${status(L)}</span></div>${btn('quick-chat', `Message${un ? ` <span class="cisa-count">${un}</span>` : ''}`, 'sm primary')}${learners.length > 1 ? `<select data-f="learner">${learners.map((x, i) => `<option value="${i}" ${i === sel ? 'selected' : ''}>${h(nameOf(x))}</option>`).join('')}</select>` : ''}</section>${warn}`;
+    const head = `<section class="ed-card adm-learner"><div class="adm-avatar">${h(nameOf(L).charAt(0).toUpperCase())}${isLive(L) ? '<i class="lc-live"></i>' : ''}</div><div class="adm-who"><b>${h(nameOf(L))}</b><span>${status(L)}${accessBadges(L)}</span></div><div class="adm-access">${accessButtons(L)}${btn('quick-chat', `Message${un ? ` <span class="cisa-count">${un}</span>` : ''}`, 'sm primary')}</div>${learners.length > 1 ? `<select data-f="learner">${learners.map((x, i) => `<option value="${i}" ${i === sel ? 'selected' : ''}>${h(nameOf(x))}</option>`).join('')}</select>` : ''}</section>${warn}`;
     const nav = '';
-    const empty = !L.data && !L.act.rows.length && !['coaching', 'audit'].includes(view);
-    const main = empty ? `<section class="ed-card adm-sec"><p class="cisa-mini">This learner hasn’t used the app yet.</p></section>` : view === 'log' ? logUI(L) : view === 'reports' ? reportUI(L) : view === 'exams' ? examsUI(L) : view === 'habits' ? habitsUI(L) : view === 'coaching' ? coachingUI(L) : view === 'audit' ? auditUI(L) : overviewUI(L);
+    const empty = !L.data && !L.act.rows.length && !['coaching', 'audit', 'requests'].includes(view);
+    const main = empty ? `<section class="ed-card adm-sec"><p class="cisa-mini">This learner hasn’t used the app yet.</p></section>` : view === 'log' ? logUI(L) : view === 'reports' ? reportUI(L) : view === 'exams' ? examsUI(L) : view === 'habits' ? habitsUI(L) : view === 'coaching' ? coachingUI(L) : view === 'audit' ? auditUI(L) : view === 'requests' ? requestsUI(L) : overviewUI(L);
     body = head + nav + main;
   }
   root.innerHTML = `<div class="cisa-hub adm-portal"><header class="cisa-head adm-head"><div><span class="ed-kicker">Admin portal</span><h1>${h(VIEW_TITLES[view] || 'Overview')}</h1><p class="ed-sub">${loadedAt ? `Updated ${h(loadedAt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }))} · chat and messages are live` : 'Loading…'}</p></div><div class="adm-head-act">${learners ? bellUI() : ''}${btn('refresh', busy ? 'Refreshing…' : '↻ Refresh', 'sm', busy ? 'disabled' : '')}</div></header>${body}</div>`;
@@ -659,6 +708,9 @@ async function onClick(e) {
   if (a === 'bk-list') { const uid = b.dataset.uid; bkLists[uid] = { loading: true }; render(); try { bkLists[uid] = await api.listBackups(uid); } catch (e) { bkLists[uid] = []; } render(); return; }
   if (a === 'bk-dl') { const d = await api.readBackup(b.dataset.uid, b.dataset.id); if (!d) { uiAlert('That backup could not be read.', { title: 'Download failed' }); return; } dlFile(`progress-backup-${b.dataset.id}-${today()}.json`, JSON.stringify(d, null, 1), 'application/json'); return; }
   if (a === 'bk-restore') { if (!(await uiConfirm(`The learner’s progress goes back to how it was on ${b.dataset.day}. Anything done after that is replaced. A copy of the current progress downloads first, so this can be undone.`, { title: 'Restore this backup?', ok: 'Restore', danger: true }))) return; const r = await api.restoreBackup(b.dataset.uid, b.dataset.id); if (r.ok && r.previous) dlFile(`progress-before-restore-${today()}.json`, JSON.stringify(r.previous, null, 1), 'application/json'); uiAlert(r.ok ? 'Done. Open learner devices update within a few seconds.' : 'Could not restore: ' + r.err, { title: r.ok ? 'Backup restored' : 'Restore failed' }); if (r.ok) saveCoach(b.dataset.uid, {}, `Restored progress backup from ${b.dataset.day}`); await load(); return; }
+  if (a === 'req-approve' || a === 'req-decline') { const ok = a === 'req-approve'; if (!(await uiConfirm(ok ? 'The learner gets access back straight away, in the same session.' : 'The learner stays blocked and sees that the request was reviewed. They can send a new request.', { title: ok ? 'Approve and unblock?' : 'Keep the learner blocked?', ok: ok ? 'Approve & unblock' : 'Keep blocked', danger: !ok }))) return; await decideRequest(b.dataset.uid, b.dataset.id, ok); return; }
+  if (a === 'acc-chat') { const uid = b.dataset.uid, on = accessOf({ uid }).chatOff; if (!on && !(await uiConfirm('The learner will no longer see the chat or any messages, and cannot send new ones. Nothing is deleted — turn chat back on at any time and the full history is there again. This applies straight away, without signing out.', { title: 'Disable chat for this learner?', ok: 'Disable chat', danger: true }))) return; if (await setAccess(uid, { chatOff: !on }, on ? 'Enabled chat' : 'Disabled chat')) uiAlert(on ? 'Chat is back on. The learner sees it straight away.' : 'Chat is off. The learner’s chat disappeared straight away; all messages are kept.', { title: on ? 'Chat enabled' : 'Chat disabled' }); return; }
+  if (a === 'acc-block') { const uid = b.dataset.uid, on = accessOf((learners || []).find(x => x.uid === uid) || { uid }).blocked; if (!on && !(await uiConfirm('The learner can still sign in, but sees only a “You are blocked” screen until you unblock them. Their progress and messages are kept. This applies straight away, without signing out.', { title: 'Block this learner?', ok: 'Block user', danger: true }))) return; if (await setAccess(uid, { blocked: !on }, on ? 'Unblocked the learner' : 'Blocked the learner')) uiAlert(on ? 'The learner is unblocked and can use the app again straight away.' : 'The learner now sees the blocked screen.', { title: on ? 'User unblocked' : 'User blocked' }); return; }
   if (a === 'relock') { const x = planHist(L), s = L.snap || {}; if (!(await uiConfirm(`This restores the lock on the ${x.mode === 'normal' ? 'Normal' : 'Relaxed'} plan with the dates currently saved (exam ${s.exam || 'not set'}). The learner cannot change the plan afterwards unless you unlock it.`, { title: 'Lock the study plan?', ok: 'Lock plan' }))) return; const ok = api.relockLearner && await api.relockLearner(b.dataset.uid, x.mode, x.lockAt ? new Date(x.lockAt).toISOString() : new Date().toISOString()); if (ok) saveCoach(b.dataset.uid, {}, `Re-locked the ${x.mode} study plan`); uiAlert(ok ? 'The plan is locked again. Open learner devices update within a few seconds.' : 'Could not re-lock. Check the connection and that the Firestore rules are published.', { title: ok ? 'Plan locked' : 'Lock failed' }); await load(); return; }
   if (a === 'unlock') { if (!(await uiConfirm('They can set up and lock a new plan afterwards.', { title: 'Unlock the study plan?', ok: 'Unlock' }))) return; api.unlockLearner(b.dataset.uid).then(ok => { if (ok) saveCoach(b.dataset.uid, {}, 'Unlocked the study plan'); uiAlert(ok ? 'The learner can now set up a new plan.' : 'Check the Firestore rules are published, then try again.', { title: ok ? 'Plan unlocked' : 'Couldn’t unlock' }); load(); }); return; }
 }
