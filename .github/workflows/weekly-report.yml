@@ -1,0 +1,41 @@
+name: Weekly status email
+
+on:
+  schedule:
+    - cron: '0 4 * * 1'    # Monday 08:00 Dubai  -> weekly report
+    - cron: '0 14 * * *'   # every day 18:00 Dubai -> 3-day study check (nudge)
+  workflow_dispatch:        # "Run workflow" button for a manual send / test
+    inputs:
+      mode:
+        description: 'weekly = Monday report, nudge = 3-day study check'
+        type: choice
+        options: [weekly, nudge]
+        default: weekly
+      test_to:
+        description: 'Send everything to this address instead (leave empty for real send)'
+        required: false
+        default: ''
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install
+        run: npm install --no-save --no-audit --no-fund firebase-admin@12
+      - name: Send emails
+        run: node scripts/weekly-report.mjs
+        env:
+          MODE: ${{ github.event_name == 'schedule' && (github.event.schedule == '0 14 * * *' && 'nudge' || 'weekly') || github.event.inputs.mode || 'weekly' }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          EMAILJS_SERVICE_ID: ${{ secrets.EMAILJS_SERVICE_ID }}
+          EMAILJS_TEMPLATE_ID: ${{ secrets.EMAILJS_TEMPLATE_ID }}
+          EMAILJS_PUBLIC_KEY: ${{ secrets.EMAILJS_PUBLIC_KEY }}
+          EMAILJS_PRIVATE_KEY: ${{ secrets.EMAILJS_PRIVATE_KEY }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          SENDER_NAME: stranger
+          TEST_TO: ${{ github.event.inputs.test_to }}
