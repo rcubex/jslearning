@@ -1341,3 +1341,7 @@ html.is-blocked,html.is-blocked body{overflow:hidden!important}
 .an-none{font-style:normal;color:#8e8e93}
 .adm-notify .nsb.def.ok{background:linear-gradient(180deg,#3ee07a,#22c55e);border-color:rgba(0,90,40,.35)}
 .an-row em.an-chip{color:#0a5bd6;font-weight:600}
+
+/* v70: make the reset button clearly red */
+:root:root #app .adm-danger [data-a="reset-learner"]{background:#dc2626!important;background-image:none!important;color:#fff!important;border:1px solid #c81e1e!important;box-shadow:0 4px 12px rgba(220,38,38,.25)!important;font-weight:600!important}
+:root:root #app .adm-danger [data-a="reset-learner"]:hover{background:#b91c1c!important}

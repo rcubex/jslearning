@@ -97,7 +97,8 @@ function stats(L, from, to) {
 }
 
 /* ---------- shared bits ---------- */
-function nameOf(L) { return (L.act && L.act.profile && L.act.profile.email) || `Learner ${L.uid.slice(0, 6)}…`; }
+const displayName = uid => (window.JSL_NAMES || {})[uid] || '';
+function nameOf(L) { return displayName(L.uid) || (L.act && L.act.profile && L.act.profile.email) || `Learner ${L.uid.slice(0, 6)}…`; }
 function lastSeen(L) { const p = L.act && L.act.profile; return Math.max(p && p.lastSeen || 0, L.data && L.data.t || 0); }
 function status(L) { const p = L.act && L.act.profile, ls = lastSeen(L), live = p && p.lastSeen && Date.now() - p.lastSeen < 3 * 60e3; return live ? `<span class="adm-dot live"></span>Active now${p.lastArea ? ' · ' + h(p.lastArea) : ''}` : `<span class="adm-dot"></span>Last active ${h(ago(ls))}`; }
 function delta(cur, prev, fmt = v => v) { if (!prev && !cur) return '<span class="adm-delta">no change</span>'; if (!prev) return '<span class="adm-delta up">new</span>'; const p = Math.round((cur - prev) / prev * 100); if (p === 0) return '<span class="adm-delta">same as before</span>'; return `<span class="adm-delta ${p > 0 ? 'up' : 'down'}">${p > 0 ? '▲' : '▼'} ${Math.abs(p)}% vs previous</span>`; }
@@ -406,7 +407,7 @@ async function openNotify(L) {
       const text = ta.value.trim(), subject = subj.value.trim() || 'Message from JS Learning'; if (!text) { note.textContent = 'Write a message first.'; ta.focus(); return; }
       busy = true; sendB.disabled = true; sendB.querySelector('span').textContent = 'Sending…'; note.textContent = '';
       try {
-        await sendMail(useCfg, email, subject, text, { heading: tpl[0] === 'custom' ? subject : tpl[3], cta_text: tpl[4], cta_url: tpl[5] });
+        await sendMail(useCfg, email, subject, text, { name: displayName(L.uid) || undefined, heading: tpl[0] === 'custom' ? subject : tpl[3], cta_text: tpl[4], cta_url: tpl[5] });
         if (JSON.stringify(useCfg) !== JSON.stringify({ service: mailCfg.service, template: mailCfg.template, key: mailCfg.key })) { mailCfg = { service: useCfg.service, template: useCfg.template, key: useCfg.key }; await saveCoach(ADMIN_UID, { emailjs: mailCfg }, null); }
         saveCoach(L.uid, {}, `Emailed the learner: ${subject}`);
         sendB.classList.add('ok'); sendB.querySelector('span').textContent = 'Sent ✓'; note.textContent = '';
