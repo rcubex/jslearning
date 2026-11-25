@@ -4,7 +4,7 @@ service cloud.firestore {
     // Approved Firebase Authentication UIDs for access to private user data.
     function approved() {
       return request.auth != null && request.auth.uid in [
-        'Yk0WCbGfCOfiy7fnXqMgcfxjvze2', 'm6ybLppag7e9ky7UMVqnc80gwxA3', 'pt8WaB9gHuMU5U8qhtKTJCEHC0r1'
+        'Yk0WCbGfCOfiy7fnXqMgcfxjvze2', 'm6ybLppag7e9ky7UMVqnc80gwxA3', 'pt8WaB9gHuMU5U8qhtKTJCEHC0r1', 'CJOZImCPj4VieLsezwCytLOXVKP2'
       ];
     }
     // The admin can read every learner's progress and unlock a locked CISA study plan.

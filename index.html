@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="JS Learning">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="./cisa/cisa.css?v=64">
+<link rel="stylesheet" href="./cisa/cisa.css?v=70">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
 
 /* Theory-first responsive reading experience */
@@ -3040,7 +3040,9 @@ const firebaseConfig = {
 };
 /* Only these approved Firebase Authentication UIDs may sign in.
    Access to saved data is also enforced by deployed Firestore rules. */
-const ALLOWED_USER_UIDS=['Yk0WCbGfCOfiy7fnXqMgcfxjvze2','m6ybLppag7e9ky7UMVqnc80gwxA3','pt8WaB9gHuMU5U8qhtKTJCEHC0r1'];
+const ALLOWED_USER_UIDS=['Yk0WCbGfCOfiy7fnXqMgcfxjvze2','m6ybLppag7e9ky7UMVqnc80gwxA3','pt8WaB9gHuMU5U8qhtKTJCEHC0r1','CJOZImCPj4VieLsezwCytLOXVKP2'];
+// Display names shown to a learner (greeting, sidebar) and used by the admin portal and emails. Add more as 'UID':'Name'.
+const LEARNER_NAMES={'CJOZImCPj4VieLsezwCytLOXVKP2':'Jacq'}; window.JSL_NAMES=LEARNER_NAMES; let USER_NAME='';
 /* Admin account: can unlock a learner's locked CISA study plan. */
 const ADMIN_UID='Yk0WCbGfCOfiy7fnXqMgcfxjvze2';
 /* ============================================================================================ */
@@ -3209,7 +3211,7 @@ function vDashboard(){
   const p=overall(), nu=nextUp(), cl=nu?nu.m.lv:5, L=LV[cl-1];
   const hr=new Date().getHours(), greet=hr<5?'Late night session':hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
   const who=(document.getElementById('who').textContent||'').split('@')[0].split(/[._\-0-9]/)[0];
-  const nm=who?who.charAt(0).toUpperCase()+who.slice(1):'';
+  const nm=USER_NAME||(who?who.charAt(0).toUpperCase()+who.slice(1):'');
   const dateStr=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'});
   const doneMods=M.filter(m=>modPct(m)===100).length;
   const answered=M.flatMap(m=>m.qs).filter(q=>S.qz[q.id]!==undefined).length;
@@ -3759,14 +3761,14 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='64';
+const APP_V='70';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){
   const sub=(ah||'admin').replace(/^admin-?/,'')||'overview';
   if(app.querySelector(':scope > .adm-portal')&&AdminMod&&AdminMod.showView){ AdminMod.showView(sub); return; }
   app.innerHTML='<div class="cisa-hub adm-portal"><section class="cisa-card">Loading admin portal…</section></div>';
-  try{ const M=await import('./cisa/admin-portal.js?v='+APP_V); AdminMod=M; if(!IS_ADMIN||!dbRef) return; await M.mountAdmin({root:app,readLearners,readActivity,unlockLearner,fb:FB,view:sub,listBackups,readBackup,restoreBackup,selfTest,appVersion:APP_V,relockLearner}); }
+  try{ const M=await import('./cisa/admin-portal.js?v='+APP_V); AdminMod=M; if(!IS_ADMIN||!dbRef) return; await M.mountAdmin({root:app,readLearners,readActivity,unlockLearner,fb:FB,view:sub,listBackups,readBackup,restoreBackup,selfTest,appVersion:APP_V,relockLearner,resetLearner}); }
   catch(e){ console.error('Admin portal failed',e); app.innerHTML='<div class="cisa-hub adm-portal"><section class="cisa-error">Unable to load the admin portal. Upload the whole <code>cisa/</code> folder alongside <code>index.html</code>.</section></div>'; }
 }
 async function vCisa(){
@@ -3830,7 +3832,7 @@ async function wireToday(){
  }catch(e){console.warn('Today card',e);const box=document.getElementById('tdCisa'); if(box) box.innerHTML='<div class="td-empty">CISA plan unavailable offline.</div>';}
 }
 function exportAll(){
- const data={kind:'jslearning-full-v1',exportedAt:new Date().toISOString(),account:(document.getElementById('who').textContent||''),progress:S,grcState,bookEntries};
+ const data={kind:'jslearning-full-v1',exportedAt:new Date().toISOString(),account:(document.getElementById('who').title||document.getElementById('who').textContent||''),progress:S,grcState,bookEntries};
  const blob=new Blob([JSON.stringify(data,null,1)],{type:'application/json'}), u=URL.createObjectURL(blob), a=document.createElement('a');
  a.href=u; a.download='js-learning-backup-'+today()+'.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000);
  S.lastBackup=Date.now(); save(); toast('Backup downloaded'); if((location.hash||'#dashboard')==='#dashboard') route();
@@ -4263,10 +4265,41 @@ async function verCheck(){
   }catch(e){}
 }
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') verCheck(); });
+/* V39: admin "Reset study data". The admin overwrites progress/{uid} with {resetId}. The first learner device that
+   sees a new resetId wipes its local copy AND finishes the server cleanup that only the learner may do (AI course
+   and workbook entries, activity log, daily backups), then marks progress.resetDone. Any other device only wipes its
+   local copy, so study done after the reset on another device is never lost. Chat and coaching are kept. */
+async function applyResetIfNeeded(remote){
+  const R=remote&&remote.resetId, u=auth&&auth.currentUser; if(!R||!u||u.uid===ADMIN_UID) return false;
+  const uid=u.uid, appliedKey='p2c-reset-'+uid; let applied=null; try{applied=localStorage.getItem(appliedKey);}catch(e){}
+  const full=remote.resetDone!==R; if(applied===R&&!full) return false;
+  try{[KEY,baseKey(),'p2c-v3-'+uid,'p2c-bk-'+uid,'p2c-bookmarks','p2c-last-active'].forEach(k=>localStorage.removeItem(k));}catch(e){}
+  grcState={}; bookEntries=[]; clearTimeout(dbTimer); syncPending=false;
+  S=Object.assign(blank(),jclone(remote)); syncBase=jclone(remote); storeLocal(); saveBase();
+  if(full){
+    for(const area of ['grcProgress','studyEntries']){ try{const q=await getDocs(collection(fdb,'users',uid,area)); await Promise.all(q.docs.map(d=>deleteDoc(d.ref).catch(()=>{})));}catch(e){} }
+    try{const q=await getDocs(collection(fdb,'activity',uid,'days')); await Promise.all(q.docs.map(d=>{const x=d.data()||{}; return setDoc(d.ref,d.id.startsWith('bk-')?{bk:'',bkDay:null,cleared:Date.now()}:{d:x.d||d.id,r:{}}).catch(()=>{});}));}catch(e){}
+    try{const a=await getDoc(doc(fdb,'activity',uid)); const em=(a.exists()&&a.data().email)||actEmail||u.email||''; await setDoc(doc(fdb,'activity',uid),{email:em,lastSeen:Date.now(),resetAt:Date.now()});}catch(e){}
+    try{await updateDoc(dbRef,{resetDone:R}); S.resetDone=R; syncBase.resetDone=R; storeLocal(); saveBase();}catch(e){console.warn('reset mark failed',e);}
+  }
+  try{localStorage.setItem(appliedKey,R); sessionStorage.setItem('p2c-reset-note','1');}catch(e){}
+  return true;
+}
+function showResetNote(){ try{ if(sessionStorage.getItem('p2c-reset-note')){ sessionStorage.removeItem('p2c-reset-note'); setTimeout(()=>uiAlert('Your study data was reset by the admin, so you are starting fresh. Your messages are still here.',{title:'Study data reset'}),800); } }catch(e){} }
+async function resetLearner(uid){
+  if(!isAdminUser()) return {ok:false,err:'not-admin'};
+  const id='r'+Date.now();
+  try{ const s=await getDoc(doc(fdb,'progress',uid)); if(!s.exists()) return {ok:true,id,empty:true};
+    await setDoc(doc(fdb,'progress',uid),{t:Date.now(),resetId:id,resetAt:new Date().toISOString(),resetBy:'admin'}); return {ok:true,id}; }
+  catch(e){ return {ok:false,err:String(e&&e.code||e&&e.message||e)}; }
+}
+
 async function initRemote(){
   if(!dbRef) return;
   try{
     const snap=await getDoc(dbRef), remote=snap.exists()?snap.data():null;
+    if(remote&&remote.resetId) await applyResetIfNeeded(remote);
+    showResetNote();
     if(remote){
       const merged=lockRecover(Object.assign(blank(),merge3(syncBase||{},S,remote)),S,remote);
       const changed=!jeq(merged,S); S=merged; storeLocal(); syncBase=jclone(remote); saveBase(); remoteReady=true;
@@ -4277,7 +4310,10 @@ async function initRemote(){
     if(unsubProg) unsubProg();
     unsubProg=onSnapshot(dbRef,sn=>{
       if(sn.metadata.hasPendingWrites||!sn.exists()) return;
-      const remote=sn.data(); if(jeq(remote,syncBase)) return;
+      const remote=sn.data();
+      if(remote.resetId){ let ap=null; try{ap=localStorage.getItem('p2c-reset-'+(auth.currentUser&&auth.currentUser.uid));}catch(e){}
+        if(ap!==remote.resetId||remote.resetDone!==remote.resetId){ if(!window.__resetBusy){ window.__resetBusy=1; applyResetIfNeeded(remote).then(did=>{ if(did) location.reload(); else window.__resetBusy=0; }); } return; } }
+      if(jeq(remote,syncBase)) return;
       const before=jclone(S); S=lockRecover(Object.assign(blank(),merge3(syncBase||{},S,remote)),S,remote); syncBase=jclone(remote); saveBase(); storeLocal();
       if(!jeq(S,remote)){syncPending=true; clearTimeout(dbTimer); dbTimer=setTimeout(flush,800);}
       if(!jeq(before,S)) softRefresh();
@@ -4294,7 +4330,7 @@ async function startSession(user){
   if(IS_ADMIN&&location.hash!=='#admin') history.replaceState(null,'','#admin');
   actStart(user); coachStart(user);
   S=loadLocal()||blank(); syncBase=loadBase();
-  document.getElementById('who').textContent=user.email||''; setAvatar(user.email);
+  USER_NAME=LEARNER_NAMES[user.uid]||''; { const w=document.getElementById('who'); w.textContent=USER_NAME||user.email||''; w.title=user.email||''; } setAvatar(USER_NAME||user.email);
   setSync('Loading…',false);
   route();
   await initRemote();

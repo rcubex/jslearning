@@ -491,9 +491,14 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 
 ## v68 — macOS light interface + Monday weekly email
 - New mac-light.css: flat macOS look across the app (grey sidebar, white content, hairline borders, native buttons and segmented controls, no glass or gradients). Desktop and phone.
-- Weekly status email every Monday 08:00 Dubai via GitHub Actions (scripts/weekly-report.mjs, .github/workflows/weekly-report.yml). Setup: README-WEEKLY-EMAIL.md.
+- Weekly status email every Monday 08:00 Dubai via GitHub Actions + EmailJS (scripts/weekly-report.mjs, .github/workflows/weekly-report.yml). Setup: README-WEEKLY-EMAIL.md.
 - Styling only in the app; saved data and sync unchanged.
 
 ## v69 — back to the original look
 - The macOS light restyle was removed at your request; the app uses its original colourful theme again.
 - Monday weekly email (GitHub Actions) stays.
+- Daily 18:00 Dubai 3-day check: no study for 3 days -> "What happened?" email; under 15 min/day average -> "studying less" email (max one nudge per 3 days).
+
+## v70 — fourth learner
+- Added learner CJOZImCPj4VieLsezwCytLOXVKP2 (same access as the other learners) in index.html and firestore.rules.
+- Display name "Jacq" for learner CJOZImCPj4VieLsezwCytLOXVKP2: dashboard greeting, sidebar, admin portal, Notify emails, weekly and nudge emails (LEARNER_NAMES in index.html).
