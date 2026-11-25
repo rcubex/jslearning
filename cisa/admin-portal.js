@@ -159,6 +159,7 @@ function overviewUI(L) {
    <div class="adm-doms">${s.scores.map(d => `<div><span>D${d.domain}</span><div class="adm-meter"><i style="width:${d.accuracy ?? 0}%"></i></div><small>${d.accuracy === null ? 'no data' : d.accuracy + '%'} · ${d.coverage}% covered</small></div>`).join('')}</div>
    <p class="cisa-mini">Mock first attempts: ${s.mocks.length ? s.mocks.map(m => `Mock ${m.id} ${m.p}%`).join(' · ') : 'none yet'}</p></section>` : ''}
   ${healthUI(L)}
+  ${resetUI(L)}
   ${aicUI(L)}
   <section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">This week</span><h3 class="ed-title">${dur(wk.app)} in the app · ${wk.active} active day${wk.active === 1 ? '' : 's'}</h3><p class="ed-sub">Last 14 days below</p></div>${btn('go-week', 'Weekly report', 'sm')}</div>${bars(st.days, true)}</section>
   <section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">Recent activity</span><h3 class="ed-title">Latest 10 entries</h3></div>${btn('go-log', 'Full activity log', 'sm')}</div>${logTable(recent, false)}</section>`;
@@ -207,6 +208,13 @@ function planHistUI(L) {
   if (x.mismatch) return `<p class="adm-warn">⚠ The learner locked the ${x.mode === 'normal' ? 'Normal' : 'Relaxed'} plan on ${h(d(x.lockAt))} (activity log), but the server shows it as not locked, and no admin unlock was recorded after that. The lock was most likely lost in the old sync problem (v51). Use <b>Lock plan</b> (top right) to restore it.</p>`;
   if (x.unlockAt) return `<p class="cisa-mini">Unlocked by the admin on ${h(d(x.unlockAt))}. The learner has not locked a new plan since.</p>`;
   return `<p class="cisa-mini">No plan lock recorded in the last ${LOOKBACK} days of activity. If the learner says they locked it, use <b>Lock plan</b> (top right) after checking the exam date.</p>`;
+}
+
+/* V39: reset a learner's study data (chat and coaching notes are kept). */
+function resetUI(L) {
+  const d = L.data || {}, R = d.resetId, pending = R && d.resetDone !== R, when = d.resetAt ? new Date(d.resetAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+  return `<section class="ed-card adm-sec adm-danger"><div class="adm-sec-head"><div><span class="ed-kicker">Danger zone</span><h3 class="ed-title">Reset study data</h3><p class="ed-sub">Starts this learner from zero. Their login, chat messages and your coaching notes are kept.</p></div>${btn('reset-learner', 'Reset study data…', 'sm danger', `data-uid="${h(L.uid)}"`)}</div>
+  ${pending ? `<p class="adm-warn">⏳ Reset requested ${h(when)}. Progress on the server is already cleared. The rest (AI course, workbook, activity log, backups) is cleared the next time the learner’s app is open — immediately if it’s open now.</p>` : R ? `<p class="cisa-mini">✓ Last reset ${h(when)} — completed.</p>` : ''}</section>`;
 }
 
 function aicUI(L) {
@@ -279,7 +287,7 @@ async function markLearnerSeen(uid) {
 const autoOf = L => { const ab = L.act && L.act.profile && L.act.profile.autoBlock, a = ((coachDocs[L.uid] || {}).access) || {}; return ab && ab.at > (a.unblockedAt || 0) ? ab : null; };
 const accessOf = L => { const a = ((coachDocs[L.uid] || {}).access) || {}, au = L.act ? autoOf(L) : null; return { chatOff: !!a.chatOff, blocked: !!a.blocked || !!au, auto: !a.blocked && !!au }; };
 function accessBadges(L) { const a = accessOf(L), ap = pendingRequests(L).length; return (ap ? `<em class="adm-badge info">🔓 ${ap} unblock request${ap > 1 ? 's' : ''}</em>` : '') + (a.blocked ? `<em class="adm-badge bad">⛔ Blocked${a.auto ? ' · inactive 10+ days' : ''}</em>` : '') + (a.chatOff ? '<em class="adm-badge warn">💬 Chat off</em>' : ''); }
-function accessButtons(L) { const a = accessOf(L), u = `data-uid="${h(L.uid)}"`; return btn('acc-chat', a.chatOff ? 'Enable chat' : 'Disable chat', 'sm ' + (a.chatOff ? 'primary' : ''), u) + btn('acc-block', a.blocked ? 'Unblock user' : 'Block user', 'sm ' + (a.blocked ? 'primary' : 'danger'), u); }
+function accessButtons(L) { const a = accessOf(L), u = `data-uid="${h(L.uid)}"`; return btn('notify', 'Notify', 'sm', u) + btn('acc-chat', a.chatOff ? 'Enable chat' : 'Disable chat', 'sm ' + (a.chatOff ? 'primary' : ''), u) + btn('acc-block', a.blocked ? 'Unblock user' : 'Block user', 'sm ' + (a.blocked ? 'primary' : 'danger'), u); }
 async function setAccess(uid, patch, what) {
   const cur = ((coachDocs[uid] || {}).access) || {}, changed = ('blocked' in patch && !!patch.blocked !== !!cur.blocked) || ('chatOff' in patch && !!patch.chatOff !== !!cur.chatOff);
   const next = { chatOff: !!cur.chatOff, blocked: !!cur.blocked, unblockedAt: cur.unblockedAt || 0, ...patch, at: changed || !cur.at ? Date.now() : cur.at };
@@ -320,6 +328,97 @@ async function maybeRequestPopup() {
     if (go) { sel = learners.indexOf(L); location.hash = 'admin-requests'; }
     return;
   }
+}
+
+/* V40: notify a learner by email, sent directly from the app through EmailJS (free tier, no server needed).
+   The EmailJS settings (service ID, template ID, public key) are saved once in coach/{adminUid}.emailjs,
+   which only the admin can read or write. The EmailJS template uses {{to_email}}, {{to_name}}, {{subject}}, {{message}}. */
+const SITE = 'https://rcubex.github.io/jslearning/';
+const ADMIN_UID = 'Yk0WCbGfCOfiy7fnXqMgcfxjvze2';
+let mailCfg = null;
+async function loadMailCfg() {
+  if (mailCfg) return mailCfg;
+  try { const fb = api.fb, s = await fb.getDoc(fb.doc(fb.fdb, 'coach', ADMIN_UID)); mailCfg = (s.exists() && s.data().emailjs) || {}; } catch (e) { mailCfg = {}; }
+  return mailCfg;
+}
+const mailReady = c => !!(c && c.service && c.template && c.key);
+const escMail = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function mailHTML(text) {
+  return String(text).trim().split(/\n{2,}/).map(par => `<p style="margin:0 0 14px;">${escMail(par).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#0A84FF;">$1</a>').replace(/\n/g, '<br>')}</p>`).join('');
+}
+async function sendMail(cfg, to, subject, message, extra = {}) {
+  const params = { to_email: to, to_name: extra.name || to.split('@')[0], subject, heading: extra.heading || subject, preheader: extra.preheader || String(message).split('\n')[0].slice(0, 120),
+    message: message + '\n\n' + (extra.cta_url || SITE), message_html: mailHTML(message), cta_text: extra.cta_text || 'Open JS Learning', cta_url: extra.cta_url || SITE, site: SITE, sender_name: extra.sender || 'stranger' };
+  const r = await fetch('https://api.emailjs.com/api/v1.0/email/send', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ service_id: cfg.service, template_id: cfg.template, user_id: cfg.key, template_params: params }) });
+  if (!r.ok) { let t = ''; try { t = await r.text(); } catch (e) { } throw new Error(t || ('HTTP ' + r.status)); }
+}
+/* [key, chip label, subject, heading, button text, button link, body] */
+function notifyTemplates(L) {
+  const s = L.snap || {}, exam = s.exam ? new Date(s.exam + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+  const days = s.exam ? Math.max(0, Math.round((new Date(s.exam + 'T00:00:00') - new Date()) / 864e5)) : 0;
+  return [
+    ['reminder', 'Study reminder', 'Your study session is waiting', 'Time for today’s study session', 'Continue studying', SITE,
+      `Just a friendly reminder to open JS Learning and do a little study today. Even 20 focused minutes keeps your progress moving and your knowledge fresh.\n\nPick up exactly where you left off — your progress is saved.`],
+    ['plan', 'Plan check-in', 'How is your study plan going?', 'How’s your study plan going?', 'Open my study plan', SITE + '#cisa',
+      `I’m checking in on your study plan.${exam ? ` Your exam is on ${exam} — that’s ${days} day${days === 1 ? '' : 's'} away.` : ''}\n\nPlease open JS Learning and complete today’s planned topics. Small, steady sessions every day make the biggest difference.`],
+    ['inactive', 'We miss you', 'We miss you on JS Learning', 'We miss you', 'Sign in now', SITE,
+      `I noticed you haven’t studied for a few days. Your progress is still saved, so it’s easy to continue where you left off.\n\nPlease note: accounts that aren’t used for 10 days are paused automatically — sign in soon to keep yours active.`],
+    ['message', 'New message', 'You have a new message', 'You have a new message', 'Read the message', SITE,
+      `There’s a new message waiting for you in JS Learning. Sign in to read it and reply.`],
+    ['unblocked', 'Unblocked', 'Your access is back', 'Your access is back', 'Start studying', SITE,
+      `Good news — your access to JS Learning has been restored. You can sign in and continue studying right away.\n\nWelcome back!`],
+    ['custom', 'Custom', 'Message from JS Learning', 'A message for you', 'Open JS Learning', SITE, '']
+  ];
+}
+async function openNotify(L) {
+  const email = (L.act && L.act.profile && L.act.profile.email) || '', T = notifyTemplates(L), cfg = { ...(await loadMailCfg()) };
+  const ov = document.createElement('div'); ov.className = 'adm-notify'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-labelledby', 'anT');
+  const setupHTML = `<div class="an-setup"><p class="an-hint"><b>One-time setup.</b> Emails are sent through your free EmailJS account. Paste the three IDs from EmailJS below.</p>
+      <label class="an-row"><span>Service ID</span><input data-c="service" placeholder="service_xxxxxxx" value="${h(cfg.service || '')}" autocomplete="off"></label>
+      <label class="an-row"><span>Template ID</span><input data-c="template" placeholder="template_xxxxxxx" value="${h(cfg.template || '')}" autocomplete="off"></label>
+      <label class="an-row"><span>Public key</span><input data-c="key" placeholder="e.g. AbCdEf123456" value="${h(cfg.key || '')}" autocomplete="off"></label></div>`;
+  ov.innerHTML = `<div class="an-win"><div class="an-bar"><button type="button" class="an-dot r" data-n="close" aria-label="Close"></button><i class="an-dot y"></i><i class="an-dot g"></i><span id="anT">New Email</span><button type="button" class="an-gear" data-n="settings" aria-label="Email settings" title="Email settings">⚙︎</button></div>
+    <div class="an-body">
+      <div class="an-setwrap" ${mailReady(cfg) ? 'hidden' : ''}>${setupHTML}</div>
+      <div class="an-row"><span>To</span>${email ? `<em class="an-chip">${h(email)}</em>` : '<em class="an-none">No email yet — it appears after the learner signs in</em>'}</div>
+      <label class="an-row"><span>Subject</span><input data-n="subject" value="${h(T[0][2])}" maxlength="120"></label>
+      <div class="an-tpl" role="tablist">${T.map(([k, lab], i) => `<button type="button" role="tab" class="${i === 0 ? 'on' : ''}" data-t="${k}">${h(lab)}</button>`).join('')}</div>
+      <textarea data-n="text" rows="7" maxlength="3000" aria-label="Message">${h(T[0][6])}</textarea>
+      <p class="an-note" aria-live="polite"></p>
+    </div>
+    <div class="an-foot"><button type="button" class="nsb" data-n="close">Cancel</button><button type="button" class="nsb def" data-n="send" ${email ? '' : 'disabled'}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.4 20.4 21 12 3.4 3.6 3.3 10l12.6 2-12.6 2z"/></svg><span>Send</span></button></div></div>`;
+  document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
+  const ta = ov.querySelector('[data-n="text"]'), subj = ov.querySelector('[data-n="subject"]'), note = ov.querySelector('.an-note'), sendB = ov.querySelector('[data-n="send"]');
+  let tpl = T[0], busy = false;
+  const close = () => { ov.classList.remove('on'); setTimeout(() => ov.remove(), 200); document.removeEventListener('keydown', esc, true); };
+  const esc = e => { if (e.key === 'Escape' && !busy) { e.preventDefault(); close(); } }; document.addEventListener('keydown', esc, true);
+  const readCfg = () => { const c = {}; ov.querySelectorAll('[data-c]').forEach(i => c[i.dataset.c] = i.value.trim()); return c; };
+  ov.addEventListener('click', async e => {
+    if (e.target === ov && !busy) return close();
+    const t = e.target.closest('[data-t]'); if (t) { tpl = T.find(x => x[0] === t.dataset.t); ov.querySelectorAll('[data-t]').forEach(b => b.classList.toggle('on', b === t)); ta.value = tpl[6]; subj.value = tpl[2]; ta.focus(); return; }
+    const b = e.target.closest('[data-n]'); if (!b || busy) return; const k = b.dataset.n;
+    if (k === 'close') return close();
+    if (k === 'settings') { const w = ov.querySelector('.an-setwrap'); w.hidden = !w.hidden; return; }
+    if (k === 'send') {
+      const c = readCfg(); const useCfg = mailReady(c) ? c : cfg;
+      if (!mailReady(useCfg)) { ov.querySelector('.an-setwrap').hidden = false; note.textContent = 'Paste your EmailJS Service ID, Template ID and Public key first (see the setup steps).'; return; }
+      const text = ta.value.trim(), subject = subj.value.trim() || 'Message from JS Learning'; if (!text) { note.textContent = 'Write a message first.'; ta.focus(); return; }
+      busy = true; sendB.disabled = true; sendB.querySelector('span').textContent = 'Sending…'; note.textContent = '';
+      try {
+        await sendMail(useCfg, email, subject, text, { heading: tpl[0] === 'custom' ? subject : tpl[3], cta_text: tpl[4], cta_url: tpl[5] });
+        if (JSON.stringify(useCfg) !== JSON.stringify({ service: mailCfg.service, template: mailCfg.template, key: mailCfg.key })) { mailCfg = { service: useCfg.service, template: useCfg.template, key: useCfg.key }; await saveCoach(ADMIN_UID, { emailjs: mailCfg }, null); }
+        saveCoach(L.uid, {}, `Emailed the learner: ${subject}`);
+        sendB.classList.add('ok'); sendB.querySelector('span').textContent = 'Sent ✓'; note.textContent = '';
+        setTimeout(close, 900);
+      } catch (err) {
+        note.textContent = 'Not sent: ' + String(err && err.message || err).slice(0, 160) + ' — check the EmailJS IDs (⚙︎) and that the template’s “To Email” is {{to_email}}.';
+        sendB.disabled = false; sendB.querySelector('span').textContent = 'Send';
+      }
+      busy = false; return;
+    }
+  });
+  setTimeout(() => (mailReady(cfg) ? ta : ov.querySelector('[data-c="service"]')).focus(), 120);
 }
 
 async function saveCoach(uid, patch, auditText) {
@@ -709,6 +808,13 @@ async function onClick(e) {
   if (a === 'bk-dl') { const d = await api.readBackup(b.dataset.uid, b.dataset.id); if (!d) { uiAlert('That backup could not be read.', { title: 'Download failed' }); return; } dlFile(`progress-backup-${b.dataset.id}-${today()}.json`, JSON.stringify(d, null, 1), 'application/json'); return; }
   if (a === 'bk-restore') { if (!(await uiConfirm(`The learner’s progress goes back to how it was on ${b.dataset.day}. Anything done after that is replaced. A copy of the current progress downloads first, so this can be undone.`, { title: 'Restore this backup?', ok: 'Restore', danger: true }))) return; const r = await api.restoreBackup(b.dataset.uid, b.dataset.id); if (r.ok && r.previous) dlFile(`progress-before-restore-${today()}.json`, JSON.stringify(r.previous, null, 1), 'application/json'); uiAlert(r.ok ? 'Done. Open learner devices update within a few seconds.' : 'Could not restore: ' + r.err, { title: r.ok ? 'Backup restored' : 'Restore failed' }); if (r.ok) saveCoach(b.dataset.uid, {}, `Restored progress backup from ${b.dataset.day}`); await load(); return; }
   if (a === 'req-approve' || a === 'req-decline') { const ok = a === 'req-approve'; if (!(await uiConfirm(ok ? 'The learner gets access back straight away, in the same session.' : 'The learner stays blocked and sees that the request was reviewed. They can send a new request.', { title: ok ? 'Approve and unblock?' : 'Keep the learner blocked?', ok: ok ? 'Approve & unblock' : 'Keep blocked', danger: !ok }))) return; await decideRequest(b.dataset.uid, b.dataset.id, ok); return; }
+  if (a === 'reset-learner') { const uid = b.dataset.uid, Lx = (learners || []).find(x => x.uid === uid), nm = Lx ? nameOf(Lx) : 'this learner';
+    if (!(await uiConfirm(`This permanently deletes ${nm}’s study data:\n• course and lesson progress, quiz answers and notes\n• CISA topics, manual reads, mocks, mistakes and the study plan (and its lock)\n• AI course progress, reviews, guides, cases and checks\n• workbook entries, flashcards and bookmarks\n• activity log, study time and daily backups\n\nKept: their login, chat messages and your coaching notes.\n\nThis cannot be undone.`, { title: 'Reset study data?', ok: 'Continue', danger: true }))) return;
+    if (!(await uiConfirm(`Last check: reset ALL study data for ${nm} now? There is no backup and no undo.`, { title: 'Are you sure?', ok: 'Reset now', danger: true }))) return;
+    const r = api.resetLearner ? await api.resetLearner(uid) : { ok: false, err: 'not available' };
+    if (r.ok) saveCoach(uid, {}, 'Reset the learner’s study data');
+    uiAlert(r.ok ? (r.empty ? 'This learner had no saved progress yet — nothing to reset.' : 'Done. Progress is cleared on the server now. The learner’s app finishes the cleanup the next time it is open (immediately if open now) and shows them a short notice.') : 'Could not reset: ' + r.err, { title: r.ok ? 'Study data reset' : 'Reset failed' }); await load(); return; }
+  if (a === 'notify') { const Lx = (learners || []).find(x => x.uid === b.dataset.uid); if (Lx) openNotify(Lx); return; }
   if (a === 'acc-chat') { const uid = b.dataset.uid, on = accessOf({ uid }).chatOff; if (!on && !(await uiConfirm('The learner will no longer see the chat or any messages, and cannot send new ones. Nothing is deleted — turn chat back on at any time and the full history is there again. This applies straight away, without signing out.', { title: 'Disable chat for this learner?', ok: 'Disable chat', danger: true }))) return; if (await setAccess(uid, { chatOff: !on }, on ? 'Enabled chat' : 'Disabled chat')) uiAlert(on ? 'Chat is back on. The learner sees it straight away.' : 'Chat is off. The learner’s chat disappeared straight away; all messages are kept.', { title: on ? 'Chat enabled' : 'Chat disabled' }); return; }
   if (a === 'acc-block') { const uid = b.dataset.uid, on = accessOf((learners || []).find(x => x.uid === uid) || { uid }).blocked; if (!on && !(await uiConfirm('The learner can still sign in, but sees only a “You are blocked” screen until you unblock them. Their progress and messages are kept. This applies straight away, without signing out.', { title: 'Block this learner?', ok: 'Block user', danger: true }))) return; if (await setAccess(uid, { blocked: !on }, on ? 'Unblocked the learner' : 'Blocked the learner')) uiAlert(on ? 'The learner is unblocked and can use the app again straight away.' : 'The learner now sees the blocked screen.', { title: on ? 'User unblocked' : 'User blocked' }); return; }
   if (a === 'relock') { const x = planHist(L), s = L.snap || {}; if (!(await uiConfirm(`This restores the lock on the ${x.mode === 'normal' ? 'Normal' : 'Relaxed'} plan with the dates currently saved (exam ${s.exam || 'not set'}). The learner cannot change the plan afterwards unless you unlock it.`, { title: 'Lock the study plan?', ok: 'Lock plan' }))) return; const ok = api.relockLearner && await api.relockLearner(b.dataset.uid, x.mode, x.lockAt ? new Date(x.lockAt).toISOString() : new Date().toISOString()); if (ok) saveCoach(b.dataset.uid, {}, `Re-locked the ${x.mode} study plan`); uiAlert(ok ? 'The plan is locked again. Open learner devices update within a few seconds.' : 'Could not re-lock. Check the connection and that the Firestore rules are published.', { title: ok ? 'Plan locked' : 'Lock failed' }); await load(); return; }
@@ -747,9 +853,9 @@ export function unmountAdmin() {
   root = null; learners = null; chats = {}; coachDocs = {}; bellOpen = false;
   if (chatEl) { chatEl.remove(); chatEl = null; } chatOpen = false; convOpen = false; document.documentElement.classList.remove('wa-lock');
 }
-export async function mountAdmin({ root: target, readLearners, readActivity, unlockLearner, fb, view: startView, listBackups, readBackup, restoreBackup, selfTest, appVersion, relockLearner }) {
+export async function mountAdmin({ root: target, readLearners, readActivity, unlockLearner, fb, view: startView, listBackups, readBackup, restoreBackup, selfTest, appVersion, relockLearner, resetLearner }) {
   view = VIEW_TITLES[startView] ? startView : 'overview'; syncNav();
-  root = target; api = { readLearners, readActivity, unlockLearner, fb, listBackups, readBackup, restoreBackup, selfTest, appVersion, relockLearner };
+  root = target; api = { readLearners, readActivity, unlockLearner, fb, listBackups, readBackup, restoreBackup, selfTest, appVersion, relockLearner, resetLearner };
   root.onclick = onClick; root.onchange = onChange; root.onsubmit = onSubmit; root.onkeydown = onKey;
   enablePaste(root, t => !!t.closest('.adm-chat-input'), sendImg);
   unsubscribeAll(); chats = {}; coachDocs = {};

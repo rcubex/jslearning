@@ -472,3 +472,28 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 ## v63: Second learner account
 
 - Added learner UID `pt8WaB9gHuMU5U8qhtKTJCEHC0r1` to the allowed users in `index.html` and `firestore.rules`. It gets the same access as the existing learner: its own progress, activity, chat, CISA plan and AI course records. The admin can switch between learners with the picker on the learner card, and blocking, chat and unblock requests work per learner.
+- **v64:** the admin learner card is laid out cleanly with several learners: avatar | the learner name as a dropdown (blue chevron, with a "2 learners" tag) above the status line and badges | Disable chat · Block user · Message in one row on the right. On narrow screens the buttons move below. The status text no longer gets squeezed.
+
+## V39 (v65): Reset a learner's study data
+
+- Admin Overview → **Danger zone → Reset study data…** (two confirmations, no backup by design). Kept: the login, chat messages and the admin's coaching notes.
+- Cleared: lesson progress, quiz answers, notes, flashcards, bookmarks; CISA topics, manual reads, mocks, mistakes, the study plan and its lock; AI course progress, reviews, guides, cases and checks; workbook entries; activity log, study time and daily backups.
+- How it works: the admin clears `progress/{uid}` straight away and stamps a `resetId`. The learner's app (live if open, otherwise at its next sign-in) wipes its local copy and finishes the cleanup the Firestore rules only allow the learner to do, then marks `resetDone`. Other devices only wipe their local copy, so old devices can't re-upload old data, and study done after the reset is never deleted. The learner sees a short "Study data reset" notice.
+- The admin card shows "Reset requested… (finishing when the learner's app is open)" until the learner's app completes it, then "Last reset … completed".
+- No Firestore rules change is needed.
+
+## V40 (v66): Email a learner directly from the admin portal
+
+- New **Notify** button on the learner card. It opens a Mac-style "New Email" window: To (the learner's email), Subject, quick templates (Study reminder, Plan check-in, We miss you, New message, Unblocked, Custom), the message, and Send.
+- Emails are sent straight from the app through **EmailJS** (free: 200 emails a month). No mail app opens and no server is needed. The settings (Service ID, Template ID, Public key) are entered once in the window (⚙︎) and saved in `coach/{adminUid}.emailjs`, which only the admin can read.
+- Each email is added to the audit trail. If sending fails, the reason is shown (for example an invalid template ID).
+- **v67: email template.** New `email-template.html` for EmailJS: a Mac-window email in the app's style with the app icon, a large heading, a greeting, the message as paragraphs, a blue button, a fallback link, a "Keep going, **stranger**" sign-off and a footer. It works on phones and in Gmail, Outlook and Apple Mail (table layout, inline styles, inbox preview text). The app now sends `heading`, `preheader`, `message_html`, `cta_text`, `cta_url` and `sender_name` for each quick message (for example "Open my study plan" → the CISA planner), and the quick-message texts were rewritten.
+
+## v68 — macOS light interface + Monday weekly email
+- New mac-light.css: flat macOS look across the app (grey sidebar, white content, hairline borders, native buttons and segmented controls, no glass or gradients). Desktop and phone.
+- Weekly status email every Monday 08:00 Dubai via GitHub Actions (scripts/weekly-report.mjs, .github/workflows/weekly-report.yml). Setup: README-WEEKLY-EMAIL.md.
+- Styling only in the app; saved data and sync unchanged.
+
+## v69 — back to the original look
+- The macOS light restyle was removed at your request; the app uses its original colourful theme again.
+- Monday weekly email (GitHub Actions) stays.
