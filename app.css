@@ -3102,3 +3102,252 @@ body{touch-action:manipulation}          /* removes double-tap zoom; pinch-zoom 
   :root:root #app .mhero .mring{justify-content:flex-start!important;text-align:left!important;margin:0!important}
   :root:root #app .mhero .mring svg{display:none!important}
 }
+
+/* ===== v76: lesson navigation bar + welcome-back card ===== */
+#app .lnav{margin-top:18px;padding-top:14px;border-top:1px dashed rgba(10,37,64,.12)}
+#app .lnav-dots{display:flex;align-items:center;gap:5px;margin-bottom:10px}
+#app .lnav-dots i{flex:1;height:5px;border-radius:3px;background:rgba(10,37,64,.10)}
+#app .lnav-dots i.done,#app .lnav-dots i.learned{background:linear-gradient(90deg,#34C759,#30D158)}
+#app .lnav-dots i.cur{background:linear-gradient(90deg,#0A84FF,#5E5CE6)}
+#app .lnav-dots b{flex:none;margin-left:6px;font-size:12.5px;font-weight:700;color:var(--muted)}
+#app .lnav-row{display:flex;gap:10px;align-items:stretch}
+#app .lnav-prev{flex:none;width:52px;min-height:58px;border-radius:16px;border:1px solid rgba(10,37,64,.12);background:#fff;display:grid;place-items:center;cursor:pointer;color:var(--ink,#0A2540)}
+#app .lnav-prev.ghost{visibility:hidden}
+#app .lnav-prev svg,#app .lnav-next svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#app .lnav-next{flex:1;min-width:0;position:relative;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;align-items:center;column-gap:10px;text-align:left;padding:10px 16px;min-height:58px;border:0;border-radius:16px;cursor:pointer;color:#fff;
+  background:linear-gradient(135deg,#0A84FF 0%,#5E5CE6 100%);box-shadow:0 8px 22px -10px rgba(10,132,255,.75);overflow:hidden}
+#app .lnav-next::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 140% at 100% 0%,rgba(255,255,255,.28),transparent 55%);pointer-events:none}
+#app .lnav-next.fin{background:linear-gradient(135deg,#30D158 0%,#0A84FF 100%)}
+#app .lnav-k{grid-column:1;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+#app .lnav-t{grid-column:1;font-size:15.5px;font-weight:700;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#app .lnav-next svg{grid-column:2;grid-row:1/3;width:34px;height:34px;padding:7px;border-radius:50%;background:rgba(255,255,255,.2);transition:transform .2s}
+#app .lnav-next:hover svg{transform:translateX(3px)}
+#app .lnav-next:active,#app .lnav-prev:active{transform:scale(.98)}
+.ln-toast{position:fixed;left:12px;right:12px;margin:0 auto;max-width:440px;bottom:calc(env(safe-area-inset-bottom,0px) + 92px);z-index:950;display:flex;align-items:center;gap:12px;padding:12px 12px 14px;border-radius:18px;overflow:hidden;
+  background:rgba(255,255,255,.96);color:#0A2540;border:1px solid rgba(10,37,64,.08);box-shadow:0 18px 40px -12px rgba(10,37,64,.35);transform:translateY(24px) scale(.98);opacity:0;transition:transform .35s cubic-bezier(.2,.9,.25,1.15),opacity .3s}
+.ln-toast.in{transform:none;opacity:1}.ln-toast.out{transform:translateY(16px);opacity:0}
+.lnt-ic{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#FF9F0A,#FF375F)}
+.lnt-ic svg{width:21px;height:21px;fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round}
+.lnt-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.lnt-txt b{font-size:15px}.lnt-txt small{font-size:13px;line-height:1.35;color:#5B6577;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ln-toast button{flex:none;border:0;border-radius:11px;background:rgba(10,37,64,.07);color:#0A2540;font:inherit;font-weight:700;font-size:13.5px;padding:9px 12px;cursor:pointer}
+.lnt-bar{position:absolute;left:0;bottom:0;height:3px;width:100%;background:linear-gradient(90deg,#FF9F0A,#FF375F);transform-origin:left;animation:lntbar 5.6s linear forwards}
+@keyframes lntbar{to{transform:scaleX(0)}}
+@media (min-width:1000px){.ln-toast{bottom:28px}}
+:root:root[data-night] #app .lnav-prev{background:#232833;border-color:rgba(255,255,255,.14);color:#E8EAF0}
+:root:root[data-night] #app .lnav-dots i{background:rgba(255,255,255,.12)}
+:root:root[data-night] .ln-toast{background:rgba(32,37,47,.97);color:#E8EAF0;border-color:rgba(255,255,255,.08)}
+:root:root[data-night] .lnt-txt small{color:#A7B0BF}:root:root[data-night] .ln-toast button{background:rgba(255,255,255,.1);color:#E8EAF0}
+/* ===== v76: flashcard swipe ===== */
+#flCard{touch-action:pan-y;will-change:transform}
+#flCard.sw-r{box-shadow:0 0 0 3px #34C759,0 12px 30px rgba(52,199,89,.25)!important}
+#flCard.sw-l{box-shadow:0 0 0 3px #FF9F0A,0 12px 30px rgba(255,159,10,.25)!important}
+.fl-swipe-hint{display:none;text-align:center;font-size:13px;color:var(--muted);margin:8px 0 0}
+@media (pointer:coarse){ .fl-actions kbd{display:none} .fl-swipe-hint{display:block} }
+
+/* ===== v76: mock exams on phones ===== */
+@media (max-width:999px){
+  /* more room during the exam: hide the app's bottom bar and the chat button */
+  html:has(#app .cisa-exam) #bottomBar,html:has(#app .cisa-exam) .lc-fab{display:none!important}
+  html:has(#app .cisa-exam) main#app.wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
+  /* exam header (title, question count, timer, submit) stays pinned under the app header */
+  #app .cisa-exam>.cisa-row:first-child{position:sticky;top:calc(env(safe-area-inset-top,0px) + 63px);z-index:20;margin:-6px -12px 12px!important;padding:10px 12px!important;background:rgba(247,248,251,.97);border-bottom:1px solid rgba(10,37,64,.08);flex-wrap:nowrap!important;gap:10px!important;align-items:center!important}
+  #app .cisa-exam>.cisa-row:first-child h2{display:none}
+  #app .cisa-exam>.cisa-row:first-child .cisa-overline{font-size:12px!important}
+  #app .cisa-exam>.cisa-row:first-child .cisa-mini{font-size:13.5px!important;font-weight:600;color:var(--ink,#0A2540)!important}
+  #app .cisa-exam>.cisa-row:first-child>div:first-child{min-width:0;flex:1}
+  #app .cisa-exam>.cisa-row:first-child>div:first-child>*:not(.cisa-overline):not(.cisa-mini){display:none}
+  #app .cisa-exam>.cisa-row:first-child .cisa-actions{flex-direction:column;align-items:flex-end;gap:6px!important;flex:none}
+  #app .cisa-exam .cisa-timer{font-size:17px!important;font-weight:800;font-variant-numeric:tabular-nums;padding:4px 10px;border-radius:9px;background:#0A2540;color:#fff}
+  #app .cisa-exam>.cisa-row:first-child .cisa-btn{min-height:34px!important;font-size:13px!important;padding:0 12px!important}
+  /* question + answers */
+  #app .cisa-exam .cisa-card .cisa-text{font-size:17px!important;line-height:1.5!important}
+  #app .cisa-exam .cisa-answer{min-height:56px!important;font-size:16px!important;line-height:1.45!important;padding:12px 14px!important;gap:12px!important;text-align:left}
+  #app .cisa-exam .cisa-answer b{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center}
+  /* Previous / Flag / Next: fixed at the bottom of the screen, always reachable */
+  #app .cisa-exam .cisa-card .cisa-actions{position:fixed;left:0;right:0;bottom:0;z-index:30;margin:0!important;display:grid!important;grid-template-columns:1fr 1.1fr 1fr;gap:8px!important;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px))!important;background:rgba(247,248,251,.98);border-top:1px solid rgba(10,37,64,.1);box-shadow:0 -6px 20px rgba(10,37,64,.08)}
+  #app .cisa-exam .cisa-card .cisa-actions .cisa-btn{min-height:48px!important;font-size:15px!important;padding:0 8px!important;justify-content:center;white-space:nowrap}
+  /* navigator: compact, big enough to tap */
+  #app .cisa-exam .cisa-number-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(44px,1fr))!important;gap:6px!important}
+  #app .cisa-exam .cisa-number-grid button{min-height:42px!important;min-width:0!important;font-size:14.5px!important;border-radius:10px!important}
+  #app .cisa-exam .cisa-grid.two{grid-template-columns:1fr!important}
+}
+@media (max-width:999px){
+  /* answers look like buttons: outlined, with a clear selected state */
+  :root:root #app .cisa-exam .cisa-answer{border:1.5px solid rgba(10,37,64,.14)!important;background:#fff!important;border-radius:14px!important;margin-bottom:10px;box-shadow:none!important}
+  :root:root #app .cisa-exam .cisa-answer b{background:rgba(10,37,64,.07);color:var(--ink,#0A2540)}
+  :root:root #app .cisa-exam .cisa-answer.selected{border-color:#0A84FF!important;background:#EAF3FF!important;box-shadow:0 0 0 2px rgba(10,132,255,.18)!important}
+  :root:root #app .cisa-exam .cisa-answer.selected b{background:#0A84FF;color:#fff}
+}
+@media (max-width:999px){
+  /* same comfortable answer buttons in quick quizzes and the mistakes review */
+  :root:root #app .cisa-hub .cisa-answer{min-height:56px;font-size:16px!important;line-height:1.45!important;padding:12px 14px!important;border:1.5px solid rgba(10,37,64,.14)!important;background:#fff!important;border-radius:14px!important}
+  :root:root #app .cisa-hub .cisa-answer.selected{border-color:#0A84FF!important;background:#EAF3FF!important}
+}
+@media (max-width:999px){
+  :root:root #app .cisa-hub .cisa-answer.is-correct{border-color:#34C759!important;background:#EAF8EE!important}
+  :root:root #app .cisa-hub .cisa-answer.is-wrong{border-color:#FF3B30!important;background:#FDECEB!important}
+}
+
+/* ===================== v76: night reading mode (html[data-night]) ===================== */
+:root:root[data-night]{color-scheme:dark;
+  --ink:#E8EAF0;--ink-2:#C9CED8;--muted:#9AA3B2;--line:rgba(255,255,255,.10);--line-2:rgba(255,255,255,.14);
+  --surface:#1B1F27;--surface-2:#232833;--bg:#111418;--accent-soft:rgba(10,132,255,.18);--hero-muted:#9AA3B2;
+  --ci-paper:#1B1F27;--ci-border:rgba(255,255,255,.12);--rack-ink:#E8EAF0;--rack-muted:#9AA3B2;
+  --ios-label:#E8EAF0;--ios-label2:#9AA3B2;--ios-sep:rgba(255,255,255,.12);--ios-fill:rgba(255,255,255,.08);
+  --glass-card:#1B1F27;--glass:#1B1F27;--shadow:0 1px 2px rgba(0,0,0,.4);--shadow-lg:0 12px 30px rgba(0,0,0,.5)}
+:root:root[data-night] body{background:#111418!important;background-image:none!important;color:#E8EAF0}
+:root:root[data-night] body::before,:root:root[data-night] body::after{opacity:0!important}
+/* header, sidebar, bottom bar */
+:root:root[data-night] #topbar.top,:root:root[data-night] header.top{background:#161A21!important;border-color:rgba(255,255,255,.08)!important;color:#E8EAF0}
+:root:root[data-night] header.top :is(.brand,#who,.nav-label,.tab,.tab span,.sync){color:#E8EAF0!important}
+:root:root[data-night] header.top .tab[aria-current="true"]{background:rgba(10,132,255,.22)!important}
+:root:root[data-night] :is(.menu-btn,.side-btn,.side-search){background:#232833!important;border-color:rgba(255,255,255,.12)!important;color:#E8EAF0!important}
+:root:root[data-night] .drop-panel{background:#161A21!important}
+:root:root[data-night] #bottomBar{background:#1B1F27!important;border-color:rgba(255,255,255,.08)!important;box-shadow:0 6px 24px rgba(0,0,0,.5)!important}
+:root:root[data-night] #bottomBar a{color:#9AA3B2!important}:root:root[data-night] #bottomBar a[aria-current="true"]{color:#5EA8FF!important;background:rgba(10,132,255,.16)!important}
+:root:root[data-night] .lc-fab{background:#232833!important;border-color:rgba(255,255,255,.12)!important}
+/* page text */
+:root:root[data-night] #app{color:#E8EAF0}
+:root:root[data-night] #app :is(h1,h2,h3,h4,h5,b,strong,th,.ed-title,.cisa-text,.mn-title){color:#F1F3F7!important}
+:root:root[data-night] #app :is(p,li,dd,td,span,small,label,.ed-sub,.cisa-mini,.lede,.lede2,.sub,.muted,.eyebrow,.crumb){color:inherit}
+:root:root[data-night] #app :is(.ed-sub,.cisa-mini,.lede,.lede2,.muted,.crumb,small,.ln,.eyebrow,.lnav-n){color:#A7B0BF!important}
+:root:root[data-night] #app a{color:#5EA8FF}
+/* every card / panel surface */
+:root:root[data-night] #app :is(.ed-card,.lcard,.panel,.cisa-card,.q,.mcard,.rd-card,.wk-card,.adm-card,.adm-sec,.adm-learner,.mhero,.cockpit,.read-tools,.term-entry,.stat,.kpi,.cisa-kpi,.adm-kpi,.aw-card,.aw-tool,.coach-card,.fl-face,.book-chapter,.sec-mod,.sec-level,.lfoot,.outline,.ed-figures,.wk-grid>*,.d3-level,.cisa-panel,.ib-card,.sec-overview>div){background:#1B1F27!important;background-image:none!important;border-color:rgba(255,255,255,.10)!important;box-shadow:none!important;color:#E8EAF0}
+:root:root[data-night] #app :is(.stat,.kpi,.cisa-kpi,.adm-kpi,.wk-grid>*,.ed-figures){background:#232833!important}
+/* lesson boxes (simple words, analogy, GRC, deeper) */
+:root:root[data-night] #app :is(.ib-simple,.ib-ap,.ib-gr,.ib-br,.callout,.book-banner,.book-flow,.deeper,.ex,.takeaways,.pts,.ib-flow,.ib-cmp,.notes,.explain){background:#232833!important;background-image:none!important;border-color:rgba(255,255,255,.12)!important;color:#E8EAF0!important}
+:root:root[data-night] #app :is(code,kbd){background:#2C3240!important;color:#E8EAF0!important;border-color:rgba(255,255,255,.12)!important}
+:root:root[data-night] #app pre{background:#0E1116!important;color:#E1E6EE!important}
+/* tables */
+:root:root[data-night] #app table :is(th,td){border-color:rgba(255,255,255,.10)!important;color:#E8EAF0}
+:root:root[data-night] #app table thead th{background:#232833!important}
+:root:root[data-night] #app :is(.lcard,.tscroll) table[data-labeled] tr,:root:root[data-night] #app .lcard table[data-cols="2"] tbody,:root:root[data-night] #app .tm-table tr.tm-row{background:#1B1F27!important;border-color:rgba(255,255,255,.12)!important}
+/* buttons, chips, inputs */
+:root:root[data-night] #app :is(.btn,.cisa-btn,.td-btn.ghost,.linkbtn,.bm,.lnav-b,.opt,.termbtn,.fl-seg,.chip,.pill,.cisa-tabs button,.cisa-tabs a,.aw-sub a,.outline button,.mn-sec,.mn-seg button):not(.primary):not(.next):not(.on):not(.active):not(.selected):not(.right):not(.wrong){background:#232833!important;border-color:rgba(255,255,255,.14)!important;color:#E8EAF0!important}
+:root:root[data-night] #app :is(.cisa-tabs,.aw-sub,.fl-segs,.mn-seg){background:#161A21!important}
+:root:root[data-night] #app :is(.cisa-tabs,.aw-sub) :is(.on,.active,[aria-current="true"],[aria-selected="true"]){background:#2F3645!important;color:#fff!important}
+:root:root[data-night] #app :is(input:not([type=checkbox]):not([type=radio]):not([type=range]),textarea,select),:root:root[data-night] .lc-panel textarea{background:#12161C!important;border-color:rgba(255,255,255,.16)!important;color:#E8EAF0!important}
+:root:root[data-night] #app ::placeholder,:root:root[data-night] .lc-panel ::placeholder{color:#6F7888!important}
+:root:root[data-night] #app :is(.d3-bar,.mini-bar,.bar,.ed-bar){background:rgba(255,255,255,.10)!important}
+/* quiz / exam answers */
+:root:root[data-night] #app .opt.right,:root:root[data-night] #app .cisa-hub .cisa-answer.is-correct{background:rgba(52,199,89,.16)!important;border-color:#34C759!important}
+:root:root[data-night] #app .opt.wrong,:root:root[data-night] #app .cisa-hub .cisa-answer.is-wrong{background:rgba(255,59,48,.16)!important;border-color:#FF453A!important}
+:root:root[data-night] #app .cisa-hub .cisa-answer{background:#1B1F27!important;border-color:rgba(255,255,255,.14)!important;color:#E8EAF0!important}
+:root:root[data-night] #app .cisa-hub .cisa-answer.selected{background:rgba(10,132,255,.18)!important;border-color:#0A84FF!important}
+:root:root[data-night] #app .cisa-exam>.cisa-row:first-child,:root:root[data-night] #app .cisa-exam .cisa-card .cisa-actions{background:#161A21!important;border-color:rgba(255,255,255,.10)!important}
+:root:root[data-night] #app .cisa-exam .cisa-timer{background:#0A84FF}
+:root:root[data-night] #app .cisa-number-grid button{background:#232833!important;color:#E8EAF0!important;border-color:rgba(255,255,255,.14)!important}
+:root:root[data-night] #app .cisa-number-grid button.answered{background:#0A84FF!important;color:#fff!important}
+/* chat */
+:root:root[data-night] .lc-panel{background:#111418!important;color:#E8EAF0}
+:root:root[data-night] .lc-panel header,:root:root[data-night] .lc-panel form,:root:root[data-night] .lc-panel .lc-compose{background:#161A21!important;border-color:rgba(255,255,255,.08)!important}
+:root:root[data-night] .lc-panel :is(.lc-who,.lc-empty b,h3,b){color:#E8EAF0!important}
+:root:root[data-night] .lc-panel .lc-msg:not(.me) .lc-bubble,:root:root[data-night] .lc-panel .lc-bubble.them{background:#232833!important;color:#E8EAF0!important}
+/* toasts, dialogs */
+:root:root[data-night] :is(.ui-dialog,.ui-dlg,dialog) {background:#1B1F27!important;color:#E8EAF0!important}
+:root:root[data-night] .ln-toast{background:rgba(40,46,58,.97)}
+/* images/diagrams with white backgrounds read better slightly dimmed */
+:root:root[data-night] #app img{filter:brightness(.88)}
+/* night: readable text everywhere (some components set dark text colours directly) */
+:root:root[data-night] #app :is(p,li,dd,td,label,figcaption,blockquote,.lbody,.ib-simple div,.ib-ap div,.ib-gr div,.ib-br div,.fdesc span,.bp-t,.cisa-text){color:#DCE1EA!important}
+:root:root[data-night] #app :is(p,li,td) :is(b,strong){color:#FFFFFF!important}
+:root:root[data-night] #app :is(.stat span,.kpi span,.td-txt small,.cisa-kpi span,.ed-figures span,.wk-grid span){color:#A7B0BF!important}
+:root:root[data-night] #app :is(.td-task,.td-row,.coach-ring,.cisa-hub li.cisa-step,.cisa-hub ol>li,.mn-toc,.mn-art,.mn-sub,.next,.fbtn,.fl-seg,.sec-levels button,.sec-filter button,.lvl-tabs button,.grc-filter button,.aic-lv button,.rn-tip,.sec-deep-intro,.sec-pitfall){background:#232833!important;background-image:none!important;border-color:rgba(255,255,255,.12)!important;color:#E8EAF0!important}
+:root:root[data-night] #app :is(.on,.active,[aria-pressed="true"],[aria-current="true"]):is(.fl-seg,.fbtn,button,.mn-sec,.mn-seg button):not(.learn):not(.lnav-next){background:#0A84FF!important;color:#fff!important;border-color:#0A84FF!important}
+:root:root[data-night] #app :is(a:not(.btn):not(.lnav-next),h6,dt,em,.rn-tip,.sec-deep-intro,.sec-pitfall){color:#DCE1EA!important}
+:root:root[data-night] #app :is(.lcard,.lbody,p,li) a:not(.btn){color:#6CB4FF!important}
+:root:root[data-night] #app .coach-ring{background:#232833!important;color:#E8EAF0!important}
+:root:root[data-night] #app button:not(.primary):not(.lnav-next):not(.danger):not([class*="is-"]):not(.selected):not(.answered):not(.on):not(.active):not([aria-pressed="true"]){border-color:rgba(255,255,255,.14)}
+:root:root[data-night] #app .aic-jump button{background:#232833!important;color:#E8EAF0!important;border-color:rgba(255,255,255,.14)!important}
+:root:root[data-night] #app .adm-kind{background:rgba(10,132,255,.18)!important;color:#9CCBFF!important}
+:root:root[data-night] #app .adm-kind.action,:root:root[data-night] #app .adm-kind[class*="act"]{background:rgba(52,199,89,.18)!important;color:#8EE6A6!important}
+/* night: desktop sidebar, reading tools, chat thread */
+:root:root[data-night] #topbar :is(.side-btn,.side-search,.menu-btn){background:#232833!important;border-color:rgba(255,255,255,.12)!important;color:#E8EAF0!important;box-shadow:none!important}
+:root:root[data-night] #topbar .side-btn svg{color:#E8EAF0;stroke:currentColor}
+:root:root[data-night] #topbar #tabs .tab{color:#C9CED8!important;background:transparent!important}
+:root:root[data-night] #topbar #tabs .tab[aria-current="true"]{background:rgba(10,132,255,.22)!important;color:#fff!important}
+:root:root[data-night] #topbar #tabs .tab:hover{background:rgba(255,255,255,.06)!important}
+:root:root[data-night] #app .read-tools :is(button,select){background:#232833!important;border-color:rgba(255,255,255,.14)!important;color:#E8EAF0!important}
+:root:root[data-night] .lc-panel :is(.lc-thread,.lc-body,.lc-scroll,.lc-list,main,section){background:#111418!important}
+:root:root[data-night] .lc-panel .lc-empty :is(p,span,div){color:#A7B0BF!important}
+:root:root[data-night] .lc-panel .lc-empty-ic{background:#232833!important}
+:root:root[data-night] .lc-panel .lc-msgs{background:#111418!important}
+:root:root[data-night] .lc-panel .lc-field{background:#12161C!important;border-color:rgba(255,255,255,.16)!important}
+:root:root[data-night] .lc-panel .lc-field textarea{background:transparent!important}
+:root:root[data-night] .lc-panel .lc-empty b{color:#E8EAF0!important}
+:root:root[data-night] .lc-panel>*:last-child{background:#161A21!important}
+/* night: phone menu drawer */
+:root:root[data-night] #topbar :is(#sideNav,.side-nav,.drop-panel,#tabs,.side-group,.nav-group){background:#161A21!important;box-shadow:none!important}
+:root:root[data-night] #topbar.open,:root:root[data-night] #topbar.open>*{background-color:#161A21!important}
+:root:root[data-night] #topbar :is(.tab,.tab span,#who,.sync,.acct span){color:#E8EAF0!important}
+:root:root[data-night] #topbar .nav-label{color:#8B95A6!important}
+:root:root[data-night] #topbar .side-foot{border-color:rgba(255,255,255,.10)!important}
+
+/* ===================== v77: calmer overview screens ===================== */
+/* dashboard: "More stats" folds the secondary sections */
+#app .ed-more{margin:22px 0 8px;border:1px solid rgba(10,37,64,.10);border-radius:18px;background:rgba(255,255,255,.75)}
+#app .ed-more>summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;gap:2px;padding:16px 48px 16px 18px;position:relative;min-height:56px;justify-content:center}
+#app .ed-more>summary::-webkit-details-marker{display:none}
+#app .ed-more>summary span{font-size:16px;font-weight:700;color:var(--ink,#0A2540)}
+#app .ed-more>summary small{font-size:13.5px;color:var(--muted)}
+#app .ed-more>summary::after{content:"";position:absolute;right:20px;top:50%;width:10px;height:10px;border-right:2.5px solid var(--muted);border-bottom:2.5px solid var(--muted);transform:translateY(-70%) rotate(45deg);transition:transform .2s}
+#app .ed-more[open]>summary::after{transform:translateY(-30%) rotate(-135deg)}
+#app .ed-more-body{padding:0 14px 16px}
+#app #goalSlot .rd-card{margin-bottom:14px}
+#app .rd-grid{margin-top:4px}
+:root:root[data-night] #app .ed-more{background:#1B1F27;border-color:rgba(255,255,255,.10)}
+
+/* ===== v77: lighter lesson boxes — "In simple words" stays the one highlighted box; the rest become calm sections with a coloured side line ===== */
+:root:root #app .lcard :is(.ib-ap,.ib-gr,.ib-br,.ib-ex,.callout,.book-banner){background:transparent!important;background-image:none!important;border:0!important;border-left:3px solid var(--ibc,#94A3B8)!important;border-radius:0!important;box-shadow:none!important;padding:2px 0 2px 14px!important;margin:20px 0 10px!important}
+:root:root #app .lcard .ib-ap{--ibc:#14b8a6}:root:root #app .lcard .ib-gr{--ibc:#8b5cf6}:root:root #app .lcard .ib-br{--ibc:#f59e0b}:root:root #app .lcard .ib-ex{--ibc:#22c55e}
+:root:root #app .lcard :is(.ib-ap,.ib-gr,.ib-br,.ib-ex)>b:first-child{display:block;font-size:12.5px!important;letter-spacing:.04em;text-transform:none!important;color:var(--ibc)!important;margin-bottom:4px}
+/* flow / comparison figures without an extra outer frame */
+:root:root #app .lcard :is(.ib-flow,.ib-cmp){background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:18px 0!important}
+/* more breathing room between lesson parts */
+#app .lcard .lbody>*+*{margin-top:14px}
+#app .lcard .lbody p{margin:0 0 12px}
+/* "Think it through" folded by default stays as a quiet line */
+:root:root #app .lcard details.deeper{background:transparent!important;border:1px dashed rgba(10,37,64,.18)!important;border-radius:12px!important}
+:root:root[data-night] #app .lcard :is(.ib-ap,.ib-gr,.ib-br,.ib-ex,.callout,.book-banner,.ib-flow,.ib-cmp){background:transparent!important}
+:root:root[data-night] #app .lcard details.deeper{border-color:rgba(255,255,255,.18)!important}
+
+/* ===== v77: calmer overview typography ===== */
+#app :is(.ed-kicker,.cisa-overline){text-transform:none!important;letter-spacing:0!important;font-size:13.5px!important;font-weight:650!important}
+#app .ed-sub,#app .cisa-mini{font-size:15px!important;line-height:1.55!important}
+#app .ed-sect{margin-top:30px!important;margin-bottom:12px!important}
+#app .ed-sect span{font-size:14px!important}
+#app :is(.rd-card,.ed-card)+:is(.rd-card,.ed-card){margin-top:14px}
+#app .rd-list li{font-size:14.5px}
+#app .rd-fc-row{font-size:14px}
+#app .ed-acad small,#app .ed-acad span:not(.d3-bar){font-size:14px}
+#app .td-txt small{font-size:13.5px!important}
+@media (max-width:700px){
+  #app :is(.ed-kicker,.cisa-overline){font-size:13.5px!important}
+  #app .ed-sub,#app .cisa-mini{font-size:15px!important}
+  #app .ed-title{font-size:20px!important}
+  #app .ed-sect{margin-top:28px!important}
+}
+
+/* ===== v76 (restored in v77): comparison tables inside lessons stack as cards on phones ===== */
+@media (max-width:700px){
+  #app .lcard :is(.ib-scroll,.tscroll,div):has(> table[data-labeled]){overflow:visible!important;background:none!important}
+  #app .lcard table[data-labeled],#app .lcard table[data-labeled] tbody{display:block;width:100%;min-width:0!important}
+  #app .lcard table[data-labeled] thead{display:none}
+  #app .lcard table[data-labeled] tr{display:block;padding:12px 14px;margin:0 0 10px;border:1px solid rgba(10,37,64,.1);border-radius:12px;background:#fff}
+  #app .lcard table[data-labeled] :is(td,th){display:block;padding:0!important;border:0!important;white-space:normal!important;text-align:left!important;background:none!important;min-width:0!important;font-size:15px!important;line-height:1.5}
+  #app .lcard table[data-labeled] tr>:first-child{font-weight:700;font-size:15.5px!important;margin-bottom:6px;color:var(--ink,#0A2540)}
+  #app .lcard table[data-labeled] td+td,#app .lcard table[data-labeled] th+td{margin-top:8px}
+  #app .lcard table[data-labeled] td[data-l]::before{content:attr(data-l);display:block;font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:1px}
+  #app .lcard table[data-cols="2"] tbody{border:1px solid rgba(10,37,64,.1);border-radius:12px;background:#fff;overflow:hidden}
+  #app .lcard table[data-cols="2"] tr{margin:0!important;border:0!important;border-radius:0!important;border-bottom:1px solid rgba(10,37,64,.07)!important;padding:10px 14px!important;background:none!important}
+  #app .lcard table[data-cols="2"] tr:last-child{border-bottom:0!important}
+  #app .lcard table[data-cols="2"] tr>:first-child{margin-bottom:2px!important;font-size:14px!important;color:var(--muted)!important;font-weight:600!important}
+  #app .lcard table[data-cols="2"] td+td,#app .lcard table[data-cols="2"] th+td{margin-top:0!important}
+  #app .lcard table[data-cols="2"] td[data-l]::before{display:none}
+  #app .lcard table[data-cols="3"] tr{display:grid!important;grid-template-columns:1fr 1fr;gap:4px 14px}
+  #app .lcard table[data-cols="3"] tr>:first-child{grid-column:1/-1;margin-bottom:2px!important}
+  #app .lcard table[data-cols="3"] td+td,#app .lcard table[data-cols="3"] th+td{margin-top:0!important}
+  :root:root[data-night] #app .lcard table[data-labeled] tr,:root:root[data-night] #app .lcard table[data-cols="2"] tbody{background:#1B1F27!important;border-color:rgba(255,255,255,.12)!important}
+}

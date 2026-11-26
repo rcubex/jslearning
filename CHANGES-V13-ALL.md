@@ -530,3 +530,18 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 - Start-up download halved: Technical, AI Compliance and Application lesson bodies load when a module is opened (and quietly in the background once the app is idle). New small indexes: content/core-meta.js, content/aic-meta.js (scripts/build-core-meta.mjs, scripts/build-aic-meta.mjs — run after editing lesson content). Sign-in wallpapers load without blocking. Retired GRC text removed from core.js.
 - Workbook and Insights tables show as one card per row on phones.
 - Phone typography audit: no text under 12px, labels/chips/captions enlarged, secondary text 14.5px, tap targets ~40px (lesson outline, key terms, CISA tabs, manual sections), "Your last 7 days" card padding, cleaner module header.
+
+## v76 — phone study experience
+- Lesson navigation under every lesson (Technical, AI Compliance, Application): progress strip, back button and an "Up next" card with the next lesson title; "Finish" jumps to takeaways and checkpoint.
+- Continue where you left off: reopening a module jumps to the last lesson read, with a welcome-back card and a Start over button.
+- Mock exams on phones: pinned timer and question count, big outlined answers with a clear selected state, Previous / Flag / Next fixed at the bottom, compact question navigator, bottom bar hidden during the exam. Same answer style in quick quizzes and the mistakes review.
+- Lesson comparison tables stack as cards on phones (2-column tables as a compact list).
+- Flashcards: swipe right = Got it, left = Again; tap to reveal.
+- Night mode: dark theme for reading (menu > Night mode), saved on the device; covers lessons, CISA, flashcards, workbook, chat, mock exams, admin.
+
+## v77 — calmer layout
+- Dashboard: Today (daily goal + tasks), Exam readiness (forecast + weak spots), academies; repeated numbers removed; last 7 days, learning path, cloud mastery and achievements folded into "More stats" (page about 40% shorter on phones).
+- CISA Today: "Do this next" card first, three quick actions, everything else (task, pace, domains, coming up) folded into "Plan & progress" (half the length).
+- Lessons: only "In simple words" stays a highlighted box; GRC, assessment, example and analogy notes become light sections with a coloured side line; more space between parts.
+- Overview text: sentence-case labels, 15px secondary text, more space between sections.
+- Restored phone card layout for lesson comparison tables.

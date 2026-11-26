@@ -229,22 +229,19 @@ function vDashboard(){
     </div>
     <a class="ed-ring" href="#courses" aria-label="Technical Academy ${p} percent">${ringSVG(180,80,14,p,'rgba(10,37,64,.07)','#0A84FF')}<span><b>${p}%</b><small>Technical</small></span></a>
   </section>
-  <section class="ed-figures">
-    <div><b>${(wk/60).toFixed(1)}h</b><span>studied this week</span></div>
-    <div><b>${streak()}</b><span>day streak</span></div>
-    <div><b>${answered?Math.round(correct()/answered*100)+'%':'–'}</b><span>quiz accuracy</span></div>
-    <a href="#cisa"><b>${cDays}</b><span>days to CISA exam${cDue?` · <em>${cDue} mistake${cDue===1?'':'s'} due</em>`:''}</span></a>
-  </section>
   <h3 class="ed-sect">Today <span>${esc(new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'}))}</span></h3>
+  <div id="goalSlot"><section class="ed-card rd-card rd-goal"><div class="rd-load">Loading your daily goal…</div></section></div>
   <div id="coachSlot"></div>
   ${todayCardHTML()}
-  <div class="rd-grid" id="readySlot"><section class="ed-card rd-card rd-goal"><div class="rd-load">Loading your daily goal…</div></section><section class="ed-card rd-card"><div class="rd-load">Checking your exam pace…</div></section><section class="ed-card rd-card"><div class="rd-load">Finding your weak spots…</div></section></div>
-  ${weekCardHTML()}
+  <h3 class="ed-sect">Exam readiness <span>CISA · ${cDays} days to go</span></h3>
+  <div class="rd-grid" id="readySlot"><section class="ed-card rd-card"><div class="rd-load">Checking your exam pace…</div></section><section class="ed-card rd-card"><div class="rd-load">Finding your weak spots…</div></section></div>
   <h3 class="ed-sect">Your academies</h3>
   <div class="ed-acads">${[['#courses','--ok','<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.6 17M12 11.5l5.4 5.5"/></svg>','Technical Academy',p,`${lessonsDone()} of ${M.reduce((n,m)=>n+m.lessons.length,0)} lessons`],
            ['#grc','--signal','<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>','AI Compliance Academy',grcP,`${grcDone} of ${grcTotal} lessons`],
            ['#appsec','--accent-3','<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14l-2 2 2 2M16 14l2 2-2 2"/></svg>','Application Academy',secProgress.p,`${secProgress.read} lessons read`],
            ['#cisa','--accent','<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4zM6 10v6c4 3 8 3 12 0v-6"/></svg>','CISA Hub',Math.round(cTopics/60*100),`${cTopics} of 60 topics`]].map(([h,c,ic,n,pp,sub])=>`<a class="ed-card ed-acad" href="${h}" style="--c:var(${c})"><span class="ed-acad-top"><span class="d3-ic">${ic}</span><span class="ed-acad-n">${n}</span><span class="ed-acad-p">${pp}%</span></span><span class="d3-bar"><i style="width:${pp}%"></i></span><span class="ed-acad-s">${sub}</span></a>`).join('')}</div>
+  <details class="ed-more" id="dashMore"><summary><span>More stats</span><small>Last 7 days · learning path · cloud mastery · achievements</small></summary><div class="ed-more-body">
+  ${weekCardHTML()}
   <h3 class="ed-sect">Learning path <span>Technical Academy levels</span></h3>
   <section class="ed-card ed-path"><div class="d3-levels">${LV.map(Lv=>{const st=levelStats(Lv.n),cur=Lv.n===cl&&p<100;return `<button type="button" class="d3-level ${cur?'on':''}" data-level="${Lv.n}" aria-label="Open level ${Lv.n}, ${esc(Lv.name)}, ${st.p} percent"><span class="d3-lv-k">${pad(Lv.n)} · ${esc(Lv.tier)}</span><strong>${esc(Lv.name)}</strong><span class="d3-bar"><i style="width:${st.p}%"></i></span><span class="d3-lv-m">${st.done}/${st.ms.length} modules</span></button>`;}).join('')}</div></section>
   <div class="dash-grid">
@@ -256,8 +253,10 @@ function vDashboard(){
   </div>
   <div class="sect-title"><h3>Achievements</h3><span class="eyebrow">${earned} of ${BADGES.length} earned</span></div>
   <div class="badges">${BADGES.map(([k,n,d,t])=>{const on=t(); return `<div class="badge ${on?'on':'off'}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[k]}</svg></span><div><b>${n}</b><span>${on?'Earned':d}</span></div></div>`;}).join('')}</div>
+  </div></details>
   </div>`;
   app.querySelectorAll('[data-level]').forEach(b=>b.onclick=()=>go('courses',+b.dataset.level));
+  { const dm=document.getElementById('dashMore'); if(dm){ try{ dm.open=localStorage.getItem('p2c-dash-more')==='1'; }catch(e){} dm.addEventListener('toggle',()=>{ try{ localStorage.setItem('p2c-dash-more',dm.open?'1':'0'); }catch(e){} }); } }
   wireToday();
   fillReadiness();
 }
@@ -739,7 +738,7 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='75';
+const APP_V='77';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){
@@ -819,7 +818,8 @@ async function fillReadiness(){
     if(!weakRefs) weakRefs=await WeakMod.loadRefs('./cisa/');
     const by=await studyMinutesByDay(); const el=document.getElementById('readySlot'); if(!el) return;
     const C=S.cisa||{};
-    el.innerHTML=goalCardHTML(by)+forecastCardHTML(WeakMod.forecast(C,weakRefs,Date.now(),WeakMod.doneDatesFromEvents(actEvents)))+weakCardHTML(WeakMod.weakReport(C,weakRefs));
+    const gs=document.getElementById('goalSlot'); if(gs) gs.innerHTML=goalCardHTML(by);
+    el.innerHTML=(gs?'':goalCardHTML(by))+forecastCardHTML(WeakMod.forecast(C,weakRefs,Date.now(),WeakMod.doneDatesFromEvents(actEvents)))+weakCardHTML(WeakMod.weakReport(C,weakRefs));
     el.querySelectorAll('[data-cisa-tab]').forEach(a=>a.addEventListener('click',()=>{window.__cisaTab=a.dataset.cisaTab;}));
   }catch(e){ console.warn('readiness',e); const el=document.getElementById('readySlot'); if(el) el.remove(); }
 }
@@ -897,8 +897,8 @@ async function vFlash(){await loadCisaTopics();flCur=flNext();flShown=false;flSe
 function drawFlash(){const root=document.getElementById('flashRoot');if(!root)return;const st=flashStats(flDeck);
  const decks=['All','Glossary','AI Compliance','CISA'].map(d=>`<button type="button" class="fl-seg ${flDeck===d?'on':''}" data-deck="${d}">${d}</button>`).join('');
  const stats=`<div class="fl-stats"><div><b>${st.due}</b><span>due</span></div><div><b>${st.newLeft}</b><span>new today</span></div><div><b>${st.learned}</b><span>learning</span></div><div><b>${st.mastered}</b><span>mastered</span></div><div><b>${st.total}</b><span>cards</span></div></div>`;
- const card=flCur?`<div class="fl-card ${flShown?'flipped':''}" id="flCard" tabindex="0" role="button" aria-label="${flShown?'Answer shown':'Show answer'}"><div class="fl-face fl-front"><span class="fl-deck">${esc(flCur.deck)}</span><h3>${esc(flCur.front)}</h3><small>Tap or press Space to reveal</small></div><div class="fl-face fl-back"><span class="fl-deck">${esc(flCur.front)}</span><p>${esc(flCur.back)}</p></div></div>
-  <div class="fl-actions">${flShown?`<button type="button" class="btn fl-again" id="flAgain">Again <kbd>1</kbd></button><button type="button" class="btn primary" id="flGood">Got it <kbd>2</kbd></button>`:`<button type="button" class="btn primary" id="flShow">Show answer <kbd>Space</kbd></button>`}</div>`
+ const card=flCur?`<div class="fl-card ${flShown?'flipped':''}" id="flCard" tabindex="0" role="button" aria-label="${flShown?'Answer shown':'Show answer'}"><div class="fl-face fl-front"><span class="fl-deck">${esc(flCur.deck)}</span><h3>${esc(flCur.front)}</h3><small>${(window.matchMedia&&matchMedia('(pointer:coarse)').matches)?'Tap to reveal':'Tap or press Space to reveal'}</small></div><div class="fl-face fl-back"><span class="fl-deck">${esc(flCur.front)}</span><p>${esc(flCur.back)}</p></div></div>
+  <p class="fl-swipe-hint">${flShown?'Swipe right if you got it · left to see it again':'Tap the card to see the answer'}</p><div class="fl-actions">${flShown?`<button type="button" class="btn fl-again" id="flAgain">Again <kbd>1</kbd></button><button type="button" class="btn primary" id="flGood">Got it <kbd>2</kbd></button>`:`<button type="button" class="btn primary" id="flShow">Show answer <kbd>Space</kbd></button>`}</div>`
   :`<div class="fl-done"><b>${flSession.done?'Session complete':'All caught up'}</b><p>${flSession.done?`${flSession.right} of ${flSession.done} remembered. `:''}No cards are due in this deck right now. New cards unlock tomorrow (10 per day), and reviewed cards return on a 1, 3, 7, 14 and 30-day schedule.</p></div>`;
  root.innerHTML=`<div class="fl-top"><div class="fl-segs">${decks}</div>${stats}</div>${card}`;
  root.querySelectorAll('[data-deck]').forEach(b=>b.onclick=()=>{flDeck=b.dataset.deck;flCur=flNext();flShown=false;drawFlash();});
@@ -1510,7 +1510,73 @@ document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==
 /* v75: on phones, wide tables (Workbook, Insights) show as one card per row. Each cell gets its column name
    as a label (data-l), so the CSS can stack the row without losing meaning. */
 (function labelTables(){
-  const run=()=>{ document.querySelectorAll('#app .tscroll table:not([data-labeled])').forEach(t=>{ const heads=[...t.querySelectorAll('thead th')].map(th=>th.textContent.trim()); if(!heads.length) return; t.setAttribute('data-labeled','1'); t.querySelectorAll('tbody tr').forEach(tr=>[...tr.children].forEach((td,i)=>{ if(heads[i]&&td.colSpan<2&&!td.hasAttribute('data-l')) td.setAttribute('data-l',heads[i]); })); }); };
+  const run=()=>{ document.querySelectorAll('#app .tscroll table:not([data-labeled]), #app .lcard table:not([data-labeled]), #app .ib-scroll table:not([data-labeled])').forEach(t=>{ const heads=[...t.querySelectorAll('thead th')].map(th=>th.textContent.trim()); if(heads.length<2&&!t.closest('.tscroll')) return; if(!heads.length) return; t.setAttribute('data-labeled','1'); t.setAttribute('data-cols',String(heads.length)); t.querySelectorAll('tbody tr').forEach(tr=>[...tr.children].forEach((td,i)=>{ if(i>0||td.tagName==='TD'){ if(heads[i]&&td.colSpan<2&&!td.hasAttribute('data-l')) td.setAttribute('data-l',heads[i]); } })); }); };
   try{ new MutationObserver(()=>{ clearTimeout(labelTables.t); labelTables.t=setTimeout(run,60); }).observe(document.getElementById('app'),{childList:true,subtree:true}); }catch(e){}
   run();
+})();
+
+/* v76: lesson navigation bar and "continue where you left off" (Technical, AI Compliance, Application modules).
+   Works on the rendered page: every lesson card (article.lesson in .timeline) gets Previous / Next buttons under it,
+   the lesson in view is remembered per module (this device), and reopening the module jumps back to it. */
+const LN_KEY='p2c-lastlesson'; let lnOpened=null, lnIO=null, lnSaveT=null;
+function lnGet(){ try{ return JSON.parse(localStorage.getItem(LN_KEY)||'{}')||{}; }catch(e){ return {}; } }
+function lnSet(mod,id){ try{ const o=lnGet(); o[mod]={id,at:Date.now()}; localStorage.setItem(LN_KEY,JSON.stringify(o)); }catch(e){} }
+function lnScrollTo(el){ if(!el) return; const top=document.querySelector('header.top'); let off=(top&&getComputedStyle(top).position!=='static'?top.getBoundingClientRect().height:0)+12;
+  /* sticky lesson outline bar (phones) also covers the top of the page */
+  document.querySelectorAll('#app .outline-panel, #app .mside, #app .outline').forEach(x=>{ const cs=getComputedStyle(x); if(cs.position==='sticky'&&x.offsetHeight<140) off=Math.max(off,(parseFloat(cs.top)||0)+x.offsetHeight+12); }); window.scrollTo({top:el.getBoundingClientRect().top+scrollY-off,behavior:'smooth'}); }
+function lnToast(text,onBack,sub){ document.querySelector('.ln-toast')?.remove(); const t=document.createElement('div'); t.className='ln-toast'; t.setAttribute('role','status');
+  t.innerHTML=`<span class="lnt-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg></span><span class="lnt-txt"><b>${text}</b>${sub?`<small>${sub}</small>`:''}</span><button type="button">Start over</button><i class="lnt-bar"></i>`;
+  t.querySelector('button').onclick=()=>{ t.remove(); onBack&&onBack(); }; document.body.appendChild(t); requestAnimationFrame(()=>t.classList.add('in')); setTimeout(()=>t.classList.add('out'),5600); setTimeout(()=>t.remove(),6000); }
+function enhanceLessons(){
+  const h=(location.hash||'').slice(1);
+  if(!/^(m\d\d|a[ib]\d\d|a\d\d)$/.test(h)) return;
+  const arts=[...document.querySelectorAll('#app .timeline > article.lesson')]; if(!arts.length) return;
+  arts.forEach((a,i)=>{
+    const card=a.querySelector('.lcard')||a; if(card.querySelector(':scope > .lnav')) return;
+    const nav=document.createElement('div'); nav.className='lnav';
+    const ttl=el=>{ const t=el&&el.querySelector('h4, h3'); return t?t.textContent.trim():''; };
+    const dots=arts.map((x,k)=>`<i class="${k<i?'done':k===i?'cur':''}${x.classList.contains('on')?' learned':''}"></i>`).join('');
+    const prev=i>0?`<button type="button" class="lnav-prev" data-lnav="${arts[i-1].id}" aria-label="Previous lesson: ${ttl(arts[i-1]).replace(/"/g,'&quot;')}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>`:'<span class="lnav-prev ghost" aria-hidden="true"></span>';
+    const nt=i<arts.length-1?ttl(arts[i+1]):'';
+    const next=i<arts.length-1
+      ?`<button type="button" class="lnav-next" data-lnav="${arts[i+1].id}"><span class="lnav-k">Up next · lesson ${i+2}</span><span class="lnav-t">${nt.replace(/</g,'&lt;')}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>`
+      :`<button type="button" class="lnav-next fin" data-lnav="__end"><span class="lnav-k">Last lesson done?</span><span class="lnav-t">Finish: takeaways &amp; checkpoint</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg></button>`;
+    nav.innerHTML=`<div class="lnav-dots" aria-label="Lesson ${i+1} of ${arts.length}">${dots}<b>${i+1}/${arts.length}</b></div><div class="lnav-row">${prev}${next}</div>`; card.appendChild(nav);
+    nav.querySelectorAll('[data-lnav]').forEach(b=>b.onclick=()=>{ const id=b.dataset.lnav;
+      if(id==='__end'){ const tl=a.closest('.timeline'); const sec=tl&&tl.closest('section'); let n=sec&&sec.nextElementSibling; while(n&&!n.offsetHeight) n=n.nextElementSibling; lnScrollTo(n||tl); return; }
+      const el=document.getElementById(id); lnScrollTo(el); lnSet(h,id); });
+  });
+  // remember the lesson being read
+  try{ lnIO&&lnIO.disconnect(); lnIO=new IntersectionObserver(es=>{ const vis=es.filter(e=>e.isIntersecting).sort((x,y)=>x.boundingClientRect.top-y.boundingClientRect.top)[0]; if(!vis) return; clearTimeout(lnSaveT); lnSaveT=setTimeout(()=>lnSet(h,vis.target.id),900); },{rootMargin:'-20% 0px -55% 0px'}); arts.forEach(a=>lnIO.observe(a)); }catch(e){}
+  // continue where you left off (only when the module is freshly opened, not after a re-render)
+  if(lnOpened!==h){ lnOpened=h; const last=lnGet()[h]; const idx=last?arts.findIndex(a=>a.id===last.id):-1;
+    if(idx>0){ const el=arts[idx]; setTimeout(()=>{ if(lnOpened!==h) return; lnScrollTo(el); const tt=(el.querySelector('h4, h3')||{}).textContent||''; lnToast('Welcome back 👋',()=>window.scrollTo({top:0,behavior:'smooth'}),`Picking up at lesson ${idx+1} of ${arts.length}${tt?' · '+tt.trim().replace(/</g,'&lt;'):''}`); },350); } }
+}
+window.addEventListener('hashchange',()=>{ lnOpened=null; document.querySelector('.ln-toast')?.remove(); });
+try{ let lnT=null; new MutationObserver(()=>{ clearTimeout(lnT); lnT=setTimeout(enhanceLessons,80); }).observe(document.getElementById('app'),{childList:true,subtree:true}); }catch(e){}
+
+/* v76: swipe flashcards on touch screens — swipe right = Got it, swipe left = Again (after the answer shows).
+   Before the answer shows, any swipe or tap reveals it. Buttons and keys still work as before. */
+(function flashSwipe(){
+  let sx=0, sy=0, dx=0, active=false, card=null, moved=false;
+  const end=(ok)=>{ if(!card) return; card.style.transition='transform .22s ease, opacity .22s ease'; if(ok===null){ card.style.transform=''; card.classList.remove('sw-l','sw-r'); } else { card.style.transform=`translateX(${ok?120:-120}%) rotate(${ok?14:-14}deg)`; card.style.opacity='0'; setTimeout(()=>{ try{ flGrade(ok); }catch(e){} },200); } card=null; };
+  document.addEventListener('pointerdown',e=>{ const c=e.target.closest&&e.target.closest('#flCard'); if(!c||e.pointerType==='mouse') return; card=c; active=true; moved=false; sx=e.clientX; sy=e.clientY; dx=0; card.style.transition='none'; },{passive:true});
+  document.addEventListener('pointermove',e=>{ if(!active||!card) return; dx=e.clientX-sx; const dy=e.clientY-sy; if(!moved&&Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>10){ active=false; card.style.transform=''; card=null; return; } if(Math.abs(dx)>8) moved=true; if(!moved) return; if(!flShown) return; card.style.transform=`translateX(${dx}px) rotate(${dx/18}deg)`; card.classList.toggle('sw-r',dx>40); card.classList.toggle('sw-l',dx<-40); },{passive:true});
+  document.addEventListener('pointerup',()=>{ if(!active||!card){ active=false; return; } active=false; if(!moved) { card.style.transform=''; card=null; return; } if(!flShown){ card.style.transform=''; card=null; flShown=true; drawFlash(); return; } if(Math.abs(dx)>80) end(dx>0); else end(null); },{passive:true});
+  document.addEventListener('pointercancel',()=>{ active=false; end(null); },{passive:true});
+})();
+
+/* v76: night reading mode — a dark theme for reading at night. Saved on this device. */
+(function nightMode(){
+  const KEY='p2c-night', root=document.documentElement;
+  const get=()=>{ try{ return localStorage.getItem(KEY)==='1'; }catch(e){ return false; } };
+  const meta=()=>{ let m=document.querySelector('meta[name="theme-color"]'); if(!m){ m=document.createElement('meta'); m.name='theme-color'; document.head.appendChild(m); } m.content=root.hasAttribute('data-night')?'#111418':'#F7F8FB'; };
+  const apply=on=>{ if(on) root.setAttribute('data-night','1'); else root.removeAttribute('data-night'); meta(); const b=document.getElementById('nightBtn'); if(b){ b.setAttribute('aria-pressed',String(on)); b.querySelector('span').textContent=on?'Day mode':'Night mode'; } };
+  apply(get());
+  const add=()=>{ const box=document.querySelector('.side-actions'); if(!box||document.getElementById('nightBtn')) return;
+    const b=document.createElement('button'); b.type='button'; b.id='nightBtn'; b.className='side-btn';
+    b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg><span>Night mode</span>';
+    b.onclick=()=>{ const on=!root.hasAttribute('data-night'); try{ localStorage.setItem(KEY,on?'1':'0'); }catch(e){} apply(on); };
+    box.insertBefore(b,box.firstChild); apply(get()); };
+  add(); setTimeout(add,1500);
 })();
