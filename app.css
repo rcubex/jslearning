@@ -3623,7 +3623,8 @@ html:root:root[data-night] #app .aic-hx .hx-reset{background:transparent!importa
   html:has(#bottomBar)::after{content:"";display:block!important;opacity:1!important;position:fixed!important;top:auto!important;left:0!important;right:0!important;bottom:0!important;height:calc(96px + env(safe-area-inset-bottom,0px));z-index:899;pointer-events:none;background:linear-gradient(to bottom,rgba(238,242,250,0),rgba(238,242,250,.94) 30px,#EEF2FA 60px);transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .2s}
   :root[data-night]:has(#bottomBar)::after{background:linear-gradient(to bottom,rgba(14,17,22,0),rgba(14,17,22,.94) 30px,#0E1116 60px)!important;opacity:1!important}
   html:has(#bottomBar.bb-hide)::after{transform:translateY(100%);opacity:0!important}
-  :root.admin-mode::after,html:has(.gate:not([hidden]))::after,html:has(.top[hidden])::after,html:has(#app .cisa-exam)::after{display:none!important}
+  html.admin-mode:has(#bottomBar)::after,html:has(#bottomBar):has(.gate:not([hidden]))::after,html:has(#bottomBar):has(.top[hidden])::after,html:has(#bottomBar):has(#app .cisa-exam)::after{display:none!important}
+  :root.admin-mode main#app.wrap{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))!important}
   :root:root main#app.wrap{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))!important}
   #bottomBar.bb-hide{transform:translateY(calc(100% + 24px + env(safe-area-inset-bottom,0px)))!important}
 }
