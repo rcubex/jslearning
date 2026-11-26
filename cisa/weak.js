@@ -58,6 +58,9 @@ export function weakReport(cisa, refs) {
 
 /* ---------- exam-readiness forecast ---------- */
 const ds = d => new Date(d).toISOString().slice(0, 10);
+// v81: exam readiness only starts once the learner locks their CISA study plan; pace counts from the lock date.
+export function planLocked(cisa) { const l = (cisa || {}).planLock; return !!(l && l.locked); }
+export function lockedAt(cisa) { const l = (cisa || {}).planLock; const t = l && l.locked && l.at ? Date.parse(l.at) : NaN; return isNaN(t) ? null : t; }
 // Recover completion dates from activity events ("Completed topic 1A1 …") for topics ticked before v71 recorded dates.
 export function doneDatesFromEvents(events) {
   const o = {};
@@ -76,7 +79,9 @@ export function forecast(cisa, refs, now = Date.now(), extraDates = null) {
   // finish topics by exam minus review days
   const targetMs = examMs - reviewDays * DAY, daysToTarget = Math.max(0, Math.ceil((targetMs - now) / DAY));
   // pace: topics completed in the last 14 days (completion dates from C.completeAt if present, else the activity of logs)
-  const since = now - 14 * DAY;
+  const lockMs0 = lockedAt(C), lockMs = lockMs0 === null ? null : Math.floor(lockMs0 / DAY) * DAY; // from the start of the lock day
+  const since = lockMs ? Math.max(now - 14 * DAY, Math.min(lockMs, now)) : now - 14 * DAY;
+  const winDays = Math.max(1, (now - since) / DAY);
   const cAt = { ...(extraDates || {}), ...(C.completeAt || {}) };
   const estimated = !Object.keys(cAt).length;
   let recent = Object.entries(cAt).filter(([id, t]) => (C.complete || {})[id] && Date.parse(t) >= since).length;
@@ -85,16 +90,16 @@ export function forecast(cisa, refs, now = Date.now(), extraDates = null) {
     const daysStudied = new Set((C.logs || []).filter(l => Date.parse(l.date) >= since).map(l => String(l.date).slice(0, 10))).size;
     recent = Math.round(daysStudied * 0.8);
   }
-  const perDay = recent / 14;
+  const perDay = recent / winDays;
   const need = daysToTarget > 0 ? left / daysToTarget : left > 0 ? Infinity : 0;
   const finishMs = left === 0 ? now : perDay > 0 ? now + Math.ceil(left / perDay) * DAY : null;
   let status = 'ok', msg;
   if (left === 0) { status = 'done'; msg = 'All topics are done — spend the time left on mocks and your weak spots.'; }
-  else if (!perDay) { status = 'behind'; msg = `No topics completed in the last 2 weeks. You need about ${need === Infinity ? left : Math.ceil(need * 7)} topics a week to finish before the review period.`; }
+  else if (!perDay) { status = 'behind'; msg = `${lockMs && now - lockMs < 14 * DAY ? `No topics completed since you locked your plan on ${fmt(lockMs)}.` : 'No topics completed in the last 2 weeks.'} You need about ${need === Infinity ? left : Math.ceil(need * 7)} topics a week to finish before the review period.`; }
   else if (finishMs > examMs) { status = 'late'; msg = `At your current pace you finish on ${fmt(finishMs)} — after the exam (${fmt(examMs)}). You need about ${Math.ceil(need * 7)} topics a week; you're doing ${Math.round(perDay * 7 * 10) / 10}.`; }
   else if (finishMs > targetMs) { status = 'behind'; msg = `At your current pace you finish on ${fmt(finishMs)}, leaving fewer than ${reviewDays} review days before the exam. Aim for ${Math.ceil(need * 7)} topics a week.`; }
   else msg = `At your current pace you finish on ${fmt(finishMs)}, with ${Math.round((examMs - finishMs) / DAY)} days left for review before the exam on ${fmt(examMs)}.`;
   if (estimated && left > 0 && perDay > 0) msg += ' (Pace is estimated from your study days; it becomes exact as you tick off topics.)';
-  return { estimated, exam, examMs, daysLeft, total, done, left, perWeek: Math.round(perDay * 7 * 10) / 10, needPerWeek: need === Infinity ? left : Math.ceil(need * 7), finish: finishMs ? ds(finishMs) : null, status, msg, reviewDays };
+  return { estimated, exam, examMs, daysLeft, total, done, left, perWeek: Math.round(perDay * 7 * 10) / 10, needPerWeek: need === Infinity ? left : Math.ceil(need * 7), finish: finishMs ? ds(finishMs) : null, status, msg, reviewDays, since: ds(since), fromLock: !!lockMs && since === Math.min(lockMs, now) };
 }
 function fmt(ms) { const d = new Date(ms); return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', ...(d.getUTCFullYear() !== new Date().getUTCFullYear() ? { year: 'numeric' } : {}), timeZone: 'UTC' }); }

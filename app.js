@@ -233,8 +233,9 @@ function vDashboard(){
   <div id="goalSlot"><section class="ed-card rd-card rd-goal"><div class="rd-load">Loading your daily goal…</div></section></div>
   <div id="coachSlot"></div>
   ${todayCardHTML()}
-  <h3 class="ed-sect">Exam readiness <span>CISA · ${cDays} days to go</span></h3>
-  <div class="rd-grid" id="readySlot"><section class="ed-card rd-card"><div class="rd-load">Checking your exam pace…</div></section><section class="ed-card rd-card"><div class="rd-load">Finding your weak spots…</div></section></div>
+  <h3 class="ed-sect">Exam readiness <span>CISA · ${cisaLocked()?cDays+' days to go':'starts when you lock your plan'}</span></h3>
+  ${cisaLocked()?'':`<section class="ed-card rd-lockcta"><span class="rd-lock-ic" aria-hidden="true">🔒</span><div><b>Lock your CISA study plan to start tracking</b><p>Your exam pace, finish-date forecast and weak spots start counting from the day you lock your plan.</p></div><a class="btn primary" href="#cisa" data-cisa-tab="planner">Choose and lock plan</a></section>`}
+  <div class="rd-grid" id="readySlot"${cisaLocked()?'':' hidden'}><section class="ed-card rd-card"><div class="rd-load">Checking your exam pace…</div></section><section class="ed-card rd-card"><div class="rd-load">Finding your weak spots…</div></section></div>
   <h3 class="ed-sect">Your academies</h3>
   <div class="ed-acads">${[['#courses','--ok','<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.6 17M12 11.5l5.4 5.5"/></svg>','Technical Academy',p,`${lessonsDone()} of ${M.reduce((n,m)=>n+m.lessons.length,0)} lessons`],
            ['#grc','--signal','<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>','AI Compliance Academy',grcP,`${grcDone} of ${grcTotal} lessons`],
@@ -272,13 +273,13 @@ let fProv='all', fQ='';
 function vCourses(){
   const tl=M.reduce((a,m)=>a+m.lessons.length,0), tq=M.reduce((a,m)=>a+m.qs.length,0);
   app.innerHTML=`<div class="view">
-  <div class="view-head"><div class="eyebrow">Courses</div><h2>Five levels, beginner to expert</h2><p class="lede">${M.length} modules, ${tl} lessons and ${tq} checkpoint questions. Work through them in order, or filter to one cloud.</p></div>
-  <div class="filters">
-    ${[['all','All'],['net','Networking'],['aws','AWS'],['az','Azure'],['gcp','Google Cloud'],['oci','OCI']].map(([k,n])=>`<button class="fbtn" data-f="${k}" aria-pressed="${fProv===k}">${n}</button>`).join('')}
+  <div class="view-head crs-head"><div><div class="eyebrow">Courses</div><h2>Five levels, beginner to expert</h2><p class="crs-meta">${M.length} modules · ${tl} lessons · ${tq} checkpoint questions</p></div><button class="crs-reset" id="crsReset" type="button">↺ New attempt</button></div>
+  <div class="filters crs-filters">
+    <div class="crs-chips" role="group" aria-label="Filter by track">${[['all','All'],['net','Networking'],['aws','AWS'],['az','Azure'],['gcp','Google Cloud'],['oci','OCI']].map(([k,n])=>`<button class="fbtn" data-f="${k}" aria-pressed="${fProv===k}">${n}</button>`).join('')}</div>
     <input class="search" id="q" type="search" placeholder="Search lessons and terms" value="${esc(fQ)}" aria-label="Search lessons and terms">
   </div>
   <div id="toc"></div></div>`;
-  const resetBtn=document.createElement('button');resetBtn.className='btn small';resetBtn.textContent='Start new technical learning attempt';resetBtn.style.marginBottom='14px';app.querySelector('#toc').before(resetBtn);
+  const resetBtn=document.getElementById('crsReset');resetBtn.title='Start new technical learning attempt';
   resetBtn.onclick=async()=>{if(!(await uiConfirm('Start a fresh technical course attempt? Completion and quiz progress will restart, but your lesson notes and study log will remain. A history backup is saved in this browser.')))return;const k='p2c-technical-history-'+(v3uid||'local');let hist=[];try{hist=JSON.parse(localStorage.getItem(k)||'[]')}catch{}hist.push({at:new Date().toISOString(),lessons:S.ls,quizzes:S.qz});localStorage.setItem(k,JSON.stringify(hist));S.ls={};S.qz={};save();vCourses();};
   drawToc();
   app.querySelectorAll('.fbtn').forEach(b=>b.onclick=()=>{fProv=b.dataset.f; app.querySelectorAll('.fbtn').forEach(x=>x.setAttribute('aria-pressed',x===b)); drawToc();});
@@ -294,7 +295,7 @@ function drawToc(){
   };
   const html=LV.map(L=>{const ms=M.filter(m=>m.lv===L.n&&match(m)); if(!ms.length) return ''; const s=levelStats(L.n); return `
     <section class="lv-sec" id="lv-${L.n}">
-      <div class="lv-head"><span class="lv-num">${pad(L.n)}</span><div><div class="eyebrow">Level ${L.n} · ${L.tier}</div><h3>${L.name}</h3><p>${esc(L.d)}</p></div>
+      <div class="lv-head lv-h2"><span class="lv-num">${pad(L.n)}</span><div class="lv-txt"><div class="eyebrow">Level ${L.n} · ${L.tier}</div><h3>${L.name}</h3><p>${esc(L.d)}</p></div>
         <div class="lvp"><div class="track"><i style="width:${s.p}%;background:var(--ok)"></i></div><div>${s.done}/${s.ms.length} modules · ${s.p}%</div></div></div>
       <div class="cards">${ms.map(card).join('')}</div>
     </section>`;}).join('');
@@ -520,7 +521,7 @@ function vGRC(){
  const levels=AIC_LEVELS.map(L=>{const ms=GRC.filter(m=>m.lv===L.lv);if(!ms.length)return '';const n=ms.reduce((a,m)=>a+m.lessons.length,0),d=ms.reduce((a,m)=>a+m.lessons.filter((l,j)=>grcState[m.id+'-l'+String(j+1).padStart(2,'0')]?.done).length,0),lp=n?Math.round(d/n*100):0;
    return `<section class="aic-level lv${L.lv}" id="aic-lv${L.lv}"><header class="aic-lh"><span class="aic-badge lv${L.lv}">${v3safe(L.tag)}</span><div><h3>${v3safe(L.name)}</h3><p>${v3safe(L.blurb)}</p></div><div class="aic-lp"><b>${lp}%</b><span>${d}/${n} lessons</span></div></header><div class="cards">${ms.map(card).join('')}</div></section>`;}).join('');
  const nextM=GRC.find(m=>modPct(m)<100);
- app.innerHTML=`<div class="view">${aicSubnav('grc')}<section class="cockpit grc-hero aic-hero"><div class="hero-top"><div><div class="eyebrow">Independent academy · Beginner to Hero</div><h1>AI Compliance Academy</h1><p class="lede2">How AI works, the laws and standards that govern it (EU AI Act, NIST AI RMF, ISO/IEC 42001, GDPR, UAE and India), and how to assess, audit and lead an AI governance programme. Built for GRC professionals; mapped to the IAPP AIGP body of knowledge and ISO/IEC 42001.</p><div class="next">${nextM?`<a class="btn" href="#${nextM.id}">${completed?'Continue':'Start'}: ${v3safe(nextM.name)} →</a>`:''}<button class="btn ghost" id="grcReset" type="button">Start a new attempt</button></div><nav class="aic-jump" aria-label="Levels">${AIC_LEVELS.map(L=>`<button type="button" data-lvjump="${L.lv}">${v3safe(L.tag==='Basics'?'How AI works':L.tag+' · '+L.name)}</button>`).join('')}</nav></div><div class="ring-big">${ringSVG(148,62,12,p,'rgba(255,255,255,.22)','#fff')}<div class="ring-lbl"><b>${p}%</b><span>${completed}/${total} read</span></div></div></div></section>
+ app.innerHTML=`<div class="view">${aicSubnav('grc')}<section class="cockpit grc-hero aic-hero aic-hx"><div class="hx-top"><div class="hx-title"><div class="eyebrow">Independent academy · Beginner to Hero</div><h1>AI Compliance Academy</h1><p class="hx-sub">${GRC.length} modules · ${total} lessons · mapped to IAPP AIGP and ISO/IEC 42001</p></div><div class="hx-ring">${ringSVG(148,62,12,p,'rgba(255,255,255,.22)','#fff')}<div class="ring-lbl"><b>${p}%</b><span>${completed}/${total}</span></div></div></div><div class="hx-act">${nextM?`<a class="btn primary hx-go" href="#${nextM.id}"><span>${completed?'Continue':'Start'}</span><b>${v3safe(nextM.name)}</b><i aria-hidden="true">→</i></a>`:''}<button class="hx-reset" id="grcReset" type="button">↺ Start a new attempt</button></div><nav class="aic-jump hx-lv" aria-label="Levels">${AIC_LEVELS.map(L=>{const ms=GRC.filter(m=>m.lv===L.lv);const n=ms.reduce((a,m)=>a+m.lessons.length,0),d=ms.reduce((a,m)=>a+m.lessons.filter((l,j)=>grcState[m.id+'-l'+String(j+1).padStart(2,'0')]?.done).length,0),lp=n?Math.round(d/n*100):0;return `<button type="button" data-lvjump="${L.lv}"><small>${v3safe(L.tag==='Basics'?'Basics':L.tag)}</small><b>${v3safe(L.tag==='Basics'?'How AI works':L.name)}</b><i style="--p:${lp}%"></i></button>`}).join('')}</nav></section>
  ${aicReviewStrip()}${aicToolsStrip()}
  ${levels}</div>`;
  app.querySelectorAll('[data-lvjump]').forEach(b=>b.onclick=()=>document.getElementById('aic-lv'+b.dataset.lvjump)?.scrollIntoView({behavior:'smooth',block:'start'}));
@@ -738,7 +739,7 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='80';
+const APP_V='81';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){
@@ -811,6 +812,7 @@ function weakCardHTML(w){
    <p class="cisa-mini">From ${w.answered} answered questions in mocks, quizzes and your logs${w.openMistakes?` · ${w.openMistakes} open mistakes`:''}.</p>
    <a class="btn" href="#cisa" data-cisa-tab="mistakes">Review mistakes →</a></section>`;
 }
+function cisaLocked(){const l=(S&&S.cisa||{}).planLock;return !!(l&&l.locked);}
 async function fillReadiness(){
   const slot=document.getElementById('readySlot'); if(!slot) return;
   try{
@@ -819,6 +821,7 @@ async function fillReadiness(){
     const by=await studyMinutesByDay(); const el=document.getElementById('readySlot'); if(!el) return;
     const C=S.cisa||{};
     const gs=document.getElementById('goalSlot'); if(gs) gs.innerHTML=goalCardHTML(by);
+    if(!cisaLocked()){ if(gs) el.remove(); else el.innerHTML=goalCardHTML(by), el.hidden=false; return; }
     el.innerHTML=(gs?'':goalCardHTML(by))+forecastCardHTML(WeakMod.forecast(C,weakRefs,Date.now(),WeakMod.doneDatesFromEvents(actEvents)))+weakCardHTML(WeakMod.weakReport(C,weakRefs));
     el.querySelectorAll('[data-cisa-tab]').forEach(a=>a.addEventListener('click',()=>{window.__cisaTab=a.dataset.cisaTab;}));
   }catch(e){ console.warn('readiness',e); const el=document.getElementById('readySlot'); if(el) el.remove(); }
@@ -847,7 +850,6 @@ function todayCardHTML(){const t=today(),fs=flashStats('All');const studied=S.lo
   <a class="td-row" href="#flash"><span class="td-ic" style="--c:#AF52DE"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="14" height="13" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v11"/></svg></span><span class="td-txt"><b>${fs.due+fs.newLeft}</b><small>flashcards ready${fs.due?` · ${fs.due} due`:''}</small></span><span class="td-go">›</span></a>
   ${(()=>{const n=aicReviewDue();return n?`<a class="td-row" href="#aic-review"><span class="td-ic" style="--c:#5856D6"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg></span><span class="td-txt"><b>${n}</b><small>AI modules ready for review</small></span><span class="td-go">›</span></a>`:'';})()}
   <a class="td-row" href="#cisa" data-cisa-tab="recorder"><span class="td-ic" style="--c:#34C759"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></span><span class="td-txt"><b id="tdMin" data-base="${studied}">${studied}</b><small>minutes studied today · focus timer</small></span><span class="td-go">›</span></a>
-  <div class="td-row td-backup ${due?'is-due':''}"><span class="td-ic" style="--c:${due?'#FF9F0A':'#0A84FF'}"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg></span><span class="td-txt"><b>${days===null?'No backup yet':days===0?'Backed up today':days+' day'+(days===1?'':'s')+' ago'}</b><small>${due?'Weekly backup recommended':'Backup of all progress'}</small></span><span class="td-btns"><button type="button" class="td-btn" id="bkDl">Download</button><button type="button" class="td-btn ghost" id="bkRs">Restore</button><input type="file" id="bkFile" accept="application/json,.json" hidden></span></div>
  </div></section>`;}
 async function wireToday(){
  app.querySelectorAll('[data-cisa-tab]').forEach(a=>a.addEventListener('click',()=>{window.__cisaTab=a.dataset.cisaTab;}));
@@ -928,16 +930,28 @@ function cmdkDraw(){const list=document.getElementById('cmdkList');cmdkRes=cmdkS
  list.innerHTML=cmdkRes.length?cmdkRes.map((x,i)=>`<button type="button" class="cmdk-item ${i===cmdkSel?'on':''}" role="option" aria-selected="${i===cmdkSel}" data-i="${i}"><span class="cmdk-k">${esc(x.k)}</span><span class="cmdk-t"><b>${esc(x.t)}</b>${x.s?`<small>${esc(String(x.s).slice(0,110))}</small>`:''}</span></button>`).join(''):'<div class="cmdk-empty">No matches</div>';
  list.querySelector('.cmdk-item.on')?.scrollIntoView({block:'nearest'});}
 function cmdkOpen(){if(!dbRef||IS_ADMIN)return;const el=document.getElementById('cmdk');el.hidden=false;document.documentElement.classList.add('ap-lock');const inp=document.getElementById('cmdkInput');inp.value='';cmdkSel=0;cmdkDraw();setTimeout(()=>inp.focus(),20);loadCisaTopics().then(()=>{cmdkItems=null;if(!el.hidden)cmdkDraw();});}
-function cmdkClose(){const el=document.getElementById('cmdk');if(el.hidden)return;el.hidden=true;document.documentElement.classList.remove('ap-lock');}
+function cmdkClose(){const el=document.getElementById('cmdk');xsHide();if(el.hidden)return;el.hidden=true;el.classList.remove('xs-mode');document.documentElement.classList.remove('ap-lock');}
 function cmdkRun(i){const x=cmdkRes[i];if(!x)return;cmdkClose();document.getElementById('sideNav')?.classList.remove('open');x.run();}
 document.getElementById('cmdkInput').addEventListener('input',()=>{cmdkSel=0;cmdkDraw();});
 document.getElementById('cmdkList').addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(b)cmdkRun(+b.dataset.i);});
 document.getElementById('cmdk').addEventListener('click',e=>{if(e.target.hasAttribute('data-cmdk-close'))cmdkClose();});
 document.getElementById('cmdkBtn').addEventListener('click',cmdkOpen);
 document.getElementById('bbSearch').addEventListener('click',cmdkOpen);
+/* v81: expanding search (header icon on phones, top-right button on desktop) + Messages in the bottom bar / sidebar */
+function xsHide(){const x=document.getElementById('xsearch');if(!x||x.hidden)return;x.hidden=true;document.documentElement.classList.remove('xs-open');document.getElementById('hdrSearchBtn')?.setAttribute('aria-expanded','false');}
+function xsOpen(){if(!dbRef||IS_ADMIN)return;cmdkOpen();const c=document.getElementById('cmdk');c.classList.add('xs-mode');const x=document.getElementById('xsearch'),inp=document.getElementById('xsearchInput');x.hidden=false;inp.value='';document.documentElement.classList.add('xs-open');document.getElementById('hdrSearchBtn')?.setAttribute('aria-expanded','true');requestAnimationFrame(()=>x.classList.add('in'));setTimeout(()=>inp.focus(),30);}
+document.getElementById('xsearchInput').addEventListener('input',e=>{const ci=document.getElementById('cmdkInput');ci.value=e.target.value;cmdkSel=0;cmdkDraw();});
+document.getElementById('xsearchClose').addEventListener('click',()=>{cmdkClose();});
+document.getElementById('hdrSearchBtn').addEventListener('click',()=>{document.getElementById('xsearch').hidden?xsOpen():cmdkClose();});
+document.getElementById('deskSearchBtn').addEventListener('click',xsOpen);
+document.getElementById('cmdkBtn').removeEventListener('click',cmdkOpen);document.getElementById('cmdkBtn').addEventListener('click',xsOpen);
+document.getElementById('bbMsg').addEventListener('click',()=>{if(IS_ADMIN){go('admin-messages');return;}go('messages');});
+document.getElementById('sideMsgBtn').addEventListener('click',()=>{if(IS_ADMIN){go('admin-messages');return;}go('messages');});
+(function msgBadge(){const sync=()=>{const fb=document.querySelector('.lc-fab b');const n=fb&&!fb.hidden?(parseInt(fb.textContent,10)||0):0;document.querySelectorAll('.msg-badge').forEach(b=>{b.hidden=!n;b.textContent=n>99?'99+':String(n);});};
+ try{new MutationObserver(()=>{clearTimeout(msgBadge.t);msgBadge.t=setTimeout(sync,50);}).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['hidden']});}catch(e){} sync();})();
 document.getElementById('bbMore').addEventListener('click',()=>document.getElementById('menuBtn')?.click());
 document.addEventListener('keydown',e=>{const open=!document.getElementById('cmdk').hidden;
- if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();open?cmdkClose():cmdkOpen();return;}
+ if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();open?cmdkClose():xsOpen();return;}
  if(!open)return;if(e.key==='Escape'){e.preventDefault();cmdkClose();}else if(e.key==='ArrowDown'){e.preventDefault();cmdkSel=Math.min(cmdkRes.length-1,cmdkSel+1);cmdkDraw();}else if(e.key==='ArrowUp'){e.preventDefault();cmdkSel=Math.max(0,cmdkSel-1);cmdkDraw();}else if(e.key==='Enter'){e.preventDefault();cmdkRun(cmdkSel);}});
 
 let IS_ADMIN=false;
@@ -1579,4 +1593,18 @@ try{ let lnT=null; new MutationObserver(()=>{ clearTimeout(lnT); lnT=setTimeout(
     b.onclick=()=>{ const on=!root.hasAttribute('data-night'); try{ localStorage.setItem(KEY,on?'1':'0'); }catch(e){} apply(on); };
     box.insertBefore(b,box.firstChild); apply(get()); };
   add(); setTimeout(add,1500);
+})();
+
+
+/* v81: bottom bar hides while scrolling and comes back when scrolling stops (phones) */
+(function autoHideBar(){
+  let t=null,lastY=window.scrollY;
+  const bar=()=>document.getElementById('bottomBar');
+  window.addEventListener('scroll',()=>{
+    if(window.innerWidth>999) return;
+    const y=window.scrollY, b=bar(); if(!b) return;
+    if(Math.abs(y-lastY)>6 && y>60) b.classList.add('bb-hide');
+    lastY=y; clearTimeout(t);
+    t=setTimeout(()=>b.classList.remove('bb-hide'),420);
+  },{passive:true});
 })();

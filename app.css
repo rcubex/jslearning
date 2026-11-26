@@ -3420,3 +3420,211 @@ body{touch-action:manipulation}          /* removes double-tap zoom; pinch-zoom 
 /* v80: daily goal card without the warning line — keep it compact */
 #app .rd-goal{padding-bottom:18px!important}
 #app .rd-goal .rd-goal-body>div:last-child>p:last-child{margin-bottom:0}
+
+/* ===================== v81: Messages ⇄ Search swap, expanding search ===================== */
+/* the floating Messages button is replaced by Messages in the bottom bar (phone) and sidebar (desktop) */
+:root:root .lc-fab{display:none!important}
+.msg-badge{position:absolute;top:2px;right:calc(50% - 22px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#FF3B30;color:#fff;font-size:11px;font-weight:700;line-height:18px;text-align:center;box-shadow:0 0 0 2px #fff}
+#bbMsg{position:relative}
+#bbMsg svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linejoin:round}
+html.admin-mode #bbMsg,html.admin-mode #sideMsgBtn,html.admin-mode #hdrSearchBtn,html.admin-mode #deskSearchBtn{display:none!important}
+/* header search icon (phones) */
+.hdr-search-btn{display:none}
+@media (max-width:999px){
+  .hdr-search-btn{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;border:1px solid rgba(10,37,64,.10);background:rgba(255,255,255,.95);color:#0A84FF;cursor:pointer;margin-left:auto;margin-right:10px;flex:none}
+  .hdr-search-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+  #topbar .side-head{display:flex;align-items:center}
+  #sideMsgBtn{display:none!important}
+  .desk-search-btn{display:none!important}
+}
+/* desktop: Messages at the top of the sidebar; search button top-right of the page */
+@media (min-width:1000px){
+  #bbMsg{display:none}
+  #cmdkBtn{display:none!important}
+  .side-msg{position:relative;display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:0 12px;border-radius:12px;border:1px solid rgba(10,37,64,.10);background:rgba(255,255,255,.8);color:var(--ink,#0A2540);font:inherit;font-size:14.5px;font-weight:600;cursor:pointer;margin-bottom:6px}
+  .side-msg svg{width:18px;height:18px;fill:none;stroke:#0A84FF;stroke-width:2;stroke-linejoin:round}
+  .side-msg .msg-badge{position:static;margin-left:auto;box-shadow:none}
+  #tabs .lc-navbtn{display:none!important}
+  .desk-search-btn{position:fixed;bottom:24px;right:24px;z-index:60;display:flex;align-items:center;gap:8px;height:42px;padding:0 14px;border-radius:999px;border:1px solid rgba(10,37,64,.10);background:rgba(255,255,255,.92);box-shadow:0 6px 18px -8px rgba(10,37,64,.3);color:var(--muted);font:inherit;font-size:14.5px;cursor:pointer;transition:box-shadow .2s}
+  .desk-search-btn:hover{box-shadow:0 8px 22px -8px rgba(10,37,64,.4)}
+  .desk-search-btn svg{width:18px;height:18px;fill:none;stroke:#0A84FF;stroke-width:2.2;stroke-linecap:round}
+  .desk-search-btn kbd{font:inherit;font-size:12px;padding:1px 6px;border-radius:6px;border:1px solid rgba(10,37,64,.15)}
+  html.xs-open .desk-search-btn{opacity:0;pointer-events:none}
+}
+/* the expanding bar */
+.xsearch{position:fixed;z-index:1001;top:calc(env(safe-area-inset-top,0px) + 8px);left:10px;right:10px}
+@media (min-width:1000px){.xsearch{left:auto;right:24px;top:auto;bottom:20px;width:min(560px,calc(100vw - var(--side,250px) - 60px))}}
+.xsearch-bar{display:flex;align-items:center;gap:10px;height:50px;padding:0 6px 0 14px;border-radius:16px;background:#fff;border:1px solid rgba(10,37,64,.12);box-shadow:0 14px 34px -12px rgba(10,37,64,.4);transform-origin:right center;transform:scaleX(.15);opacity:0;transition:transform .28s cubic-bezier(.2,.9,.25,1.05),opacity .2s}
+.xsearch.in .xsearch-bar{transform:none;opacity:1}
+.xsearch-bar svg{width:20px;height:20px;flex:none;fill:none;stroke:#0A84FF;stroke-width:2.2;stroke-linecap:round}
+.xsearch-bar input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:16px;color:var(--ink,#0A2540)}
+.xsearch-bar input::-webkit-search-cancel-button{display:none}
+.xsearch-x{flex:none;border:0;background:transparent;color:#0A84FF;font:inherit;font-size:15px;font-weight:600;padding:8px 10px;cursor:pointer}
+/* results drop down under the bar */
+.cmdk.xs-mode{align-items:flex-start!important}
+.cmdk.xs-mode .cmdk-input{display:none!important}
+.cmdk.xs-mode .cmdk-backdrop{background:rgba(10,20,40,.18)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.cmdk.xs-mode .cmdk-panel{position:fixed!important;top:calc(env(safe-area-inset-top,0px) + 66px)!important;left:10px!important;right:10px!important;width:auto!important;max-height:calc(100dvh - 90px)!important;border-radius:16px!important;margin:0!important;background:#fff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+@media (min-width:1000px){.cmdk.xs-mode .cmdk-panel{left:auto!important;right:24px!important;top:auto!important;bottom:80px!important;width:min(560px,calc(100vw - var(--side,250px) - 60px))!important;max-height:70vh!important}}
+/* night */
+:root:root[data-night] .hdr-search-btn,:root:root[data-night] .desk-search-btn,:root:root[data-night] .side-msg{background:#232833!important;border-color:rgba(255,255,255,.12)!important;color:#E8EAF0!important}
+:root:root[data-night] .xsearch-bar,:root:root[data-night] .cmdk.xs-mode .cmdk-panel{background:#1B1F27!important;border-color:rgba(255,255,255,.12)!important}
+:root:root[data-night] .xsearch-bar input{color:#E8EAF0}
+:root:root[data-night] .msg-badge{box-shadow:0 0 0 2px #1B1F27}
+.xsearch{z-index:9600!important}
+/* v81: bottom bar auto-hide */
+@media (max-width:999px){
+  #bottomBar{transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .2s}
+  #bottomBar.bb-hide{transform:translateY(calc(100% + 24px + env(safe-area-inset-bottom,0px)));opacity:0;pointer-events:none}
+}
+/* v81: phone sign-in — card centred in the screen and a little smaller */
+@media (max-width:600px){
+  :root:root .gate.lockgate{justify-content:center!important;gap:14px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 40px)!important}
+  :root:root .gate.lockgate .lk-clock{margin:0!important}
+  :root:root .gate.lockgate .lk-time{font-size:56px!important}
+  :root:root .gate.lockgate .lk-date{font-size:14px!important}
+  :root:root .gate.lockgate .lk-card{width:min(330px,calc(100vw - 48px))!important;margin:6px auto 0!important;padding:18px 18px 16px!important;border-radius:22px!important}
+  :root:root .gate.lockgate .lk-head-row{margin-bottom:12px!important}
+  :root:root .gate.lockgate .lk-logo{width:42px!important;height:42px!important;border-radius:12px!important}
+  :root:root .gate.lockgate .lk-field>span:first-child{font-size:13px!important}
+  :root:root .gate.lockgate .lk-input{min-height:46px!important}
+  :root:root .gate.lockgate .lk-go{min-height:46px!important;font-size:16px!important}
+  :root:root .gate.lockgate .gate-msg:empty{display:none}
+  :root:root .gate.lockgate:has(.lk-note:not([hidden]):not(.out)){padding-top:calc(env(safe-area-inset-top,0px) + 110px)!important}
+}
+
+/* v81 · custom checkboxes (CISA topic lists, planner, settings) — replaces the native box that rendered as a black blob on iOS */
+:root:root #app input[type=checkbox]:not(.sw):not([role=switch]){-webkit-appearance:none!important;appearance:none!important;flex:0 0 auto;width:24px!important;height:24px!important;min-width:24px;min-height:0!important;margin:0!important;padding:0!important;border-radius:8px!important;border:2px solid color-mix(in srgb,var(--ink,#202334) 28%,transparent)!important;background:var(--surface,#fff)!important;box-shadow:none!important;transform:none!important;cursor:pointer;display:inline-grid;place-content:center;transition:background .15s,border-color .15s,box-shadow .15s;vertical-align:middle}
+:root:root #app input[type=checkbox]:not(.sw):not([role=switch])::before{content:"";width:12px;height:12px;transform:scale(0);transition:transform .14s ease;background:#fff;clip-path:polygon(14% 52%,0 66%,38% 100%,100% 22%,86% 8%,38% 72%)}
+:root:root #app input[type=checkbox]:not(.sw):not([role=switch]):checked{background:var(--ci,var(--accent,#0a84ff))!important;border-color:var(--ci,var(--accent,#0a84ff))!important}
+:root:root #app input[type=checkbox]:not(.sw):not([role=switch]):checked::before{transform:scale(1)}
+:root:root #app input[type=checkbox]:not(.sw):not([role=switch]):focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--ci,var(--accent,#0a84ff)) 30%,transparent)!important}
+:root:root #app input[type=checkbox]:not(.sw):not([role=switch]):active{transform:scale(.92)!important}
+:root:root[data-night] #app input[type=checkbox]:not(.sw):not([role=switch]){background:#12161C!important;border-color:rgba(255,255,255,.28)!important}
+:root:root[data-night] #app input[type=checkbox]:not(.sw):not([role=switch]):checked{background:var(--ci,var(--accent,#0a84ff))!important;border-color:var(--ci,var(--accent,#0a84ff))!important}
+:root:root #app .cisa-check{flex-direction:row!important;align-items:flex-start!important;gap:12px!important}
+:root:root #app .cisa-task .cisa-check>input{margin-top:2px!important}
+:root:root #app .cisa-task.done .cisa-check strong{text-decoration:line-through;text-decoration-color:color-mix(in srgb,currentColor 40%,transparent);opacity:.7}
+
+/* v81 · AI Compliance Academy hero (compact) */
+:root:root #app .aic-hx{display:flex!important;flex-direction:column;gap:16px;padding:22px 24px!important;overflow:hidden}
+:root:root #app .aic-hx .hx-top{display:flex;align-items:center;gap:18px;justify-content:space-between}
+:root:root #app .aic-hx .hx-title{min-width:0}
+:root:root #app .aic-hx h1{margin:4px 0 6px!important;font-size:clamp(26px,3.2vw,38px)!important;line-height:1.1!important}
+:root:root #app .aic-hx .hx-sub{margin:0;font-size:13.5px;opacity:.72;display:block!important}
+:root:root #app .aic-hx .hx-ring{position:relative;flex:0 0 auto;width:104px;height:104px}
+:root:root #app .aic-hx .hx-ring svg{width:100%;height:100%}
+:root:root #app .aic-hx .hx-ring .ring-lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+:root:root #app .aic-hx .hx-ring .ring-lbl b{font-size:24px;line-height:1}
+:root:root #app .aic-hx .hx-ring .ring-lbl span{font-size:11px;opacity:.65;letter-spacing:.02em}
+:root:root #app .aic-hx .hx-act{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+:root:root #app .aic-hx .hx-go{display:inline-flex!important;align-items:center;gap:8px;min-height:46px;padding:0 18px!important;border-radius:14px!important;background:#0A84FF!important;color:#fff!important;border:0!important;box-shadow:0 8px 20px -10px rgba(10,132,255,.8)!important;font-size:15px;max-width:100%;text-decoration:none}
+:root:root #app .aic-hx .hx-go span{font-weight:500;opacity:.85}
+:root:root #app .aic-hx .hx-go b{font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+:root:root #app .aic-hx .hx-go i{font-style:normal;flex:none}
+:root:root #app .aic-hx .hx-reset{border:0!important;background:transparent!important;box-shadow:none!important;padding:6px 2px!important;min-height:0!important;font:inherit;font-size:13.5px;color:inherit;opacity:.65;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(127,127,127,.4)}
+:root:root #app .aic-hx .hx-reset:hover{opacity:1}
+:root:root #app .aic-hx .hx-lv{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:2px 0 0!important;padding:0!important;flex-wrap:nowrap!important}
+:root:root #app .aic-hx .hx-lv button{display:flex!important;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;min-width:0;padding:10px 12px 12px!important;border-radius:14px!important;border:1px solid rgba(10,37,64,.10)!important;background:rgba(255,255,255,.6)!important;color:inherit!important;box-shadow:none!important;position:relative;overflow:hidden;cursor:pointer;min-height:0!important;height:auto!important;transition:background .15s,transform .15s}
+:root:root #app .aic-hx .hx-lv button:hover{background:#fff!important;transform:translateY(-1px)}
+:root:root #app .aic-hx .hx-lv small{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#0A84FF}
+:root:root #app .aic-hx .hx-lv b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+:root:root #app .aic-hx .hx-lv i{position:absolute;left:0;bottom:0;height:3px;width:100%;background:rgba(10,37,64,.08)}
+:root:root #app .aic-hx .hx-lv i::after{content:"";position:absolute;inset:0;width:var(--p);background:#30D158;border-radius:0 3px 3px 0}
+@media (max-width:999px){
+  :root:root #app .aic-hx .hx-lv{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:600px){
+  :root:root #app .aic-hx{padding:18px 16px!important;gap:14px;border-radius:20px!important}
+  :root:root #app .aic-hx .hx-top{align-items:flex-start;gap:12px}
+  :root:root #app .aic-hx h1{font-size:26px!important}
+  :root:root #app .aic-hx .hx-sub{font-size:12.5px}
+  :root:root #app .aic-hx .hx-ring{width:72px;height:72px}
+  :root:root #app .aic-hx .hx-ring .ring-lbl b{font-size:18px}
+  :root:root #app .aic-hx .hx-ring .ring-lbl span{display:none}
+  :root:root #app .aic-hx .hx-act{flex-direction:column;align-items:stretch;gap:6px}
+  :root:root #app .aic-hx .hx-go{justify-content:flex-start;width:100%}
+  :root:root #app .aic-hx .hx-go b{flex:1}
+  :root:root #app .aic-hx .hx-reset{align-self:center}
+  :root:root #app .aic-hx .hx-lv{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px!important;padding:0 16px 2px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  :root:root #app .aic-hx .hx-lv::-webkit-scrollbar{display:none}
+  :root:root #app .aic-hx .hx-lv button{flex:0 0 auto;width:132px;scroll-snap-align:start}
+}
+:root:root[data-night] #app .aic-hx .hx-lv button{background:#232833!important;border-color:rgba(255,255,255,.12)!important;color:#E8EAF0!important}
+:root:root[data-night] #app .aic-hx .hx-lv small{color:#64B5FF}
+:root:root[data-night] #app .aic-hx .hx-lv i{background:rgba(255,255,255,.1)}
+:root:root #app .aic-hx .hx-ring circle:first-child{stroke:rgba(10,37,64,.10)!important}
+:root:root #app .aic-hx .hx-ring .nf{stroke:#0A84FF!important}
+:root:root[data-night] #app .aic-hx .hx-ring circle:first-child{stroke:rgba(255,255,255,.12)!important}
+:root:root[data-night] #app .aic-hx .hx-ring .nf{stroke:#64B5FF!important}
+
+/* v81 · Courses "Five levels" page */
+:root:root #app .crs-head{display:flex!important;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px!important}
+:root:root #app .crs-head h2{margin:2px 0 4px!important}
+:root:root #app .crs-meta{margin:0;font-size:13.5px;color:var(--muted);display:block!important}
+:root:root #app .crs-reset{flex:none;border:1px solid rgba(10,37,64,.12)!important;background:rgba(255,255,255,.7)!important;color:var(--ink-2,inherit)!important;border-radius:999px!important;padding:7px 13px!important;min-height:0!important;font:inherit;font-size:13px;font-weight:500;cursor:pointer;box-shadow:none!important;white-space:nowrap}
+:root:root #app .crs-reset:hover{background:#fff!important}
+:root:root #app .crs-filters{display:flex!important;align-items:center;gap:10px;flex-wrap:nowrap!important;margin:0 0 18px!important}
+:root:root #app .crs-chips{display:flex;gap:6px;flex:0 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+:root:root #app .crs-chips::-webkit-scrollbar{display:none}
+:root:root #app .crs-chips .fbtn{flex:none;white-space:nowrap;min-height:36px;padding:0 14px!important;margin:0!important}
+:root:root #app .crs-filters .search{flex:1 1 220px;min-width:0;margin:0!important;height:38px!important;min-height:0!important}
+/* level header: compact number badge, no dead space */
+:root:root #app .lv-h2{display:grid!important;grid-template-columns:auto minmax(0,1fr) 220px;align-items:center;gap:16px;padding:16px 20px!important;min-height:0!important}
+:root:root #app .lv-h2 .lv-num{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;font-size:20px!important;line-height:1!important;font-weight:700;background:color-mix(in srgb,#0A84FF 12%,transparent);color:#0A84FF;margin:0!important}
+:root:root #app .lv-h2 .lv-txt h3{margin:2px 0 3px!important;font-size:19px!important}
+:root:root #app .lv-h2 .lv-txt p{margin:0!important;font-size:13.5px;color:var(--muted)}
+:root:root #app .lv-h2 .lvp{margin:0!important;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted);font-family:inherit!important;text-align:right}
+:root:root #app .lv-h2 .lvp .track{height:6px;border-radius:99px;overflow:hidden;background:rgba(10,37,64,.08)}
+:root:root #app .lv-h2 .lvp .track i{display:block;height:100%;border-radius:99px}
+@media (max-width:999px){
+  :root:root #app .crs-filters{flex-direction:column;align-items:stretch}
+  :root:root #app .crs-chips{margin:0;padding:0}
+  :root:root #app .crs-filters .search{flex:none;width:100%}
+}
+@media (max-width:640px){
+  :root:root #app .crs-head h2{font-size:26px!important;line-height:1.12!important}
+  :root:root #app .crs-meta{font-size:12.5px}
+  :root:root #app .lv-h2{grid-template-columns:auto minmax(0,1fr);gap:4px 12px;padding:14px 16px!important}
+  :root:root #app .lv-h2 .lv-num{width:42px;height:42px;font-size:16px!important;border-radius:13px;align-self:start}
+  :root:root #app .lv-h2 .lv-txt h3{font-size:17px!important}
+  :root:root #app .lv-h2 .lvp{grid-column:1/-1;flex-direction:row-reverse;align-items:center;gap:10px;margin-top:8px!important;text-align:left;white-space:nowrap}
+  :root:root #app .lv-h2 .lvp .track{flex:1}
+}
+:root:root[data-night] #app .crs-reset{background:#232833!important;border-color:rgba(255,255,255,.12)!important;color:#E8EAF0!important}
+:root:root[data-night] #app .lv-h2 .lv-num{background:rgba(100,181,255,.14);color:#64B5FF}
+:root:root[data-night] #app .lv-h2 .lvp .track{background:rgba(255,255,255,.1)}
+:root:root #app .view>.crs-head .crs-meta{color:rgba(10,37,64,.62)!important;-webkit-text-fill-color:currentColor!important;background:none!important;opacity:1!important}
+:root:root[data-night] #app .view>.crs-head .crs-meta{color:rgba(232,234,240,.65)!important}
+:root:root #app .lv-h2 .lvp,:root:root #app .lv-h2 .lvp *{font-family:var(--f-body,inherit)!important;letter-spacing:0!important}
+html:root:root[data-night] #app .aic-hx a.hx-go.btn{background:#0A84FF!important;color:#fff!important;border:0!important}
+html:root:root[data-night] #app .aic-hx .hx-lv button small{color:#64B5FF!important}
+html:root:root[data-night] #app .aic-hx .hx-reset{background:transparent!important;color:#C9CED8!important;border:0!important}
+
+/* v81 · exam readiness waits for a locked CISA plan */
+:root:root #app .rd-lockcta{display:flex;align-items:center;gap:16px;padding:18px 20px!important;margin-bottom:6px}
+:root:root #app .rd-lockcta .rd-lock-ic{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:rgba(10,132,255,.12);font-size:22px}
+:root:root #app .rd-lockcta div{flex:1;min-width:0}
+:root:root #app .rd-lockcta b{display:block;font-size:15.5px;margin-bottom:3px}
+:root:root #app .rd-lockcta p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.45}
+:root:root #app .rd-lockcta .btn{flex:none;white-space:nowrap}
+@media (max-width:640px){:root:root #app .rd-lockcta{flex-wrap:wrap;gap:12px;padding:16px!important}:root:root #app .rd-lockcta .rd-lock-ic{width:40px;height:40px;font-size:19px}:root:root #app .rd-lockcta div{flex:1 1 calc(100% - 56px)}:root:root #app .rd-lockcta .btn{width:100%;justify-content:center}}
+:root:root[data-night] #app .rd-lockcta .rd-lock-ic{background:rgba(100,181,255,.14)}
+/* v81 · dashboard alignment: cards side by side start on the same line and match height */
+:root:root #app .rd-grid,:root:root #app .ed-acads{align-items:stretch!important}
+:root:root #app .rd-grid>*,:root:root #app .ed-acads>*{margin-top:0!important;margin-bottom:0!important}
+
+/* v81 · phone bottom bar: floating pill (as before), solid, with a fade strip behind it so page content never shows through or below it */
+@media (max-width:999px){
+  :root:root #bottomBar{left:12px!important;right:12px!important;bottom:calc(8px + env(safe-area-inset-bottom,0px))!important;height:64px!important;padding:6px!important;border-radius:22px!important;border:1px solid rgba(10,37,64,.07)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:0 10px 28px -10px rgba(10,37,64,.28),0 1px 2px rgba(10,37,64,.06)!important;align-items:stretch;grid-auto-rows:auto}
+  html:root:root:not([data-night]) #bottomBar{background:#FFFFFF!important}
+  :root:root #bottomBar>a,:root:root #bottomBar>button{height:auto;border-radius:16px!important;margin:0!important}
+  :root:root[data-night] #bottomBar{background:#1B1F27!important;border-color:rgba(255,255,255,.08)!important;box-shadow:0 10px 28px -8px rgba(0,0,0,.7)!important}
+  html:has(#bottomBar)::after{content:"";display:block!important;opacity:1!important;position:fixed!important;top:auto!important;left:0!important;right:0!important;bottom:0!important;height:calc(96px + env(safe-area-inset-bottom,0px));z-index:899;pointer-events:none;background:linear-gradient(to bottom,rgba(238,242,250,0),rgba(238,242,250,.94) 30px,#EEF2FA 60px);transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .2s}
+  :root[data-night]:has(#bottomBar)::after{background:linear-gradient(to bottom,rgba(14,17,22,0),rgba(14,17,22,.94) 30px,#0E1116 60px)!important;opacity:1!important}
+  html:has(#bottomBar.bb-hide)::after{transform:translateY(100%);opacity:0!important}
+  :root.admin-mode::after,html:has(.gate:not([hidden]))::after,html:has(.top[hidden])::after,html:has(#app .cisa-exam)::after{display:none!important}
+  :root:root main#app.wrap{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))!important}
+  #bottomBar.bb-hide{transform:translateY(calc(100% + 24px + env(safe-area-inset-bottom,0px)))!important}
+}
+@media (min-width:761px){html:has(#bottomBar)::after{display:none!important}}

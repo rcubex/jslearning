@@ -163,7 +163,8 @@ function weekStats(uid, data, W) {
   const techDone = Object.values(P.ls || {}).filter(Boolean).length;
   const cisaDone = Object.values(C.complete || {}).filter(Boolean).length, manDone = Object.keys(C.manRead || {}).length;
   const aiDone = (data.grc || []).filter(x => /^a[ib]\d+-l\d+$/.test(x.id) && x.done).length;
-  const fc = WEAK ? WEAK.M.forecast(C, WEAK.refs, Date.now(), WEAK.M.doneDatesFromEvents(rows.filter(r => r && r.k === 'e'))) : null, weak = WEAK ? WEAK.M.weakReport(C, WEAK.refs) : null;
+  const lk = !!(C.planLock && C.planLock.locked); // v81: exam readiness only once the CISA plan is locked
+  const fc = WEAK && lk ? WEAK.M.forecast(C, WEAK.refs, Date.now(), WEAK.M.doneDatesFromEvents(rows.filter(r => r && r.k === 'e'))) : null, weak = WEAK && lk ? WEAK.M.weakReport(C, WEAK.refs) : null;
   const exam = fc ? fc.exam : '2027-01-13';
   const daysToExam = exam ? Math.max(0, Math.round((Date.parse(exam + 'T00:00:00Z') - Date.now()) / DAY)) : null;
   // streak (consecutive active days up to Sunday)

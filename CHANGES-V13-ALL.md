@@ -559,3 +559,29 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 
 ## v80
 - Daily goal card: removed the red "last 3 days" warning line and its space (phone and desktop).
+
+## v81
+- **Messages and search swapped.** Messages now takes Search's place: in the phone bottom bar and at the top of the desktop sidebar, with an unread badge. The floating chat bubble is gone.
+- **Expanding search.** On phones a search icon in the header expands into a search bar. On desktop a "Search ⌘K" button sits bottom-right (where the chat bubble was) and expands with results above it.
+- **Phone bottom bar:**
+  - Hides while you scroll and comes back when you stop.
+  - Keeps its floating pill shape but is now solid, with a fade strip behind it, so page content no longer shows through, beside or below it.
+- **Phone sign-in:** the card is centred and smaller.
+- **AI Compliance Academy hero:**
+  - Compact title and progress ring.
+  - One Start/Continue button.
+  - "Start a new attempt" is now a small link.
+  - Levels are a row of chips with per-level progress (6 across on desktop, swipe on phones).
+- **Courses "Five levels":**
+  - Shorter header with a small "New attempt" button.
+  - Filter chips in one scrolling row.
+  - Compact level headers with a small number badge and progress bar.
+- **Checkboxes:** custom rounded checkboxes with a tick, replacing the black native boxes on iPhone. Done topics are struck through. Works in night mode.
+- **Exam readiness waits for a locked CISA plan:**
+  - Until the plan is locked, the dashboard shows "Lock your CISA study plan to start tracking" in place of the forecast and weak spots.
+  - Once locked, pace counts only topics completed from the lock day (a 14-day window once the lock is older than that).
+  - The same rule applies in the admin Team overview (Readiness, Plan pace and Weakest show "Plan not locked"), the learner's admin Readiness panel, and the Monday email.
+- **Dashboard:**
+  - The backup row was removed from the CISA study card. Backup is still in CISA Hub → Notes & backup.
+  - Side-by-side cards (Exam readiness and Your academies) now line up.
+- No data changes. Firestore rules are unchanged.

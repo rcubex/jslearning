@@ -760,7 +760,8 @@ function teamRow(L) {
   const last3 = [1, 2, 3].map(i => by[addDays(t, -i)] || 0), avg3 = Math.round(last3.reduce((a, b) => a + b, 0) / 3);
   let streak = 0; for (let d = (by[t] || 0) >= GOAL ? t : addDays(t, -1); (by[d] || 0) >= GOAL; d = addDays(d, -1)) streak++;
   const c = (L.data && L.data.cisa) || {}, a = accessOf(L), reqs = pendingRequests(L).length;
-  const fc = WK ? WK.M.forecast(c, WK.refs, Date.now(), WK.M.doneDatesFromEvents(rowsOf(L).filter(r => r.kind === 'action'))) : null, wr = WK ? WK.M.weakReport(c, WK.refs) : null;
+  const lk = !!(c.planLock && c.planLock.locked); // v81: readiness only counts once the plan is locked
+  const fc = WK && lk ? WK.M.forecast(c, WK.refs, Date.now(), WK.M.doneDatesFromEvents(rowsOf(L).filter(r => r.kind === 'action'))) : null, wr = WK && lk ? WK.M.weakReport(c, WK.refs) : null;
   const p = L.act && L.act.profile, lastSeen = p && p.lastSeen || 0;
   const flags = [];
   if (reqs) flags.push(['info', `${reqs} unblock request${reqs > 1 ? 's' : ''}`]);
@@ -770,7 +771,7 @@ function teamRow(L) {
   else if (avg3 < FLOOR) flags.push(['warn', `Low study · ${avg3} min/day`]);
   if (lastSeen && fc && fc.status === 'late') flags.push(['bad', 'Behind exam pace']); else if (lastSeen && fc && fc.status === 'behind') flags.push(['warn', 'Falling behind plan']);
   if (wr && wr.openMistakes >= 15) flags.push(['warn', `${wr.openMistakes} open mistakes`]);
-  return { L, week, lastWeekSame, active7, avg3, streak, today: by[t] || 0, ready: L.snap ? L.snap.ready : null, fc, wr, lastSeen, flags, live: isLive(L), spark: last7.map(d => by[d] || 0) };
+  return { L, week, lastWeekSame, active7, avg3, streak, today: by[t] || 0, ready: L.snap ? L.snap.ready : null, fc, wr, lk, lastSeen, flags, live: isLive(L), spark: last7.map(d => by[d] || 0) };
 }
 function spark(vals) { const mx = Math.max(GOAL, ...vals); return `<span class="tm-spark">${vals.map(v => `<i class="${v >= GOAL ? 'hit' : v >= FLOOR ? 'half' : v > 0 ? 'low' : ''}" style="height:${v ? Math.max(4, Math.round(v / mx * 26)) : 2}px" title="${v} min"></i>`).join('')}</span>`; }
 function agoText(t) { if (!t) return 'never'; const m = Math.round((Date.now() - t) / 60e3); return m < 3 ? 'online now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : Math.round(m / 1440) + ' d ago'; }
@@ -780,18 +781,20 @@ function teamUI() {
   const tot = rows.reduce((n, r) => n + r.week, 0), act = rows.filter(r => r.today > 0).length;
   const fl = f => `<em class="adm-badge ${f[0]}">${h(f[1])}</em>`;
   const trend = r => r.week > r.lastWeekSame ? `<small class="tm-up">▲ ${r.week - r.lastWeekSame}</small>` : r.week < r.lastWeekSame ? `<small class="tm-dn">▼ ${r.lastWeekSame - r.week}</small>` : '<small>=</small>';
-  const fcCell = r => !r.lastSeen ? '–' : !r.fc ? '…' : `<span class="tm-fc ${r.fc.status}">${{ ok: 'On track', done: 'Finished', behind: 'Behind', late: 'Off track' }[r.fc.status]}</span><small>${r.fc.done}/${r.fc.total} · ${r.fc.perWeek}/wk</small>`;
-  const weakCell = r => !r.wr ? '…' : r.wr.weakDomains.length ? `D${r.wr.weakDomains[0].id} · ${r.wr.weakDomains[0].acc}%` : r.wr.enough ? '<span class="tm-ok">none</span>' : '<small>not enough data</small>';
+  const fcCell = r => !r.lastSeen ? '–' : !r.lk ? '<small>Plan not locked</small>' : !r.fc ? '…' : `<span class="tm-fc ${r.fc.status}">${{ ok: 'On track', done: 'Finished', behind: 'Behind', late: 'Off track' }[r.fc.status]}</span><small>${r.fc.done}/${r.fc.total} · ${r.fc.perWeek}/wk</small>`;
+  const weakCell = r => !r.lk ? '<small>–</small>' : !r.wr ? '…' : r.wr.weakDomains.length ? `D${r.wr.weakDomains[0].id} · ${r.wr.weakDomains[0].acc}%` : r.wr.enough ? '<span class="tm-ok">none</span>' : '<small>not enough data</small>';
   return `<section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">This week · ${h(fmtRange(mondayOf(today()), today()))}</span><h3 class="ed-title">${rows.length} learner${rows.length === 1 ? '' : 's'} · ${Math.round(tot / 6) / 10} h studied · ${act} studied today</h3><p class="ed-sub">Minutes use the same rule as the weekly email: tracked app time, or logged minutes if more. Goal ${GOAL} min a day, minimum ${FLOOR}.</p></div></div>
    ${need.length ? `<div class="tm-need"><b>Needs attention</b>${need.map(r => `<button type="button" class="tm-need-i" data-a="team-open" data-i="${learners.indexOf(r.L)}"><span class="lc-av learner">${h(nameOf(r.L).charAt(0).toUpperCase())}</span><span><b>${h(nameOf(r.L))}</b>${r.flags.filter(f => f[0] !== 'muted').map(fl).join('')}</span><span class="tm-go">›</span></button>`).join('')}</div>` : '<p class="tm-allgood">✓ Everyone is on track this week.</p>'}
    <div class="adm-scroll"><table class="adm-table tm-table"><thead><tr><th>Learner</th><th>This week</th><th>Last 7 days</th><th>Active</th><th>3-day avg</th><th>Streak</th><th>Readiness</th><th>Plan pace</th><th>Weakest</th><th>Last seen</th></tr></thead><tbody>
-   ${rows.map(r => `<tr data-a="team-open" data-i="${learners.indexOf(r.L)}" class="tm-row"><td class="tm-name"><b>${h(nameOf(r.L))}</b>${r.flags.length ? `<div class="tm-flags">${r.flags.map(fl).join('')}</div>` : ''}</td><td data-l="This week"><b>${r.week}</b> min ${trend(r)}</td><td data-l="Last 7 days">${spark(r.spark)}</td><td data-l="Active">${r.active7}/7</td><td data-l="3-day avg" class="${r.avg3 < FLOOR ? 'tm-bad' : ''}">${r.avg3} min</td><td data-l="Streak">${r.streak ? r.streak + ' 🔥' : '0'}</td><td data-l="Readiness">${r.ready === null || r.ready === undefined ? '–' : r.ready + '%'}</td><td data-l="Plan pace">${fcCell(r)}</td><td data-l="Weakest">${weakCell(r)}</td><td data-l="Last seen" class="${r.live ? 'tm-live' : ''}">${h(agoText(r.lastSeen))}</td></tr>`).join('')}
+   ${rows.map(r => `<tr data-a="team-open" data-i="${learners.indexOf(r.L)}" class="tm-row"><td class="tm-name"><b>${h(nameOf(r.L))}</b>${r.flags.length ? `<div class="tm-flags">${r.flags.map(fl).join('')}</div>` : ''}</td><td data-l="This week"><b>${r.week}</b> min ${trend(r)}</td><td data-l="Last 7 days">${spark(r.spark)}</td><td data-l="Active">${r.active7}/7</td><td data-l="3-day avg" class="${r.avg3 < FLOOR ? 'tm-bad' : ''}">${r.avg3} min</td><td data-l="Streak">${r.streak ? r.streak + ' 🔥' : '0'}</td><td data-l="Readiness">${!r.lk || r.ready === null || r.ready === undefined ? '–' : r.ready + '%'}</td><td data-l="Plan pace">${fcCell(r)}</td><td data-l="Weakest">${weakCell(r)}</td><td data-l="Last seen" class="${r.live ? 'tm-live' : ''}">${h(agoText(r.lastSeen))}</td></tr>`).join('')}
    </tbody></table></div></section>`;
 }
 function readyUI(L) {
   ensureWeak();
   if (!WK) return `<section class="ed-card adm-sec"><p class="cisa-mini">Loading weak spots and exam forecast…</p></section>`;
-  const c = (L.data && L.data.cisa) || {}, f = WK.M.forecast(c, WK.refs, Date.now(), WK.M.doneDatesFromEvents(rowsOf(L).filter(r => r.kind === 'action'))), w = WK.M.weakReport(c, WK.refs);
+  const c0 = (L.data && L.data.cisa) || {};
+  if (!(c0.planLock && c0.planLock.locked)) return `<section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">Exam readiness</span><h3 class="ed-title">Starts when the plan is locked</h3><p class="ed-sub">This learner hasn't locked a CISA study plan yet. Pace, forecast and weak spots count from the day they lock it.</p></div></div></section>`;
+  const c = c0, f = WK.M.forecast(c, WK.refs, Date.now(), WK.M.doneDatesFromEvents(rowsOf(L).filter(r => r.kind === 'action'))), w = WK.M.weakReport(c, WK.refs);
   const col = { ok: 'ok', done: 'ok', behind: 'warn', late: 'bad' }[f.status];
   return `<section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">Exam readiness</span><h3 class="ed-title">Forecast & weak spots</h3></div></div>
    <div class="tm-ready"><div><p><em class="adm-badge ${col}">${{ ok: 'On track', done: 'Syllabus finished', behind: 'Falling behind', late: 'Not on track' }[f.status]}</em></p><p class="ed-sub">${h(f.msg)}</p>
