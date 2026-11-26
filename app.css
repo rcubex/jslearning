@@ -3225,7 +3225,7 @@ body{touch-action:manipulation}          /* removes double-tap zoom; pinch-zoom 
 :root:root[data-night] #app table thead th{background:#232833!important}
 :root:root[data-night] #app :is(.lcard,.tscroll) table[data-labeled] tr,:root:root[data-night] #app .lcard table[data-cols="2"] tbody,:root:root[data-night] #app .tm-table tr.tm-row{background:#1B1F27!important;border-color:rgba(255,255,255,.12)!important}
 /* buttons, chips, inputs */
-:root:root[data-night] #app :is(.btn,.cisa-btn,.td-btn.ghost,.linkbtn,.bm,.lnav-b,.opt,.termbtn,.fl-seg,.chip,.pill,.cisa-tabs button,.cisa-tabs a,.aw-sub a,.outline button,.mn-sec,.mn-seg button):not(.primary):not(.next):not(.on):not(.active):not(.selected):not(.right):not(.wrong){background:#232833!important;border-color:rgba(255,255,255,.14)!important;color:#E8EAF0!important}
+:root:root[data-night] #app :is(.btn,.cisa-btn,.td-btn.ghost,.linkbtn,.bm,.lnav-b,.opt,.termbtn,.fl-seg,.chip,.pill,.cisa-tabs button,.cisa-tabs a,.aw-sub a,.outline button,.mn-sec,.mn-seg button):not(.primary):not(.next):not(.on):not(.active):not(.selected):not(.right):not(.wrong):not(.ct-tab){background:#232833!important;border-color:rgba(255,255,255,.14)!important;color:#E8EAF0!important}
 :root:root[data-night] #app :is(.cisa-tabs,.aw-sub,.fl-segs,.mn-seg){background:#161A21!important}
 :root:root[data-night] #app :is(.cisa-tabs,.aw-sub) :is(.on,.active,[aria-current="true"],[aria-selected="true"]){background:#2F3645!important;color:#fff!important}
 :root:root[data-night] #app :is(input:not([type=checkbox]):not([type=radio]):not([type=range]),textarea,select),:root:root[data-night] .lc-panel textarea{background:#12161C!important;border-color:rgba(255,255,255,.16)!important;color:#E8EAF0!important}
@@ -3351,3 +3351,69 @@ body{touch-action:manipulation}          /* removes double-tap zoom; pinch-zoom 
   #app .lcard table[data-cols="3"] td+td,#app .lcard table[data-cols="3"] th+td{margin-top:0!important}
   :root:root[data-night] #app .lcard table[data-labeled] tr,:root:root[data-night] #app .lcard table[data-cols="2"] tbody{background:#1B1F27!important;border-color:rgba(255,255,255,.12)!important}
 }
+
+/* ===================== v78: simpler CISA Hub ===================== */
+/* 4 main tabs + sub-tabs */
+:root:root #app .cisa-hub .cisa-tabs.cisa-tabs4,:root:root #app .cisa-tabs.cisa-tabs4{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;width:100%!important;flex-wrap:nowrap!important;gap:4px!important;padding:4px!important;border-radius:14px!important;overflow:visible!important}
+:root:root #app .cisa-tabs.cisa-tabs4 button{min-height:44px!important;font-size:15px!important;font-weight:650!important;border-radius:11px!important;padding:0 6px!important;justify-content:center;white-space:nowrap}
+:root:root #app .cisa-tabs.cisa-tabs4 button[aria-current="true"]{background:#0A84FF!important;color:#fff!important;box-shadow:0 4px 12px -4px rgba(10,132,255,.6)!important}
+#app .cisa-subtabs{display:flex;gap:8px;margin:10px 0 4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#app .cisa-subtabs::-webkit-scrollbar{display:none}
+#app .cisa-subtabs button{flex:none;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid rgba(10,37,64,.14);background:#fff;color:var(--ink,#0A2540);font:inherit;font-size:14.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+#app .cisa-subtabs button[aria-current="true"]{background:#0A2540;border-color:#0A2540;color:#fff}
+#app .cisa-subtabs .cisa-count,#app .cisa-tabs4 .cisa-count{margin-left:4px}
+/* plan label in the header */
+#app .cisa-plan-tag{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 12px;border-radius:999px;background:rgba(10,132,255,.12);color:#0A6CD8;font-size:14px;font-weight:650;border:0}
+#app button.cisa-plan-tag.set{background:#FF9F0A;color:#fff;cursor:pointer}
+/* study loop strip */
+#app .cisa-flow{display:flex;align-items:center;gap:6px;margin:0 0 6px;flex-wrap:nowrap}
+#app .cisa-flow span{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:650;color:var(--muted);white-space:nowrap}
+#app .cisa-flow span i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:13px;background:rgba(10,37,64,.08);color:var(--muted)}
+#app .cisa-flow span.done{color:#1f9d4f}#app .cisa-flow span.done i{background:#34C759;color:#fff}
+#app .cisa-flow span.cur{color:var(--ink,#0A2540)}#app .cisa-flow span.cur i{background:#0A84FF;color:#fff;box-shadow:0 0 0 4px rgba(10,132,255,.18)}
+#app .cisa-flow b{flex:1;min-width:8px;height:2px;border-radius:2px;background:rgba(10,37,64,.12)}
+#app .cisa-flow-hint{margin:0 0 14px;font-size:13.5px;color:var(--muted);line-height:1.45;padding-bottom:12px;border-bottom:1px dashed rgba(10,37,64,.12)}
+@media (max-width:380px){#app .cisa-flow span{font-size:12.5px;gap:4px}#app .cisa-flow span i{width:22px;height:22px}}
+/* explainers under numbers */
+#app .ed-stats>div small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.35}
+/* topic <-> manual link */
+#app .cisa-link{display:flex;align-items:center;gap:12px;margin:16px 0 4px;padding:12px 14px;border-radius:14px;background:rgba(10,132,255,.07);border:1px solid rgba(10,132,255,.18)}
+#app .cisa-link-ic{font-size:22px;flex:none}
+#app .cisa-link>div{flex:1;min-width:0}
+#app .cisa-link b{display:block;font-size:14.5px;line-height:1.35}
+#app .cisa-link small{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+/* first-visit tour */
+#app .cisa-tour{margin:12px 0;padding:18px;border-radius:18px;background:linear-gradient(135deg,#0A84FF,#5E5CE6);color:#fff;box-shadow:0 14px 34px -14px rgba(10,132,255,.7)}
+#app .cisa-tour>b{font-size:17px;display:block;margin-bottom:10px;color:#fff!important}
+#app .cisa-tour ol{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:10px}
+#app .cisa-tour li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.45;color:rgba(255,255,255,.92)}
+#app .cisa-tour li>span{flex:none;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;font-weight:700;font-size:13px}
+#app .cisa-tour li b{display:block;color:#fff!important;font-size:15px}
+#app .cisa-tour .cisa-btn.primary{background:#fff!important;color:#0A2540!important;border:0!important;min-height:42px;padding:0 22px!important}
+/* night */
+:root:root[data-night] #app .cisa-subtabs button{background:#232833;border-color:rgba(255,255,255,.14);color:#E8EAF0}
+:root:root[data-night] #app .cisa-subtabs button[aria-current="true"]{background:#E8EAF0;color:#111418}
+:root:root[data-night] #app .cisa-flow span i{background:rgba(255,255,255,.10)}
+:root:root[data-night] #app .cisa-flow b{background:rgba(255,255,255,.14)}
+:root:root[data-night] #app .cisa-link{background:rgba(10,132,255,.12);border-color:rgba(10,132,255,.3)}
+:root:root[data-night] #app .cisa-plan-tag{background:rgba(10,132,255,.2);color:#9CCBFF}
+@media (max-width:440px){#app .cisa-flow{gap:4px}#app .cisa-flow span{font-size:13px;gap:5px}#app .cisa-flow span i{width:24px;height:24px;font-size:12px}#app .cisa-flow b{min-width:4px}}
+@media (max-width:370px){#app .cisa-flow span{font-size:12px;gap:3px}#app .cisa-flow span i{width:21px;height:21px}}
+
+/* ===== v79: CISA main tabs — one row, icon + label (can never stack) ===== */
+:root:root #app .cisa-hub .cisa-tabs.cisa-tabs4,:root:root #app .cisa-tabs.cisa-tabs4{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;grid-template-columns:none!important;gap:4px!important;padding:5px!important;width:100%!important;max-width:100%!important;overflow:visible!important;
+  border-radius:18px!important;background:rgba(255,255,255,.85)!important;border:1px solid rgba(10,37,64,.08)!important;box-shadow:0 6px 18px -10px rgba(10,37,64,.25)!important}
+:root:root #app .cisa-tabs.cisa-tabs4 .ct-tab{flex:1 1 0!important;min-width:0!important;width:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;
+  min-height:58px!important;padding:6px 2px!important;border:0!important;border-radius:14px!important;background:transparent!important;color:#5B6577!important;box-shadow:none!important;font:inherit;cursor:pointer;transition:background .18s,color .18s}
+:root:root #app .cisa-tabs.cisa-tabs4 .ct-tab[aria-current="true"]{background:linear-gradient(135deg,#0A84FF,#5E5CE6)!important;color:#fff!important;box-shadow:0 6px 14px -6px rgba(10,132,255,.7)!important}
+:root:root #app .cisa-tabs4 .ct-ic{position:relative;display:grid;place-items:center;width:24px;height:24px}
+:root:root #app .cisa-tabs4 .ct-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+:root:root #app .cisa-tabs4 .ct-l{font-size:13.5px!important;font-weight:650!important;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+:root:root #app .cisa-tabs4 .ct-badge{position:absolute;top:-6px;right:-10px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#FF3B30;color:#fff;font-style:normal;font-size:11px;font-weight:700;display:grid;place-items:center;box-shadow:0 0 0 2px #fff}
+:root:root #app .cisa-tabs4 .ct-tab[aria-current="true"] .ct-badge{box-shadow:0 0 0 2px #2F7BF5}
+@media (min-width:700px){:root:root #app .cisa-tabs.cisa-tabs4 .ct-tab{flex-direction:row!important;gap:8px!important;min-height:48px!important}:root:root #app .cisa-tabs4 .ct-l{font-size:15px!important}}
+:root:root[data-night] #app .cisa-tabs.cisa-tabs4{background:#1B1F27!important;border-color:rgba(255,255,255,.10)!important}
+:root:root[data-night] #app .cisa-tabs.cisa-tabs4 .ct-tab:not([aria-current="true"]){color:#A7B0BF!important}
+:root:root[data-night] #app .cisa-tabs4 .ct-badge{box-shadow:0 0 0 2px #1B1F27}
+:root:root[data-night] #app .cisa-hub .cisa-tabs.cisa-tabs4 .ct-tab{background:transparent!important;border:0!important;color:#A7B0BF!important}
+:root:root[data-night] #app .cisa-hub .cisa-tabs.cisa-tabs4 .ct-tab[aria-current="true"]{background:linear-gradient(135deg,#0A84FF,#5E5CE6)!important;color:#fff!important}

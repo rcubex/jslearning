@@ -545,3 +545,14 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 - Lessons: only "In simple words" stays a highlighted box; GRC, assessment, example and analogy notes become light sections with a coloured side line; more space between parts.
 - Overview text: sentence-case labels, 15px secondary text, more space between sections.
 - Restored phone card layout for lesson comparison tables.
+
+## v78 — simpler CISA Hub
+- Four main tabs that fit on a phone: Today (Today, Study plan) · Study (Topics, Manual) · Practice (Mocks & quizzes, Mistakes, Revision notes) · Progress (Analytics, Log study, Notes & backup, Learners for admin). Mistakes-due count on Practice.
+- Plan: once locked only the locked plan is shown ("🔒 Relaxed plan"); the switch is gone from the header. If the admin unlocks it, both plans show again so the learner can choose and lock a new one.
+- Topics and manual sections linked: each topic shows its manual section (read / not read); marking one done offers to mark the other too.
+- Today: Read → Revise → Quiz → Mock strip showing where the learner is; "Do this next" card.
+- Plain-language explainers under the numbers (topics complete, readiness, pace, coverage).
+- First-visit tour (shown once).
+
+## v79 — CISA tab bar
+- CISA main tabs redesigned: one row with icons (Today, Study, Practice, Progress), red badge for mistakes due, gradient highlight; side-by-side icon+label on desktop; night mode fixed. Can no longer stack vertically.
