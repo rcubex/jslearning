@@ -510,3 +510,23 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 - Daily goal ring (30 min) with streak and 7-day dots on the dashboard; same minutes rule as the emails.
 - Admin Team overview: all learners side by side, needs-attention list.
 - Faster start: Application Academy lessons (1.2 MB) load on demand (content/security-meta.js index, scripts/build-sec-meta.mjs); nested modules preloaded in parallel. Start-up JS 3.0 MB -> 1.8 MB.
+
+## v72 — lighter index, sign-in check, forecast, phones
+- index.html split: styles -> app.css, main code -> app.js (index.html 500 KB -> 27 KB). Same look and behaviour.
+- Sign-in: a remembered session from an earlier visit no longer opens the app; each new tab/app launch asks for email + password (a refresh keeps you signed in). Password box cleared on the sign-in screen.
+- Forecast uses real completion dates recovered from activity history ("Completed topic ..."), so it is accurate straight away.
+- Phone layout pass for iPhone 13/17 and Galaxy S25: Team overview as cards, 16px inputs (no iOS zoom), larger touch targets, narrow-screen spacing, sign-in screen spacing, shorter chat placeholder on phones.
+
+## v73 — mobile reading & sign-in
+- Phones: solid header and bottom bar (no text showing through), Messages button moved into the header, near-solid reading cards, tighter lesson padding (wider text), larger lesson text, compact reading tools and module header, quiz options 44px tall, CISA manual/glossary/chat text sizes, admin activity tables stacked instead of side-scrolling.
+- Sign-in screen on phones: smaller clock, solid card near the top, bigger fields/button, quote moved to the bottom, clock and quote hide while typing so the keyboard never covers the form.
+- No accidental zoom: 16px inputs, no double-tap zoom (pinch still works), no sideways page wobble.
+
+## v74 — mobile sweep
+- Sign-in quote notification back at the top (clock moves down while it shows).
+- Full phone sweep (300 screens: every module, CISA tab, chat, admin page at iPhone 17 and Galaxy S25 sizes): long inline code wraps, small reference notes enlarged, CISA manual note box 16px.
+
+## v75 — lighter start-up, table cards, phone typography
+- Start-up download halved: Technical, AI Compliance and Application lesson bodies load when a module is opened (and quietly in the background once the app is idle). New small indexes: content/core-meta.js, content/aic-meta.js (scripts/build-core-meta.mjs, scripts/build-aic-meta.mjs — run after editing lesson content). Sign-in wallpapers load without blocking. Retired GRC text removed from core.js.
+- Workbook and Insights tables show as one card per row on phones.
+- Phone typography audit: no text under 12px, labels/chips/captions enlarged, secondary text 14.5px, tap targets ~40px (lesson outline, key terms, CISA tabs, manual sections), "Your last 7 days" card padding, cleaner module header.

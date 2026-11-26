@@ -58,7 +58,13 @@ export function weakReport(cisa, refs) {
 
 /* ---------- exam-readiness forecast ---------- */
 const ds = d => new Date(d).toISOString().slice(0, 10);
-export function forecast(cisa, refs, now = Date.now()) {
+// Recover completion dates from activity events ("Completed topic 1A1 …") for topics ticked before v71 recorded dates.
+export function doneDatesFromEvents(events) {
+  const o = {};
+  for (const e of events || []) { const m = /^Completed topic (\S+)/.exec(String(e.x || '')); if (m && e.d && !(o[m[1]] && o[m[1]] >= e.d)) o[m[1]] = e.d; }
+  return o;
+}
+export function forecast(cisa, refs, now = Date.now(), extraDates = null) {
   const C = cisa || {}, mode = C.planMode || 'normal';
   const plan = (C.plans && C.plans[mode]) || (refs.templates || {})[mode] || {};
   const exam = plan.examDate || (mode === 'relaxed' ? '2027-01-29' : '2027-01-13');
@@ -71,7 +77,7 @@ export function forecast(cisa, refs, now = Date.now()) {
   const targetMs = examMs - reviewDays * DAY, daysToTarget = Math.max(0, Math.ceil((targetMs - now) / DAY));
   // pace: topics completed in the last 14 days (completion dates from C.completeAt if present, else the activity of logs)
   const since = now - 14 * DAY;
-  const cAt = C.completeAt || {};
+  const cAt = { ...(extraDates || {}), ...(C.completeAt || {}) };
   const estimated = !Object.keys(cAt).length;
   let recent = Object.entries(cAt).filter(([id, t]) => (C.complete || {})[id] && Date.parse(t) >= since).length;
   if (!Object.keys(cAt).length) {

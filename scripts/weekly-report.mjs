@@ -26,7 +26,9 @@ const DAY = 864e5;
 
 /* ---------- who are the learners: read the same lists the app uses ---------- */
 function learnersFromApp() {
-  const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  // the learner lists live in app.js since v72 (index.html before)
+  const rd = f => { try { return fs.readFileSync(new URL('../' + f, import.meta.url), 'utf8'); } catch (e) { return ''; } };
+  const html = rd('app.js') + '\n' + rd('index.html');
   const allowed = (html.match(/const ALLOWED_USER_UIDS=\[([^\]]*)\]/) || [])[1] || '';
   const admin = (html.match(/const ADMIN_UID='([^']+)'/) || [])[1] || 'Yk0WCbGfCOfiy7fnXqMgcfxjvze2';
   const namesSrc = (html.match(/const LEARNER_NAMES=\{([^}]*)\}/) || [])[1] || '';
@@ -161,7 +163,7 @@ function weekStats(uid, data, W) {
   const techDone = Object.values(P.ls || {}).filter(Boolean).length;
   const cisaDone = Object.values(C.complete || {}).filter(Boolean).length, manDone = Object.keys(C.manRead || {}).length;
   const aiDone = (data.grc || []).filter(x => /^a[ib]\d+-l\d+$/.test(x.id) && x.done).length;
-  const fc = WEAK ? WEAK.M.forecast(C, WEAK.refs) : null, weak = WEAK ? WEAK.M.weakReport(C, WEAK.refs) : null;
+  const fc = WEAK ? WEAK.M.forecast(C, WEAK.refs, Date.now(), WEAK.M.doneDatesFromEvents(rows.filter(r => r && r.k === 'e'))) : null, weak = WEAK ? WEAK.M.weakReport(C, WEAK.refs) : null;
   const exam = fc ? fc.exam : '2027-01-13';
   const daysToExam = exam ? Math.max(0, Math.round((Date.parse(exam + 'T00:00:00Z') - Date.now()) / DAY)) : null;
   // streak (consecutive active days up to Sunday)
