@@ -159,6 +159,7 @@ function overviewUI(L) {
    <div class="adm-kpis six">${kpi('Readiness', s.ready === null ? '–' : s.ready + '%', 'first mock attempts')}${kpi('Topics done', `${s.done}/${s.total}`)}${kpi('Logged study', s.hours + 'h', 'all time')}${kpi('Recent quizzes', s.quiz === null ? '–' : s.quiz + '%')}${kpi('Mistakes due', s.mx)}${kpi('Manual read', `${s.manual}/60`)}</div>
    <div class="adm-doms">${s.scores.map(d => `<div><span>D${d.domain}</span><div class="adm-meter"><i style="width:${d.accuracy ?? 0}%"></i></div><small>${d.accuracy === null ? 'no data' : d.accuracy + '%'} · ${d.coverage}% covered</small></div>`).join('')}</div>
    <p class="cisa-mini">Mock first attempts: ${s.mocks.length ? s.mocks.map(m => `Mock ${m.id} ${m.p}%`).join(' · ') : 'none yet'}</p></section>` : ''}
+  ${readyUI(L)}
   ${healthUI(L)}
   ${resetUI(L)}
   ${aicUI(L)}
@@ -735,8 +736,73 @@ function auditUI(L) {
   ${au.length ? `<div class="adm-scroll"><table class="adm-table"><thead><tr><th>When</th><th>Action</th></tr></thead><tbody>${au.map(x => `<tr><td class="adm-when">${h(new Date(x.at).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }))}</td><td>${h(x.what)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="cisa-mini">No admin actions recorded yet.</p>'}</section>`;
 }
 
+
+/* ---------- v71: weak spots, exam forecast and the Team overview ---------- */
+let WK = null, wkLoading = false;
+function ensureWeak() {
+  if (WK || wkLoading) return WK;
+  wkLoading = true;
+  import('./weak.js?v=' + ((api && api.appVersion) || '')).then(async M => { WK = { M, refs: await M.loadRefs('./cisa/') }; wkLoading = false; softRender(); }).catch(e => { wkLoading = false; console.warn('weak spots', e); });
+  return null;
+}
+const GOAL = 30, FLOOR = 15;
+function dayMinutes(L) { // per day: tracked app time or logged minutes, whichever is larger (same rule as the emails)
+  const app = {}, lg = {};
+  for (const r of rowsOf(L)) { if (r.kind === 'time') app[r.d] = (app[r.d] || 0) + r.sec; else if (r.kind === 'logged') lg[r.d] = (lg[r.d] || 0) + r.sec; }
+  for (const e of ((L.data && L.data.log) || [])) lg[e.d] = (lg[e.d] || 0) + (+e.m || 0) * 60;
+  const o = {}; for (const k of new Set([...Object.keys(app), ...Object.keys(lg)])) o[k] = Math.round(Math.max(app[k] || 0, lg[k] || 0) / 60); return o;
+}
+function teamRow(L) {
+  const by = dayMinutes(L), t = today(), mon = mondayOf(t);
+  const sum = (a, b) => dayList(a, b).reduce((n, d) => n + (by[d] || 0), 0);
+  const week = sum(mon, t), lastWeekSame = sum(addDays(mon, -7), addDays(t, -7));
+  const last7 = dayList(addDays(t, -6), t), active7 = last7.filter(d => (by[d] || 0) >= 5).length;
+  const last3 = [1, 2, 3].map(i => by[addDays(t, -i)] || 0), avg3 = Math.round(last3.reduce((a, b) => a + b, 0) / 3);
+  let streak = 0; for (let d = (by[t] || 0) >= GOAL ? t : addDays(t, -1); (by[d] || 0) >= GOAL; d = addDays(d, -1)) streak++;
+  const c = (L.data && L.data.cisa) || {}, a = accessOf(L), reqs = pendingRequests(L).length;
+  const fc = WK ? WK.M.forecast(c, WK.refs) : null, wr = WK ? WK.M.weakReport(c, WK.refs) : null;
+  const p = L.act && L.act.profile, lastSeen = p && p.lastSeen || 0;
+  const flags = [];
+  if (reqs) flags.push(['info', `${reqs} unblock request${reqs > 1 ? 's' : ''}`]);
+  if (a.blocked) flags.push(['bad', a.auto ? 'Auto-blocked' : 'Blocked']);
+  if (!lastSeen) flags.push(['muted', 'Never signed in']);
+  else if (last3.every(m => m === 0)) flags.push(['bad', 'No study for 3 days']);
+  else if (avg3 < FLOOR) flags.push(['warn', `Low study · ${avg3} min/day`]);
+  if (lastSeen && fc && fc.status === 'late') flags.push(['bad', 'Behind exam pace']); else if (lastSeen && fc && fc.status === 'behind') flags.push(['warn', 'Falling behind plan']);
+  if (wr && wr.openMistakes >= 15) flags.push(['warn', `${wr.openMistakes} open mistakes`]);
+  return { L, week, lastWeekSame, active7, avg3, streak, today: by[t] || 0, ready: L.snap ? L.snap.ready : null, fc, wr, lastSeen, flags, live: isLive(L), spark: last7.map(d => by[d] || 0) };
+}
+function spark(vals) { const mx = Math.max(GOAL, ...vals); return `<span class="tm-spark">${vals.map(v => `<i class="${v >= GOAL ? 'hit' : v >= FLOOR ? 'half' : v > 0 ? 'low' : ''}" style="height:${v ? Math.max(4, Math.round(v / mx * 26)) : 2}px" title="${v} min"></i>`).join('')}</span>`; }
+function agoText(t) { if (!t) return 'never'; const m = Math.round((Date.now() - t) / 60e3); return m < 3 ? 'online now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : Math.round(m / 1440) + ' d ago'; }
+function teamUI() {
+  ensureWeak();
+  const rows = (learners || []).map(teamRow), need = rows.filter(r => r.flags.some(f => f[0] === 'bad' || f[0] === 'warn' || f[0] === 'info'));
+  const tot = rows.reduce((n, r) => n + r.week, 0), act = rows.filter(r => r.today > 0).length;
+  const fl = f => `<em class="adm-badge ${f[0]}">${h(f[1])}</em>`;
+  const trend = r => r.week > r.lastWeekSame ? `<small class="tm-up">▲ ${r.week - r.lastWeekSame}</small>` : r.week < r.lastWeekSame ? `<small class="tm-dn">▼ ${r.lastWeekSame - r.week}</small>` : '<small>=</small>';
+  const fcCell = r => !r.lastSeen ? '–' : !r.fc ? '…' : `<span class="tm-fc ${r.fc.status}">${{ ok: 'On track', done: 'Finished', behind: 'Behind', late: 'Off track' }[r.fc.status]}</span><small>${r.fc.done}/${r.fc.total} · ${r.fc.perWeek}/wk</small>`;
+  const weakCell = r => !r.wr ? '…' : r.wr.weakDomains.length ? `D${r.wr.weakDomains[0].id} · ${r.wr.weakDomains[0].acc}%` : r.wr.enough ? '<span class="tm-ok">none</span>' : '<small>not enough data</small>';
+  return `<section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">This week · ${h(fmtRange(mondayOf(today()), today()))}</span><h3 class="ed-title">${rows.length} learner${rows.length === 1 ? '' : 's'} · ${Math.round(tot / 6) / 10} h studied · ${act} studied today</h3><p class="ed-sub">Minutes use the same rule as the weekly email: tracked app time, or logged minutes if more. Goal ${GOAL} min a day, minimum ${FLOOR}.</p></div></div>
+   ${need.length ? `<div class="tm-need"><b>Needs attention</b>${need.map(r => `<button type="button" class="tm-need-i" data-a="team-open" data-i="${learners.indexOf(r.L)}"><span class="lc-av learner">${h(nameOf(r.L).charAt(0).toUpperCase())}</span><span><b>${h(nameOf(r.L))}</b>${r.flags.filter(f => f[0] !== 'muted').map(fl).join('')}</span><span class="tm-go">›</span></button>`).join('')}</div>` : '<p class="tm-allgood">✓ Everyone is on track this week.</p>'}
+   <div class="adm-scroll"><table class="adm-table tm-table"><thead><tr><th>Learner</th><th>This week</th><th>Last 7 days</th><th>Active</th><th>3-day avg</th><th>Streak</th><th>Readiness</th><th>Plan pace</th><th>Weakest</th><th>Last seen</th></tr></thead><tbody>
+   ${rows.map(r => `<tr data-a="team-open" data-i="${learners.indexOf(r.L)}" class="tm-row"><td><b>${h(nameOf(r.L))}</b>${r.flags.length ? `<div class="tm-flags">${r.flags.map(fl).join('')}</div>` : ''}</td><td><b>${r.week}</b> min ${trend(r)}</td><td>${spark(r.spark)}</td><td>${r.active7}/7</td><td class="${r.avg3 < FLOOR ? 'tm-bad' : ''}">${r.avg3} min</td><td>${r.streak ? r.streak + ' 🔥' : '0'}</td><td>${r.ready === null || r.ready === undefined ? '–' : r.ready + '%'}</td><td>${fcCell(r)}</td><td>${weakCell(r)}</td><td class="${r.live ? 'tm-live' : ''}">${h(agoText(r.lastSeen))}</td></tr>`).join('')}
+   </tbody></table></div></section>`;
+}
+function readyUI(L) {
+  ensureWeak();
+  if (!WK) return `<section class="ed-card adm-sec"><p class="cisa-mini">Loading weak spots and exam forecast…</p></section>`;
+  const c = (L.data && L.data.cisa) || {}, f = WK.M.forecast(c, WK.refs), w = WK.M.weakReport(c, WK.refs);
+  const col = { ok: 'ok', done: 'ok', behind: 'warn', late: 'bad' }[f.status];
+  return `<section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">Exam readiness</span><h3 class="ed-title">Forecast & weak spots</h3></div></div>
+   <div class="tm-ready"><div><p><em class="adm-badge ${col}">${{ ok: 'On track', done: 'Syllabus finished', behind: 'Falling behind', late: 'Not on track' }[f.status]}</em></p><p class="ed-sub">${h(f.msg)}</p>
+    <div class="adm-kpis">${kpi('Topics', `${f.done}/${f.total}`)}${kpi('Pace now', f.perWeek + '/wk')}${kpi('Needed', f.needPerWeek + '/wk')}${kpi('Exam', f.daysLeft + ' days', h(f.exam))}</div></div>
+    <div>${w.enough || w.topics.length ? `<p class="cisa-mini">Weakest domains</p><ul class="rd-list">${(w.weakDomains.length ? w.weakDomains : []).slice(0, 3).map(d => `<li><span class="rd-pct bad">${d.acc}%</span><span><b>Domain ${d.id}</b> · ${h(d.name)}</span></li>`).join('') || '<li>None below 70% 👍</li>'}</ul>
+    ${w.topics.length ? `<p class="cisa-mini" style="margin-top:8px">Weakest topics</p><ul class="rd-list">${w.topics.slice(0, 5).map(t => `<li><span class="rd-pct ${t.acc === null ? '' : t.acc < 50 ? 'bad' : 'warn'}">${t.acc === null ? '—' : t.acc + '%'}</span><span><b>${h(t.id)}</b> · ${h(t.title)}${t.mistakes ? ` <em>${t.mistakes} open mistake${t.mistakes === 1 ? '' : 's'}</em>` : ''}</span></li>`).join('')}</ul>` : ''}
+    <p class="cisa-mini">${w.answered} answered questions · ${w.openMistakes} open mistakes</p>` : '<p class="cisa-mini">Not enough answered questions yet (needs about 20 from mocks, quizzes or logs).</p>'}</div></div></section>`;
+}
+
 /* ---------- render ---------- */
-const VIEW_TITLES = { overview: 'Overview', log: 'Activity log', reports: 'Reports', exams: 'Exams', habits: 'Study habits', coaching: 'Coaching', requests: 'Unblock requests', audit: 'Audit trail' };
+const VIEW_TITLES = { team: 'Team overview', overview: 'Overview', log: 'Activity log', reports: 'Reports', exams: 'Exams', habits: 'Study habits', coaching: 'Coaching', requests: 'Unblock requests', audit: 'Audit trail' };
 function render() {
   if (!root || !root.isConnected || !document.documentElement.classList.contains('admin-mode')) return;
   // keep what the admin is typing across live re-renders
@@ -747,6 +813,7 @@ function render() {
   let body;
   if (!learners) body = `<section class="ed-card adm-sec"><p class="cisa-mini">${busy ? 'Loading learners…' : ''}</p></section>`;
   else if (!learners.length) body = `<section class="ed-card adm-sec"><p>No learner accounts yet. ${err ? h(err) : ''}</p></section>`;
+  else if (view === 'team') body = teamUI();
   else {
     const L = learners[sel], un = unreadOf(L.uid);
     const warn = !L.ok ? `<p class="pl-err">Cannot read this learner (${h(L.error)}). Publish the latest <code>firestore.rules</code> in the Firebase Console.</p>` : !L.act.ok && L.act.error && L.act.error !== 'not-admin' ? `<p class="pl-err">Activity log unavailable (${h(L.act.error)}). Publish the latest <code>firestore.rules</code> in the Firebase Console; activity is recorded once the rules allow it.</p>` : '';
@@ -815,6 +882,7 @@ async function onClick(e) {
     const r = api.resetLearner ? await api.resetLearner(uid) : { ok: false, err: 'not available' };
     if (r.ok) saveCoach(uid, {}, 'Reset the learner’s study data');
     uiAlert(r.ok ? (r.empty ? 'This learner had no saved progress yet — nothing to reset.' : 'Done. Progress is cleared on the server now. The learner’s app finishes the cleanup the next time it is open (immediately if open now) and shows them a short notice.') : 'Could not reset: ' + r.err, { title: r.ok ? 'Study data reset' : 'Reset failed' }); await load(); return; }
+  if (a === 'team-open') { sel = +b.dataset.i || 0; setView('overview'); window.scrollTo(0, 0); return; }
   if (a === 'notify') { const Lx = (learners || []).find(x => x.uid === b.dataset.uid); if (Lx) openNotify(Lx); return; }
   if (a === 'acc-chat') { const uid = b.dataset.uid, on = accessOf({ uid }).chatOff; if (!on && !(await uiConfirm('The learner will no longer see the chat or any messages, and cannot send new ones. Nothing is deleted — turn chat back on at any time and the full history is there again. This applies straight away, without signing out.', { title: 'Disable chat for this learner?', ok: 'Disable chat', danger: true }))) return; if (await setAccess(uid, { chatOff: !on }, on ? 'Enabled chat' : 'Disabled chat')) uiAlert(on ? 'Chat is back on. The learner sees it straight away.' : 'Chat is off. The learner’s chat disappeared straight away; all messages are kept.', { title: on ? 'Chat enabled' : 'Chat disabled' }); return; }
   if (a === 'acc-block') { const uid = b.dataset.uid, on = accessOf((learners || []).find(x => x.uid === uid) || { uid }).blocked; if (!on && !(await uiConfirm('The learner can still sign in, but sees only a “You are blocked” screen until you unblock them. Their progress and messages are kept. This applies straight away, without signing out.', { title: 'Block this learner?', ok: 'Block user', danger: true }))) return; if (await setAccess(uid, { blocked: !on }, on ? 'Unblocked the learner' : 'Blocked the learner')) uiAlert(on ? 'The learner is unblocked and can use the app again straight away.' : 'The learner now sees the blocked screen.', { title: on ? 'User unblocked' : 'User blocked' }); return; }

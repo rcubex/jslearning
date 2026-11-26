@@ -34,17 +34,41 @@ service cloud.firestore {
       return exists(c) && (get(c).data.get('access', {}).get('chatOff', false) == true
         || get(c).data.get('access', {}).get('blocked', false) == true);
     }
+    // Blocked = blocked by the admin, or auto-blocked after 10+ days away (activity/{uid}.autoBlock)
+    // and not unblocked by the admin since (coach/{uid}.access.unblockedAt).
+    // A blocked learner can still sign in, see the blocked screen and send an unblock request,
+    // but the server refuses their study data (read and write) until the admin unblocks them.
+    function accessOf(uid) {
+      let c = /databases/$(database)/documents/coach/$(uid);
+      return exists(c) ? get(c).data.get('access', {}) : {};
+    }
+    function autoBlockOf(uid) {
+      let a = /databases/$(database)/documents/activity/$(uid);
+      return exists(a) ? get(a).data.get('autoBlock', {}) : {};
+    }
+    function isBlocked(uid) {
+      let acc = accessOf(uid);
+      return acc.get('blocked', false) == true
+        || autoBlockOf(uid).get('at', 0) > acc.get('unblockedAt', 0);
+    }
+    // The learner's own app may record a new auto-block but can never remove or roll one back.
+    function autoBlockKept() {
+      let b = resource.data.get('autoBlock', null);
+      let a = request.resource.data.get('autoBlock', null);
+      return b == null || a == b || (a != null && a.get('at', 0) > b.get('at', 0));
+    }
     match /progress/{uid} {
-      allow read: if approved() && (request.auth.uid == uid || isAdmin());
-      allow create: if approved() && request.auth.uid == uid;
-      allow update: if approved() && (isAdmin() || (request.auth.uid == uid && planIntact()));
-      allow delete: if approved() && request.auth.uid == uid;
+      allow read: if approved() && (isAdmin() || (request.auth.uid == uid && !isBlocked(uid)));
+      allow create: if approved() && request.auth.uid == uid && !isBlocked(uid);
+      allow update: if approved() && (isAdmin() || (request.auth.uid == uid && !isBlocked(uid) && planIntact()));
+      allow delete: if approved() && request.auth.uid == uid && !isBlocked(uid);
     }
     // Activity log: written by the learner's own app, read by the learner and the admin.
     // Learners can add and update entries but cannot delete them.
     match /activity/{uid} {
       allow read: if approved() && (request.auth.uid == uid || isAdmin());
-      allow create, update: if approved() && request.auth.uid == uid;
+      allow create: if approved() && request.auth.uid == uid;
+      allow update: if approved() && request.auth.uid == uid && autoBlockKept();
       match /days/{day} {
         allow read: if approved() && (request.auth.uid == uid || isAdmin());
         allow create, update: if approved() && request.auth.uid == uid;
@@ -81,7 +105,7 @@ service cloud.firestore {
     }
     match /users/{uid}/{area}/{entryId} {
       allow read, write: if approved() && request.auth.uid == uid
-        && area in ['grcProgress', 'studyEntries'];
+        && area in ['grcProgress', 'studyEntries'] && !isBlocked(uid);
     }
   }
 }

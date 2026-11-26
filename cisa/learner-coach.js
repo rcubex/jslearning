@@ -300,6 +300,8 @@ async function onClick(e) {
 /* ---------- V33: access set by the admin (chat disabled / user blocked), applied live ---------- */
 function applyAccess(a) {
   const next = { chatOff: !!(a && a.chatOff), blocked: !!(a && a.blocked), at: (a && a.at) || 0, auto: !!(a && a.auto) };
+  // Unblocked in this session: the server refused study data while blocked, so reload once to reconnect sync cleanly.
+  if (access && access.blocked && !next.blocked && !window.__lcUnblockReload) { window.__lcUnblockReload = 1; setTimeout(() => location.reload(), 900); }
   access = next; try { localStorage.setItem('lc-access-' + uid, JSON.stringify(next)); } catch (e) { }
   const off = next.chatOff || next.blocked, html = document.documentElement;
   html.classList.toggle('chat-off', off);

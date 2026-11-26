@@ -502,3 +502,11 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 ## v70 — fourth learner
 - Added learner CJOZImCPj4VieLsezwCytLOXVKP2 (same access as the other learners) in index.html and firestore.rules.
 - Display name "Jacq" for learner CJOZImCPj4VieLsezwCytLOXVKP2: dashboard greeting, sidebar, admin portal, Notify emails, weekly and nudge emails (LEARNER_NAMES in index.html).
+
+## v71 — security, readiness and speed
+- Blocks enforced on the server (firestore.rules): a blocked or auto-blocked learner cannot read or write study data; unblock requests still work; the app cannot remove its own auto-block. The learner app reloads once when unblocked.
+- Weak spots: weakest CISA domains/topics from mocks, practice quizzes, logged questions and open mistakes (cisa/weak.js) on the dashboard, in the admin learner overview and in the Monday email.
+- Exam-readiness forecast (pace vs exam date) on the dashboard, admin and the Monday email. Topic completion dates are now recorded (cisa.completeAt).
+- Daily goal ring (30 min) with streak and 7-day dots on the dashboard; same minutes rule as the emails.
+- Admin Team overview: all learners side by side, needs-attention list.
+- Faster start: Application Academy lessons (1.2 MB) load on demand (content/security-meta.js index, scripts/build-sec-meta.mjs); nested modules preloaded in parallel. Start-up JS 3.0 MB -> 1.8 MB.

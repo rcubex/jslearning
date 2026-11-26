@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="JS Learning">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="./cisa/cisa.css?v=70">
+<link rel="stylesheet" href="./cisa/cisa.css?v=71">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
 
 /* Theory-first responsive reading experience */
@@ -2911,6 +2911,38 @@ a.td-row:hover{background:rgba(255,255,255,.6)}
  :root #topbar.top.open .nav-drop .drop-panel{display:flex!important;flex-direction:column}
 }
 </style>
+<!-- v71: fetch nested content modules in parallel instead of one level at a time -->
+<link rel="modulepreload" href="./content/aic-0-fig.js">
+<link rel="modulepreload" href="./content/aic-0-meta.js">
+<link rel="modulepreload" href="./content/aic-0-t1.js">
+<link rel="modulepreload" href="./content/aic-0-t2.js">
+<link rel="modulepreload" href="./content/aic-0-t3.js">
+<link rel="modulepreload" href="./content/aic-0.js">
+<link rel="modulepreload" href="./content/aic-1.js">
+<link rel="modulepreload" href="./content/aic-2.js">
+<link rel="modulepreload" href="./content/aic-3.js">
+<link rel="modulepreload" href="./content/aic-4.js">
+<link rel="modulepreload" href="./content/aic-5.js">
+<link rel="modulepreload" href="./content/aic-cases-plus.js">
+<link rel="modulepreload" href="./content/aic-cases.js">
+<link rel="modulepreload" href="./content/aic-checks.js">
+<link rel="modulepreload" href="./content/aic-labs.js">
+<link rel="modulepreload" href="./content/aic-library.js">
+<link rel="modulepreload" href="./content/aic-th1.js">
+<link rel="modulepreload" href="./content/aic-th2.js">
+<link rel="modulepreload" href="./content/aic-th3.js">
+<link rel="modulepreload" href="./content/aic-th4.js">
+<link rel="modulepreload" href="./content/aic-th5.js">
+<link rel="modulepreload" href="./content/aic-toolkit.js">
+<link rel="modulepreload" href="./content/aic-visual.js">
+<link rel="modulepreload" href="./content/aic-x-ab.js">
+<link rel="modulepreload" href="./content/aic-x-ab2.js">
+<link rel="modulepreload" href="./content/aic-x-ab3.js">
+<link rel="modulepreload" href="./content/aic-x-ab4.js">
+<link rel="modulepreload" href="./content/aic-x-ai.js">
+<link rel="modulepreload" href="./content/aic-x-ai2.js">
+<link rel="modulepreload" href="./content/aic-x-cf.js">
+<link rel="modulepreload" href="./content/aic-x-fig.js">
 </head>
 <body>
 <header class="top" id="topbar">
@@ -2924,7 +2956,7 @@ a.td-row:hover{background:rgba(255,255,255,.6)}
   <div class="side-nav" id="sideNav">
     <button class="side-search" id="cmdkBtn" type="button" aria-label="Search everything"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span>Search</span><kbd>⌘K</kbd></button>
     <nav class="tabs" id="tabs" aria-label="Workbook sections">
-      <div class="nav-group nav-main"><span class="nav-label">Learn</span><span class="nav-label adm-only" hidden>Admin</span><button class="tab adm-only" data-v="admin" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Overview</span></button><button class="tab adm-only" data-v="admin-log" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Activity log</span></button><button class="tab adm-only" data-v="admin-reports" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 17v-3M12 17v-6M15 17v-4"/></svg><span>Reports</span></button><button class="tab adm-only" data-v="admin-exams" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><path d="M6 16l4-5 3 3 5-7"/></svg><span>Exams</span></button><button class="tab adm-only" data-v="admin-habits" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M12 14h2M16 14h2M8 17h2"/></svg><span>Habits</span></button><button class="tab adm-only" data-v="admin-coaching" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg><span>Coaching</span></button><button class="tab adm-only" data-v="admin-chat" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg><span>Messages</span><b class="lc-navbadge" id="admNavBadge" hidden>0</b></button><button class="tab adm-only" data-v="admin-requests" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2"/></svg><span>Unblock requests</span></button><button class="tab adm-only" data-v="admin-audit" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span>Audit trail</span></button><button class="tab" data-v="dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button><button class="tab" data-v="courses"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.6 17M12 11.5l5.4 5.5"/></svg><span>Technical</span></button><button class="tab" data-v="grc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M12 7.5l1.2 2.8 2.8 1.2-2.8 1.2L12 15.5l-1.2-2.8L8 11.5l2.8-1.2z"/></svg><span>AI Compliance</span></button><button class="tab" data-v="appsec"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14l-2 2 2 2M16 14l2 2-2 2M13 12l-2 8"/></svg><span>Application</span></button><button class="tab" data-v="cisa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4zM6 10v6c4 3 8 3 12 0v-6M21 8v7"/></svg><span>CISA Hub</span></button><button class="tab lc-navbtn" data-v="messages" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg><span>Messages</span><b class="lc-navbadge" id="lcNavBadge" hidden>0</b></button></div>
+      <div class="nav-group nav-main"><span class="nav-label">Learn</span><span class="nav-label adm-only" hidden>Admin</span><button class="tab adm-only" data-v="admin" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Overview</span></button><button class="tab adm-only" data-v="admin-log" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Activity log</span></button><button class="tab adm-only" data-v="admin-reports" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 17v-3M12 17v-6M15 17v-4"/></svg><span>Reports</span></button><button class="tab adm-only" data-v="admin-exams" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><path d="M6 16l4-5 3 3 5-7"/></svg><span>Exams</span></button><button class="tab adm-only" data-v="admin-habits" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M12 14h2M16 14h2M8 17h2"/></svg><span>Habits</span></button><button class="tab adm-only" data-v="admin-coaching" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg><span>Coaching</span></button><button class="tab adm-only" data-v="admin-chat" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg><span>Messages</span><b class="lc-navbadge" id="admNavBadge" hidden>0</b></button><button class="tab adm-only" data-v="admin-team" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14c3 0 5.5 1.8 5.5 4.6"/></svg><span>Team overview</span></button><button class="tab adm-only" data-v="admin-requests" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2"/></svg><span>Unblock requests</span></button><button class="tab adm-only" data-v="admin-audit" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span>Audit trail</span></button><button class="tab" data-v="dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button><button class="tab" data-v="courses"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.6 17M12 11.5l5.4 5.5"/></svg><span>Technical</span></button><button class="tab" data-v="grc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M12 7.5l1.2 2.8 2.8 1.2-2.8 1.2L12 15.5l-1.2-2.8L8 11.5l2.8-1.2z"/></svg><span>AI Compliance</span></button><button class="tab" data-v="appsec"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14l-2 2 2 2M16 14l2 2-2 2M13 12l-2 8"/></svg><span>Application</span></button><button class="tab" data-v="cisa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4zM6 10v6c4 3 8 3 12 0v-6M21 8v7"/></svg><span>CISA Hub</span></button><button class="tab lc-navbtn" data-v="messages" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.7C4 14.9 3 13 3 10.9 3 6.8 7 3.5 12 3.5z"/></svg><span>Messages</span><b class="lc-navbadge" id="lcNavBadge" hidden>0</b></button></div>
       <div class="nav-group nav-drop"><button class="nav-label" type="button" aria-expanded="false">Track<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="drop-panel"><button class="tab" data-v="workbook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 7h6M9 10.5h6"/></svg><span>My Workbook</span></button><button class="tab" data-v="log"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M7.5 14h3M7.5 17h6"/></svg><span>Study Log</span></button><button class="tab" data-v="insights"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><rect x="5.5" y="11" width="3" height="6" rx="1"/><rect x="10.5" y="6" width="3" height="11" rx="1"/><rect x="15.5" y="9" width="3" height="8" rx="1"/></svg><span>Study Insights</span></button></div></div>
       <div class="nav-group nav-drop"><button class="nav-label" type="button" aria-expanded="false">Tools<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="drop-panel"><button class="tab" data-v="explore"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span>Explore & Glossary</span></button><button class="tab" data-v="flash"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="14" height="13" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v11"/><path d="M7 12.5h6"/></svg><span>Flashcards</span></button><button class="tab" data-v="rosetta"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h9M8.5 4v2M6 6c0 4 3 7 6 8M11 6c-.5 3-3 6-6 8"/><path d="M13 20l4-9 4 9M14.5 17h5"/></svg><span>Cloud Rosetta</span></button><button class="tab" data-v="subnets"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18M12 7.5h9"/></svg><span>Subnet Calculator</span></button><button class="tab" data-v="certs"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.5 7 21l5-3 5 3-1.5-7.5"/></svg><span>Cert Paths</span></button></div></div>
     </nav>
@@ -3057,7 +3089,10 @@ import { TECH_PLUS5 } from './content/tech-plus5.js';
 const TECH_PLUS={...TP1,...TECH_PLUS2,...TECH_PLUS3,...TECH_PLUS4,...TECH_PLUS5};
 import { AIC, AIC_LEVELS } from './content/ai-compliance.js';
 import { renderAIC, isAICRoute, aicSubnav, aicWorkSummary, AIC_FLASH, aicReviewState } from './content/aic-work.js';
-import { SEC_ACADEMY, SEC_TEXTBOOK } from './content/security.js';
+import { SEC_META } from './content/security-meta.js';
+// v71: the Application Academy's full lessons (~1.2 MB) load on demand; a 23 KB index is enough for progress and search.
+let SEC_ACADEMY=SEC_META, SEC_TEXTBOOK={}, secFull=false, secLoading=null;
+function loadSec(){ if(secFull) return Promise.resolve(); if(!secLoading) secLoading=import('./content/security.js').then(M=>{SEC_ACADEMY=M.SEC_ACADEMY;SEC_TEXTBOOK=M.SEC_TEXTBOOK;secFull=true;}).catch(e=>{secLoading=null;throw e;}); return secLoading; }
 import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, getDocs, collection, deleteDoc, query, where, orderBy, onSnapshot, addDoc, updateDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -3236,7 +3271,7 @@ function vDashboard(){
   const secProgress=secOverall();
   const wbMins=bookEntries.reduce((a,e)=>a+(Number(e.minutes)||0),0), lastE=bookEntries[0];
   const allMins=totalMins()+wbMins;
-  const cz=S.cisa||{}, cplan=(cz.plans&&cz.plans[cz.planMode||'normal'])||{}, examD=cplan.examDate||'2027-01-13', todayK=dayKey(new Date());
+  const cz=S.cisa||{}, cplan=(cz.plans&&cz.plans[cz.planMode||'normal'])||{}, examD=cplan.examDate||(cz.planMode==='relaxed'?'2027-01-29':'2027-01-13'), todayK=dayKey(new Date());
   const cDays=Math.max(0,Math.round((new Date(examD+'T12:00:00')-new Date(todayK+'T12:00:00'))/864e5));
   const examLabel=new Date(examD+'T12:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
   const cDue=Object.values(cz.mistakes||{}).filter(x=>x&&!x.x&&x.d<=todayK).length, cTopics=Object.values(cz.complete||{}).filter(Boolean).length;
@@ -3262,6 +3297,7 @@ function vDashboard(){
   <h3 class="ed-sect">Today <span>${esc(new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'}))}</span></h3>
   <div id="coachSlot"></div>
   ${todayCardHTML()}
+  <div class="rd-grid" id="readySlot"><section class="ed-card rd-card rd-goal"><div class="rd-load">Loading your daily goal…</div></section><section class="ed-card rd-card"><div class="rd-load">Checking your exam pace…</div></section><section class="ed-card rd-card"><div class="rd-load">Finding your weak spots…</div></section></div>
   ${weekCardHTML()}
   <h3 class="ed-sect">Your academies</h3>
   <div class="ed-acads">${[['#courses','--ok','<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.6 17M12 11.5l5.4 5.5"/></svg>','Technical Academy',p,`${lessonsDone()} of ${M.reduce((n,m)=>n+m.lessons.length,0)} lessons`],
@@ -3282,6 +3318,7 @@ function vDashboard(){
   </div>`;
   app.querySelectorAll('[data-level]').forEach(b=>b.onclick=()=>go('courses',+b.dataset.level));
   wireToday();
+  fillReadiness();
 }
 
 /* ---------------- courses ---------------- */
@@ -3761,7 +3798,7 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='70';
+const APP_V='71';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){
@@ -3788,6 +3825,62 @@ function flashDeck(){const g=Object.keys(GLOSS).map(t=>({k:'g:'+t,front:t,back:G
 async function loadCisaTopics(){if(window.__cisaTopics)return window.__cisaTopics;try{const g=await (await fetch('cisa/data/manual-guide.json')).json();window.__manualSecs=g.chapters.flatMap(c=>c.parts.flatMap(p=>p.sections.flatMap(x=>[{id:x.id,title:x.title,page:x.page,ch:c.n},...(x.subs||[]).map(y=>({id:y.id,title:y.title,page:y.page,ch:c.n}))])));}catch(e){window.__manualSecs=[];}try{const r=await fetch('cisa/data/syllabus.json');const d=await r.json();window.__cisaTopics=d.domains.flatMap(x=>x.topics.map(t=>({id:t.id,title:t.title,intro:t.intro,domain:t.domain})));}catch(e){window.__cisaTopics=[];}return window.__cisaTopics;}
 function flashState(){S.flash=S.flash||{};return S.flash;}
 function flashStats(deckName){const F=flashState(),t=today(),deck=flashDeck().filter(c=>!deckName||deckName==='All'||c.deck===deckName);let due=0,learned=0,mastered=0;for(const c of deck){const r=F[c.k];if(!r)continue;learned++;if(r.x)mastered++;else if(r.d<=t)due++;}const newToday=(S.flashNew&&S.flashNew.d===t)?S.flashNew.n:0;const fresh=deck.filter(c=>!F[c.k]).length;return {total:deck.length,due,learned,mastered,fresh,newLeft:Math.max(0,Math.min(fresh,10-newToday))};}
+
+/* ---------------- v71: daily goal, exam-readiness forecast, weak spots ---------------- */
+const GOAL_MIN=30, GOAL_FLOOR=15; let WeakMod=null, weakRefs=null, actDaysCache={at:0,uid:'',by:{}};
+async function trackedMinutesByDay(){
+  const uid=auth.currentUser&&auth.currentUser.uid; if(!uid||!fdb) return {};
+  if(actDaysCache.uid===uid&&Date.now()-actDaysCache.at<120000) return actDaysCache.by;
+  const by={};
+  try{ const qs=await getDocs(collection(fdb,'activity',uid,'days')); qs.forEach(d=>{ if(!/^\d{4}-\d{2}-\d{2}$/.test(d.id)) return; const r=(d.data()||{}).r||{}; for(const x of Object.values(r)) if(x&&x.k==='t') by[x.d||d.id]=(by[x.d||d.id]||0)+(+x.sec||0)/60; }); }catch(e){}
+  for(const r of Object.values(typeof actPending==='object'&&actPending||{})) if(r&&r.k==='t'&&!(by[r.d]>0)) by[r.d]=(by[r.d]||0)+(+r.sec||0)/60;
+  actDaysCache={at:Date.now(),uid,by}; return by;
+}
+// same rule as the nudge emails: tracked app time, or logged minutes if that is more
+async function studyMinutesByDay(){
+  const t=await trackedMinutesByDay(), l={};
+  S.log.forEach(e=>{l[e.d]=(l[e.d]||0)+(+e.m||0);});
+  ((S.cisa&&S.cisa.logs)||[]).forEach(e=>{const k=String(e.date||'').slice(0,10); l[k]=(l[k]||0)+(+e.minutes||0);});
+  const o={}; for(const k of new Set([...Object.keys(t),...Object.keys(l)])) o[k]=Math.round(Math.max(t[k]||0,l[k]||0)); return o;
+}
+function goalCardHTML(by){
+  const k=today(), m=by[k]||0, pc=Math.min(100,Math.round(m/GOAL_MIN*100));
+  let st=0; const d=new Date(); if((by[dayKey(d)]||0)<GOAL_MIN) d.setDate(d.getDate()-1); while((by[dayKey(d)]||0)>=GOAL_MIN){st++; d.setDate(d.getDate()-1);}
+  let best=0,run=0; const keys=Object.keys(by).sort(); let prev=null; for(const x of keys){ if(by[x]>=GOAL_MIN){ run=(prev&&Math.round((new Date(x)-new Date(prev))/864e5)===1)?run+1:1; prev=x; best=Math.max(best,run);} }
+  const last3=[1,2,3].map(i=>{const z=new Date(); z.setDate(z.getDate()-i); return by[dayKey(z)]||0;}), avg3=Math.round(last3.reduce((a,b)=>a+b,0)/3);
+  const week=[...Array(7)].map((_,i)=>{const z=new Date(); z.setDate(z.getDate()-6+i); const key=dayKey(z), v=by[key]||0; return `<i class="${v>=GOAL_MIN?'hit':v>=GOAL_FLOOR?'half':v>0?'low':''}" title="${esc(z.toLocaleDateString(undefined,{weekday:'short',day:'numeric'}))}: ${v} min"><span>${z.toLocaleDateString(undefined,{weekday:'narrow'})}</span></i>`;}).join('');
+  const msg=m>=GOAL_MIN?'Goal reached today — great work. 🎉':m>0?`${GOAL_MIN-m} more minute${GOAL_MIN-m===1?'':'s'} to reach today’s goal.`:'Nothing yet today — start a 30-minute session.';
+  const warn=avg3<GOAL_FLOOR?`<p class="rd-warn">Last 3 days: ${avg3} min a day on average — below the ${GOAL_FLOOR}-minute minimum.</p>`:'';
+  return `<section class="ed-card rd-card rd-goal"><span class="ed-kicker">Daily goal</span><div class="rd-goal-body"><div class="rd-ring">${ringSVG(120,50,11,pc,'rgba(10,37,64,.08)',m>=GOAL_MIN?'#34C759':'#0A84FF')}<span><b>${m}</b><small>of ${GOAL_MIN} min</small></span></div>
+   <div><h3 class="ed-title">${st} day streak 🔥</h3><p class="ed-sub">${msg}</p><div class="rd-week">${week}</div><p class="cisa-mini">Best streak ${best} day${best===1?'':'s'} · goal ${GOAL_MIN} min a day</p></div></div>${warn}</section>`;
+}
+function forecastCardHTML(f){
+  const cls={ok:'ok',done:'ok',behind:'warn',late:'bad'}[f.status]||'ok', pc=Math.round(f.done/f.total*100);
+  const ttl={ok:'On track for the exam',done:'Syllabus finished',behind:'Falling behind',late:'Not on track for the exam date'}[f.status];
+  return `<section class="ed-card rd-card rd-fc rs-${cls}"><span class="ed-kicker">Exam-readiness forecast</span><h3 class="ed-title">${ttl}</h3><p class="ed-sub">${esc(f.msg)}</p>
+   <span class="d3-bar ed-bar"><i style="width:${pc}%"></i></span><div class="rd-fc-row"><span><b>${f.done}/${f.total}</b> topics</span><span><b>${f.perWeek}</b> / week now</span><span><b>${f.needPerWeek}</b> / week needed</span><span><b>${f.daysLeft}</b> days to exam</span></div>
+   <a class="btn" href="#cisa" data-cisa-tab="overview">Open study plan →</a></section>`;
+}
+function weakCardHTML(w){
+  if(!w.enough&&!w.topics.length) return `<section class="ed-card rd-card"><span class="ed-kicker">Weak spots</span><h3 class="ed-title">Not enough answers yet</h3><p class="ed-sub">Take a practice quiz or a mock exam. After about 20 answered questions, your weakest CISA domains and topics show here.</p><a class="btn" href="#cisa" data-cisa-tab="mocks">Mock exams & practice →</a></section>`;
+  const D=w.weakDomains.slice(0,2).map(d=>`<li><span class="rd-pct bad">${d.acc}%</span><span><b>Domain ${d.id}</b> · ${esc(d.name)}</span></li>`).join('');
+  const T=w.topics.slice(0,4).map(t=>`<li><span class="rd-pct ${t.acc===null?'':t.acc<50?'bad':'warn'}">${t.acc===null?'—':t.acc+'%'}</span><span><b>${esc(t.id)}</b> · ${esc(t.title)}${t.mistakes?` <em>${t.mistakes} open mistake${t.mistakes===1?'':'s'}</em>`:''}</span></li>`).join('');
+  return `<section class="ed-card rd-card rd-weak"><span class="ed-kicker">Weak spots</span><h3 class="ed-title">${w.weakDomains.length||w.topics.length?'Focus here next':'No weak spots right now 💪'}</h3>
+   ${D?`<ul class="rd-list">${D}</ul>`:''}${T?`<p class="cisa-mini" style="margin:8px 0 2px">Weakest topics</p><ul class="rd-list">${T}</ul>`:''}
+   <p class="cisa-mini">From ${w.answered} answered questions in mocks, quizzes and your logs${w.openMistakes?` · ${w.openMistakes} open mistakes`:''}.</p>
+   <a class="btn" href="#cisa" data-cisa-tab="mistakes">Review mistakes →</a></section>`;
+}
+async function fillReadiness(){
+  const slot=document.getElementById('readySlot'); if(!slot) return;
+  try{
+    if(!WeakMod) WeakMod=await import('./cisa/weak.js?v='+APP_V);
+    if(!weakRefs) weakRefs=await WeakMod.loadRefs('./cisa/');
+    const by=await studyMinutesByDay(); const el=document.getElementById('readySlot'); if(!el) return;
+    const C=S.cisa||{};
+    el.innerHTML=goalCardHTML(by)+forecastCardHTML(WeakMod.forecast(C,weakRefs))+weakCardHTML(WeakMod.weakReport(C,weakRefs));
+    el.querySelectorAll('[data-cisa-tab]').forEach(a=>a.addEventListener('click',()=>{window.__cisaTab=a.dataset.cisaTab;}));
+  }catch(e){ console.warn('readiness',e); const el=document.getElementById('readySlot'); if(el) el.remove(); }
+}
 function weekCardHTML(){try{
  const byA=minutesByDay(),byW={};bookEntries.forEach(e=>{const k=String(e.date||'').slice(0,10);byW[k]=(byW[k]||0)+(Number(e.minutes)||0);});
  const span=off=>{const ks=[];for(let i=6+off;i>=off;i--){const d=new Date();d.setDate(d.getDate()-i);ks.push(dayKey(d));}return ks;};
@@ -3915,7 +4008,7 @@ function route(){
   const isMod=/^m\d\d$/.test(h); const isGRC=/^a[ib]\d\d$/.test(h)||isAICRoute(h); const isApp=/^a\d\d$/.test(h);
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-current',String(t.dataset.v===(isMod?'courses':isGRC?'grc':isApp?'appsec':h))));
   document.querySelectorAll('#bottomBar [data-bb]').forEach(a=>a.setAttribute('aria-current',String(a.dataset.bb===(isMod||h==='courses'?'courses':h))));
-  if(isMod) vModule(h); else if(isAICRoute(h)) renderAIC(h,{app,state:()=>grcState,save:saveGRC,confirm:uiConfirm,plus:()=>GRC_PLUS}); else if(isGRC) vGRCModule(h); else if(isApp) vApplicationModule(h); else (VIEWS[h]||vDashboard)();
+  if(isMod) vModule(h); else if(isAICRoute(h)) renderAIC(h,{app,state:()=>grcState,save:saveGRC,confirm:uiConfirm,plus:()=>GRC_PLUS}); else if(isGRC) vGRCModule(h); else if((isApp||h==='appsec')&&!secFull){ app.innerHTML='<div class="view"><section class="ed-card" style="padding:28px;text-align:center;color:var(--muted)">Loading the Application Academy…</section></div>'; loadSec().then(()=>{ if(((location.hash||'').replace('#','')||'dashboard')===h) route(); }).catch(()=>{ app.innerHTML='<div class="view"><section class="ed-card" style="padding:28px">Could not load the Application Academy. Check your connection and try again.</section></div>'; }); } else if(isApp) vApplicationModule(h); else (VIEWS[h]||vDashboard)();
   updateTop();
 }
 function afterRoute(){ if(pendingLevel){const el=document.getElementById('lv-'+pendingLevel); pendingLevel=null; if(el){el.scrollIntoView({block:'start'}); return;}} window.scrollTo(0,0);}
@@ -4279,7 +4372,7 @@ async function applyResetIfNeeded(remote){
   if(full){
     for(const area of ['grcProgress','studyEntries']){ try{const q=await getDocs(collection(fdb,'users',uid,area)); await Promise.all(q.docs.map(d=>deleteDoc(d.ref).catch(()=>{})));}catch(e){} }
     try{const q=await getDocs(collection(fdb,'activity',uid,'days')); await Promise.all(q.docs.map(d=>{const x=d.data()||{}; return setDoc(d.ref,d.id.startsWith('bk-')?{bk:'',bkDay:null,cleared:Date.now()}:{d:x.d||d.id,r:{}}).catch(()=>{});}));}catch(e){}
-    try{const a=await getDoc(doc(fdb,'activity',uid)); const em=(a.exists()&&a.data().email)||actEmail||u.email||''; await setDoc(doc(fdb,'activity',uid),{email:em,lastSeen:Date.now(),resetAt:Date.now()});}catch(e){}
+    try{const a=await getDoc(doc(fdb,'activity',uid)); const ad=a.exists()?a.data():{}, em=ad.email||actEmail||u.email||''; const keep=ad.autoBlock?{autoBlock:ad.autoBlock}:{}; await setDoc(doc(fdb,'activity',uid),{email:em,lastSeen:Date.now(),resetAt:Date.now(),...keep});}catch(e){}
     try{await updateDoc(dbRef,{resetDone:R}); S.resetDone=R; syncBase.resetDone=R; storeLocal(); saveBase();}catch(e){console.warn('reset mark failed',e);}
   }
   try{localStorage.setItem(appliedKey,R); sessionStorage.setItem('p2c-reset-note','1');}catch(e){}
@@ -4333,6 +4426,7 @@ async function startSession(user){
   USER_NAME=LEARNER_NAMES[user.uid]||''; { const w=document.getElementById('who'); w.textContent=USER_NAME||user.email||''; w.title=user.email||''; } setAvatar(USER_NAME||user.email);
   setSync('Loading…',false);
   route();
+  if(!IS_ADMIN) setTimeout(()=>{ (window.requestIdleCallback||setTimeout)(()=>loadSec().catch(()=>{}),{timeout:8000}); },6000);
   await initRemote();
   await loadV3(user.uid);
   setTimeout(dailyBackup,15000); verCheck();

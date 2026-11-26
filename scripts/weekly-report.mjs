@@ -120,6 +120,17 @@ async function makeStore() {
   };
 }
 
+/* ---------- weak spots + exam forecast (shared with the app: cisa/weak.js) ---------- */
+let WEAK = null;
+async function loadWeak() {
+  if (WEAK) return WEAK;
+  const rd = p => fs.readFileSync(new URL('../cisa/' + p, import.meta.url), 'utf8');
+  const M = await import('data:text/javascript;charset=utf-8,' + encodeURIComponent(rd('weak.js')));
+  const js = p => { try { return JSON.parse(rd(p)); } catch (e) { return null; } };
+  WEAK = { M, refs: M.makeRefs(js('data/syllabus.json'), [js('mock-exams/mock-01.json'), js('mock-exams/mock-02.json')], { normal: js('data/normal-plan.json'), relaxed: js('data/relaxed-plan.json') }) };
+  return WEAK;
+}
+
 /* ---------- metrics ---------- */
 function weekStats(uid, data, W) {
   const P = data.progress || {}, C = P.cisa || {}, rows = [];
@@ -150,11 +161,12 @@ function weekStats(uid, data, W) {
   const techDone = Object.values(P.ls || {}).filter(Boolean).length;
   const cisaDone = Object.values(C.complete || {}).filter(Boolean).length, manDone = Object.keys(C.manRead || {}).length;
   const aiDone = (data.grc || []).filter(x => /^a[ib]\d+-l\d+$/.test(x.id) && x.done).length;
-  const plan = (C.plans && C.plans[C.planMode || 'normal']) || {}; const exam = plan.examDate || '2027-01-13';
+  const fc = WEAK ? WEAK.M.forecast(C, WEAK.refs) : null, weak = WEAK ? WEAK.M.weakReport(C, WEAK.refs) : null;
+  const exam = fc ? fc.exam : '2027-01-13';
   const daysToExam = exam ? Math.max(0, Math.round((Date.parse(exam + 'T00:00:00Z') - Date.now()) / DAY)) : null;
   // streak (consecutive active days up to Sunday)
   let streak = 0; for (let i = daily.length - 1; i >= 0 && daily[i].m >= 5; i--) streak++;
-  return { mins, prevMins, active, prevActive, daily, areas, aiLessons, manWeek, topicsWeek, lessonsWeek, mocksWeek, mockBest, qWeek, qRight, reviews, techDone, cisaDone, manDone, aiDone, exam, daysToExam, locked: !!(C.planLock && C.planLock.locked), mode: C.planMode, streak, best: daily.reduce((a, x) => x.m > a.m ? x : a, { m: 0 }) };
+  return { fc, weak, mins, prevMins, active, prevActive, daily, areas, aiLessons, manWeek, topicsWeek, lessonsWeek, mocksWeek, mockBest, qWeek, qRight, reviews, techDone, cisaDone, manDone, aiDone, exam, daysToExam, locked: !!(C.planLock && C.planLock.locked), mode: C.planMode, streak, best: daily.reduce((a, x) => x.m > a.m ? x : a, { m: 0 }) };
 }
 
 /* ---------- copy ---------- */
@@ -172,6 +184,9 @@ function headline(s) {
 }
 function focusList(s) {
   const out = [];
+  const wt = s.weak && s.weak.topics[0], wd = s.weak && s.weak.weakDomains[0];
+  if (wt || wd) out.push([wt ? `Fix your weakest topic: ${wt.id}` : `Strengthen Domain ${wd.id}`, wt ? `${wt.title} — ${wt.acc === null ? '' : wt.acc + '% correct'}${wt.mistakes ? `${wt.acc === null ? '' : ', '}${wt.mistakes} open mistake${wt.mistakes === 1 ? '' : 's'}` : ''}. Re-read it and redo the questions you missed.` : `${wd.name} — only ${wd.acc}% correct so far. Spend one session on its topics.`, SITE + '#cisa', 'Review mistakes']);
+  if (s.fc && (s.fc.status === 'late' || s.fc.status === 'behind')) out.push(['Speed up your CISA plan', `You need about ${s.fc.needPerWeek} topics a week; you're doing ${s.fc.perWeek}.`, SITE + '#cisa', 'Open study plan']);
   if (s.active < 4) out.push(['Study on at least 4 days', 'Short daily sessions beat one long one. Aim for 30 minutes on four days this week.', SITE + '#dashboard', 'Plan a session']);
   if (s.daysToExam !== null) out.push([`CISA exam in ${s.daysToExam} days`, s.locked ? 'Follow your locked plan and clear today’s topics in the CISA Hub.' : 'Set up and lock your study plan so every week has clear targets.', SITE + '#cisa', 'Open CISA Hub']);
   if (s.reviews === 0 && s.aiDone > 0) out.push(['Do your spaced reviews', 'A 3-minute review of finished AI modules helps you remember what you learned.', SITE + '#aic-review', 'Start review']);
@@ -199,6 +214,12 @@ function emailHTML(name, s, W, part = false) {
  ${done.length ? `<tr><td class="pad" style="padding:22px ${part ? 0 : 32}px 0;${F}"><div style="font-size:15px;font-weight:700;color:#0A2540;">What you got done</div><table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:8px;">${done.map(([n, l]) => `<tr><td style="padding:4px 0;${F}font-size:14px;color:#33415c;"><span style="display:inline-block;min-width:34px;font-weight:700;color:#0A84FF;">${n}</span>${l}</td></tr>`).join('')}</table></td></tr>` : ''}
  ${s.areas.length ? `<tr><td class="pad" style="padding:18px ${part ? 0 : 32}px 0;${F}"><div style="font-size:15px;font-weight:700;color:#0A2540;">Where your time went</div><div style="font-size:13.5px;color:#4a5568;margin-top:6px;line-height:1.7;">${s.areas.map(x => `${esc(x.a)} <b style="color:#0A2540;">${hm(x.m)}</b>`).join(' &nbsp;·&nbsp; ')}</div></td></tr>` : ''}
  <tr><td class="pad" style="padding:22px ${part ? 0 : 32}px 0;${F}"><div style="font-size:15px;font-weight:700;color:#0A2540;">Overall progress</div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:6px;">${prog.map(progRow).join('')}</table></td></tr>
+ ${s.fc ? `<tr><td class="pad" style="padding:22px ${part ? 0 : 32}px 0;${F}"><div style="font-size:15px;font-weight:700;color:#0A2540;">Exam readiness</div>
+   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:8px;background:${{ ok: '#f0fdf4', done: '#f0fdf4', behind: '#fff7ed', late: '#fef2f2' }[s.fc.status]};border:1px solid ${{ ok: '#bbf7d0', done: '#bbf7d0', behind: '#fed7aa', late: '#fecaca' }[s.fc.status]};border-radius:12px;"><tr><td style="padding:12px 14px;${F}">
+   <div style="font-size:14px;font-weight:700;color:${{ ok: '#15803d', done: '#15803d', behind: '#c2410c', late: '#b91c1c' }[s.fc.status]};">${{ ok: '✓ On track for the exam', done: '✓ Syllabus finished', behind: '⚠ Falling behind the plan', late: '⚠ Not on track for the exam date' }[s.fc.status]}</div>
+   <div style="font-size:13.5px;color:#33415c;margin-top:4px;line-height:1.5;">${esc(s.fc.msg)}</div></td></tr></table>
+   ${s.weak && (s.weak.weakDomains.length || s.weak.topics.length) ? `<div style="font-size:13px;color:#6b7686;margin:12px 0 4px;">Your weak spots</div><table role="presentation" cellpadding="0" cellspacing="0">${[...s.weak.weakDomains.slice(0, 2).map(d => [d.acc + '%', `<b>Domain ${d.id}</b> · ${esc(d.name)}`]), ...s.weak.topics.slice(0, 3).map(t => [t.acc === null ? '—' : t.acc + '%', `<b>${esc(t.id)}</b> · ${esc(t.title)}${t.mistakes ? ` <span style="color:#b91c1c;">(${t.mistakes} open mistake${t.mistakes === 1 ? '' : 's'})</span>` : ''}`])].map(([p, t]) => `<tr><td valign="top" style="padding:3px 10px 3px 0;"><span style="display:inline-block;min-width:38px;text-align:center;font-size:12px;font-weight:700;color:#b91c1c;background:#fee2e2;border-radius:6px;padding:2px 4px;${F}">${p}</span></td><td style="padding:3px 0;${F}font-size:13.5px;color:#33415c;line-height:1.4;">${t}</td></tr>`).join('')}</table>` : ''}
+ </td></tr>` : ''}
  <tr><td class="pad" style="padding:22px ${part ? 0 : 32}px 0;${F}"><div style="font-size:15px;font-weight:700;color:#0A2540;margin-bottom:4px;">Focus for this week</div><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${focus}</table></td></tr>
  <tr><td class="pad" align="center" style="padding:24px ${part ? 0 : 26}px 6px;">${part ? '' : btn('Continue studying →', SITE + '#dashboard', true)}${btn('Open CISA Hub', SITE + '#cisa')}${btn('Study insights', SITE + '#insights')}</td></tr>
 `;
@@ -224,6 +245,7 @@ function emailText(name, s, W) {
 
 /* ---------- main ---------- */
 async function main() {
+  try { await loadWeak(); } catch (e) { console.warn('weak spots unavailable:', e.message); }
   const { admin, learners, names } = learnersFromApp(), W = lastWeek(), store = await makeStore();
   if (MODE !== 'nudge') console.log(`Week ${W.days[0]} → ${W.days[6]} · ${learners.length} learner(s)${DRY ? ' · DRY RUN' : ''}`);
   const EJ = { service: process.env.EMAILJS_SERVICE_ID, template: process.env.EMAILJS_TEMPLATE_ID, pub: process.env.EMAILJS_PUBLIC_KEY, priv: process.env.EMAILJS_PRIVATE_KEY };
@@ -260,4 +282,8 @@ async function main() {
   console.log(summary.join('\n'));
   await store.close();
 }
-main().catch(e => { console.error(e); process.exit(1); });
+// Also write the result to the run's Summary page (visible even when GitHub can't load the step log)
+const ghSummary = t => { try { if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, t + '\n'); } catch (e) { } };
+const _log = console.log; console.log = (...a) => { _log(...a); ghSummary('    ' + a.join(' ').split('\n').join('\n    ')); };
+ghSummary(`### JS Learning emails · mode: ${MODE}${process.env.TEST_TO ? ' · test to ' + process.env.TEST_TO : ''}\n`);
+main().catch(e => { console.error(e); ghSummary(`\n**❌ Failed:** ${String(e && e.message || e)}\n`); process.exit(1); });
