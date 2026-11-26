@@ -556,3 +556,6 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 
 ## v79 — CISA tab bar
 - CISA main tabs redesigned: one row with icons (Today, Study, Practice, Progress), red badge for mistakes due, gradient highlight; side-by-side icon+label on desktop; night mode fixed. Can no longer stack vertically.
+
+## v80
+- Daily goal card: removed the red "last 3 days" warning line and its space (phone and desktop).

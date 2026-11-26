@@ -3417,3 +3417,6 @@ body{touch-action:manipulation}          /* removes double-tap zoom; pinch-zoom 
 :root:root[data-night] #app .cisa-tabs4 .ct-badge{box-shadow:0 0 0 2px #1B1F27}
 :root:root[data-night] #app .cisa-hub .cisa-tabs.cisa-tabs4 .ct-tab{background:transparent!important;border:0!important;color:#A7B0BF!important}
 :root:root[data-night] #app .cisa-hub .cisa-tabs.cisa-tabs4 .ct-tab[aria-current="true"]{background:linear-gradient(135deg,#0A84FF,#5E5CE6)!important;color:#fff!important}
+/* v80: daily goal card without the warning line — keep it compact */
+#app .rd-goal{padding-bottom:18px!important}
+#app .rd-goal .rd-goal-body>div:last-child>p:last-child{margin-bottom:0}

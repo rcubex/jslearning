@@ -738,7 +738,7 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='79';
+const APP_V='80';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){
@@ -791,7 +791,7 @@ function goalCardHTML(by){
   const last3=[1,2,3].map(i=>{const z=new Date(); z.setDate(z.getDate()-i); return by[dayKey(z)]||0;}), avg3=Math.round(last3.reduce((a,b)=>a+b,0)/3);
   const week=[...Array(7)].map((_,i)=>{const z=new Date(); z.setDate(z.getDate()-6+i); const key=dayKey(z), v=by[key]||0; return `<i class="${v>=GOAL_MIN?'hit':v>=GOAL_FLOOR?'half':v>0?'low':''}" title="${esc(z.toLocaleDateString(undefined,{weekday:'short',day:'numeric'}))}: ${v} min"><span>${z.toLocaleDateString(undefined,{weekday:'narrow'})}</span></i>`;}).join('');
   const msg=m>=GOAL_MIN?'Goal reached today — great work. 🎉':m>0?`${GOAL_MIN-m} more minute${GOAL_MIN-m===1?'':'s'} to reach today’s goal.`:'Nothing yet today — start a 30-minute session.';
-  const warn=avg3<GOAL_FLOOR?`<p class="rd-warn">Last 3 days: ${avg3} min a day on average — below the ${GOAL_FLOOR}-minute minimum.</p>`:'';
+  const warn='';
   return `<section class="ed-card rd-card rd-goal"><span class="ed-kicker">Daily goal</span><div class="rd-goal-body"><div class="rd-ring">${ringSVG(120,50,11,pc,'rgba(10,37,64,.08)',m>=GOAL_MIN?'#34C759':'#0A84FF')}<span><b>${m}</b><small>of ${GOAL_MIN} min</small></span></div>
    <div><h3 class="ed-title">${st} day streak 🔥</h3><p class="ed-sub">${msg}</p><div class="rd-week">${week}</div><p class="cisa-mini">Best streak ${best} day${best===1?'':'s'} · goal ${GOAL_MIN} min a day</p></div></div>${warn}</section>`;
 }
