@@ -566,7 +566,11 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 - **Phone bottom bar:**
   - Hides while you scroll and comes back when you stop.
   - Keeps its floating pill shape but is now solid, with a fade strip behind it, so page content no longer shows through, beside or below it.
-- **Phone sign-in:** the card is centred and smaller.
+- **Phone sign-in:**
+  - The card is smaller and sits higher.
+  - Each field is a single soft grey box (the browser's yellow autofill highlight is turned off).
+  - The clock and logo are smaller and the gaps are tighter.
+  - The Sign in button stays visible when the keyboard opens.
 - **AI Compliance Academy hero:**
   - Compact title and progress ring.
   - One Start/Continue button.
@@ -585,3 +589,6 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
   - The backup row was removed from the CISA study card. Backup is still in CISA Hub → Notes & backup.
   - Side-by-side cards (Exam readiness and Your academies) now line up.
 - No data changes. Firestore rules are unchanged.
+
+## v82
+- Phone sign-in polish (see v81 → Phone sign-in) shipped as its own version, so phones that already have v81 pick it up straight away.

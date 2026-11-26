@@ -3629,3 +3629,25 @@ html:root:root[data-night] #app .aic-hx .hx-reset{background:transparent!importa
   #bottomBar.bb-hide{transform:translateY(calc(100% + 24px + env(safe-area-inset-bottom,0px)))!important}
 }
 @media (min-width:761px){html:has(#bottomBar)::after{display:none!important}}
+
+/* v81 · phone sign-in polish: single soft fields (no autofill yellow), shorter card, smaller clock and logo */
+@media (max-width:600px){
+  :root:root .gate.lockgate{justify-content:flex-start!important;padding-top:calc(env(safe-area-inset-top,0px) + 13vh)!important;gap:12px!important}
+  :root:root .gate .lk-date{font-size:15px!important}
+  :root:root .gate .lk-time{font-size:48px!important;line-height:1.05!important}
+  :root:root .gate .lk-card{padding:16px 18px 18px!important;border-radius:22px!important}
+  :root:root .gate .lk-head{margin-bottom:12px!important;gap:12px!important}
+  :root:root .gate .lk-logo{width:40px!important;height:40px!important;border-radius:12px!important}
+  :root:root .gate .lk-logo svg{width:20px!important;height:20px!important}
+  :root:root .gate .lk-field{gap:5px!important;margin:0 0 10px!important}
+  :root:root .gate .lk-field>span:first-child{font-size:13px!important;margin:0!important;padding:0 2px!important}
+  :root:root .gate .lk-input{min-height:46px!important;height:46px!important;padding:0 12px!important;border:0!important;border-radius:13px!important;background:rgba(118,118,128,.10)!important;box-shadow:none!important;gap:10px!important}
+  :root:root .gate .lk-input input{background:transparent!important;padding:0!important;height:100%!important;border:0!important;box-shadow:none!important}
+  :root:root .gate .lk-input input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px #EFF0F4 inset!important;-webkit-text-fill-color:#1C2433!important}
+  :root:root .gate .lk-peek{padding:6px 2px 6px 8px!important}
+  :root:root .gate .lk-go{min-height:48px!important;margin-top:6px!important}
+  html:root:root body .gate.lockgate .lk-time{font-size:46px!important;line-height:1.05!important}
+  :root:root .gate .lk-input input:-webkit-autofill,:root:root .gate .lk-input input:-webkit-autofill:focus{transition:background-color 99999s ease-out 0s}
+  :root:root[data-night] .gate .lk-input{background:rgba(255,255,255,.08)!important}
+  :root:root[data-night] .gate .lk-input input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px #262B35 inset!important;-webkit-text-fill-color:#E8EAF0!important}
+}
