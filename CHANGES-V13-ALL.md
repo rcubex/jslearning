@@ -592,3 +592,22 @@ The course now has 39 modules, 234 lessons and about 72,000 words.
 
 ## v82
 - Phone sign-in polish (see v81 → Phone sign-in) shipped as its own version, so phones that already have v81 pick it up straight away.
+
+## v83
+- **Access levels (new).** Every account now has a level: **Learner** or **Pentest** (plus the admin). The two groups are kept apart:
+  - Pentest users see only the new **Pentest Academy** plus Home, My Workbook, Study Log, Study Insights and Messages.
+  - Learners keep exactly what they had and cannot open the Pentest Academy.
+  - Enforced in the app (navigation and routes) and in the Firestore rules (only approved/rostered accounts get data; each account only reads its own study data).
+- **Pentest Academy (new content).** Three tracks, 18 modules, 90 lessons, 36 guided labs, 72 checkpoint questions:
+  - **Web Application Pentesting** — engagements & recon, proxy/auth/sessions, access control & business logic, injection, client-side (XSS/CSRF/CORS), APIs/SSRF/uploads & reporting.
+  - **Mobile Application Pentesting** — foundations & lab setup, Android static analysis, iOS assessment, traffic interception & dynamic analysis, auth/crypto/resilience, backend & reporting.
+  - **Network Pentesting** — methodology & safe testing, discovery & scanning, enumeration & vulnerability assessment, authentication & credential hygiene, Active Directory & architecture, wireless & reporting.
+  - Methodology-level and defence-oriented; guided labs are for the learner's own authorized lab. Original teaching text (no copied material).
+- **Pentest home and hub.** Pentest users get their own dashboard (goal, streak, Up next, per-track progress) and an academy hub with track chips, search and module cards. Module pages have lessons, guided labs with notes, and checkpoints, with progress saved per user.
+- **Admin portal:**
+  - **Add user** button (name, email, temporary password, access level) — creates the sign-in account and sets the level, no code change.
+  - **Learners / Pentest** group switch on Team overview, with a Pentest badge and group counts.
+  - Per-user **access level** control (switch level, deactivate) for admin-added accounts.
+- **Weekly email** excludes pentest users from the CISA/Technical report (they would otherwise get a report about content they can't see). Learner emails are unchanged.
+- First pentest account added: it sees only the Pentest Academy. Your four existing accounts are unchanged.
+- **Publish the updated `firestore.rules`** with this release (adds the roster collection and roster-based approval).

@@ -11,11 +11,38 @@ const firebaseConfig = {
 };
 /* Only these approved Firebase Authentication UIDs may sign in.
    Access to saved data is also enforced by deployed Firestore rules. */
-const ALLOWED_USER_UIDS=['Yk0WCbGfCOfiy7fnXqMgcfxjvze2','m6ybLppag7e9ky7UMVqnc80gwxA3','pt8WaB9gHuMU5U8qhtKTJCEHC0r1','CJOZImCPj4VieLsezwCytLOXVKP2'];
+const ALLOWED_USER_UIDS=['Yk0WCbGfCOfiy7fnXqMgcfxjvze2','m6ybLppag7e9ky7UMVqnc80gwxA3','pt8WaB9gHuMU5U8qhtKTJCEHC0r1','CJOZImCPj4VieLsezwCytLOXVKP2','GnHicVzeiHWGfr5p8KrR5K2aMWA3'];
 // Display names shown to a learner (greeting, sidebar) and used by the admin portal and emails. Add more as 'UID':'Name'.
 const LEARNER_NAMES={'CJOZImCPj4VieLsezwCytLOXVKP2':'Jacq'}; window.JSL_NAMES=LEARNER_NAMES; let USER_NAME='';
 /* Admin account: can unlock a learner's locked CISA study plan. */
 const ADMIN_UID='Yk0WCbGfCOfiy7fnXqMgcfxjvze2';
+/* ============================================================================================
+   Access levels (v83). Every account has a role: 'admin', 'learner' or 'pentest'.
+   - learner: the existing study app (Technical, AI Compliance, CISA, etc.). No Pentest access.
+   - pentest: the Pentest Academy only (Web, Mobile, Network), plus Home, Workbook, Log, Insights, Messages.
+     No access to learner content, and learners cannot access theirs.
+   The role lives in Firestore at roster/{uid} (written only by the admin) so new users can be added
+   from the admin portal without a code change. The four original accounts default to 'learner' (admin aside)
+   even before a roster doc exists, so nothing about them changes. Firestore rules enforce that only
+   rostered/approved accounts get data, and each account only ever reads its own study data. */
+const BUILTIN_ROLES={'Yk0WCbGfCOfiy7fnXqMgcfxjvze2':'admin','m6ybLppag7e9ky7UMVqnc80gwxA3':'learner','pt8WaB9gHuMU5U8qhtKTJCEHC0r1':'learner','CJOZImCPj4VieLsezwCytLOXVKP2':'learner','GnHicVzeiHWGfr5p8KrR5K2aMWA3':'pentest'};
+let USER_ROLE='learner';            // resolved at sign-in
+let ROSTER=null;                    // admin-only cache of roster/{uid} docs
+const ROLE_LABEL={admin:'Admin',learner:'Learner',pentest:'Pentest'};
+// Views each non-admin role may open (module routes are gated separately by prefix).
+const ROLE_VIEWS={
+  learner:['dashboard','courses','grc','appsec','cisa','workbook','insights','explore','flash','rosetta','subnets','certs','log','messages'],
+  pentest:['dashboard','pentest','workbook','insights','log','messages']
+};
+function roleOf(uid){ return BUILTIN_ROLES[uid] || (ROSTER&&ROSTER[uid]&&ROSTER[uid].role) || 'learner'; }
+function isPentest(){ return USER_ROLE==='pentest'; }
+let MY_ROSTER=null; // the signed-in user's own roster/{uid} doc (role, name, active), cached at the gate
+// Approved = one of the four built-in accounts, or an active roster entry the admin created.
+async function approvedUid(uid){
+  if(BUILTIN_ROLES[uid]) return true;
+  try{ const rs=await getDoc(doc(fdb,'roster',uid)); if(rs.exists()){ const d=rs.data(); if(d&&d.active!==false){ MY_ROSTER=d; return true; } } }catch(e){}
+  return false;
+}
 /* ============================================================================================ */
 import { GRC_V31 } from "./grc-v31.js"
 import { uiConfirm, uiAlert } from './cisa/ui-dialog.js';
@@ -33,6 +60,9 @@ import { SEC_META } from './content/security-meta.js';
 // v71: the Application Academy's full lessons (~1.2 MB) load on demand; a 23 KB index is enough for progress and search.
 let SEC_ACADEMY=SEC_META, SEC_TEXTBOOK={}, secFull=false, secLoading=null;
 function loadSec(){ if(secFull) return Promise.resolve(); if(!secLoading) secLoading=import('./content/security.js').then(M=>{SEC_ACADEMY=M.SEC_ACADEMY;SEC_TEXTBOOK=M.SEC_TEXTBOOK;secFull=true;}).catch(e=>{secLoading=null;throw e;}); return secLoading; }
+// v83: Pentest Academy content (Web, Mobile, Network) loads on demand, only for pentest users.
+let PT_TRACKS=[], PT_LEVELS=[], PT_MODULES=[], PT_BY_ID={}, ptFull=false, ptLoading=null;
+function loadPentest(){ if(ptFull) return Promise.resolve(); if(!ptLoading) ptLoading=import('./content/pentest-index.js').then(M=>{ PT_TRACKS=M.PT_TRACKS; PT_LEVELS=M.PT_LEVELS; PT_MODULES=M.PT_MODULES; PT_BY_ID=M.PT_BY_ID; ptFull=true; }).catch(e=>{ptLoading=null;throw e;}); return ptLoading; }
 import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, getDocs, collection, deleteDoc, query, where, orderBy, onSnapshot, addDoc, updateDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -91,7 +121,7 @@ const CERTS = [
 
 
 /* ---------------- helpers ---------------- */
-const blank=()=>({v:2,ls:{},qz:{},notes:{},cert:{},log:[],last:null,t:0,appAcademy:{},cisa:{}});
+const blank=()=>({v:2,ls:{},qz:{},notes:{},cert:{},log:[],last:null,t:0,appAcademy:{},cisa:{},pentest:{}});
 let S=blank();
 const app=document.getElementById('app');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -663,6 +693,134 @@ const secState=()=>S.appAcademy||(S.appAcademy={});
 const secLessonDone=(m,i)=>!!secState()[secKey(m,'l',i)];
 const secLabDone=(m,i)=>!!secState()[secKey(m,'lab',i)];
 const secQuizAnswer=(m,i)=>secState()[secKey(m,'q',i)];
+
+/* ===================== Pentest Academy (v83) — pentest-role users only ===================== */
+const ptState=()=>S.pentest||(S.pentest={});
+const ptKey=(m,kind,n)=>m.id+'-'+kind+String(n+1).padStart(2,'0');
+const ptLessonDone=(m,i)=>!!ptState()[ptKey(m,'l',i)];
+const ptLabDone=(m,i)=>!!ptState()[ptKey(m,'lab',i)];
+const ptQuizAnswer=(m,i)=>ptState()[ptKey(m,'q',i)];
+function ptModScore(m){
+  const total=m.lessons.length+m.labs.length+m.qs.length;
+  const read=m.lessons.filter((l,j)=>ptLessonDone(m,j)).length;
+  const labs=m.labs.filter((l,j)=>ptLabDone(m,j)).length;
+  const right=m.qs.filter((q,j)=>ptQuizAnswer(m,j)===q.a).length;
+  const done=read+labs+right;
+  return {total,read,labs,right,done,p:total?Math.round(done/total*100):0};
+}
+function ptOverall(){
+  let total=0,done=0; for(const m of PT_MODULES){const s=ptModScore(m);total+=s.total;done+=s.done;}
+  return {total,done,p:total?Math.round(done/total*100):0};
+}
+function ptTrackScore(tid){
+  const ms=PT_MODULES.filter(m=>m.track===tid); let total=0,done=0,full=0;
+  for(const m of ms){const s=ptModScore(m);total+=s.total;done+=s.done;if(s.p===100)full++;}
+  return {modules:ms.length,full,p:total?Math.round(done/total*100):0};
+}
+function ptNext(){ for(const m of PT_MODULES){ if(ptModScore(m).p<100) return m; } return null; }
+let ptFilter='all', ptSearch='';
+function vPentest(){
+  if(!ptFull){ app.innerHTML='<div class="view"><section class="ed-card" style="padding:28px;text-align:center;color:var(--muted)">Loading the Pentest Academy…</section></div>'; loadPentest().then(()=>{ if(((location.hash||'').replace('#','')||'dashboard')==='pentest') vPentest(); }).catch(()=>{ app.innerHTML='<div class="view"><section class="ed-card" style="padding:28px">Could not load the Pentest Academy. Check your connection and try again.</section></div>'; }); return; }
+  const z=ptOverall(), nx=ptNext();
+  const totals={lessons:PT_MODULES.reduce((a,m)=>a+m.lessons.length,0),labs:PT_MODULES.reduce((a,m)=>a+m.labs.length,0),qs:PT_MODULES.reduce((a,m)=>a+m.qs.length,0)};
+  const trackChips=[['all','All tracks'],...PT_TRACKS.map(t=>[t.id,t.short])];
+  app.innerHTML=`<div class="view"><section class="cockpit pt-hero pt-hx"><div class="hx-top"><div class="hx-title"><div class="eyebrow">Pentest Academy · Hands-on security testing</div><h1>Offensive security, step by step</h1><p class="hx-sub">${PT_MODULES.length} modules · ${totals.lessons} lessons · ${totals.labs} guided labs · ${totals.qs} checks · Web, Mobile & Network</p></div><div class="hx-ring">${ringSVG(148,62,12,z.p,'rgba(255,255,255,.22)','#fff')}<div class="ring-lbl"><b>${z.p}%</b><span>${z.done}/${z.total}</span></div></div></div>
+   <div class="hx-act">${nx?`<a class="btn primary hx-go" href="#${nx.id}"><span>${z.done?'Continue':'Start'}</span><b>${v3safe(nx.name)}</b><i aria-hidden="true">→</i></a>`:'<span class="pill">All modules complete 🎉</span>'}</div>
+   <nav class="pt-tracks hx-lv" aria-label="Tracks">${PT_TRACKS.map(t=>{const s=ptTrackScore(t.id);return `<button type="button" data-pttrack="${t.id}"><small>${v3safe(t.tag)}</small><b>${v3safe(t.short)}</b><span class="pt-tk-p">${s.full}/${s.modules} · ${s.p}%</span><i style="--p:${s.p}%"></i></button>`}).join('')}</nav></section>
+   <div class="sect-title" style="margin-top:22px"><h3>Your tracks</h3><span class="eyebrow">Practice only on systems you own or are authorized to test</span></div>
+   <div class="pt-filter"><div class="pt-chips">${trackChips.map(([k,n])=>`<button type="button" class="fbtn ${ptFilter===k?'active':''}" data-ptf="${k}" aria-pressed="${ptFilter===k}">${esc(n)}</button>`).join('')}</div><input class="search" id="ptSearch" type="search" placeholder="Search modules, topics…" value="${esc(ptSearch)}" aria-label="Search pentest modules"></div>
+   <div id="ptPath">${ptRoadmap()}</div>
+   <div class="sec-references"><b>References</b> · <a href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank" rel="noopener noreferrer">OWASP WSTG</a> · <a href="https://mas.owasp.org/" target="_blank" rel="noopener noreferrer">OWASP MASVS/MASTG</a> · <a href="http://www.pentest-standard.org/" target="_blank" rel="noopener noreferrer">PTES</a><p>Guided labs are written practice instructions for your own authorized lab, not hosted targets.</p></div></div>`;
+  app.querySelectorAll('[data-pttrack]').forEach(b=>b.onclick=()=>{ptFilter=b.dataset.pttrack;vPentest();});
+  app.querySelectorAll('[data-ptf]').forEach(b=>b.onclick=()=>{ptFilter=b.dataset.ptf;app.querySelectorAll('[data-ptf]').forEach(t=>{t.classList.toggle('active',t===b);t.setAttribute('aria-pressed',String(t===b))});document.getElementById('ptPath').innerHTML=ptRoadmap();});
+  const si=document.getElementById('ptSearch'); if(si) si.oninput=e=>{ptSearch=e.target.value;document.getElementById('ptPath').innerHTML=ptRoadmap();};
+  afterRoute();
+}
+function ptRoadmap(){
+  const q=ptSearch.trim().toLowerCase();
+  const tracks=PT_TRACKS.filter(t=>ptFilter==='all'||ptFilter===t.id);
+  const out=tracks.map(t=>{
+    const mods=PT_MODULES.filter(m=>m.track===t.id&&(!q||(m.name+' '+m.goal+' '+m.lessons.map(x=>x.t).join(' ')).toLowerCase().includes(q)));
+    if(!mods.length) return '';
+    const all=PT_MODULES.filter(m=>m.track===t.id), full=all.filter(m=>ptModScore(m).p===100).length;
+    return `<section class="sec-stage"><div class="sec-stage-head"><span class="sec-stage-num">${PT_TRACKS.indexOf(t)+1}</span><div><h3>${esc(t.name)} <small>· ${all.length} modules</small></h3><p>${esc(t.desc)}</p></div><span class="pill">${full}/${all.length} completed</span></div><div class="cards">${mods.map(ptCard).join('')}</div></section>`;
+  }).join('');
+  return out||'<div class="sec-no-results">No modules match this search.</div>';
+}
+function ptCard(m){
+  const s=ptModScore(m), n=PT_MODULES.filter(x=>x.track===m.track).indexOf(m)+1;
+  return `<a class="mcard ${s.p===100?'done':s.p?'prog':''}" href="#${m.id}"><div class="row"><span class="num">MODULE ${String(n).padStart(2,'0')} · ${esc(m.level)}</span><span class="pill ${s.p===100?'done':s.p?'prog':''}">${s.p===100?'Complete':s.p?s.p+'%':'Not started'}</span></div><h4>${esc(m.name)}</h4><p>${esc(m.goal)}</p><p class="sec-metrics">${m.lessons.length} lessons · ${m.labs.length} labs · ${m.qs.length} checks</p><div class="bar"><i style="width:${s.p}%"></i></div></a>`;
+}
+function vPentestModule(id,keepY){
+  if(!ptFull){ loadPentest().then(()=>vPentestModule(id,keepY)); return; }
+  const m=PT_BY_ID[id]; if(!m) return vPentest();
+  const i=PT_MODULES.indexOf(m), prev=PT_MODULES[i-1], next=PT_MODULES[i+1], s=ptModScore(m);
+  const answered=m.qs.filter((q,j)=>ptQuizAnswer(m,j)!==undefined&&ptQuizAnswer(m,j)!==null).length;
+  const doneLabs=m.labs.filter((l,j)=>ptLabDone(m,j)).length;
+  app.innerHTML=`<div class="${keepY?'':'view'}"><section class="mhero pt-mhero"><div><div class="crumb"><a href="#pentest">Pentest Academy</a> / ${esc(m.level)} / ${id.toUpperCase()}</div><h2>${esc(m.name)}</h2><p class="goal">${esc(m.goal)}</p><div class="meta"><span class="pill">${m.lessons.length} lessons</span><span class="pill">${m.labs.length} guided labs</span><span class="pill">${m.qs.length} checks</span></div></div><div class="mring">${ringSVG(84,34,8,s.p,'rgba(255,255,255,.22)','#fff')}<div><b>${s.p}%</b><span>${s.done} / ${s.total}</span></div></div></section>
+  <div class="mbody"><div><section class="msect"><div class="h"><h3>Lessons</h3><span class="eyebrow">${s.read} of ${m.lessons.length} read</span></div>
+  <div class="read-tools" aria-label="Reading preferences"><button type="button" id="ptSmaller">A−</button><button type="button" id="ptLarger">A+</button><button type="button" id="ptWidth">${readPrefs.width===60?'Comfort width':'Wide reading'}</button><span class="eyebrow">Preferences stay on this device</span></div>
+  <div class="timeline">${m.lessons.map((l,j)=>{const k=ptKey(m,'l',j),on=ptLessonDone(m,j);return `<article class="lesson ${on?'on':''}" id="PT-${k}"><span class="lnode">${on?CHECK:j+1}</span><div class="lcard"><div class="ln">Lesson ${j+1} of ${m.lessons.length}</div><h4>${esc(l.t)}</h4><div class="lbody">${ptLessonBody(l)}</div><div class="lfoot"><button class="btn pt-complete ${on?'done':''}" data-key="${k}">${on?'✓ Marked as read':'Mark as read'}</button></div></div></article>`;}).join('')}</div></section>
+  <section class="msect pt-lab-area"><div class="h"><h3>Guided practice labs</h3><span class="eyebrow">${doneLabs} of ${m.labs.length} completed</span></div><div class="sec-safety">Practice only in your own lab or on systems you are explicitly authorized to test. Labs are guided tasks; no live target is provided.</div>
+  ${m.labs.map((l,j)=>{const k=ptKey(m,'lab',j),on=ptLabDone(m,j);return `<article class="sec-lab" id="PT-${k}"><div class="sec-lab-head"><span class="pill">LAB ${j+1}</span><h4>${esc(l.t)}</h4><span class="pill ${on?'done':''}">${on?'Completed':'Not completed'}</span></div><p>${esc(l.task)}</p><p class="pt-lab-focus"><b>Success looks like:</b> ${esc(l.focus)}</p><label for="${k}-note">Lab notes (saved to your progress)</label><textarea id="${k}-note" data-pt-note="${k}" rows="3" maxlength="1800" placeholder="Evidence, commands, findings…">${esc(ptState()[k+'-note']||'')}</textarea><div class="lfoot"><button class="btn pt-lab-done ${on?'done':''}" data-key="${k}">${on?'✓ Lab completed':'Mark lab complete'}</button></div></article>`;}).join('')}</section>
+  <section class="msect" id="pt-quiz"><div class="h"><h3>Knowledge checkpoint</h3><span class="eyebrow">${answered} of ${m.qs.length} answered</span></div>${m.qs.map((q,j)=>{const a=ptQuizAnswer(m,j),done=a!==undefined&&a!==null;return `<div class="q"><p><span>Q${j+1}</span>${esc(q.t)}</p><div class="opts">${q.o.map((o,k)=>`<button class="opt ${done&&k===q.a?'right':''} ${done&&k===a&&a!==q.a?'wrong':''}" data-ptq="${j}" data-answer="${k}" ${done?'disabled':''}><span class="ltr">${'ABCD'[k]}</span><span>${esc(o)}</span></button>`).join('')}</div>${done?`<div class="explain"><span><b>${a===q.a?'Correct.':'Not quite.'}</b> ${esc(q.x)}</span>${a!==q.a?`<button class="linkbtn" data-pt-retry="${j}">Try again</button>`:''}</div>`:''}</div>`;}).join('')}</section>
+  <nav class="pager">${prev?`<a class="btn" href="#${prev.id}">← ${esc(prev.name)}</a>`:'<span></span>'}${next?`<a class="btn" href="#${next.id}">${esc(next.name)} →</a>`:'<a class="btn" href="#pentest">Academy overview →</a>'}</nav></div>
+  <aside class="mside"><div class="panel outline-panel"><h5>In this module</h5><div class="outline">${m.lessons.map((l,j)=>`<button class="${ptLessonDone(m,j)?'on':''}" data-pt-jump="PT-${ptKey(m,'l',j)}"><i></i>${j+1}. ${esc(l.t)}</button>`).join('')}<button data-pt-jump="pt-quiz"><i></i>Checkpoint (${m.qs.length})</button></div></div></aside></div></div>`;
+  const rer=()=>{const y=window.scrollY;vPentestModule(id,true);window.scrollTo(0,y);};
+  app.querySelectorAll('.pt-complete').forEach(b=>b.onclick=()=>{ptState()[b.dataset.key]=!ptState()[b.dataset.key];save();rer();});
+  app.querySelectorAll('.pt-lab-done').forEach(b=>b.onclick=()=>{ptState()[b.dataset.key]=!ptState()[b.dataset.key];save();rer();});
+  app.querySelectorAll('[data-ptq]').forEach(b=>b.onclick=()=>{ptState()[ptKey(m,'q',+b.dataset.ptq)]=+b.dataset.answer;save();rer();});
+  app.querySelectorAll('[data-pt-retry]').forEach(b=>b.onclick=()=>{delete ptState()[ptKey(m,'q',+b.dataset.ptRetry)];save();rer();});
+  app.querySelectorAll('[data-pt-note]').forEach(t=>t.oninput=()=>{ptState()[t.dataset.ptNote+'-note']=t.value;save();});
+  app.querySelectorAll('[data-pt-jump]').forEach(b=>b.onclick=()=>{const el=document.getElementById(b.dataset.ptJump);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});});
+  const applyRead=()=>{app.querySelectorAll('.pt-mhero ~ .mbody .lbody').forEach(el=>{el.style.fontSize=readPrefs.size+'px';});};
+  const rp=document.getElementById('ptSmaller'); if(rp){ rp.onclick=()=>{readPrefs.size=Math.max(15,readPrefs.size-1);saveReadPrefs();applyRead();}; document.getElementById('ptLarger').onclick=()=>{readPrefs.size=Math.min(22,readPrefs.size+1);saveReadPrefs();applyRead();}; document.getElementById('ptWidth').onclick=()=>{readPrefs.width=readPrefs.width===60?75:60;saveReadPrefs();rer();}; applyRead(); }
+  afterRoute();
+}
+// Line-based renderer for pentest lesson bodies: headings, lists, command blocks and key/warn notes,
+// handling a heading immediately followed by a list (no blank line) correctly.
+function ptLessonBody(l){
+  const lines=String(l.b||'').replace(/\r/g,'').split('\n');
+  let out='', para=[], list=null, cmd=null;
+  const flushPara=()=>{ if(para.length){ out+=`<p>${ptInline(para.join(' '))}</p>`; para=[]; } };
+  const flushList=()=>{ if(list){ out+=list.o?`<ol class="pt-ol">${list.items.map(x=>`<li>${ptInline(x)}</li>`).join('')}</ol>`:`<ul class="pt-ul">${list.items.map(x=>`<li>${ptInline(x)}</li>`).join('')}</ul>`; list=null; } };
+  const flushCmd=()=>{ if(cmd){ out+=`<pre class="pt-cmd">${cmd.map(x=>esc(x)).join('\n')}</pre>`; cmd=null; } };
+  const flushAll=()=>{ flushPara(); flushList(); flushCmd(); };
+  for(const raw of lines){ const t=raw.trim();
+    if(!t){ flushAll(); continue; }
+    if(t.startsWith('## ')){ flushAll(); out+=`<h5 class="pt-h">${ptInline(t.slice(3).trim())}</h5>`; continue; }
+    if(t.startsWith('> ')){ flushAll(); out+=`<aside class="pt-key">${ptInline(t.slice(2).trim())}</aside>`; continue; }
+    if(t.startsWith('! ')){ flushAll(); out+=`<aside class="pt-warn">${ptInline(t.slice(2).trim())}</aside>`; continue; }
+    if(t.startsWith('$ ')){ flushPara(); flushList(); (cmd=cmd||[]).push(t.slice(2)); continue; }
+    if(t.startsWith('- ')){ flushPara(); flushCmd(); if(!list||list.o){ flushList(); list={o:false,items:[]}; } list.items.push(t.slice(2)); continue; }
+    const m=/^(\d+)\.\s+(.*)$/.exec(t);
+    if(m){ flushPara(); flushCmd(); if(!list||!list.o){ flushList(); list={o:true,items:[]}; } list.items.push(m[2]); continue; }
+    flushList(); flushCmd(); para.push(t);
+  }
+  flushAll();
+  return out;
+}
+// {{code}} spans in pentest text.
+function ptInline(s){ return esc(s).replace(/\{\{([^}]+)\}\}/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>'); }
+function vPentestDashboard(){
+  const dateStr=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'});
+  const nm=USER_NAME||((document.getElementById('who').textContent||'').split('@')[0].split(/[._\-0-9]/)[0]||'');
+  const greetName=nm?nm.charAt(0).toUpperCase()+nm.slice(1):'';
+  const hr=new Date().getHours(), greet=hr<5?'Late night session':hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+  if(!ptFull){ loadPentest().then(()=>{ if(((location.hash||'').replace('#','')||'dashboard')==='dashboard') vPentestDashboard(); }); app.innerHTML=`<div class="view"><section class="view-head ed-head"><span class="eyebrow">${esc(dateStr)}</span><h2>${greet}${greetName?', '+esc(greetName):''}</h2></section><section class="ed-card" style="padding:28px;text-align:center;color:var(--muted)">Loading your academy…</section></div>`; return; }
+  const z=ptOverall(), nx=ptNext();
+  const by=minutesByDay();
+  app.innerHTML=`<div class="view">
+  <section class="view-head ed-head"><span class="eyebrow">${esc(dateStr)}</span><h2>${greet}${greetName?', '+esc(greetName):''}</h2></section>
+  <section class="ed-card ed-hero"><div class="ed-hero-main"><span class="ed-kicker">${z.done?'Continue learning':'Start here'}</span><h3 class="ed-title">${nx?esc(nx.name):'Every module complete'}</h3><p class="ed-sub">${nx?esc(ROLE_LABEL.pentest)+' · '+esc(PT_TRACKS.find(t=>t.id===nx.track)?.name||'')+' · '+esc(nx.level):'Pick any module to revise.'}</p>${nx?`<span class="d3-bar ed-bar"><i style="width:${ptModScore(nx).p}%"></i></span>`:''}<div class="ed-actions">${nx?`<a class="btn primary" href="#${nx.id}">${z.done?'Continue':'Start module'} →</a>`:''}<a class="btn" href="#pentest">All modules</a></div></div>
+    <a class="ed-ring" href="#pentest" aria-label="Pentest Academy ${z.p} percent">${ringSVG(180,80,14,z.p,'rgba(10,37,64,.07)','#0A84FF')}<span><b>${z.p}%</b><small>Pentest</small></span></a></section>
+  <h3 class="ed-sect">Today <span>${esc(new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'}))}</span></h3>
+  <div class="rd-grid">${goalCardHTML(by)}
+   <section class="ed-card rd-card"><span class="ed-kicker">Your tracks</span><div class="pt-dash-tracks">${PT_TRACKS.map(t=>{const s=ptTrackScore(t.id);return `<a class="pt-dash-tk" href="#pentest"><div><b>${esc(t.short)}</b><small>${s.full}/${s.modules} modules</small></div><div class="pt-dash-bar"><i style="width:${s.p}%"></i></div><span class="pt-dash-p">${s.p}%</span></a>`}).join('')}</div></section>
+  </div></div>`;
+  afterRoute();
+}
+
 const secScore=m=>{
  const read=m.lessons.filter((l,i)=>secLessonDone(m,i)).length;
  const labs=m.labs.filter((l,i)=>secLabDone(m,i)).length;
@@ -739,14 +897,14 @@ function vApplicationModule(id,keepY){
 /* ---------------- router ---------------- */
 let CisaModule=null, AdminMod=null;
 /* Version tag for on-demand modules, so a browser never mixes a new index.html with an old cached module. */
-const APP_V='82';
+const APP_V='83';
 function adminStop(){ try{ AdminMod&&AdminMod.unmountAdmin&&AdminMod.unmountAdmin(); }catch(e){} }
 /* Admin account: a monitoring-only portal (learners, activity log, weekly and 2-week reports). */
 async function vAdmin(ah){
   const sub=(ah||'admin').replace(/^admin-?/,'')||'overview';
   if(app.querySelector(':scope > .adm-portal')&&AdminMod&&AdminMod.showView){ AdminMod.showView(sub); return; }
   app.innerHTML='<div class="cisa-hub adm-portal"><section class="cisa-card">Loading admin portal…</section></div>';
-  try{ const M=await import('./cisa/admin-portal.js?v='+APP_V); AdminMod=M; if(!IS_ADMIN||!dbRef) return; await M.mountAdmin({root:app,readLearners,readActivity,unlockLearner,fb:FB,view:sub,listBackups,readBackup,restoreBackup,selfTest,appVersion:APP_V,relockLearner,resetLearner}); }
+  try{ const M=await import('./cisa/admin-portal.js?v='+APP_V); AdminMod=M; if(!IS_ADMIN||!dbRef) return; await M.mountAdmin({root:app,readLearners,readActivity,unlockLearner,fb:FB,view:sub,listBackups,readBackup,restoreBackup,selfTest,appVersion:APP_V,relockLearner,resetLearner,addUser:adminAddUser,setRole:adminSetRole,roleLabel:ROLE_LABEL}); }
   catch(e){ console.error('Admin portal failed',e); app.innerHTML='<div class="cisa-hub adm-portal"><section class="cisa-error">Unable to load the admin portal. Upload the whole <code>cisa/</code> folder alongside <code>index.html</code>.</section></div>'; }
 }
 async function vCisa(){
@@ -757,7 +915,7 @@ async function vCisa(){
     await CisaModule.mount({root:app,read:()=>{const v=S.cisa||{};window.__cisaBase=jclone(v);return v;},write:(next)=>{const b=window.__cisaBase;S.cisa=b?merge3(b,next,S.cisa||{}):next;window.__cisaBase=jclone(next);save()},isAdmin:!!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID),verifyAdmin,readLearners,unlockLearner,track:(w,a)=>actEvent(w,a),tab:window.__cisaTab||null,topic:window.__cisaTopic||null,section:window.__cisaSection||null}); window.__cisaTab=null; window.__cisaTopic=null; window.__cisaSection=null; window.__cisaWhere=CisaModule.where||null;
   }catch(e){console.error('CISA load failed',e);app.innerHTML='<div class="cisa-hub"><section class="cisa-error">Unable to load CISA Hub. Verify the whole <code>cisa/</code> directory was uploaded alongside <code>index.html</code>.</section></div>'}
 }
-const VIEWS={dashboard:vDashboard,courses:vCourses,grc:vGRC,appsec:vApplication,cisa:vCisa,workbook:vWorkbook,insights:vInsights,explore:vExplore,flash:vFlash,rosetta:vRosetta,subnets:vSubnets,certs:vCerts,log:vLog};
+const VIEWS={dashboard:vDashboard,pentest:vPentest,courses:vCourses,grc:vGRC,appsec:vApplication,cisa:vCisa,workbook:vWorkbook,insights:vInsights,explore:vExplore,flash:vFlash,rosetta:vRosetta,subnets:vSubnets,certs:vCerts,log:vLog};
 let pendingLevel=null;
 
 /* ================= Today card, backup, flashcards, quick search ================= */
@@ -956,11 +1114,35 @@ document.addEventListener('keydown',e=>{const open=!document.getElementById('cmd
 
 let IS_ADMIN=false;
 /* Show the Admin portal item only to the admin, and Messages only to learners (no reliance on CSS). */
-function navForRole(){ document.querySelectorAll('#tabs .adm-only').forEach(el=>el.hidden=!IS_ADMIN); const m=document.querySelector('#tabs .lc-navbtn'); if(m) m.hidden=IS_ADMIN||!dbRef; }
+function navForRole(){
+  document.querySelectorAll('#tabs .adm-only').forEach(el=>el.hidden=!IS_ADMIN);
+  const m=document.querySelector('#tabs .lc-navbtn'); if(m) m.hidden=IS_ADMIN||!dbRef;
+  const pt=isPentest();
+  document.documentElement.classList.toggle('pentest-mode',pt&&!IS_ADMIN);
+  // Pentest users: show only their tab and shared tools; learners: hide the Pentest tab and show their own.
+  const allow=pt?ROLE_VIEWS.pentest:null;
+  document.querySelectorAll('#tabs .tab[data-v]').forEach(t=>{ const v=t.dataset.v; if(t.classList.contains('adm-only'))return; if(v==='pentest'){ t.hidden=!(pt&&!IS_ADMIN); } else if(allow){ t.hidden=!allow.includes(v); } else { t.hidden=false; } });
+  document.querySelectorAll('#bottomBar [data-bb]').forEach(a=>{ const v=a.dataset.bb; if(v==='pentest'){ a.hidden=!(pt&&!IS_ADMIN); } else if(v==='courses'||v==='cisa'){ a.hidden=pt&&!IS_ADMIN; } });
+}
 function route(){
   if(!IS_ADMIN&&location.hash==='#admin'){ history.replaceState(null,'','#dashboard'); }
   if(IS_ADMIN){ let ah=(location.hash||'').replace('#',''); if(!/^admin(-[a-z]+)?$/.test(ah)||ah==='admin-chat'){ ah='admin'; history.replaceState(null,'','#admin'); } document.querySelectorAll('#tabs .tab').forEach(t=>t.setAttribute('aria-current',String(t.dataset.v===ah))); vAdmin(ah); return; }
   let h=(location.hash||'').replace('#','')||'dashboard'; if(h==='contents') h='courses';
+  const isPT=/^p[wmn]\d\d$/.test(h);
+  if(isPentest()){
+    // Pentest users: only their academy plus shared tools. Everything else redirects home.
+    if(!isPT && !ROLE_VIEWS.pentest.includes(h)){ h='dashboard'; history.replaceState(null,'','#dashboard'); }
+    document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-current',String(t.dataset.v===(isPT?'pentest':h))));
+    document.querySelectorAll('#bottomBar [data-bb]').forEach(a=>a.setAttribute('aria-current',String(a.dataset.bb===(isPT?'pentest':h))));
+    if(h==='dashboard') vPentestDashboard();
+    else if(h==='pentest') vPentest();
+    else if(isPT) vPentestModule(h);
+    else if(h==='messages'){ /* handled via openMessages */ (VIEWS[h]||vPentestDashboard)(); }
+    else (VIEWS[h]||vPentestDashboard)();
+    updateTop(); return;
+  }
+  // Learners never reach the Pentest Academy.
+  if(isPT||h==='pentest'){ h='dashboard'; history.replaceState(null,'','#dashboard'); }
   const isMod=/^m\d\d$/.test(h); const isGRC=/^a[ib]\d\d$/.test(h)||isAICRoute(h); const isApp=/^a\d\d$/.test(h);
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-current',String(t.dataset.v===(isMod?'courses':isGRC?'grc':isApp?'appsec':h))));
   document.querySelectorAll('#bottomBar [data-bb]').forEach(a=>a.setAttribute('aria-current',String(a.dataset.bb===(isMod||h==='courses'?'courses':h))));
@@ -1064,12 +1246,46 @@ function coachStop(){ try{ CoachMod&&CoachMod.stopCoach(); }catch(e){} }
 /* Admin: read other approved accounts' progress (allowed by Firestore rules for the admin only). */
 async function readLearners(){
   if(!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID)) return [];
+  // Build the full set of accounts: the built-in ones plus any the admin added to the roster.
+  const ids=new Set(ALLOWED_USER_UIDS.filter(u=>u!==ADMIN_UID));
+  const roles={...BUILTIN_ROLES}; const names={...LEARNER_NAMES}; const emails={};
+  ROSTER={};
+  try{ const rs=await getDocs(collection(fdb,'roster')); rs.forEach(d=>{ if(d.id===ADMIN_UID) return; const v=d.data()||{}; ROSTER[d.id]=v; if(v.active===false){ ids.delete(d.id); return; } ids.add(d.id); roles[d.id]=v.role||'learner'; if(v.name) names[d.id]=v.name; if(v.email) emails[d.id]=v.email; }); }catch(e){}
   const out=[];
-  for(const uid of ALLOWED_USER_UIDS.filter(u=>u!==ADMIN_UID)){
-    try{ const snap=await getDoc(doc(fdb,'progress',uid)); out.push({uid,ok:true,data:snap.exists()?snap.data():null}); }
-    catch(e){ out.push({uid,ok:false,error:String(e&&e.code||e&&e.message||e)}); }
+  for(const uid of ids){
+    const role=roles[uid]||'learner', builtin=!!BUILTIN_ROLES[uid];
+    try{ const snap=await getDoc(doc(fdb,'progress',uid)); out.push({uid,ok:true,data:snap.exists()?snap.data():null,role,builtin,name:names[uid]||'',email:emails[uid]||''}); }
+    catch(e){ out.push({uid,ok:false,error:String(e&&e.code||e&&e.message||e),role,builtin,name:names[uid]||'',email:emails[uid]||''}); }
   }
   return out;
+}
+// Admin: create a new account and assign its access level, without a code change.
+// Uses a throwaway secondary Firebase app so the admin stays signed in (same pattern as admin verify).
+async function adminAddUser({name,email,password,role}){
+  if(!isAdminUser()) return {ok:false,err:'Only the admin can add users.'};
+  if(!email||!password||password.length<6) return {ok:false,err:'Enter an email and a password of at least 6 characters.'};
+  if(!['learner','pentest'].includes(role)) role='pentest';
+  let tmp=null;
+  try{
+    tmp=initializeApp(firebaseConfig,'admin-add-'+Date.now());
+    const a2=getAuth(tmp); a2.n=1;
+    let cred;
+    const { createUserWithEmailAndPassword }=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+    try{ cred=await createUserWithEmailAndPassword(a2,email,password); }
+    catch(e){ const code=e&&e.code||''; return {ok:false,err:code==='auth/email-already-in-use'?'That email already has an account. Use a different email, or set their role from the list if they are already here.':code==='auth/invalid-email'?'That email address is not valid.':code==='auth/weak-password'?'Choose a stronger password (at least 6 characters).':'Could not create the account ('+(code||'error')+').'}; }
+    const uid=cred.user.uid;
+    try{ await setDoc(doc(getFirestore(tmp),'roster',uid),{role,name:name||'',email,active:true,addedAt:new Date().toISOString(),by:'admin'}); }
+    catch(e){ return {ok:false,err:'Account was created but saving its access level failed. Try "Set role" on them in the list.'}; }
+    try{ await signOut(a2); }catch(e){}
+    return {ok:true,uid,role};
+  }catch(e){ return {ok:false,err:'Could not add the user. Check the connection and try again.'}; }
+  finally{ if(tmp){ try{ await deleteApp(tmp); }catch(e){} } }
+}
+// Admin: change an existing account's role or active flag.
+async function adminSetRole(uid,patch){
+  if(!isAdminUser()) return {ok:false,err:'not-admin'};
+  try{ await setDoc(doc(fdb,'roster',uid),{...patch,updatedAt:new Date().toISOString(),by:'admin'},{merge:true}); return {ok:true}; }
+  catch(e){ return {ok:false,err:String(e&&e.code||e)}; }
 }
 async function relockLearner(uid,mode,at){
   if(!isAdminUser()) return false;
@@ -1375,11 +1591,16 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 async function startSession(user){
   KEY='p2c-'+user.uid;
   dbRef=doc(fdb,'progress',user.uid); remoteReady=false; syncPending=false; if(unsubProg){unsubProg();unsubProg=null;}
-  IS_ADMIN=user.uid===ADMIN_UID; document.documentElement.classList.toggle('admin-mode',IS_ADMIN); navForRole();
+  IS_ADMIN=user.uid===ADMIN_UID;
+  USER_ROLE=IS_ADMIN?'admin':(BUILTIN_ROLES[user.uid]||(MY_ROSTER&&MY_ROSTER.role)||'learner');
+  const rosterName=(!IS_ADMIN&&MY_ROSTER&&MY_ROSTER.name)||'';
+  document.documentElement.classList.toggle('admin-mode',IS_ADMIN); navForRole();
   if(IS_ADMIN&&location.hash!=='#admin') history.replaceState(null,'','#admin');
+  // A pentest user landing on a learner-only hash (e.g. an old bookmark) is sent home by route().
+  if(isPentest()&&!IS_ADMIN){ const hh=(location.hash||'').replace('#',''); if(hh&&!/^p[wmn]\d\d$/.test(hh)&&!ROLE_VIEWS.pentest.includes(hh)) history.replaceState(null,'','#dashboard'); }
   actStart(user); coachStart(user);
   S=loadLocal()||blank(); syncBase=loadBase();
-  USER_NAME=LEARNER_NAMES[user.uid]||''; { const w=document.getElementById('who'); w.textContent=USER_NAME||user.email||''; w.title=user.email||''; } setAvatar(USER_NAME||user.email);
+  USER_NAME=LEARNER_NAMES[user.uid]||rosterName||''; { const w=document.getElementById('who'); w.textContent=USER_NAME||user.email||''; w.title=user.email||''; } setAvatar(USER_NAME||user.email);
   setSync('Loading…',false);
   route();
   if(!IS_ADMIN) setTimeout(()=>{ (window.requestIdleCallback||setTimeout)(()=>{ loadCore().catch(()=>{}).then(()=>loadAIC().catch(()=>{})).then(()=>loadSec().catch(()=>{})); },{timeout:8000}); },6000);
@@ -1477,8 +1698,8 @@ if(!configured){
 }else{
   onAuthStateChanged(auth,async user=>{
     FX.ready();
-    if(user){ if(!ALLOWED_USER_UIDS.includes(user.uid)){await signOut(auth);say('This account is not approved for this private workbook.','bad');return;} if(justSubmitted){justSubmitted=false; try{sessionStorage.setItem('p2c-signed-in','1')}catch(e){} await FX.leave();} else { let tabOk=false; try{tabOk=sessionStorage.getItem('p2c-signed-in')==='1'}catch(e){} if(!tabOk){ await signOut(auth); say('Please sign in with your email and password.',''); return; } let last=0; try{last=+localStorage.getItem('p2c-last-active')||0}catch(e){} if(last&&Date.now()-last>=10*60*1000){ await signOut(auth); say('Your session timed out after 10 minutes of inactivity. Please sign in again.',''); return; } } showGate(false); window.scrollTo(0,0); startSession(user); setTimeout(()=>idleReset(),0);}
-    else{ try{sessionStorage.removeItem('p2c-signed-in')}catch(e){} adminStop(); dbRef=null; v3uid=null; IS_ADMIN=false; document.documentElement.classList.remove('admin-mode'); navForRole(); actUid=null; clearInterval(actTimer); coachStop(); S=blank(); app.innerHTML=''; showGate(true); document.getElementById('password').value=''; clearTimeout(idleT); }
+    if(user){ if(!(await approvedUid(user.uid))){await signOut(auth);say('This account is not approved for this private workbook.','bad');return;} if(justSubmitted){justSubmitted=false; try{sessionStorage.setItem('p2c-signed-in','1')}catch(e){} await FX.leave();} else { let tabOk=false; try{tabOk=sessionStorage.getItem('p2c-signed-in')==='1'}catch(e){} if(!tabOk){ await signOut(auth); say('Please sign in with your email and password.',''); return; } let last=0; try{last=+localStorage.getItem('p2c-last-active')||0}catch(e){} if(last&&Date.now()-last>=10*60*1000){ await signOut(auth); say('Your session timed out after 10 minutes of inactivity. Please sign in again.',''); return; } } showGate(false); window.scrollTo(0,0); startSession(user); setTimeout(()=>idleReset(),0);}
+    else{ try{sessionStorage.removeItem('p2c-signed-in')}catch(e){} adminStop(); dbRef=null; v3uid=null; IS_ADMIN=false; USER_ROLE='learner'; MY_ROSTER=null; document.documentElement.classList.remove('admin-mode','pentest-mode'); navForRole(); actUid=null; clearInterval(actTimer); coachStop(); S=blank(); app.innerHTML=''; showGate(true); document.getElementById('password').value=''; clearTimeout(idleT); }
   });
 }
 document.getElementById('loginForm').addEventListener('submit',async e=>{

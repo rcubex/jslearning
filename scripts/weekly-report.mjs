@@ -33,7 +33,13 @@ function learnersFromApp() {
   const admin = (html.match(/const ADMIN_UID='([^']+)'/) || [])[1] || 'Yk0WCbGfCOfiy7fnXqMgcfxjvze2';
   const namesSrc = (html.match(/const LEARNER_NAMES=\{([^}]*)\}/) || [])[1] || '';
   const names = Object.fromEntries([...namesSrc.matchAll(/'([^']+)'\s*:\s*'([^']+)'/g)].map(m => [m[1], m[2]]));
-  return { admin, names, learners: [...allowed.matchAll(/'([^']+)'/g)].map(m => m[1]).filter(u => u !== admin) };
+  // v83: access levels. This CISA/Technical weekly report is for learners only; pentest users are excluded
+  // (they would otherwise receive a study report about content they cannot see). Their own summary can be added later.
+  const rolesSrc = (html.match(/const BUILTIN_ROLES=\{([^}]*)\}/) || [])[1] || '';
+  const roles = Object.fromEntries([...rolesSrc.matchAll(/'([^']+)'\s*:\s*'([^']+)'/g)].map(m => [m[1], m[2]]));
+  const pentestUids = new Set(Object.keys(roles).filter(u => roles[u] === 'pentest'));
+  const learners = [...allowed.matchAll(/'([^']+)'/g)].map(m => m[1]).filter(u => u !== admin && !pentestUids.has(u));
+  return { admin, names, roles, pentestUids, learners };
 }
 
 /* ---------- the week that just ended: Monday 00:00 → Sunday 23:59, Dubai time ---------- */
@@ -249,7 +255,10 @@ function emailText(name, s, W) {
 /* ---------- main ---------- */
 async function main() {
   try { await loadWeak(); } catch (e) { console.warn('weak spots unavailable:', e.message); }
-  const { admin, learners, names } = learnersFromApp(), W = lastWeek(), store = await makeStore();
+  const { admin, learners: baseLearners, names } = learnersFromApp(), W = lastWeek(), store = await makeStore();
+  // v83: also exclude any pentest users the admin added to the roster (not in the code list).
+  let learners = baseLearners;
+  try { const roster = await store.list('roster'); const rosterPentest = new Set(roster.filter(r => r.role === 'pentest' && r.active !== false).map(r => r.id)); if (rosterPentest.size) learners = learners.filter(u => !rosterPentest.has(u)); } catch (e) { }
   if (MODE !== 'nudge') console.log(`Week ${W.days[0]} → ${W.days[6]} · ${learners.length} learner(s)${DRY ? ' · DRY RUN' : ''}`);
   const EJ = { service: process.env.EMAILJS_SERVICE_ID, template: process.env.EMAILJS_TEMPLATE_ID, pub: process.env.EMAILJS_PUBLIC_KEY, priv: process.env.EMAILJS_PRIVATE_KEY };
   if (!DRY && !(EJ.service && EJ.template && EJ.pub && EJ.priv)) throw new Error('EmailJS secrets missing: EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY and EMAILJS_PRIVATE_KEY are all required.');

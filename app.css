@@ -3651,3 +3651,97 @@ html:root:root[data-night] #app .aic-hx .hx-reset{background:transparent!importa
   :root:root[data-night] .gate .lk-input{background:rgba(255,255,255,.08)!important}
   :root:root[data-night] .gate .lk-input input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px #262B35 inset!important;-webkit-text-fill-color:#E8EAF0!important}
 }
+
+/* ===================== Pentest Academy (v83) ===================== */
+:root:root #app .cockpit.pt-hero,:root:root #app .mhero.pt-mhero{color:#fff!important;background:radial-gradient(70% 120% at 88% 0%,rgba(255,92,92,.30),transparent 62%),linear-gradient(155deg,#2a1230,#1a0f2e 60%,#101428)!important}
+:root:root #app .cockpit.pt-hero .eyebrow,:root:root #app .mhero.pt-mhero .crumb,:root:root #app .mhero.pt-mhero .crumb a{color:rgba(255,255,255,.78)!important}
+:root:root #app .cockpit.pt-hero h1,:root:root #app .cockpit.pt-hero .hx-sub,:root:root #app .mhero.pt-mhero h2,:root:root #app .mhero.pt-mhero .goal{color:#fff!important}
+:root:root #app .cockpit.pt-hero .hx-sub{opacity:.82}
+:root:root #app .mhero.pt-mhero .meta .pill{background:rgba(255,255,255,.14)!important;color:#fff!important;border-color:rgba(255,255,255,.2)!important}
+/* reuse the compact hero layout from the AI Academy for the pentest hub */
+:root:root #app .pt-hx{display:flex!important;flex-direction:column;gap:16px;padding:22px 24px!important;overflow:hidden}
+:root:root #app .pt-hx .hx-top{display:flex;align-items:center;gap:18px;justify-content:space-between}
+:root:root #app .pt-hx .hx-title{min-width:0}
+:root:root #app .pt-hx h1{margin:4px 0 6px!important;font-size:clamp(26px,3.2vw,38px)!important;line-height:1.1!important}
+:root:root #app .pt-hx .hx-sub{margin:0;font-size:13.5px;opacity:.78;display:block!important}
+:root:root #app .pt-hx .hx-ring{position:relative;flex:0 0 auto;width:104px;height:104px}
+:root:root #app .pt-hx .hx-ring svg{width:100%;height:100%}
+:root:root #app .pt-hx .hx-ring .ring-lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+:root:root #app .pt-hx .hx-ring .ring-lbl b{font-size:24px;line-height:1}
+:root:root #app .pt-hx .hx-ring .ring-lbl span{font-size:11px;opacity:.7}
+:root:root #app .pt-hx .hx-act{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+:root:root #app .pt-hx .hx-go{display:inline-flex!important;align-items:center;gap:8px;min-height:46px;padding:0 18px!important;border-radius:14px!important;background:#fff!important;color:#1a0f2e!important;border:0!important;box-shadow:0 8px 20px -10px rgba(0,0,0,.6)!important;font-size:15px;max-width:100%;text-decoration:none}
+:root:root #app .pt-hx .hx-go span{font-weight:500;opacity:.7}
+:root:root #app .pt-hx .hx-go b{font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+:root:root #app .pt-hx .hx-go i{font-style:normal;flex:none}
+:root:root #app .pt-hx .hx-lv{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:2px 0 0!important;padding:0!important}
+:root:root #app .pt-hx .hx-lv button{display:flex!important;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;min-width:0;padding:12px 14px 14px!important;border-radius:14px!important;border:1px solid rgba(255,255,255,.14)!important;background:rgba(255,255,255,.08)!important;color:#fff!important;box-shadow:none!important;position:relative;overflow:hidden;cursor:pointer;min-height:0!important;height:auto!important;transition:background .15s,transform .15s}
+:root:root #app .pt-hx .hx-lv button:hover{background:rgba(255,255,255,.16)!important;transform:translateY(-1px)}
+:root:root #app .pt-hx .hx-lv small{font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;opacity:.75}
+:root:root #app .pt-hx .hx-lv b{font-size:15px;font-weight:650}
+:root:root #app .pt-hx .hx-lv .pt-tk-p{font-size:12px;opacity:.72}
+:root:root #app .pt-hx .hx-lv i{position:absolute;left:0;bottom:0;height:3px;width:100%;background:rgba(255,255,255,.14)}
+:root:root #app .pt-hx .hx-lv i::after{content:"";position:absolute;inset:0;width:var(--p);background:#30D158}
+:root:root #app .pt-hx .hx-ring circle:first-child{stroke:rgba(255,255,255,.22)!important}
+@media (max-width:640px){
+  :root:root #app .pt-hx{padding:18px 16px!important}
+  :root:root #app .pt-hx .hx-ring{width:74px;height:74px}
+  :root:root #app .pt-hx .hx-ring .ring-lbl b{font-size:18px}
+  :root:root #app .pt-hx .hx-ring .ring-lbl span{display:none}
+  :root:root #app .pt-hx .hx-act{flex-direction:column;align-items:stretch}
+  :root:root #app .pt-hx .hx-go{justify-content:flex-start;width:100%}
+  :root:root #app .pt-hx .hx-lv{display:flex!important;overflow-x:auto;margin:0 -16px!important;padding:0 16px 2px!important;scrollbar-width:none}
+  :root:root #app .pt-hx .hx-lv::-webkit-scrollbar{display:none}
+  :root:root #app .pt-hx .hx-lv button{flex:0 0 auto;width:150px}
+}
+/* pentest filter row (mirrors the courses filter) */
+:root:root #app .pt-filter{display:flex;align-items:center;gap:10px;margin:0 0 18px}
+:root:root #app .pt-chips{display:flex;gap:6px;flex:0 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none}
+:root:root #app .pt-chips::-webkit-scrollbar{display:none}
+:root:root #app .pt-chips .fbtn{flex:none;white-space:nowrap}
+:root:root #app .pt-filter .search{flex:1 1 220px;min-width:0;margin:0!important;height:38px!important;min-height:0!important}
+@media (max-width:999px){:root:root #app .pt-filter{flex-direction:column;align-items:stretch}:root:root #app .pt-filter .search{width:100%}}
+/* pentest lesson body blocks */
+:root:root #app .pt-h{font-size:15.5px;font-weight:700;margin:16px 0 6px}
+:root:root #app .pt-ul,:root:root #app .pt-ol{margin:8px 0;padding-left:20px}
+:root:root #app .pt-ul li,:root:root #app .pt-ol li{margin:4px 0;line-height:1.5}
+:root:root #app .pt-key{border-left:3px solid #0A84FF;background:color-mix(in srgb,#0A84FF 8%,transparent);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0;font-weight:500}
+:root:root #app .pt-warn{border-left:3px solid #FF9F0A;background:color-mix(in srgb,#FF9F0A 10%,transparent);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+:root:root #app .pt-cmd{background:#0d1117;color:#e6edf3;border-radius:10px;padding:12px 14px;margin:12px 0;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55}
+:root:root #app .pt-lab-focus{font-size:13.5px;color:var(--muted);margin:6px 0}
+:root:root #app .mhero.pt-mhero{color:#fff;background:radial-gradient(70% 120% at 88% 0%,rgba(255,92,92,.30),transparent 62%),linear-gradient(155deg,#2a1230,#1a0f2e 60%,#101428)}
+/* pentest dashboard track list */
+:root:root #app .pt-dash-tracks{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+:root:root #app .pt-dash-tk{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;padding:8px 2px}
+:root:root #app .pt-dash-tk>div:first-child{flex:0 0 120px;min-width:0}
+:root:root #app .pt-dash-tk b{display:block;font-size:14px}
+:root:root #app .pt-dash-tk small{color:var(--muted);font-size:12px}
+:root:root #app .pt-dash-bar{flex:1;height:8px;border-radius:99px;background:rgba(10,37,64,.08);overflow:hidden}
+:root:root #app .pt-dash-bar i{display:block;height:100%;background:#0A84FF;border-radius:99px}
+:root:root #app .pt-dash-p{flex:0 0 auto;font-size:12.5px;color:var(--muted);width:38px;text-align:right}
+:root:root[data-night] #app .pt-dash-bar{background:rgba(255,255,255,.1)}
+:root:root[data-night] #app .pt-hx .hx-go{background:#E8EAF0!important;color:#1a0f2e!important}
+
+:root:root #app .cockpit.pt-hero .hx-ring .ring-lbl b,:root:root #app .cockpit.pt-hero .hx-ring .ring-lbl span{color:#fff!important}
+
+/* v83 · admin access-level controls */
+:root:root #app .adm-head-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+:root:root #app .adm-seg{display:inline-flex;gap:2px;background:rgba(10,37,64,.06);border-radius:12px;padding:3px}
+:root:root #app .adm-seg button{border:0;background:transparent;border-radius:9px;padding:7px 14px;font:inherit;font-size:13.5px;font-weight:500;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+:root:root #app .adm-seg button b{font-weight:700;opacity:.7}
+:root:root #app .adm-seg button.on{background:#fff;color:var(--ink,#1c2433);box-shadow:0 1px 2px rgba(10,37,64,.12)}
+:root:root #app .adm-adduser-btn{flex:none}
+:root:root #app .adm-adduser .auf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:8px 0 14px}
+:root:root #app .adm-adduser .auf-grid label{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:500;color:var(--muted)}
+:root:root #app .adm-adduser .auf-grid input,:root:root #app .adm-adduser .auf-grid select{min-height:42px;border:1px solid rgba(10,37,64,.16);border-radius:11px;padding:0 12px;font:inherit;font-size:14.5px;background:var(--surface,#fff);color:var(--ink,#1c2433)}
+:root:root #app .adm-adduser .auf-act{display:flex;gap:10px}
+:root:root #app .adm-role{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+:root:root #app .adm-role-cur{font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:999px;background:rgba(10,132,255,.12);color:#0A84FF}
+:root:root #app .adm-badge.rolebadge{background:rgba(10,132,255,.14);color:#0A84FF;margin-left:6px}
+@media (max-width:640px){:root:root #app .adm-adduser .auf-grid{grid-template-columns:1fr}:root:root #app .adm-head-bar{flex-direction:column;align-items:stretch}:root:root #app .adm-seg{justify-content:space-between}}
+:root:root[data-night] #app .adm-seg{background:rgba(255,255,255,.08)}
+:root:root[data-night] #app .adm-seg button.on{background:#2a2f3a;color:#E8EAF0}
+:root:root[data-night] #app .adm-adduser .auf-grid input,:root:root[data-night] #app .adm-adduser .auf-grid select{background:#1b1f27;border-color:rgba(255,255,255,.14);color:#E8EAF0}
+html:root:root[data-night] #app .pt-hx a.hx-go.btn.primary,html:root:root[data-night] #app .pt-hx a.hx-go.btn.primary span,html:root:root[data-night] #app .pt-hx a.hx-go.btn.primary b,html:root:root[data-night] #app .pt-hx a.hx-go.btn.primary i{background-color:#E8EAF0!important;color:#17101f!important}
+html:root:root[data-night] #app .pt-hx a.hx-go.btn.primary span{background:transparent!important;opacity:.7}
+html:root:root[data-night] #app .pt-hx a.hx-go.btn.primary b,html:root:root[data-night] #app .pt-hx a.hx-go.btn.primary i{background:transparent!important}

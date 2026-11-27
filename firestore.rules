@@ -1,11 +1,18 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Approved Firebase Authentication UIDs for access to private user data.
+    // A user is approved if they are one of the built-in accounts, or the admin has created an
+    // active roster/{uid} entry for them (v83). The roster lets the admin add users (e.g. pentest
+    // accounts) without a code change. Each account still only ever reads its own study data.
+    function rostered() {
+      let r = /databases/$(database)/documents/roster/$(request.auth.uid);
+      return exists(r) && get(r).data.get('active', true) == true;
+    }
     function approved() {
-      return request.auth != null && request.auth.uid in [
-        'Yk0WCbGfCOfiy7fnXqMgcfxjvze2', 'm6ybLppag7e9ky7UMVqnc80gwxA3', 'pt8WaB9gHuMU5U8qhtKTJCEHC0r1', 'CJOZImCPj4VieLsezwCytLOXVKP2'
-      ];
+      return request.auth != null && (request.auth.uid in [
+        'Yk0WCbGfCOfiy7fnXqMgcfxjvze2', 'm6ybLppag7e9ky7UMVqnc80gwxA3', 'pt8WaB9gHuMU5U8qhtKTJCEHC0r1', 'CJOZImCPj4VieLsezwCytLOXVKP2',
+        'GnHicVzeiHWGfr5p8KrR5K2aMWA3'
+      ] || rostered());
     }
     // The admin can read every learner's progress and unlock a locked CISA study plan.
     function isAdmin() {
@@ -106,6 +113,12 @@ service cloud.firestore {
     match /users/{uid}/{area}/{entryId} {
       allow read, write: if approved() && request.auth.uid == uid
         && area in ['grcProgress', 'studyEntries'] && !isBlocked(uid);
+    }
+    // Roster: the access level (role, name, active) the admin assigns to each account.
+    // A user may read only their own entry; only the admin may create or change entries.
+    match /roster/{uid} {
+      allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
     }
   }
 }

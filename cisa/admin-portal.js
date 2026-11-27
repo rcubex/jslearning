@@ -8,6 +8,9 @@ import { assignmentStatus, targetProgress, threadHTML, threadAction, EDIT_WINDOW
 import { uiConfirm, uiAlert } from './ui-dialog.js';
 
 let root, api, learners = null, busy = false, err = '', loadedAt = null, refreshTimer = null;
+let teamGroup = 'all', addUserOpen = false, addUserBusy = false, addUserMsg = ''; // v83 access levels
+const roleOfL = L => (L && L.role) || 'learner';
+const roleBadge = L => { const r = roleOfL(L); return r === 'pentest' ? '<em class="adm-badge info rolebadge">Pentest</em>' : ''; };
 let sel = 0, view = 'overview', rep = 'week', off = { week: 0, biweek: 0, month: 0 }, logRange = '7', logArea = 'all', logType = 'all', logLimit = 150;
 const tst = { sel: null, editing: null }; let expiryTimer = null;
 let chats = {}, coachDocs = {}, unsubs = {}, bellOpen = false, exSel = null, exWrongOnly = true, manualList = null, assignType = 'topic', flash = '';
@@ -775,18 +778,46 @@ function teamRow(L) {
 }
 function spark(vals) { const mx = Math.max(GOAL, ...vals); return `<span class="tm-spark">${vals.map(v => `<i class="${v >= GOAL ? 'hit' : v >= FLOOR ? 'half' : v > 0 ? 'low' : ''}" style="height:${v ? Math.max(4, Math.round(v / mx * 26)) : 2}px" title="${v} min"></i>`).join('')}</span>`; }
 function agoText(t) { if (!t) return 'never'; const m = Math.round((Date.now() - t) / 60e3); return m < 3 ? 'online now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : Math.round(m / 1440) + ' d ago'; }
+function addUserForm() {
+  if (!addUserOpen) return '';
+  return `<section class="ed-card adm-sec adm-adduser"><div class="adm-sec-head"><div><span class="ed-kicker">New account</span><h3 class="ed-title">Add a user</h3><p class="ed-sub">Creates their sign-in account and sets what they can access. Pentest users see only the Pentest Academy; learners see the study app.</p></div></div>
+   ${addUserMsg ? `<p class="${/^OK/.test(addUserMsg) ? 'tm-allgood' : 'pl-err'}">${h(addUserMsg.replace(/^OK · /, ''))}</p>` : ''}
+   <form class="adm-adduser-form" data-form="adduser"><div class="auf-grid">
+     <label>Name<input type="text" data-keep="au-name" name="name" autocomplete="off" placeholder="Their name"></label>
+     <label>Email<input type="email" data-keep="au-email" name="email" autocomplete="off" placeholder="name@example.com" required></label>
+     <label>Temporary password<input type="text" data-keep="au-pass" name="password" autocomplete="off" placeholder="At least 6 characters" required></label>
+     <label>Access level<select data-keep="au-role" name="role"><option value="pentest">Pentest (Pentest Academy only)</option><option value="learner">Learner (study app)</option></select></label>
+   </div><div class="auf-act"><button type="submit" class="btn primary" ${addUserBusy ? 'disabled' : ''}>${addUserBusy ? 'Creating…' : 'Create account'}</button><button type="button" class="btn" data-a="adduser-cancel">Cancel</button></div></form></section>`;
+}
+function roleControl(L) {
+  if (!api.setRole) return '';
+  const r = roleOfL(L), other = r === 'pentest' ? 'learner' : 'pentest', lab = api.roleLabel || { learner: 'Learner', pentest: 'Pentest' };
+  const cur = `<span class="adm-role-cur">${h(lab[r] || r)}</span>`;
+  if (L.builtin) return `<span class="adm-role" title="Built-in account">${cur}</span>`;
+  return `<span class="adm-role">${cur}<button type="button" class="btn sm" data-a="set-role" data-uid="${h(L.uid)}" data-role="${other}">Make ${h(lab[other] || other)}</button><button type="button" class="btn sm danger" data-a="deactivate" data-uid="${h(L.uid)}">Deactivate</button></span>`;
+}
 function teamUI() {
   ensureWeak();
-  const rows = (learners || []).map(teamRow), need = rows.filter(r => r.flags.some(f => f[0] === 'bad' || f[0] === 'warn' || f[0] === 'info'));
+  const all = learners || [];
+  const counts = { all: all.length, learner: all.filter(L => roleOfL(L) !== 'pentest').length, pentest: all.filter(L => roleOfL(L) === 'pentest').length };
+  const shown = teamGroup === 'all' ? all : teamGroup === 'pentest' ? all.filter(L => roleOfL(L) === 'pentest') : all.filter(L => roleOfL(L) !== 'pentest');
+  const seg = `<div class="adm-head-bar"><div class="adm-seg" role="group" aria-label="Group">${[['all', 'All'], ['learner', 'Learners'], ['pentest', 'Pentest']].map(([k, n]) => `<button type="button" class="${teamGroup === k ? 'on' : ''}" data-a="grp" data-g="${k}">${n} <b>${counts[k]}</b></button>`).join('')}</div>${api.addUser ? '<button type="button" class="btn primary adm-adduser-btn" data-a="adduser-open">+ Add user</button>' : ''}</div>`;
+  const pentestView = teamGroup === 'pentest';
+  const rows = shown.map(teamRow), need = rows.filter(r => r.flags.some(f => f[0] === 'bad' || f[0] === 'warn' || f[0] === 'info'));
   const tot = rows.reduce((n, r) => n + r.week, 0), act = rows.filter(r => r.today > 0).length;
   const fl = f => `<em class="adm-badge ${f[0]}">${h(f[1])}</em>`;
   const trend = r => r.week > r.lastWeekSame ? `<small class="tm-up">▲ ${r.week - r.lastWeekSame}</small>` : r.week < r.lastWeekSame ? `<small class="tm-dn">▼ ${r.lastWeekSame - r.week}</small>` : '<small>=</small>';
   const fcCell = r => !r.lastSeen ? '–' : !r.lk ? '<small>Plan not locked</small>' : !r.fc ? '…' : `<span class="tm-fc ${r.fc.status}">${{ ok: 'On track', done: 'Finished', behind: 'Behind', late: 'Off track' }[r.fc.status]}</span><small>${r.fc.done}/${r.fc.total} · ${r.fc.perWeek}/wk</small>`;
   const weakCell = r => !r.lk ? '<small>–</small>' : !r.wr ? '…' : r.wr.weakDomains.length ? `D${r.wr.weakDomains[0].id} · ${r.wr.weakDomains[0].acc}%` : r.wr.enough ? '<span class="tm-ok">none</span>' : '<small>not enough data</small>';
-  return `<section class="ed-card adm-sec"><div class="adm-sec-head"><div><span class="ed-kicker">This week · ${h(fmtRange(mondayOf(today()), today()))}</span><h3 class="ed-title">${rows.length} learner${rows.length === 1 ? '' : 's'} · ${Math.round(tot / 6) / 10} h studied · ${act} studied today</h3><p class="ed-sub">Minutes use the same rule as the weekly email: tracked app time, or logged minutes if more. Goal ${GOAL} min a day, minimum ${FLOOR}.</p></div></div>
-   ${need.length ? `<div class="tm-need"><b>Needs attention</b>${need.map(r => `<button type="button" class="tm-need-i" data-a="team-open" data-i="${learners.indexOf(r.L)}"><span class="lc-av learner">${h(nameOf(r.L).charAt(0).toUpperCase())}</span><span><b>${h(nameOf(r.L))}</b>${r.flags.filter(f => f[0] !== 'muted').map(fl).join('')}</span><span class="tm-go">›</span></button>`).join('')}</div>` : '<p class="tm-allgood">✓ Everyone is on track this week.</p>'}
-   <div class="adm-scroll"><table class="adm-table tm-table"><thead><tr><th>Learner</th><th>This week</th><th>Last 7 days</th><th>Active</th><th>3-day avg</th><th>Streak</th><th>Readiness</th><th>Plan pace</th><th>Weakest</th><th>Last seen</th></tr></thead><tbody>
-   ${rows.map(r => `<tr data-a="team-open" data-i="${learners.indexOf(r.L)}" class="tm-row"><td class="tm-name"><b>${h(nameOf(r.L))}</b>${r.flags.length ? `<div class="tm-flags">${r.flags.map(fl).join('')}</div>` : ''}</td><td data-l="This week"><b>${r.week}</b> min ${trend(r)}</td><td data-l="Last 7 days">${spark(r.spark)}</td><td data-l="Active">${r.active7}/7</td><td data-l="3-day avg" class="${r.avg3 < FLOOR ? 'tm-bad' : ''}">${r.avg3} min</td><td data-l="Streak">${r.streak ? r.streak + ' 🔥' : '0'}</td><td data-l="Readiness">${!r.lk || r.ready === null || r.ready === undefined ? '–' : r.ready + '%'}</td><td data-l="Plan pace">${fcCell(r)}</td><td data-l="Weakest">${weakCell(r)}</td><td data-l="Last seen" class="${r.live ? 'tm-live' : ''}">${h(agoText(r.lastSeen))}</td></tr>`).join('')}
+  const emptyMsg = teamGroup === 'pentest' ? 'No pentest users yet. Use “Add user” to create one.' : 'No accounts in this group.';
+  const head = `<div class="adm-sec-head"><div><span class="ed-kicker">This week · ${h(fmtRange(mondayOf(today()), today()))}</span><h3 class="ed-title">${rows.length} ${pentestView ? 'pentest user' : teamGroup === 'learner' ? 'learner' : 'account'}${rows.length === 1 ? '' : 's'} · ${Math.round(tot / 6) / 10} h studied · ${act} studied today</h3><p class="ed-sub">Minutes use the same rule as the weekly email: tracked app time, or logged minutes if more. Goal ${GOAL} min a day, minimum ${FLOOR}.</p></div></div>`;
+  if (!rows.length) return seg + addUserForm() + `<section class="ed-card adm-sec">${head}<p class="cisa-mini">${emptyMsg}</p></section>`;
+  const cisaCols = pentestView ? '' : '<th>Readiness</th><th>Plan pace</th><th>Weakest</th>';
+  const cisaCells = r => pentestView ? '' : `<td data-l="Readiness">${!r.lk || r.ready === null || r.ready === undefined ? '–' : r.ready + '%'}</td><td data-l="Plan pace">${fcCell(r)}</td><td data-l="Weakest">${weakCell(r)}</td>`;
+  return seg + addUserForm() + `<section class="ed-card adm-sec">${head}
+   ${need.length ? `<div class="tm-need"><b>Needs attention</b>${need.map(r => `<button type="button" class="tm-need-i" data-a="team-open" data-i="${learners.indexOf(r.L)}"><span class="lc-av learner">${h(nameOf(r.L).charAt(0).toUpperCase())}</span><span><b>${h(nameOf(r.L))}</b>${roleBadge(r.L)}${r.flags.filter(f => f[0] !== 'muted').map(fl).join('')}</span><span class="tm-go">›</span></button>`).join('')}</div>` : '<p class="tm-allgood">✓ Everyone is on track this week.</p>'}
+   <div class="adm-scroll"><table class="adm-table tm-table"><thead><tr><th>${pentestView ? 'User' : 'Learner'}</th><th>This week</th><th>Last 7 days</th><th>Active</th><th>3-day avg</th><th>Streak</th>${cisaCols}<th>Last seen</th></tr></thead><tbody>
+   ${rows.map(r => `<tr data-a="team-open" data-i="${learners.indexOf(r.L)}" class="tm-row"><td class="tm-name"><b>${h(nameOf(r.L))}</b>${roleBadge(r.L)}${r.flags.length ? `<div class="tm-flags">${r.flags.map(fl).join('')}</div>` : ''}</td><td data-l="This week"><b>${r.week}</b> min ${trend(r)}</td><td data-l="Last 7 days">${spark(r.spark)}</td><td data-l="Active">${r.active7}/7</td><td data-l="3-day avg" class="${r.avg3 < FLOOR ? 'tm-bad' : ''}">${r.avg3} min</td><td data-l="Streak">${r.streak ? r.streak + ' 🔥' : '0'}</td>${cisaCells(r)}<td data-l="Last seen" class="${r.live ? 'tm-live' : ''}">${h(agoText(r.lastSeen))}</td></tr>`).join('')}
    </tbody></table></div></section>`;
 }
 function readyUI(L) {
@@ -820,7 +851,7 @@ function render() {
   else {
     const L = learners[sel], un = unreadOf(L.uid);
     const warn = !L.ok ? `<p class="pl-err">Cannot read this learner (${h(L.error)}). Publish the latest <code>firestore.rules</code> in the Firebase Console.</p>` : !L.act.ok && L.act.error && L.act.error !== 'not-admin' ? `<p class="pl-err">Activity log unavailable (${h(L.act.error)}). Publish the latest <code>firestore.rules</code> in the Firebase Console; activity is recorded once the rules allow it.</p>` : '';
-    const head = `<section class="ed-card adm-learner"><div class="adm-avatar">${h(nameOf(L).charAt(0).toUpperCase())}${isLive(L) ? '<i class="lc-live"></i>' : ''}</div><div class="adm-who">${learners.length > 1 ? `<label class="adm-pick"><select class="adm-sel" data-f="learner" aria-label="Choose learner">${learners.map((x, i) => `<option value="${i}" ${i === sel ? 'selected' : ''}>${h(nameOf(x))}</option>`).join('')}</select><small>${learners.length} learners</small></label>` : `<b>${h(nameOf(L))}</b>`}<span class="adm-stat">${status(L)}</span>${accessBadges(L) ? `<span class="adm-badges">${accessBadges(L)}</span>` : ''}</div><div class="adm-access">${accessButtons(L)}${btn('quick-chat', `Message${un ? ` <span class="cisa-count">${un}</span>` : ''}`, 'sm primary')}</div></section>${warn}`;
+    const head = `<section class="ed-card adm-learner"><div class="adm-avatar">${h(nameOf(L).charAt(0).toUpperCase())}${isLive(L) ? '<i class="lc-live"></i>' : ''}</div><div class="adm-who">${learners.length > 1 ? `<label class="adm-pick"><select class="adm-sel" data-f="learner" aria-label="Choose learner">${learners.map((x, i) => `<option value="${i}" ${i === sel ? 'selected' : ''}>${h(nameOf(x))}</option>`).join('')}</select><small>${learners.length} learners</small></label>` : `<b>${h(nameOf(L))}</b>`}<span class="adm-stat">${status(L)}</span>${accessBadges(L) ? `<span class="adm-badges">${accessBadges(L)}</span>` : ''}</div><div class="adm-access">${roleControl(L)}${accessButtons(L)}${btn('quick-chat', `Message${un ? ` <span class="cisa-count">${un}</span>` : ''}`, 'sm primary')}</div></section>${warn}`;
     const nav = '';
     const empty = !L.data && !L.act.rows.length && !['coaching', 'audit', 'requests'].includes(view);
     const main = empty ? `<section class="ed-card adm-sec"><p class="cisa-mini">This learner hasn’t used the app yet.</p></section>` : view === 'log' ? logUI(L) : view === 'reports' ? reportUI(L) : view === 'exams' ? examsUI(L) : view === 'habits' ? habitsUI(L) : view === 'coaching' ? coachingUI(L) : view === 'audit' ? auditUI(L) : view === 'requests' ? requestsUI(L) : overviewUI(L);
@@ -857,6 +888,11 @@ async function onClick(e) {
   const a = b.dataset.a, L = learners && learners[sel];
   if (a === 'refresh') { load(); return; }
   if (a === 'view') { setView(b.dataset.v); return; }
+  if (a === 'grp') { teamGroup = b.dataset.g || 'all'; render(); return; }
+  if (a === 'adduser-open') { addUserOpen = true; addUserMsg = ''; render(); return; }
+  if (a === 'adduser-cancel') { addUserOpen = false; addUserMsg = ''; render(); return; }
+  if (a === 'set-role') { const uid = b.dataset.uid, nr = b.dataset.role; const Lx = (learners || []).find(x => x.uid === uid); const nm = Lx ? nameOf(Lx) : 'this user'; if (!api.setRole) return; if (!(await uiConfirm(`Change ${nm}'s access to ${nr === 'pentest' ? 'Pentest (Pentest Academy only)' : 'Learner (study app)'}? They see the new area the next time they open the app.`, { title: 'Change access level?', ok: 'Change' }))) return; const r = await api.setRole(uid, { role: nr }); uiAlert(r.ok ? 'Access level updated.' : 'Could not update: ' + (r.err || 'error'), { title: r.ok ? 'Updated' : 'Failed' }); if (r.ok) await load(); return; }
+  if (a === 'deactivate') { const uid = b.dataset.uid, Lx = (learners || []).find(x => x.uid === uid); const nm = Lx ? nameOf(Lx) : 'this user'; if (!api.setRole) return; if (!(await uiConfirm(`${nm} will no longer be able to sign in. Their data is kept, and you can reactivate them later. Built-in accounts cannot be deactivated here.`, { title: 'Deactivate this account?', ok: 'Deactivate', danger: true }))) return; const r = await api.setRole(uid, { active: false }); uiAlert(r.ok ? 'Account deactivated.' : 'Could not deactivate: ' + (r.err || 'error'), { title: r.ok ? 'Deactivated' : 'Failed' }); if (r.ok) await load(); return; }
   if (a === 'bell') { bellOpen = !bellOpen; render(); return; }
   if (a === 'dismiss' || a === 'dismiss-all') { const dm = dismissed(); if (a === 'dismiss') dm[b.dataset.id] = Date.now(); else for (const x of (learners || []).flatMap(alertsOf)) dm[x.uid + ':' + x.id] = Date.now(); try { localStorage.setItem('adm-dismiss', JSON.stringify(dm)); } catch (err) { } render(); return; }
   if (a === 'alert-go') { const i = (learners || []).findIndex(x => x.uid === b.dataset.uid); if (i >= 0) sel = i; bellOpen = false; renderChatWin(true); setView(b.dataset.go); return; }
@@ -903,6 +939,18 @@ function onChange(e) {
 async function onSubmit(e) {
   if (e.target.closest('.adm-msgs')) { const c = threadCtx(); if (c) await threadAction(e, c); return; }
   const form = e.target.closest('[data-form]'); if (!form) return; e.preventDefault();
+  if (form.dataset.form === 'adduser') {
+    if (!api.addUser || addUserBusy) return;
+    const v = Object.fromEntries(new FormData(form));
+    const email = String(v.email || '').trim(), password = String(v.password || ''), name = String(v.name || '').trim(), role = v.role === 'learner' ? 'learner' : 'pentest';
+    if (!email || !password) { addUserMsg = 'Enter an email and a temporary password.'; render(); return; }
+    addUserBusy = true; addUserMsg = ''; render();
+    const r = await api.addUser({ name, email, password, role });
+    addUserBusy = false;
+    if (r.ok) { addUserMsg = 'OK · Created ' + (name || email) + ' as ' + (api.roleLabel[role] || role) + '. Share the email and temporary password with them.'; addUserOpen = true; teamGroup = role === 'pentest' ? 'pentest' : 'learner'; await load(); render(); }
+    else { addUserMsg = r.err || 'Could not add the user.'; render(); }
+    return;
+  }
   const L = learners && learners[sel]; if (!L) return; const v = Object.fromEntries(new FormData(form)); const kind = form.dataset.form;
   const clear = keys => keys.forEach(k => { const el = form.querySelector(`[name="${k}"]`); if (el) { if (el.type === 'checkbox') el.checked = false; else el.value = ''; } });
   if (kind === 'chat') { const text = String(v.text || '').trim(); if (!text) return; clear(['text', 'popup']); if (!(await sendMsg(L.uid, text, v.popup ? 'popup' : 'chat', ''))) { form.querySelector('[name="text"]').value = text; } return; }
@@ -925,9 +973,9 @@ export function unmountAdmin() {
   root = null; learners = null; chats = {}; coachDocs = {}; bellOpen = false;
   if (chatEl) { chatEl.remove(); chatEl = null; } chatOpen = false; convOpen = false; document.documentElement.classList.remove('wa-lock');
 }
-export async function mountAdmin({ root: target, readLearners, readActivity, unlockLearner, fb, view: startView, listBackups, readBackup, restoreBackup, selfTest, appVersion, relockLearner, resetLearner }) {
+export async function mountAdmin({ root: target, readLearners, readActivity, unlockLearner, fb, view: startView, listBackups, readBackup, restoreBackup, selfTest, appVersion, relockLearner, resetLearner, addUser, setRole, roleLabel }) {
   view = VIEW_TITLES[startView] ? startView : 'overview'; syncNav();
-  root = target; api = { readLearners, readActivity, unlockLearner, fb, listBackups, readBackup, restoreBackup, selfTest, appVersion, relockLearner, resetLearner };
+  root = target; api = { readLearners, readActivity, unlockLearner, fb, listBackups, readBackup, restoreBackup, selfTest, appVersion, relockLearner, resetLearner, addUser, setRole, roleLabel: roleLabel || { learner: 'Learner', pentest: 'Pentest' } };
   root.onclick = onClick; root.onchange = onChange; root.onsubmit = onSubmit; root.onkeydown = onKey;
   enablePaste(root, t => !!t.closest('.adm-chat-input'), sendImg);
   unsubscribeAll(); chats = {}; coachDocs = {};
